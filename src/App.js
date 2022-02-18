@@ -1,33 +1,28 @@
-
-
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-// import Login from "./pages/Auth/Login";
-// import Register from "./pages/Auth/Register";
+import Login from "./pages/auth/login";
+import Admin from "./layout/admin";
+import Absensi from "./pages/guru/absensi";
+import Dashboard from "./pages/guru/dashboard";
 // import Dashboard from "./pages/Admin/Dashboard";
-// import ProtectRoute from "./routers/ProtectRoute";
+import ProtectRoute from "./routers/ProtectRoute";
 function App() {
   return (
-   <div>ok</div>
-    
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="admin/"
+        element={
+          <ProtectRoute>
+            <Admin />
+          </ProtectRoute>
+        }
+      >
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="absensi" element={<Absensi />} />
+      </Route>
+    </Routes>
   );
 }
 
 export default App;
-
-
-{/* <Routes>
-<Route path="/login" element={<Login />} />
-<Route path="/register" element={<Register />} />
-
-<Route
-  path="/dashboard"
-  element={
-    <ProtectRoute>
-      <Dashboard />
-    </ProtectRoute>
-  }
-/>
-  <Route path="/" element={<Navigate replace to="/login" />} />
-  <Route path="*" element={<Navigate replace to="/login" />} />
-</Routes> */}
