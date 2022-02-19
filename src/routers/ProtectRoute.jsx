@@ -2,29 +2,30 @@ import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { authme } from "../api/auth";
 import { useQuery } from "react-query";
-export default function PrivateRoute({ children }) {
+export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
   let { data, isFetching } = useQuery(
     //query key
-    ["authme"],
+    ["authme", auth],
     //axios function,triggered when page/pageSize change
     () => authme(),
     //configuration
     {
       staleTime: 60 * 1000 * 60 * 12, // 12 jam,
       select: (response) => {
-        console.log("dda");
-        const role = response?.data?.role
-        if(role !== 'Guru'){
-          Cookies.remove('mysmk_token')
+       
+        const role = response?.data?.role;
+        if (role !== userRole) {
+          Cookies.remove("mysmk_token");
+          return <Navigate to='/logn' />
         }
-        console.log(response?.data?.role)
+        console.log(response?.data?.role);
       },
     }
   );
-if(isFetching){
-  return <div>Loading</div>
-}
+  if (isFetching) {
+    return <div>Loading</div>;
+  }
   return auth !== undefined ? children : <Navigate to="/login" />;
 }
 //

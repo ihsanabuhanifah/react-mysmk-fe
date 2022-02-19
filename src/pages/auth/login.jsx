@@ -5,7 +5,6 @@ import { login } from "../../api/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
-
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required("Wajib di isi"),
   password: Yup.string()
@@ -26,8 +25,14 @@ export default function Login() {
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
-      console.log(result.data.msg);
-      return navigate('/admin')
+
+      if (result.data.role === "Guru") {
+        return navigate("/guru");
+      }
+      console.log(result.data.role);
+      if (result.data.role === "Wali Santri") {
+        return navigate("/siswa");
+      }
     } catch (err) {
       if (err.response.status === 422) {
         return console.log(err.response.data.msg);
@@ -38,7 +43,7 @@ export default function Login() {
       return console.log("periksa koneksi internet anda");
     }
   };
-  
+
   return (
     <React.Fragment>
       <Formik
