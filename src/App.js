@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import Absensi from "./pages/guru/absensi";
+import Jadwal from "./pages/guru/jadwal";
 import Dashboard from "./pages/guru/dashboard";
 // import Dashboard from "./pages/Guru/Dashboard";
 import ProtectRoute from "./routers/ProtectRoute";
@@ -22,7 +22,7 @@ function App() {
         }
       >
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="absensi" element={<Absensi />} />
+        <Route path="jadwal" element={<Jadwal />} />
       </Route>
       <Route
         path="/siswa"
@@ -33,7 +33,7 @@ function App() {
         }
       >
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="absensi" element={<Absensi />} />
+        <Route path="absensi" element={<Jadwal />} />
       </Route>
     </Routes>
   );

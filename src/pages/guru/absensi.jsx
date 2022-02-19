@@ -3,7 +3,7 @@ export default function Absensi() {
   let navigate = useNavigate();
   return (
     <div>
-      ini absenesi
+      ini absensi
       
     </div>
   );
