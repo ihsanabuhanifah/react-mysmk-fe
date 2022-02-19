@@ -46,7 +46,9 @@ export default function Jadwal() {
               <td>{value?.semester}</td>
               <td>{value?.tahun_ajaran?.nama_tahun_ajaran}</td>
               <td>
-                <button>Absensi</button>
+                <button onClick={()=> {
+                  return navigate('/guru/jadwal/absensi')
+                }}>Absensi</button>
               </td>
             </tr>
           

@@ -1,13 +1,17 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import qs from "qs";
 const headers = {
   Accept: "application/json",
-  'X-Authorization': `Bearer ${Cookies.get("mysmk_token")}`,
+  "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
   baseURL: "http://localhost:8081",
   timeout: 1000 * 60 * 3,
-  headers,
+  paramsSerializer: function (params) {
+    return qs.stringify(params, { encode: false, skipNulls: true });
+  },
+  headers
 });
 
 export const syncToken = () => {
@@ -16,7 +20,5 @@ export const syncToken = () => {
   )}`;
 };
 export default axiosClient;
-
-
 
 // https://mysmk.herokuapp.com

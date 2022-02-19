@@ -3,9 +3,9 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import Jadwal from "./pages/guru/jadwal";
-import Dashboard from "./pages/guru/dashboard";
-// import Dashboard from "./pages/Guru/Dashboard";
+import { Jadwal, Absensi, Dashboard } from "./pages/guru";
+
+
 import ProtectRoute from "./routers/ProtectRoute";
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="jadwal" element={<Jadwal />} />
+        <Route path="jadwal/absensi" element={<Absensi />} />
       </Route>
       <Route
         path="/siswa"
