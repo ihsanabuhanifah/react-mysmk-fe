@@ -1,8 +1,9 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, NLink, Outlet } from "react-router-dom";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
+import Notifikasi from "../module/notifikasi";
 
 export default function Guru() {
   React.useEffect(() => {
@@ -30,13 +31,20 @@ export default function Guru() {
   return (
     <div>
       <h1>Welcome to the ustadz {data?.name}!</h1>
-      <nav>
-        <Link to="dashboard">Invoices</Link> |{" "}
-        <Link to="jadwal">Jadwal</Link>
-        
-      </nav>
-      <div className="content">
-        <Outlet data={data} />
+      <div className="grid grid-cols-12 gap-x-2">
+        <div className="col-span-1">
+          {" "}
+          <nav className="flex flex-col">
+            <NavLink to="dashboard">Invoices</NavLink>
+            <NavLink to="jadwal">Jadwal</NavLink>
+          </nav>
+        </div>
+        <div className="content col-span-9">
+          <Outlet data={data} />
+        </div>
+        <div className="content col-span-2">
+          <Notifikasi />
+        </div>
       </div>
     </div>
   );

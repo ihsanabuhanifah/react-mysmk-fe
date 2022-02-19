@@ -4,6 +4,7 @@ import Login from "./pages/auth/login";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import { Jadwal, Absensi, Dashboard } from "./pages/guru";
+import NotFound from "./pages/NotFound";
 
 
 import ProtectRoute from "./routers/ProtectRoute";
@@ -23,7 +24,7 @@ function App() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="jadwal" element={<Jadwal />} />
-        <Route path="jadwal/absensi/:kelas_id/:mapel_id" element={<Absensi />} />
+        <Route path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal" element={<Absensi />} />
       </Route>
       <Route
         path="/siswa"
@@ -36,6 +37,7 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="absensi" element={<Jadwal />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

@@ -6,7 +6,7 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
-  baseURL: "https://mysmk.herokuapp.com",
+  baseURL: "http://localhost:8081",
   timeout: 1000 * 60 * 3,
   paramsSerializer: function (params) {
     return qs.stringify(params, { encode: false, skipNulls: true });

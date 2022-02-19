@@ -5,12 +5,34 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../api/guru/absensi";
 import * as Yup from "yup";
+
+let personalSchema = Yup.object().shape({
+  kehadiran: Yup.object().shape({
+    id: Yup.string().nullable().required("wajib diisi"),
+    alasan: Yup.mixed()
+      .nullable()
+      .when("id", {
+        is: (id) => {
+          if (id == 6) {
+            return true;
+          }
+        },
+        then: (id) => Yup.mixed().required(`Wajib Absensi`),
+      }),
+  }),
+});
+
+let AbsensiSchema = Yup.object().shape({
+  absensi_kehadiran: Yup.array().of(personalSchema),
+});
 export default function Absensi() {
+  let { kelas_id, mapel_id, tanggal } = useParams();
+  console.log(tanggal);
   let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
-  let [dariTanggal, setDariTanggal] = React.useState("2022-02-17");
-  let [sampaiTanggal, setSampaiTanggal] = React.useState("2022-02-17");
-  let { kelas_id, mapel_id } = useParams();
+  let [dariTanggal, setDariTanggal] = React.useState(tanggal);
+  let [sampaiTanggal, setSampaiTanggal] = React.useState(tanggal);
+
   let queryClient = useQueryClient();
   const [initialState, setIniitalState] = React.useState({
     tanggal: "",
@@ -43,8 +65,8 @@ export default function Absensi() {
       onSuccess: (data) => {
         setIniitalState({
           ...initialState,
-          tanggal: data?.absensi?.[0].tanggal,
-          semester: data?.absensi?.[0].semester,
+          tanggal: data?.absensi?.[0]?.tanggal,
+          semester: data?.absensi?.[0]?.semester,
           ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
           kelas_id: data?.absensi?.[0]?.kelas?.id,
           mapel_id: data?.absensi?.[0]?.mapel?.id,
@@ -58,15 +80,22 @@ export default function Absensi() {
   const onSubmit = async (values) => {
     const result = await updateAbsensi(values);
     queryClient.invalidateQueries("absensi");
+    queryClient.invalidateQueries("notifikasi");
 
     return console.log("hasil", result);
   };
 
   //   console.log(initialState);
+
+  React.useEffect(() => {
+    console.log("jalan");
+    setDariTanggal(tanggal);
+    setSampaiTanggal(tanggal);
+  }, [tanggal]);
   return (
     <Formik
       initialValues={initialState}
-      //   validationSchema={LoginSchema}
+      validationSchema={AbsensiSchema}
       enableReinitialize
       onSubmit={onSubmit}
     >
@@ -81,6 +110,34 @@ export default function Absensi() {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
+          <div>
+            <h2>Agenda Mengajar</h2>
+            <div>
+              {values?.agenda_kelas?.map((value, index) => (
+                <React.Fragment key={index}>
+                  <div className="grid grid-cols-9 gap-2">
+                    <input
+                      className="col-span-1"
+                      type="text"
+                      disabled
+                      defaultValue={`Jam ke-${value?.jam_ke}`}
+                    />
+
+                    <input
+                      className="col-span-7"
+                      type="text"
+                      placeholder="Materi"
+                      id={`agenda_kelas[${index}]materi`}
+                      name={`agenda_kelas[${index}]materi`}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={value?.materi}
+                    />
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
           <table className="table-fixed">
             <thead>
               <tr>
@@ -88,7 +145,27 @@ export default function Absensi() {
                 <th>Nama</th>
                 <th>Kelas</th>
                 <th>Mata Pelajaran</th>
-                <th>Kehadiran</th>
+                <th>
+                  <span className="mr-2">Kehadiran</span>
+                  <input
+                    onChange={(e) => {
+                        
+                      console.log(e.target.checked);
+                      if (e.target.checked) {
+                        let kehadiran = []
+                        values?.absensi_kehadiran?.map((value) => {
+                            console.log(value.kehadiran.id)
+                          value.kehadiran.id = 1;
+                          console.log(value.kehadiran.id)
+                          kehadiran.push(value);
+                        });
+
+                        setFieldValue("absensi_kehadiran", kehadiran);
+                      }
+                    }}
+                    type="checkbox"
+                  />
+                </th>
                 <th>Keterangan</th>
                 <th>Semester</th>
                 <th>Tahun Ajaran</th>
@@ -124,6 +201,10 @@ export default function Absensi() {
                       name={`absensi_kehadiran[${index}]kehadiran.id`}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      error={
+                        errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan &&
+                        touched?.absensi_kehadiran?.[index]?.kehadiran?.alasan
+                      }
                       value={value?.kehadiran?.id}
                     >
                       <option value={1}>Hadir</option>
@@ -133,6 +214,13 @@ export default function Absensi() {
                       <option value={5}>Tanpa Keterangan</option>
                       <option value={6}>Belum Absensi</option>
                     </select>
+
+                    {errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan !==
+                      undefined && (
+                      <span className="text-xs font-bold text-red-500 italic">
+                        {errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan}
+                      </span>
+                    )}
                   </td>
                   <td>
                     <input

@@ -11,7 +11,7 @@ export function listAbsensi(params) {
 }
 
 export async function updateAbsensi(values) {
-    let absensi_kehadiran = []
+  let absensi_kehadiran = [];
   await Promise.all(
     values.absensi_kehadiran?.map((data, index) => {
       let absensi = {
@@ -21,13 +21,17 @@ export async function updateAbsensi(values) {
         keterangan: data?.keterangan,
       };
       data = absensi;
-      absensi_kehadiran.push(absensi)
+      absensi_kehadiran.push(absensi);
       console.log("sini", absensi);
-      console.log(data)
+      console.log(data);
     })
   );
 
-  values.absensi_kehadiran = absensi_kehadiran
- 
+  values.absensi_kehadiran = absensi_kehadiran;
+
   return axios.put("/guru/absensi/update", values);
+}
+
+export function notifikasiAbsensi() {
+  return axios.get("/guru/absensi/notifikasi");
 }

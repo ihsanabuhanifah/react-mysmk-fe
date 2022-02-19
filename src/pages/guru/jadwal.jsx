@@ -2,8 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { listJadwal } from "../../api/guru/absensi";
 import { useQuery } from "react-query";
+import dayjs from "dayjs";
 export default function Jadwal() {
   let navigate = useNavigate();
+  let date = new Date();
   const [hari, setHari] = React.useState("senin");
   let { data, isLoading, isFetching } = useQuery(
     //query key
@@ -47,8 +49,13 @@ export default function Jadwal() {
               <td>{value?.tahun_ajaran?.nama_tahun_ajaran}</td>
               <td>
                 <button
+                  className="text-white bg-blue-300 hover:bg-blue-500 px-2 py-1 rounded-md"
                   onClick={() => {
-                    return navigate(`/guru/jadwal/absensi/${value?.kelas?.id}/${value?.mapel?.id}`);
+                    return navigate(
+                      `/guru/jadwal/absensi/${value?.kelas?.id}/${
+                        value?.mapel?.id
+                      }/${dayjs(date).format("YYYY-MM-DD")}`
+                    );
                   }}
                 >
                   Absensi
