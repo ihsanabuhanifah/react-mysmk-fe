@@ -11,7 +11,7 @@ const axiosClient = axios.create({
   paramsSerializer: function (params) {
     return qs.stringify(params, { encode: false, skipNulls: true });
   },
-  headers
+  headers,
 });
 
 export const syncToken = () => {

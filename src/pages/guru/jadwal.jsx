@@ -38,7 +38,7 @@ export default function Jadwal() {
         <tbody>
           {data?.data?.rows?.map((value, index) => (
             <tr>
-              <td>{index+1}</td>
+              <td>{index + 1}</td>
               <td>{value?.hari}</td>
               <td>{value?.kelas?.nama_kelas}</td>
               <td>{value?.mapel?.nama_mapel}</td>
@@ -46,12 +46,15 @@ export default function Jadwal() {
               <td>{value?.semester}</td>
               <td>{value?.tahun_ajaran?.nama_tahun_ajaran}</td>
               <td>
-                <button onClick={()=> {
-                  return navigate('/guru/jadwal/absensi')
-                }}>Absensi</button>
+                <button
+                  onClick={() => {
+                    return navigate(`/guru/jadwal/absensi/${value?.kelas?.id}/${value?.mapel?.id}`);
+                  }}
+                >
+                  Absensi
+                </button>
               </td>
             </tr>
-          
           ))}
         </tbody>
       </table>

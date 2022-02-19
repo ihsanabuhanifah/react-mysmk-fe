@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Routes, Route, Navigate, Link  } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
@@ -23,7 +23,7 @@ function App() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="jadwal" element={<Jadwal />} />
-        <Route path="jadwal/absensi" element={<Absensi />} />
+        <Route path="jadwal/absensi/:kelas_id/:mapel_id" element={<Absensi />} />
       </Route>
       <Route
         path="/siswa"
