@@ -14,10 +14,33 @@ const axiosClient = axios.create({
   headers,
 });
 
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+
+    console.log('err',error)
+    if (401 === error?.response?.status) {
+      Cookies.remove("mysmk_token");
+
+      clearToken();
+      localStorage.clear();
+      window.location.replace("/login");
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
 export const syncToken = () => {
   axiosClient.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
     "mysmk_token"
   )}`;
+};
+
+export const clearToken = () => {
+  delete axiosClient.defaults.headers["mysmk_token"];
 };
 export default axiosClient;
 
