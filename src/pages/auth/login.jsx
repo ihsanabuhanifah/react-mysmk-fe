@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { login } from "../../api/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { Input, Label, FormText, ErrorMEssage, Select } from "../../components";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required("Wajib di isi"),
@@ -63,9 +64,12 @@ export default function Login() {
           isSubmitting,
         }) => (
           <form onSubmit={handleSubmit}>
-            <div>
+            <FormText>
               {/* <label htmlFor="email">email</label> */}
-              <input
+              <Label htmlFor="email" required>
+                Email
+              </Label>
+              <Input
                 id="email"
                 name="email"
                 placeholder="email"
@@ -76,12 +80,17 @@ export default function Login() {
                 disabled={isSubmitting}
               />
               {errors.email && touched.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
+                <ErrorMEssage className="text-red-500 text-sm">
+                  {errors.email}
+                </ErrorMEssage>
               )}
-            </div>
-            <div>
+            </FormText>
+            <FormText>
               {/* <label htmlFor="email">email</label> */}
-              <input
+              <Label htmlFor="password" required>
+                Password
+              </Label>
+              <Input
                 id="password"
                 name="password"
                 placeholder="password"
@@ -92,11 +101,14 @@ export default function Login() {
                 disabled={isSubmitting}
               />
               {errors.password && touched.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
+                <ErrorMEssage className="">{errors.password}</ErrorMEssage>
               )}
-            </div>
-            <div>
-              <select
+            </FormText>
+            <FormText>
+            <Label htmlFor="password" required>
+                Login Sebagai 
+              </Label>
+              <Select
                 id="loginAs"
                 name="loginAs"
                 placeholder="loginAs"
@@ -115,11 +127,11 @@ export default function Login() {
                 <option value={6}>Wali Kelas</option>
                 <option value={7}>Keuangan</option>
                 <option value={8}>Santri</option>
-              </select>
+              </Select>
               {errors.loginAs && touched.loginAs && (
                 <p className="text-red-500 text-sm">{errors.loginAs}</p>
               )}
-            </div>
+            </FormText>
             <div>
               <button type="submit">
                 {isSubmitting ? "Process" : "Login"}

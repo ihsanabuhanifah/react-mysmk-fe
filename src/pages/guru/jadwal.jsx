@@ -2,14 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { listJadwal } from "../../api/guru/absensi";
 import { useQuery } from "react-query";
-import dayjs from "dayjs";
 import { formatHari, formatTahun } from "../../utils";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   const parameter = {
-    hari,
+    ...(hari !== "semua" && {
+      hari,
+    }),
   };
   let { data, isLoading, isFetching } = useQuery(
     //query key
@@ -19,7 +20,6 @@ export default function Jadwal() {
     //configuration
     {
       select: (response) => {
-        console.log(response);
         return response.data;
       },
     }
@@ -33,10 +33,10 @@ export default function Jadwal() {
           name="hari"
           id="hari"
           onChange={(e) => {
-            console.log("jalan" , e.target.value);
             setHari(e.target.value);
           }}
         >
+          <option value="semua">Semua Jadwal</option>
           <option value="senin">Senin</option>
           <option value="selasa">Selasa</option>
           <option value="rabu">Rabu</option>

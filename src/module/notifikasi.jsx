@@ -34,7 +34,7 @@ export default function Notifikasi() {
                   `/guru/jadwal/absensi/${value?.kelas?.id}/${value?.mapel?.id}/${dayjs(value?.tanggal).format('YYYY-MM-DD')}`
                 );
               }}
-              className="text-xs text-justify hover:bg-blue-50 p-2"
+              className="text-xs text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
             >
               Anda Belum melakukan abensi pada mata pelajaran{" "}
               {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas}

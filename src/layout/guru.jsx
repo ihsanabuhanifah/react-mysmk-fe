@@ -4,8 +4,10 @@ import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 import Notifikasi from "../module/notifikasi";
+import { formatTahun } from "../utils";
 
 export default function Guru() {
+  let date = new Date();
   React.useEffect(() => {
     document.title = "Guru";
   });
@@ -29,17 +31,18 @@ export default function Guru() {
 
   console.log(data);
   return (
-    <div>
+    <div className="h-screen">
       <h1>Welcome to the ustadz {data?.name}!</h1>
-      <div className="grid grid-cols-12 gap-x-2">
+      <div className="grid grid-cols-12 gap-x-2 h-full">
         <div className="col-span-1">
           {" "}
           <nav className="flex flex-col">
             <NavLink to="dashboard">Invoices</NavLink>
-            <NavLink to="jadwal">Jadwal</NavLink>
+            <NavLink to="jadwal">Jadwal KBM</NavLink>
+            <NavLink to={`halaqoh/${formatTahun(date)}`}>Halaqoh</NavLink>
           </nav>
         </div>
-        <div className="content col-span-9">
+        <div className="content col-span-9 overflow-auto">
           <Outlet data={data} />
         </div>
         <div className="content col-span-2">

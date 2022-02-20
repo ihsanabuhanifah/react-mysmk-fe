@@ -5,7 +5,10 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../api/guru/absensi";
 import { listMapel, listKelas } from "../../api/list";
+import { listHalaqoh } from "../../api/guru/halaqoh";
+import { listAlquranOptions } from "../../api/list";
 import * as Yup from "yup";
+import { AsyncPaginate } from "react-select-async-paginate";
 
 let personalSchema = Yup.object().shape({
   kehadiran: Yup.object().shape({
@@ -28,7 +31,7 @@ let AbsensiSchema = Yup.object().shape({
 });
 export default function Absensi() {
   let { kelas_id, mapel_id, tanggal } = useParams();
- 
+
   let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
   let [dariTanggal, setDariTanggal] = React.useState(tanggal);
@@ -40,28 +43,23 @@ export default function Absensi() {
   let queryClient = useQueryClient();
   const [initialState, setIniitalState] = React.useState({
     tanggal: "",
-    semester: "",
-    ta_id: "",
-    kelas_id: "",
-    mapel_id: "",
+    halaqoh_id: "",
+    waktu: "",
     absensi_kehadiran: [],
-    agenda_kelas: [],
   });
   let navigate = useNavigate();
 
   let parameter = {
     page,
     pageSize,
-    dariTanggal,
-    sampaiTanggal,
-    mapel_id,
-    kelas_id,
+    dariTanggal: tanggal,
+    sampaiTanggal: tanggal,
   };
   let { isLoading, isError, data, isFetching } = useQuery(
     //query key
     ["absensi", parameter],
     //axios function,triggered when page/pageSize change
-    () => listAbsensi(parameter),
+    () => listHalaqoh(parameter),
     //configuration
     {
       keepPreviousData: true,
@@ -69,39 +67,12 @@ export default function Absensi() {
       onSuccess: (data) => {
         setIniitalState({
           ...initialState,
-          tanggal: data?.absensi?.[0]?.tanggal,
-          semester: data?.absensi?.[0]?.semester,
-          ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
-          kelas_id: data?.absensi?.[0]?.kelas?.id,
-          mapel_id: data?.absensi?.[0]?.mapel?.id,
-          absensi_kehadiran: data?.absensi,
-          agenda_kelas: data?.agenda,
+          tanggal: data?.halaqoh?.rows?.[0].tanggal,
+          halaqoh_id: data?.halaqoh?.rows?.[0].halaqoh.id,
+          waktu: data?.halaqoh?.rows?.[0].waktu,
+          absensi_kehadiran: data?.halaqoh?.rows,
         });
       },
-    }
-  );
-  let { data: dataMapel } = useQuery(
-    //query key
-    ["list_mapel"],
-    //axios function,triggered when page/pageSize change
-    () => listMapel(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
-    }
-  );
-  let { data: dataKelas } = useQuery(
-    //query key
-    ["list_kelas"],
-    //axios function,triggered when page/pageSize change
-    () => listKelas(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
     }
   );
 
@@ -110,18 +81,18 @@ export default function Absensi() {
     queryClient.invalidateQueries("absensi");
     queryClient.invalidateQueries("notifikasi");
 
-   
+    return console.log("hasil", result);
   };
 
   //   console.log(initialState);
 
   React.useEffect(() => {
-   
+    console.log("jalan");
     setDariTanggal(tanggal);
     setSampaiTanggal(tanggal);
   }, [tanggal]);
 
- 
+  console.log("datahalaqoh", data);
   return (
     <Formik
       initialValues={initialState}
@@ -140,112 +111,19 @@ export default function Absensi() {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
-          <div>
-            <input
-              type="date"
-              value={tanggalActive}
-              placeholder="tanggal"
-              onChange={(e) => {
-                setTanggalActive(e.target.value);
-              }}
-            />
-            <select
-              name="mapel_id"
-              id="mapel_id"
-              value={mapel_id}
-              onChange={(e) => {
-                setMapel(e.target.value);
-              }}
-            >
-              {dataMapel?.data?.map((value) => (
-                <option value={value.id}>{value.nama_mapel}</option>
-              ))}
-            </select>
-            <select
-              name="kelas_id"
-              id="kelas _id"
-              value={kelas_id}
-              onChange={(e) => {
-                setKelas(e.target.value);
-              }}
-            >
-              {dataKelas?.data?.map((value) => (
-                <option value={value.id}>{value.nama_kelas}</option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={() => {
-                return navigate(
-                  `/guru/jadwal/absensi/${kelas}/${mapel}/${tanggalActive}`
-                );
-              }}
-            >
-              Filter
-            </button>
-          </div>
-          <div>
-            <h2>Agenda Mengajar</h2>
-            <div>
-              {values?.agenda_kelas?.length === 0 ? (
-                <div>
-                  <p>Tidak ditemukan jadwal </p>
-                </div>
-              ) : (
-                values?.agenda_kelas?.map((value, index) => (
-                  <React.Fragment key={index}>
-                    <div className="grid grid-cols-9 gap-2">
-                      <input
-                        className="col-span-1"
-                        type="text"
-                        disabled
-                        defaultValue={`Jam ke-${value?.jam_ke}`}
-                      />
-
-                      <input
-                        className="col-span-7"
-                        type="text"
-                        placeholder="Materi"
-                        id={`agenda_kelas[${index}]materi`}
-                        name={`agenda_kelas[${index}]materi`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={value?.materi}
-                      />
-                    </div>
-                  </React.Fragment>
-                ))
-              )}
-            </div>
-          </div>
           <table className="table-fixed">
             <thead>
               <tr>
                 <th>No</th>
                 <th>Nama</th>
-                <th>Kelas</th>
-                <th>Mata Pelajaran</th>
-                <th>
-                  <span className="mr-2">Kehadiran</span>
-                  <input
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        let kehadiran = [];
-                        values?.absensi_kehadiran?.map((value) => {
-                          value.kehadiran.id = 1;
-
-                          kehadiran.push(value);
-                        });
-
-                        setFieldValue("absensi_kehadiran", kehadiran);
-                      }
-                    }}
-                    type="checkbox"
-                  />
-                </th>
+                <th>Dari surat</th>
+                <th>Dari Ayat</th>
+                <th>Sampai Surat</th>
+                <th>Sampai Ayat</th>
+                <th>Total Halaman</th>
+                <th>Juz Ke</th>
+                <th>Status Kehadiran</th>
                 <th>Keterangan</th>
-                <th>Semester</th>
-                <th>Tahun Ajaran</th>
               </tr>
             </thead>
             <tbody>
@@ -265,17 +143,50 @@ export default function Absensi() {
                       />
                     </td>
                     <td>
-                      <input
-                        disabled
-                        type="text"
-                        defaultValue={value?.kelas?.nama_kelas}
+                     <div className="w-1/3">
+                     <AsyncPaginate
+                        value={{
+                          value: value?.surat_awal?.id,
+                          label: value?.surat_awal?.nama_surat,
+                        }}
+                        loadOptions={listAlquranOptions}
+                        onChange={() => {
+                          console.log("tes");
+                        }}
+                        additional={{
+                          page: 1,
+                        }}
                       />
+                      <input type="text" />
+                     </div>
                     </td>
                     <td>
                       <input
+                        disabled
                         type="text"
-                        defaultValue={value?.mapel?.nama_mapel}
+                        defaultValue={value?.dari_ayat}
                       />
+                    </td>
+                    <td>
+                      <AsyncPaginate
+                        value={{
+                          value: value?.surat_akhir?.id,
+                          label: value?.surat_akhir?.nama_surat,
+                        }}
+                        loadOptions={listAlquranOptions}
+                        onChange={() => {
+                          console.log("tes");
+                        }}
+                        additional={{
+                          page: 1,
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input type="text" defaultValue={value?.sampai_ayat} />
+                    </td>
+                    <td>
+                      <input type="text" defaultValue={value?.total_halaman} />
                     </td>
                     <td>
                       <select
@@ -318,13 +229,7 @@ export default function Absensi() {
                         value={value?.keterangan}
                       />
                     </td>
-                    <td>
-                      <input
-                        type="text"
-                        disabled
-                        defaultValue={`Semester ${value?.semester}`}
-                      />
-                    </td>
+
                     <td>
                       <input
                         placeholder="keterangan"

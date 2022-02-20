@@ -26,7 +26,7 @@ export default function ProtectRoute({ children, userRole }) {
       },
     }
   );
-  if (loading) {
+  if (isFetching) {
     return <div>Loading</div>;
   }
   return auth !== undefined ? children : <Navigate to="/login" />;
