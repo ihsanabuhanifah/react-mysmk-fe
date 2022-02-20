@@ -1,9 +1,11 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { authme } from "../api/auth";
 import { useQuery } from "react-query";
 export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
+  let [loading, setLoading] = React.useState(true);
   let { data, isFetching } = useQuery(
     //query key
     ["authme", auth],
@@ -18,11 +20,13 @@ export default function ProtectRoute({ children, userRole }) {
           Cookies.remove("mysmk_token");
           return <Navigate to="/logn" />;
         }
-        console.log(response?.data?.role);
+      },
+      onSuccess: () => {
+        setLoading(false);
       },
     }
   );
-  if (isFetching) {
+  if (loading) {
     return <div>Loading</div>;
   }
   return auth !== undefined ? children : <Navigate to="/login" />;

@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { listJadwal } from "../../api/guru/absensi";
 import { useQuery } from "react-query";
 import dayjs from "dayjs";
+import { formatHari, formatTahun } from "../../utils";
 export default function Jadwal() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   let date = new Date();
-  const [hari, setHari] = React.useState("senin");
+  let [hari, setHari] = React.useState(formatHari(new Date()));
+  const parameter = {
+    hari,
+  };
   let { data, isLoading, isFetching } = useQuery(
     //query key
-    ["jadwal", { hari }],
+    ["jadwal", parameter],
     //axios function,triggered when page/pageSize change
-    () => listJadwal(),
+    () => listJadwal(parameter),
     //configuration
     {
       select: (response) => {
@@ -21,9 +25,27 @@ export default function Jadwal() {
     }
   );
 
-  console.log(data);
   return (
     <React.Fragment>
+      <div>
+        <select
+          value={hari}
+          name="hari"
+          id="hari"
+          onChange={(e) => {
+            console.log("jalan" , e.target.value);
+            setHari(e.target.value);
+          }}
+        >
+          <option value="senin">Senin</option>
+          <option value="selasa">Selasa</option>
+          <option value="rabu">Rabu</option>
+          <option value="kamis">Kamis</option>
+          <option value="jumat">Jumat</option>
+          <option value="sabtu">Sabtu</option>
+          <option value="ahad">Ahad</option>
+        </select>
+      </div>
       <table>
         <thead>
           <tr>
@@ -39,7 +61,7 @@ export default function Jadwal() {
         </thead>
         <tbody>
           {data?.data?.rows?.map((value, index) => (
-            <tr>
+            <tr key={index}>
               <td>{index + 1}</td>
               <td>{value?.hari}</td>
               <td>{value?.kelas?.nama_kelas}</td>
@@ -54,7 +76,7 @@ export default function Jadwal() {
                     return navigate(
                       `/guru/jadwal/absensi/${value?.kelas?.id}/${
                         value?.mapel?.id
-                      }/${dayjs(date).format("YYYY-MM-DD")}`
+                      }/${formatTahun(date)}`
                     );
                   }}
                 >

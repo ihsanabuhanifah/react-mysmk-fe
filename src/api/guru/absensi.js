@@ -1,8 +1,8 @@
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 
-export function listJadwal() {
-  return axios.get("/guru/jadwal/list?");
+export function listJadwal(params) {
+  return axios.get("/guru/jadwal/list", { params });
 }
 
 export function listAbsensi(params) {
@@ -13,7 +13,7 @@ export function listAbsensi(params) {
 export async function updateAbsensi(values) {
   let absensi_kehadiran = [];
   await Promise.all(
-    values.absensi_kehadiran?.map((data, index) => {
+    values?.absensi_kehadiran?.map((data, index) => {
       let absensi = {
         id: data?.id,
         student_id: data?.siswa?.id,
