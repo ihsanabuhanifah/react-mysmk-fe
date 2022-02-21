@@ -105,8 +105,8 @@ export default function Login() {
               )}
             </FormText>
             <FormText>
-            <Label htmlFor="password" required>
-                Login Sebagai 
+              <Label htmlFor="password" required>
+                Login Sebagai
               </Label>
               <Select
                 id="loginAs"

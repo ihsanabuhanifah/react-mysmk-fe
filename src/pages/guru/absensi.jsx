@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../api/guru/absensi";
 import { listMapel, listKelas } from "../../api/list";
+import { Input , Select} from "../../components";
 import * as Yup from "yup";
 
 let personalSchema = Yup.object().shape({
@@ -141,7 +142,7 @@ export default function Absensi() {
       }) => (
         <form onSubmit={handleSubmit}>
           <div>
-            <input
+            <Input
               type="date"
               value={tanggalActive}
               placeholder="tanggal"
@@ -149,10 +150,10 @@ export default function Absensi() {
                 setTanggalActive(e.target.value);
               }}
             />
-            <select
-              name="mapel_id"
-              id="mapel_id"
-              value={mapel_id}
+            <Select
+              name="mapel"
+              id="mapel"
+              value={mapel}
               onChange={(e) => {
                 setMapel(e.target.value);
               }}
@@ -160,11 +161,11 @@ export default function Absensi() {
               {dataMapel?.data?.map((value) => (
                 <option value={value.id}>{value.nama_mapel}</option>
               ))}
-            </select>
-            <select
-              name="kelas_id"
-              id="kelas _id"
-              value={kelas_id}
+            </Select>
+            <Select
+              name="kelas"
+              id="kelas"
+              value={kelas}
               onChange={(e) => {
                 setKelas(e.target.value);
               }}
@@ -172,7 +173,7 @@ export default function Absensi() {
               {dataKelas?.data?.map((value) => (
                 <option value={value.id}>{value.nama_kelas}</option>
               ))}
-            </select>
+            </Select>
             <button
               type="button"
               onClick={() => {
@@ -195,14 +196,14 @@ export default function Absensi() {
                 values?.agenda_kelas?.map((value, index) => (
                   <React.Fragment key={index}>
                     <div className="grid grid-cols-9 gap-2">
-                      <input
+                      <Input
                         className="col-span-1"
                         type="text"
                         disabled
                         defaultValue={`Jam ke-${value?.jam_ke}`}
                       />
 
-                      <input
+                      <Input
                         className="col-span-7"
                         type="text"
                         placeholder="Materi"
@@ -258,27 +259,28 @@ export default function Absensi() {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                      <input
+                      <Input
                         disabled
                         type="text"
                         defaultValue={value?.siswa?.nama_siswa}
                       />
                     </td>
                     <td>
-                      <input
+                      <Input
                         disabled
                         type="text"
                         defaultValue={value?.kelas?.nama_kelas}
                       />
                     </td>
                     <td>
-                      <input
+                      <Input
                         type="text"
+                        disabled
                         defaultValue={value?.mapel?.nama_mapel}
                       />
                     </td>
                     <td>
-                      <select
+                      <Select
                         id={`absensi_kehadiran[${index}]kehadiran.id`}
                         name={`absensi_kehadiran[${index}]kehadiran.id`}
                         onChange={handleChange}
@@ -296,7 +298,7 @@ export default function Absensi() {
                         <option value={4}>Dispensasi</option>
                         <option value={5}>Tanpa Keterangan</option>
                         <option value={6}>Belum Absensi</option>
-                      </select>
+                      </Select>
 
                       {errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan !==
                         undefined && (
@@ -309,25 +311,27 @@ export default function Absensi() {
                       )}
                     </td>
                     <td>
-                      <input
+                      <Input
                         id={`absensi_kehadiran[${index}]keterangan`}
                         name={`absensi_kehadiran[${index}]keterangan`}
                         onChange={handleChange}
                         onBlur={handleBlur}
                         type="text"
+                        placeholder = "Keterangan"
                         value={value?.keterangan}
                       />
                     </td>
                     <td>
-                      <input
+                      <Input
                         type="text"
                         disabled
                         defaultValue={`Semester ${value?.semester}`}
                       />
                     </td>
                     <td>
-                      <input
+                      <Input
                         placeholder="keterangan"
+                        disabled
                         type="text"
                         defaultValue={value?.tahun_ajaran?.nama_tahun_ajaran}
                       />

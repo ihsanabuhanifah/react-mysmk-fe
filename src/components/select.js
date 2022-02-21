@@ -3,25 +3,38 @@ import clsx from "clsx";
 import { Children } from "react";
 
 export function Select({
-    size = "sm",
-    disabled = false,
-    error = false,
-    children,
-    ...props
-  }) {
-    let cl = clsx(
-      `appearance-none border transition-all duration-300 ease-in-out rounded px-1 text-gray-800  leading-tight outline-none  w-full  focus:border-2`,
-      {
-        "bg-gray-100 cursor-not-allowed": disabled,
-        "border border-red-400": error,
-        "h-8 text-xs": size === "xs",
-        "h-10 text-sm": size == "sm",
-        "h-12 text-base": size == "normal",
-      }
-    );
-    return (
-        <select className={cl} {...props}>
-            {children}
-        </select>
-    );
-  }
+  size = "sm",
+  disabled = false,
+  error = false,
+  children,
+  width = true,
+  ...props
+}) {
+  let cl = clsx(
+    `appearance-none border transition-all duration-300 ease-in-out rounded px-1 text-gray-800  leading-tight outline-none   focus:border-2`,
+    {
+      "bg-gray-100 cursor-not-allowed": disabled,
+      "border border-red-400": error,
+      "h-8 text-xs": size === "xs",
+      "h-10 text-sm": size == "sm",
+      "h-12 text-base": size == "normal",
+      "w-full": width === true,
+    }
+  );
+  return (
+    <div className="block w-full relative ">
+      <select className={cl} {...props}>
+        {children}
+      </select>
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <svg
+          className="fill-current h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
+      </div>
+    </div>
+  );
+}

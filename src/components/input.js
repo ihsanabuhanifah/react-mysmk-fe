@@ -5,16 +5,18 @@ export function Input({
   size = "sm",
   disabled = false,
   error = false,
+  width = false,
   ...props
 }) {
   let cl = clsx(
-    `appearance-none border transition-all duration-300 ease-in-out rounded px-1 text-gray-800  leading-tight outline-none  w-full  focus:border-2`,
+    `appearance-none border transition-all duration-300 ease-in-out rounded px-1 text-gray-800  leading-tight outline-none    focus:border-2`,
     {
       "bg-gray-100 cursor-not-allowed": disabled,
       "border border-red-400": error,
       "h-8 text-xs": size === "xs",
       "h-10 text-sm": size == "sm",
       "h-12 text-base": size == "normal",
+      "w-full" : width === true
     }
   );
   return <input className={cl} {...props} />;
