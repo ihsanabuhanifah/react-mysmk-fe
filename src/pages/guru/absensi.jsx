@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../api/guru/absensi";
 import { listMapel, listKelas } from "../../api/list";
-import { Input , Select} from "../../components";
+import { Input, Select, Button } from "../../components";
 import * as Yup from "yup";
 
 let personalSchema = Yup.object().shape({
@@ -29,7 +29,7 @@ let AbsensiSchema = Yup.object().shape({
 });
 export default function Absensi() {
   let { kelas_id, mapel_id, tanggal } = useParams();
- 
+
   let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
   let [dariTanggal, setDariTanggal] = React.useState(tanggal);
@@ -110,19 +110,16 @@ export default function Absensi() {
     const result = await updateAbsensi(values);
     queryClient.invalidateQueries("absensi");
     queryClient.invalidateQueries("notifikasi");
-
-   
   };
 
   //   console.log(initialState);
 
   React.useEffect(() => {
-   
     setDariTanggal(tanggal);
     setSampaiTanggal(tanggal);
+    setTanggalActive(tanggal);
   }, [tanggal]);
 
- 
   return (
     <Formik
       initialValues={initialState}
@@ -285,7 +282,7 @@ export default function Absensi() {
                         name={`absensi_kehadiran[${index}]kehadiran.id`}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        error={
+                        errors={
                           errors?.absensi_kehadiran?.[index]?.kehadiran
                             ?.alasan &&
                           touched?.absensi_kehadiran?.[index]?.kehadiran?.alasan
@@ -317,7 +314,7 @@ export default function Absensi() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         type="text"
-                        placeholder = "Keterangan"
+                        placeholder="Keterangan"
                         value={value?.keterangan}
                       />
                     </td>
@@ -341,7 +338,11 @@ export default function Absensi() {
               )}
             </tbody>
           </table>
-          <button type="submit">{isSubmitting ? "Meyimpan" : "Simpan"}</button>
+          <div>
+            <Button type="submit">
+              {isSubmitting ? "Meyimpan" : "Simpan"}
+            </Button>
+          </div>
         </form>
       )}
     </Formik>

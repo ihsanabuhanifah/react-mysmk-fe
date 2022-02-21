@@ -8,7 +8,7 @@ import { listMapel, listKelas } from "../../api/list";
 import { listHalaqoh } from "../../api/guru/halaqoh";
 import { listAlquranOptions } from "../../api/list";
 import * as Yup from "yup";
-import { AsyncPaginate } from "react-select-async-paginate";
+import { Input, ReactSelectAsync } from "../../components";
 
 let personalSchema = Yup.object().shape({
   kehadiran: Yup.object().shape({
@@ -67,9 +67,9 @@ export default function Absensi() {
       onSuccess: (data) => {
         setIniitalState({
           ...initialState,
-          tanggal: data?.halaqoh?.rows?.[0].tanggal,
-          halaqoh_id: data?.halaqoh?.rows?.[0].halaqoh.id,
-          waktu: data?.halaqoh?.rows?.[0].waktu,
+          tanggal: data?.halaqoh?.rows?.[0]?.tanggal,
+          halaqoh_id: data?.halaqoh?.rows?.[0]?.halaqoh.id,
+          waktu: data?.halaqoh?.rows?.[0]?.waktu,
           absensi_kehadiran: data?.halaqoh?.rows,
         });
       },
@@ -136,39 +136,40 @@ export default function Absensi() {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                      <input
+                      <Input
                         disabled
                         type="text"
                         defaultValue={value?.siswa?.nama_siswa}
                       />
                     </td>
                     <td>
-                     <div className="w-1/3">
-                     <AsyncPaginate
-                        value={{
-                          value: value?.surat_awal?.id,
-                          label: value?.surat_awal?.nama_surat,
-                        }}
-                        loadOptions={listAlquranOptions}
-                        onChange={() => {
-                          console.log("tes");
-                        }}
-                        additional={{
-                          page: 1,
-                        }}
-                      />
-                      <input type="text" />
-                     </div>
+                      <div className="w-1/3">
+                        <ReactSelectAsync
+                          debounceTimeout={300}
+                          value={{
+                            value: value?.surat_awal?.id,
+                            label: value?.surat_awal?.nama_surat,
+                          }}
+                          loadOptions={listAlquranOptions}
+                          onChange={() => {
+                            console.log("tes");
+                          }}
+                          additional={{
+                            page: 1,
+                          }}
+                        />
+                      </div>
                     </td>
                     <td>
-                      <input
+                      <Input
                         disabled
                         type="text"
                         defaultValue={value?.dari_ayat}
                       />
                     </td>
                     <td>
-                      <AsyncPaginate
+                      <ReactSelectAsync
+                        debounceTimeout={300}
                         value={{
                           value: value?.surat_akhir?.id,
                           label: value?.surat_akhir?.nama_surat,
@@ -183,10 +184,10 @@ export default function Absensi() {
                       />
                     </td>
                     <td>
-                      <input type="text" defaultValue={value?.sampai_ayat} />
+                      <Input type="text" defaultValue={value?.sampai_ayat} />
                     </td>
                     <td>
-                      <input type="text" defaultValue={value?.total_halaman} />
+                      <Input type="text" defaultValue={value?.total_halaman} />
                     </td>
                     <td>
                       <select
@@ -220,7 +221,7 @@ export default function Absensi() {
                       )}
                     </td>
                     <td>
-                      <input
+                      <Input
                         id={`absensi_kehadiran[${index}]keterangan`}
                         name={`absensi_kehadiran[${index}]keterangan`}
                         onChange={handleChange}
@@ -231,7 +232,7 @@ export default function Absensi() {
                     </td>
 
                     <td>
-                      <input
+                      <Input
                         placeholder="keterangan"
                         type="text"
                         defaultValue={value?.tahun_ajaran?.nama_tahun_ajaran}

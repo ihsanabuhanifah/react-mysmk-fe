@@ -37,7 +37,7 @@ export default function Guru() {
         <div className="col-span-1">
           {" "}
           <nav className="flex flex-col">
-            <NavLink to="dashboard">Invoices</NavLink>
+            <NavLink to="dashboard">Dashboard</NavLink>
             <NavLink to="jadwal">Jadwal KBM</NavLink>
             <NavLink to={`halaqoh/${formatTahun(date)}`}>Halaqoh</NavLink>
           </nav>

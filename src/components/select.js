@@ -1,12 +1,14 @@
 import React from "react";
 import clsx from "clsx";
-import { Children } from "react";
+
+import { AsyncPaginate } from "react-select-async-paginate";
 
 export function Select({
   size = "sm",
   disabled = false,
   error = false,
   children,
+  errors,
   width = true,
   ...props
 }) {
@@ -21,8 +23,15 @@ export function Select({
       "w-full": width === true,
     }
   );
+  let clDiv = clsx('lock w-full relative  ' , {
+    'border border-red-500' : error === true,
+    'border border-red-500' : errors !== undefined
+    
+  })
+
+  console.log('ee' , errors)
   return (
-    <div className="block w-full relative ">
+    <div className={clDiv}>
       <select className={cl} {...props}>
         {children}
       </select>
@@ -35,6 +44,14 @@ export function Select({
           <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
         </svg>
       </div>
+    </div>
+  );
+}
+
+export function ReactSelectAsync({ ...props }) {
+  return (
+    <div className="w-48">
+      <AsyncPaginate {...props} />
     </div>
   );
 }
