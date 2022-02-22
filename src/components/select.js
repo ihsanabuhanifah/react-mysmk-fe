@@ -20,16 +20,17 @@ export function Select({
       "h-8 text-xs": size === "xs",
       "h-10 text-sm": size == "sm",
       "h-12 text-base": size == "normal",
-      "w-full": width === true,
+    
     }
   );
   let clDiv = clsx('lock w-full relative  ' , {
-    'border border-red-500' : error === true,
-    'border border-red-500' : errors !== undefined
+    'border border-red-400' : error === true,
+    'border border-red-400' : errors !== undefined,
+    "w-full": width === true,
     
   })
 
-  console.log('ee' , errors)
+  
   return (
     <div className={clDiv}>
       <select className={cl} {...props}>
@@ -48,9 +49,12 @@ export function Select({
   );
 }
 
-export function ReactSelectAsync({ ...props }) {
+export function ReactSelectAsync({ error = false, ...props }) {
+  let cl = clsx('w-48 rounded-md' , {
+    'border border-red-400' : error === true
+  })
   return (
-    <div className="w-48">
+    <div className={cl}>
       <AsyncPaginate {...props} />
     </div>
   );

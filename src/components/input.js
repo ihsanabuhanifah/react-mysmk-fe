@@ -31,7 +31,7 @@ export function Label({ children, required = false, ...props }) {
 }
 
 export function FormText({ children, flexDirection = "col", ...props }) {
-  let cl = clsx(`flex  w-1/5`, {
+  let cl = clsx(`flex  w-full`, {
     "flex-col": flexDirection === "col",
     "flex-row": flexDirection === "row",
   });

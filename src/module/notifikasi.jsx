@@ -16,7 +16,7 @@ export default function Notifikasi() {
     {
       staleTime: 60 * 1000, // 1 menit,
       select: (response) => {
-        console.log(response);
+     
         return response.data;
       },
     }
@@ -30,13 +30,13 @@ export default function Notifikasi() {
     {
       staleTime: 60 * 1000, // 1 menit,
       select: (response) => {
-        console.log(response);
+     
         return response.data;
       },
     }
   );
 
-  console.log(data);
+ 
   return (
     <React.Fragment>
       <h2 className="px-2">Notifikasi</h2>

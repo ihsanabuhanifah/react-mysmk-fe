@@ -8,9 +8,33 @@ import { listMapel, listKelas } from "../../api/list";
 import { listHalaqoh } from "../../api/guru/halaqoh";
 import { listAlquranOptions } from "../../api/list";
 import * as Yup from "yup";
-import { Input, ReactSelectAsync } from "../../components";
+import {
+  Input,
+  ReactSelectAsync,
+  Select,
+  Button,
+  ErrorMEssage,
+  FormText,
+} from "../../components";
 
 let personalSchema = Yup.object().shape({
+  dari_ayat: Yup.number().typeError("Wajib angka").required("wajib disii"),
+  sampai_ayat: Yup.number().typeError("Wajib angka").required("wajib disii"),
+  total_halaman: Yup.number().typeError("Wajib angka").required("wajib disii"),
+  surat_awal: Yup.object()
+    .shape({
+      label: Yup.string(),
+      value: Yup.string(),
+    })
+    .nullable()
+    .required("wajib dipilih"),
+  surat_akhir: Yup.object()
+    .shape({
+      label: Yup.string(),
+      value: Yup.string(),
+    })
+    .nullable()
+    .required("wajib dipilih"),
   kehadiran: Yup.object().shape({
     id: Yup.string().nullable().required("wajib diisi"),
     alasan: Yup.mixed()
@@ -77,6 +101,7 @@ export default function Absensi() {
   );
 
   const onSubmit = async (values) => {
+    return console.log(values);
     const result = await updateAbsensi(values);
     queryClient.invalidateQueries("absensi");
     queryClient.invalidateQueries("notifikasi");
@@ -87,12 +112,12 @@ export default function Absensi() {
   //   console.log(initialState);
 
   React.useEffect(() => {
-    console.log("jalan");
     setDariTanggal(tanggal);
     setSampaiTanggal(tanggal);
   }, [tanggal]);
 
-  console.log("datahalaqoh", data);
+  console.log("datahalaqoh", initialState);
+
   return (
     <Formik
       initialValues={initialState}
@@ -121,7 +146,6 @@ export default function Absensi() {
                 <th>Sampai Surat</th>
                 <th>Sampai Ayat</th>
                 <th>Total Halaman</th>
-                <th>Juz Ke</th>
                 <th>Status Kehadiran</th>
                 <th>Keterangan</th>
               </tr>
@@ -143,54 +167,146 @@ export default function Absensi() {
                       />
                     </td>
                     <td>
-                      <div className="w-1/3">
+                      <FormText>
                         <ReactSelectAsync
                           debounceTimeout={300}
-                          value={{
-                            value: value?.surat_awal?.id,
-                            label: value?.surat_awal?.nama_surat,
-                          }}
+                          value={value?.surat_awal}
                           loadOptions={listAlquranOptions}
-                          onChange={() => {
-                            console.log("tes");
+                          onChange={(value) => {
+                            console.log(value);
+                            setFieldValue(
+                              `absensi_kehadiran[${index}]surat_awal`,
+                              value
+                            );
                           }}
+                          error={
+                            errors?.absensi_kehadiran?.[index]?.surat_awal &&
+                            touched?.absensi_kehadiran?.[index]?.surat_awal
+                          }
+                          placeholder="Pilih Surat"
                           additional={{
                             page: 1,
                           }}
                         />
-                      </div>
+                        {errors?.absensi_kehadiran?.[index]?.surat_awal &&
+                          touched?.absensi_kehadiran?.[index]?.surat_awal && (
+                            <ErrorMEssage>
+                              {errors?.absensi_kehadiran?.[index]?.surat_awal}
+                            </ErrorMEssage>
+                          )}
+                      </FormText>
                     </td>
                     <td>
-                      <Input
-                        disabled
-                        type="text"
-                        defaultValue={value?.dari_ayat}
-                      />
+                      <FormText>
+                        <Input
+                          id={`absensi_kehadiran[${index}]dari_ayat`}
+                          name={`absensi_kehadiran[${index}]dari_ayat`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="number"
+                          value={value?.dari_ayat}
+                          placeholder="Dari Ayat"
+                          onBlur={handleBlur}
+                          error={
+                            errors?.absensi_kehadiran?.[index]?.dari_ayat &&
+                            touched?.absensi_kehadiran?.[index]?.dari_ayat
+                          }
+                        />
+                        {errors?.absensi_kehadiran?.[index]?.dari_ayat &&
+                          touched?.absensi_kehadiran?.[index]?.dari_ayat && (
+                            <ErrorMEssage>
+                              {errors?.absensi_kehadiran?.[index]?.dari_ayat}
+                            </ErrorMEssage>
+                          )}
+                      </FormText>
+                    </td>
+
+                    <td>
+                      <FormText>
+                        <ReactSelectAsync
+                          debounceTimeout={300}
+                          value={value?.surat_akhir}
+                          loadOptions={listAlquranOptions}
+                          onChange={(value) => {
+                            console.log(value);
+                            setFieldValue(
+                              `absensi_kehadiran[${index}]surat_akhir`,
+                              value
+                            );
+                          }}
+                          error={
+                            errors?.absensi_kehadiran?.[index]?.surat_akhir &&
+                            touched?.absensi_kehadiran?.[index]?.surat_akhir
+                          }
+                          placeholder="Pilih Surat"
+                          additional={{
+                            page: 1,
+                          }}
+                        />
+                        {errors?.absensi_kehadiran?.[index]?.surat_awal &&
+                          touched?.absensi_kehadiran?.[index]?.surat_awal && (
+                            <ErrorMEssage>
+                              {errors?.absensi_kehadiran?.[index]?.surat_awal}
+                            </ErrorMEssage>
+                          )}
+                      </FormText>
                     </td>
                     <td>
-                      <ReactSelectAsync
-                        debounceTimeout={300}
-                        value={{
-                          value: value?.surat_akhir?.id,
-                          label: value?.surat_akhir?.nama_surat,
-                        }}
-                        loadOptions={listAlquranOptions}
-                        onChange={() => {
-                          console.log("tes");
-                        }}
-                        additional={{
-                          page: 1,
-                        }}
-                      />
+                      <FormText>
+                        <Input
+                          id={`absensi_kehadiran[${index}]sampai_ayat`}
+                          name={`absensi_kehadiran[${index}]sampai_ayat`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="number"
+                          value={value?.sampai_ayat}
+                          placeholder="Sampai Ayat"
+                          onBlur={handleBlur}
+                          error={
+                            errors?.absensi_kehadiran?.[index]?.sampai_ayat &&
+                            touched?.absensi_kehadiran?.[index]?.sampai_ayat
+                          }
+                        />
+                        {errors?.absensi_kehadiran?.[index]?.sampai_ayat &&
+                          touched?.absensi_kehadiran?.[index]?.sampai_ayat && (
+                            <ErrorMEssage>
+                              {errors?.absensi_kehadiran?.[index]?.sampai_ayat}
+                            </ErrorMEssage>
+                          )}
+                      </FormText>
                     </td>
+
                     <td>
-                      <Input type="text" defaultValue={value?.sampai_ayat} />
+                      <FormText>
+                        <Input
+                          id={`absensi_kehadiran[${index}]total_halaman`}
+                          name={`absensi_kehadiran[${index}]total_halaman`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          type="number"
+                          value={value?.total_halaman}
+                          placeholder="Total Halaman"
+                          onBlur={handleBlur}
+                          error={
+                            errors?.absensi_kehadiran?.[index]?.total_halaman &&
+                            touched?.absensi_kehadiran?.[index]?.total_halaman
+                          }
+                        />
+                        {errors?.absensi_kehadiran?.[index]?.total_halaman &&
+                          touched?.absensi_kehadiran?.[index]
+                            ?.total_halaman && (
+                            <ErrorMEssage>
+                              {
+                                errors?.absensi_kehadiran?.[index]
+                                  ?.total_halaman
+                              }
+                            </ErrorMEssage>
+                          )}
+                      </FormText>
                     </td>
+
                     <td>
-                      <Input type="text" defaultValue={value?.total_halaman} />
-                    </td>
-                    <td>
-                      <select
+                      <Select
                         id={`absensi_kehadiran[${index}]kehadiran.id`}
                         name={`absensi_kehadiran[${index}]kehadiran.id`}
                         onChange={handleChange}
@@ -208,16 +324,16 @@ export default function Absensi() {
                         <option value={4}>Dispensasi</option>
                         <option value={5}>Tanpa Keterangan</option>
                         <option value={6}>Belum Absensi</option>
-                      </select>
+                      </Select>
 
                       {errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan !==
                         undefined && (
-                        <span className="text-xs font-bold text-red-500 italic">
+                        <ErrorMEssage>
                           {
                             errors?.absensi_kehadiran?.[index]?.kehadiran
                               ?.alasan
                           }
-                        </span>
+                        </ErrorMEssage>
                       )}
                     </td>
                     <td>
@@ -228,14 +344,7 @@ export default function Absensi() {
                         onBlur={handleBlur}
                         type="text"
                         value={value?.keterangan}
-                      />
-                    </td>
-
-                    <td>
-                      <Input
-                        placeholder="keterangan"
-                        type="text"
-                        defaultValue={value?.tahun_ajaran?.nama_tahun_ajaran}
+                        placeholder="Keterangan"
                       />
                     </td>
                   </tr>
@@ -243,7 +352,7 @@ export default function Absensi() {
               )}
             </tbody>
           </table>
-          <button type="submit">{isSubmitting ? "Meyimpan" : "Simpan"}</button>
+          <Button type="submit">{isSubmitting ? "Meyimpan" : "Simpan"}</Button>
         </form>
       )}
     </Formik>
