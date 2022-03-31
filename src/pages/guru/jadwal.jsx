@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { listJadwal } from "../../api/guru/absensi";
 import LayoutPage from "../../module/layoutPage";
-import { Table, Dropdown, Button, Form, Select } from "semantic-ui-react";
+import { Table, Dropdown, Button, Form, Select, Segment } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../components";
 
@@ -65,7 +65,8 @@ export default function Jadwal() {
           />
         </Form>
       </div>
-      <Table celled selectable>
+     <Segment raised> 
+     <Table celled selectable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
@@ -81,7 +82,7 @@ export default function Jadwal() {
         <Table.Body>
           <TableLoading
             count={8}
-            isLoading={isLoading}
+            isLoading={isFetching}
             data={data?.data?.rows}
             messageEmpty={"Tidak Ada Jadwal Pelajaran"}
           >
@@ -119,6 +120,7 @@ export default function Jadwal() {
           </TableLoading>
         </Table.Body>
       </Table>
+     </Segment>
     </LayoutPage>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimmer, Loader, Table, Segment } from "semantic-ui-react";
+import { Dimmer, Loader, Table } from "semantic-ui-react";
 
 export function TableLoading({
   children,
