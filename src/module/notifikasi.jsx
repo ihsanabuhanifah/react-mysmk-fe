@@ -16,7 +16,6 @@ export default function Notifikasi() {
     {
       staleTime: 60 * 1000, // 1 menit,
       select: (response) => {
-     
         return response.data;
       },
     }
@@ -30,16 +29,14 @@ export default function Notifikasi() {
     {
       staleTime: 60 * 1000, // 1 menit,
       select: (response) => {
-     
         return response.data;
       },
     }
   );
 
- 
   return (
-    <React.Fragment>
-      <h2 className="px-2">Notifikasi</h2>
+    <div className="mt-5 border p-3 h-9/12 overflow-auto rounded-lg">
+      <h3 className="px-2">Notifikasi</h3>
       <div>
         <section>
           {data?.data?.map((value, index) => (
@@ -52,10 +49,14 @@ export default function Notifikasi() {
                     }/${dayjs(value?.tanggal).format("YYYY-MM-DD")}`
                   );
                 }}
-                className="text-xs text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
+                className="text-xs flex items-center italic text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
               >
-                Anda Belum melakukan abensi pada mata pelajaran{" "}
-                {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas}
+                <div className="h-10 w-2 bg-green-400  mr-5"></div>
+                <div>
+                  {" "}
+                  Anda Belum melakukan abensi pada mata pelajaran{" "}
+                  {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas}
+                </div>
               </button>
             </div>
           ))}
@@ -71,15 +72,19 @@ export default function Notifikasi() {
                     )}`
                   );
                 }}
-                className="text-xs text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
+                className="flex items-center  text-xs italic text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
               >
-                Anda Belum melakukan abensi Halaqoh pada tanggal{" "}
-                {dayjs(value?.tanggal).format("YYYY-MM-DD")}
+                <div className="h-10 w-2 bg-green-400  mr-5"></div>
+                <div>
+                  {" "}
+                  Anda Belum melakukan abensi Halaqoh pada tanggal{" "}
+                  {dayjs(value?.tanggal).format("YYYY-MM-DD")}
+                </div>
               </button>
             </div>
           ))}
         </section>
       </div>
-    </React.Fragment>
+    </div>
   );
 }

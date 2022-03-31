@@ -18,8 +18,8 @@ export function Select({
       "bg-gray-100 cursor-not-allowed": disabled,
       "border border-red-400": error,
       "h-8 text-xs": size === "xs",
-      "h-10 text-sm": size == "sm",
-      "h-12 text-base": size == "normal",
+      "h-10 text-sm": size === "sm",
+      "h-12 text-base": size === "normal",
     
     }
   );

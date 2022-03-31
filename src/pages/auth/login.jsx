@@ -4,25 +4,41 @@ import * as Yup from "yup";
 import { login } from "../../api/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { Input, Label, FormText, ErrorMEssage, Select } from "../../components";
+import LogoMySMK from "../../image/MySMK.png";
+import SMKMQ from "../../image/MADINATULQURAN.png";
+import { Form, Button, Image, Input, Select } from "semantic-ui-react";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email().required("Wajib di isi"),
-  password: Yup.string()
-    .min(8, "Password minimal 8 Karakter")
-    .required("wajib di isi"),
-  loginAs: Yup.number().required("Wajib di pilih"),
+  // email: Yup.string().email().required("Wajib di isi"),
+  // password: Yup.string()
+  //   .min(8, "Password minimal 8 Karakter")
+  //   .required("wajib di isi"),
+  // loginAs: Yup.number().required("Wajib di pilih"),
 });
+
 export default function Login() {
+  let [showPassword, setShowPassword] = React.useState(false);
   const initialState = {
     email: "",
     password: "",
-    loginAs: "",
+    loginAs: 4,
   };
   let navigate = useNavigate();
+  const rolesOptions = [
+    { key: 1, value: 1, text: "Super Admin" },
+    { key: 2, value: 2, text: "Admin" },
+    { key: 3, value: 3, text: "Kepala Sekolah" },
+    { key: 4, value: 4, text: "Guru" },
+    { key: 5, value: 5, text: "Musyrif" },
+    { key: 6, value: 6, text: "Wali Kelas" },
+    { key: 7, value: 7, text: "Keuangan" },
+    { key: 9, value: 9, text: "Santri" },
+  ];
   const onSubmit = async (values) => {
     try {
+      console.log(values);
       const result = await login(values);
+
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
@@ -63,81 +79,102 @@ export default function Login() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <form onSubmit={handleSubmit}>
-            <FormText>
-              {/* <label htmlFor="email">email</label> */}
-              <Label htmlFor="email" required>
-                Email
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                placeholder="email"
-                error={errors.email && touched.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.email}
-                disabled={isSubmitting}
-              />
-              {errors.email && touched.email && (
-                <ErrorMEssage className="text-red-500 text-sm">
-                  {errors.email}
-                </ErrorMEssage>
-              )}
-            </FormText>
-            <FormText>
-              {/* <label htmlFor="email">email</label> */}
-              <Label htmlFor="password" required>
-                Password
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                placeholder="password"
-                error={errors.password && touched.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                disabled={isSubmitting}
-              />
-              {errors.password && touched.password && (
-                <ErrorMEssage className="">{errors.password}</ErrorMEssage>
-              )}
-            </FormText>
-            <FormText>
-              <Label htmlFor="password" required>
-                Login Sebagai
-              </Label>
-              <Select
-                id="loginAs"
-                name="loginAs"
-                placeholder="loginAs"
-                error={errors.loginAs && touched.loginAs}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.loginAs}
-                disabled={isSubmitting}
-              >
-                <option value={null}>Pilih</option>
-                <option value={1}>Super Admin</option>
-                <option value={2}>Admin</option>
-                <option value={3}>Kepala Sekolah</option>
-                <option value={4}>Guru</option>
-                <option value={5}>Musyrif</option>
-                <option value={6}>Wali Kelas</option>
-                <option value={7}>Keuangan</option>
-                <option value={8}>Santri</option>
-              </Select>
-              {errors.loginAs && touched.loginAs && (
-                <p className="text-red-500 text-sm">{errors.loginAs}</p>
-              )}
-            </FormText>
-            <div>
-              <button type="submit">
-                {isSubmitting ? "Process" : "Login"}
-              </button>
+          <div className="w-screen h-screen">
+            <div className="grid grid-cols-5 h-full content-center ">
+              <div className="col-start-3 h-full w-full  ">
+                <div className="w-full h-full">
+                  <Form onSubmit={handleSubmit}>
+                    <div className="flex justify-center items-center mb-14">
+                      <div>
+                        <Image src={LogoMySMK} />
+                        <Image src={SMKMQ} />
+                      </div>
+                    </div>
+                    <Form.Field
+                      control={Input}
+                      label="Email"
+                      placeholder="Masukan Email"
+                      name="email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={"envelope"}
+                      iconPosition="left"
+                      error={
+                        errors.email &&
+                        touched.email && {
+                          content: `${errors?.email}`,
+                          pointing: "above",
+                        }
+                      }
+                      type="email"
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="Kata Sandi"
+                      placeholder="Masukan Kata Sandi"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={{
+                        name: showPassword ? "eye slash" : "eye",
+                        circular: true,
+                        link: true,
+                        onClick: () => setShowPassword(!showPassword),
+                      }}
+                      iconPosition="left"
+                      error={
+                        errors.password &&
+                        touched.password && {
+                          content: `${errors?.password}`,
+                          pointing: "above",
+                        }
+                      }
+                      type={showPassword ? "text" : "password"}
+                    />{" "}
+                    <Form.Field
+                      control={Select}
+                      options={rolesOptions}
+                      label={{
+                        children: "Masuk Sebagai",
+                        htmlFor: "loginAs",
+                        name: "loginAs",
+                      }}
+                      onChange={(event, data) => {
+                        setFieldValue("loginAs", data.value);
+                      }}
+                      onBlur={handleBlur}
+                      value={values.loginAs}
+                      disabled={isSubmitting}
+                      placeholder="Pilih Role"
+                      error={
+                        errors.loginAs &&
+                        touched.loginAs && {
+                          content: `${errors?.loginAs}`,
+                          pointing: "above",
+                        }
+                      }
+                      search
+                      searchInput={{ id: "loginAs", name: "loginAs" }}
+                    />
+                    <Button
+                      content={isSubmitting ? "Proses" : "Masuk"}
+                      type="submit"
+                      fluid
+                      size="medium"
+                      color="green"
+                      disabled={isSubmitting}
+                    />
+                  </Form>
+                </div>
+              </div>
             </div>
-          </form>
+          </div>
         )}
       </Formik>
     </React.Fragment>

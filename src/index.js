@@ -6,7 +6,9 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import 'semantic-ui-css/semantic.min.css'
 const queryClient = new QueryClient();
+
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

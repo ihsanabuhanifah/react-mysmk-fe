@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link  } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import { Jadwal, Absensi, Dashboard, Halaqoh } from "./pages/guru";
+import { Jadwal, Absensi, Dashboard, Halaqoh , Kunjungan, Pulang} from "./pages/guru";
 import NotFound from "./pages/NotFound";
 
 
@@ -24,6 +24,8 @@ function App() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="jadwal" element={<Jadwal />} />
+        <Route path="kunjungan" element={<Kunjungan />} />
+        <Route path="pulang" element={<Pulang />} />
         <Route path="halaqoh/:tanggal" element={<Halaqoh />} />
         <Route path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal" element={<Absensi />} />
       </Route>

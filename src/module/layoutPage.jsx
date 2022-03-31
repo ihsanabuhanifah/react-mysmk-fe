@@ -1,0 +1,14 @@
+import React from "react";
+import { Divider, Segment } from "semantic-ui-react";
+
+export default function LayoutPage({ title, children }) {
+  return (
+    <React.Fragment>
+      <section className="mt-5 ml-5 mr-5 mb-5">
+        <h1 className="text-2xl capitalize mb-5">{title}</h1>
+       
+        <div>{children}</div>
+      </section>
+    </React.Fragment>
+  );
+}

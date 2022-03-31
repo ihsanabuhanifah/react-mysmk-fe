@@ -5,7 +5,21 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../api/guru/absensi";
 import { listMapel, listKelas } from "../../api/list";
-import { Input, Select, Button } from "../../components";
+import { TableLoading } from "../../components";
+import {
+  Input,
+  Table,
+  Select,
+  Form,
+  Button,
+  Segment,
+  Header,
+  TextArea,
+  Dropdown,
+} from "semantic-ui-react";
+import { getOptions } from "../../utils/format";
+import { izinOptions } from "../../utils/options";
+import LayoutPage from "../../module/layoutPage";
 import * as Yup from "yup";
 
 let personalSchema = Yup.object().shape({
@@ -121,230 +135,246 @@ export default function Absensi() {
   }, [tanggal]);
 
   return (
-    <Formik
-      initialValues={initialState}
-      validationSchema={AbsensiSchema}
-      enableReinitialize
-      onSubmit={onSubmit}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldValue,
-        isSubmitting,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <Input
-              type="date"
-              value={tanggalActive}
-              placeholder="tanggal"
-              onChange={(e) => {
-                setTanggalActive(e.target.value);
-              }}
-            />
-            <Select
-              name="mapel"
-              id="mapel"
-              value={mapel}
-              onChange={(e) => {
-                setMapel(e.target.value);
-              }}
-            >
-              {dataMapel?.data?.map((value) => (
-                <option value={value.id}>{value.nama_mapel}</option>
-              ))}
-            </Select>
-            <Select
-              name="kelas"
-              id="kelas"
-              value={kelas}
-              onChange={(e) => {
-                setKelas(e.target.value);
-              }}
-            >
-              {dataKelas?.data?.map((value) => (
-                <option value={value.id}>{value.nama_kelas}</option>
-              ))}
-            </Select>
-            <button
-              type="button"
-              onClick={() => {
-                return navigate(
-                  `/guru/jadwal/absensi/${kelas}/${mapel}/${tanggalActive}`
-                );
-              }}
-            >
-              Filter
-            </button>
-          </div>
-          <div>
-            <h2>Agenda Mengajar</h2>
-            <div>
-              {values?.agenda_kelas?.length === 0 ? (
-                <div>
-                  <p>Tidak ditemukan jadwal </p>
-                </div>
-              ) : (
-                values?.agenda_kelas?.map((value, index) => (
-                  <React.Fragment key={index}>
-                    <div className="grid grid-cols-9 gap-2">
-                      <Input
-                        className="col-span-1"
-                        type="text"
-                        disabled
-                        defaultValue={`Jam ke-${value?.jam_ke}`}
-                      />
+    <LayoutPage title={"Agenda Mengajar"}>
+      <Formik
+        initialValues={initialState}
+        validationSchema={AbsensiSchema}
+        enableReinitialize
+        onSubmit={onSubmit}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          setFieldValue,
+          isSubmitting,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Segment>
+              <section className="grid grid-cols-7 gap-5">
+                {/* <Input
+                type="date"
+                value={tanggalActive}
+                placeholder="tanggal"
+                onChange={(e) => {
+                  setTanggalActive(e.target.value);
+                }}
+              /> */}
 
-                      <Input
-                        className="col-span-7"
-                        type="text"
-                        placeholder="Materi"
-                        id={`agenda_kelas[${index}]materi`}
-                        name={`agenda_kelas[${index}]materi`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={value?.materi}
-                      />
-                    </div>
-                  </React.Fragment>
-                ))
+                <div className="col-span-2">
+                  <Form.Field
+                    control={Input}
+                    label="Tanggal"
+                    name="email"
+                    onChange={(e) => {
+                      setTanggalActive(e.target.value);
+                    }}
+                    value={tanggalActive}
+                    disabled={isSubmitting}
+                    type="date"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <Form.Field
+                    control={Select}
+                    options={getOptions(dataMapel?.data, "nama_mapel")}
+                    label={{
+                      children: "Mata Pelajaran",
+                      htmlFor: "mapel",
+                      name: "mapel",
+                    }}
+                    onChange={(event, data) => {
+                      setMapel(data.value);
+                    }}
+                    value={parseFloat(mapel)}
+                    placeholder="Mata Pelajaran"
+                    search
+                    searchInput={{ id: "mapel", name: "mapel" }}
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <Form.Field
+                    control={Select}
+                    options={getOptions(dataKelas?.data, "nama_kelas")}
+                    label={{
+                      children: "Kelas",
+                      htmlFor: "kelas",
+                      name: "kelas",
+                    }}
+                    onChange={(event, data) => {
+                      setKelas(data.value);
+                    }}
+                    value={parseFloat(kelas)}
+                    placeholder="Kelas"
+                    search
+                    searchInput={{ id: "kelas", name: "kelas" }}
+                  />
+                </div>
+
+                <div className=" flex items-center justify-center pt-4">
+                  <Button
+                    content={"Filter"}
+                    type="button"
+                    fluid
+                    size="medium"
+                    color="green"
+                    onClick={() => {
+                      return navigate(
+                        `/guru/jadwal/absensi/${kelas}/${mapel}/${tanggalActive}`
+                      );
+                    }}
+                  />
+                </div>
+              </section>
+            </Segment>
+            {!isFetching && (
+              <div>
+                <Segment raised>
+                  <Header as={"h3"}>Materi</Header>
+                  {values?.agenda_kelas?.map((value, index) => (
+                    <React.Fragment key={index}>
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={`Jam ke-${value?.jam_ke}`}
+                          placeholder="Materi"
+                          name={`agenda_kelas[${index}]materi`}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={value?.materi}
+                          disabled={isSubmitting}
+                          fluid
+                          type="email"
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </Segment>
+              </div>
+            )}
+            <Segment raised content>
+              <Header as={"h3"}>Absensi Kelas</Header>
+              <Table>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>No</Table.HeaderCell>
+                    <Table.HeaderCell>Nama</Table.HeaderCell>
+                    <Table.HeaderCell>Kelas</Table.HeaderCell>
+                    <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                    <Table.HeaderCell>
+                      <div className="flex items-center">
+                        {" "}
+                        <span className="mr-2">Kehadiran</span>
+                        <input
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              let kehadiran = [];
+                              values?.absensi_kehadiran?.map((value) => {
+                                value.kehadiran.id = 1;
+
+                                kehadiran.push(value);
+                              });
+
+                              setFieldValue("absensi_kehadiran", kehadiran);
+                            }
+                          }}
+                          type="checkbox"
+                        />
+                      </div>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell>Keterangan</Table.HeaderCell>
+                    <Table.HeaderCell>Semester</Table.HeaderCell>
+                    <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  <TableLoading
+                    count={8}
+                    isLoading={isFetching}
+                    data={values?.absensi_kehadiran}
+                    messageEmpty={"Tidak Ada Jadwal Pelajaran"}
+                  >
+                    {values?.absensi_kehadiran?.map((value, index) => (
+                      <Table.Row key={index}>
+                        <Table.Cell>{index + 1}</Table.Cell>
+                        <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
+                        <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                        <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                        <Table.Cell>
+                          <div className="flex flex-col">
+                            <Dropdown
+                              selection
+                              search
+                              options={izinOptions}
+                              id={`absensi_kehadiran[${index}]kehadiran.id`}
+                              name={`absensi_kehadiran[${index}]kehadiran.id`}
+                              onChange={(e, data) => {
+                                setFieldValue(
+                                  `absensi_kehadiran[${index}]kehadiran.id`,
+                                  data.value
+                                );
+                              }}
+                              errors={
+                                errors?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan &&
+                                touched?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan
+                              }
+                              value={value?.kehadiran?.id}
+                            />
+
+                            {errors?.absensi_kehadiran?.[index]?.kehadiran
+                              ?.alasan !== undefined && (
+                              <span className="text-xs font-bold text-red-500 italic">
+                                {
+                                  errors?.absensi_kehadiran?.[index]?.kehadiran
+                                    ?.alasan
+                                }
+                              </span>
+                            )}
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <TextArea
+                            rows={2}
+                            id={`absensi_kehadiran[${index}]keterangan`}
+                            name={`absensi_kehadiran[${index}]keterangan`}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            type="text"
+                            placeholder="Keterangan"
+                            value={value?.keterangan}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>semester {value?.semester}</Table.Cell>
+                        <Table.Cell>
+                          {value?.tahun_ajaran?.nama_tahun_ajaran}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </TableLoading>
+                </Table.Body>
+              </Table>
+            </Segment>
+            <div>
+              {!isFetching && (
+                <Button
+                  content={isSubmitting ? "Menyimpan" : "Simpan"}
+                  type="submit"
+                  fluid
+                  size="medium"
+                  color="green"
+                  disabled={isSubmitting}
+                />
               )}
             </div>
-          </div>
-          <table className="table-fixed">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Mata Pelajaran</th>
-                <th>
-                  <span className="mr-2">Kehadiran</span>
-                  <input
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        let kehadiran = [];
-                        values?.absensi_kehadiran?.map((value) => {
-                          value.kehadiran.id = 1;
-
-                          kehadiran.push(value);
-                        });
-
-                        setFieldValue("absensi_kehadiran", kehadiran);
-                      }
-                    }}
-                    type="checkbox"
-                  />
-                </th>
-                <th>Keterangan</th>
-                <th>Semester</th>
-                <th>Tahun Ajaran</th>
-              </tr>
-            </thead>
-            <tbody>
-              {values?.absensi_kehadiran?.length === 0 ? (
-                <tr>
-                  <td colSpan={8}>Tidak ditemukan jadwal </td>
-                </tr>
-              ) : (
-                values?.absensi_kehadiran?.map((value, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <Input
-                        disabled
-                        type="text"
-                        defaultValue={value?.siswa?.nama_siswa}
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        disabled
-                        type="text"
-                        defaultValue={value?.kelas?.nama_kelas}
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        type="text"
-                        disabled
-                        defaultValue={value?.mapel?.nama_mapel}
-                      />
-                    </td>
-                    <td>
-                      <Select
-                        id={`absensi_kehadiran[${index}]kehadiran.id`}
-                        name={`absensi_kehadiran[${index}]kehadiran.id`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        errors={
-                          errors?.absensi_kehadiran?.[index]?.kehadiran
-                            ?.alasan &&
-                          touched?.absensi_kehadiran?.[index]?.kehadiran?.alasan
-                        }
-                        value={value?.kehadiran?.id}
-                      >
-                        <option value={1}>Hadir</option>
-                        <option value={2}>Sakit</option>
-                        <option value={3}>Izin Pulang</option>
-                        <option value={4}>Dispensasi</option>
-                        <option value={5}>Tanpa Keterangan</option>
-                        <option value={6}>Belum Absensi</option>
-                      </Select>
-
-                      {errors?.absensi_kehadiran?.[index]?.kehadiran?.alasan !==
-                        undefined && (
-                        <span className="text-xs font-bold text-red-500 italic">
-                          {
-                            errors?.absensi_kehadiran?.[index]?.kehadiran
-                              ?.alasan
-                          }
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <Input
-                        id={`absensi_kehadiran[${index}]keterangan`}
-                        name={`absensi_kehadiran[${index}]keterangan`}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        type="text"
-                        placeholder="Keterangan"
-                        value={value?.keterangan}
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        type="text"
-                        disabled
-                        defaultValue={`Semester ${value?.semester}`}
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        placeholder="keterangan"
-                        disabled
-                        type="text"
-                        defaultValue={value?.tahun_ajaran?.nama_tahun_ajaran}
-                      />
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-          <div>
-            <Button type="submit">
-              {isSubmitting ? "Meyimpan" : "Simpan"}
-            </Button>
-          </div>
-        </form>
-      )}
-    </Formik>
+          </Form>
+        )}
+      </Formik>
+    </LayoutPage>
   );
 }

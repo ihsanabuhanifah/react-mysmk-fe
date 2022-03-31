@@ -22,12 +22,15 @@
     "react-scripts": "4.0.3",
     "react-select": "^5.2.2",
     "react-select-async-paginate": "^0.6.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.1.2",
     "sweetalert2": "^11.1.9",
     "web-vitals": "^1.1.2",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "set PORT=2001 && craco start",
+  
+    "start": "set PORT=2001 &&  TAILWIND_MODE=watch craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

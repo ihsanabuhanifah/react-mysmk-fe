@@ -5,9 +5,12 @@ import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 import Notifikasi from "../module/notifikasi";
 import { formatTahun } from "../utils";
-
+import LogoMySMK from "../image/MySMK.png";
+import SMKMQ from "../image/MADINATULQURAN.png";
+import LogoNotif from "../image/notifikasi.png";
+import { Image, Input } from "semantic-ui-react";
+import SidebarGuru from "./Sidebar/sidebarGuru";
 export default function Guru() {
-  let date = new Date();
   React.useEffect(() => {
     document.title = "Guru";
   });
@@ -29,26 +32,41 @@ export default function Guru() {
     }
   );
 
-  console.log(data);
   return (
-    <div className="h-screen">
-      <h1>Welcome to the ustadz {data?.name}!</h1>
-      <div className="grid grid-cols-12 gap-x-2 h-full">
-        <div className="col-span-1">
-          {" "}
-          <nav className="flex flex-col">
-            <NavLink to="dashboard">Dashboard</NavLink>
-            <NavLink to="jadwal">Jadwal KBM</NavLink>
-            <NavLink to={`halaqoh/${formatTahun(date)}`}>Halaqoh</NavLink>
-          </nav>
+    <div className="h-screen antialiased text-gray-700 border">
+      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-10 overflow-auto" >
+        <div className="h-24 w-24 col-span-2 ">
+          <Image src={LogoMySMK} />
+          <Image src={SMKMQ} />
         </div>
-        <div className="content col-span-9 overflow-auto">
+        <div className="rounded-xl col-span-6 ">
+          <Input
+            classN
+            fluid
+            loading={false}
+            icon="search"
+            iconPosition="left"
+            placeholder="Search..."
+          />
+        </div>
+        <div className="col-span-2">
+          <div className="border-2 h-10 w-10 rounded-full p-2">
+            <img className="w-5 h-5" src={LogoNotif} alt="" />
+          </div>
+        </div>
+      </header>
+      <main className="grid grid-cols-12 gap-x-2 h-9/12  ">
+        <div className="col-span-2 border-r-2 pl-10 pt-5">
+          <SidebarGuru />
+        </div>
+        <div className="content col-span-8 overflow-auto ">
           <Outlet data={data} />
         </div>
-        <div className="content col-span-2">
+        <div className="content col-span-2 pr-5 ">
           <Notifikasi />
+       
         </div>
-      </div>
+      </main>
     </div>
   );
 }

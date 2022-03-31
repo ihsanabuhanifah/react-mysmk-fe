@@ -6,7 +6,7 @@ import { useQuery } from "react-query";
 export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
   let [loading, setLoading] = React.useState(true);
-  let { data, isFetching } = useQuery(
+  let { data, isFetching, isLoading } = useQuery(
     //query key
     ["authme", auth],
     //axios function,triggered when page/pageSize change
@@ -26,7 +26,7 @@ export default function ProtectRoute({ children, userRole }) {
       },
     }
   );
-  if (isFetching) {
+  if (isLoading) {
     return <div>Loading</div>;
   }
   return auth !== undefined ? children : <Navigate to="/login" />;
