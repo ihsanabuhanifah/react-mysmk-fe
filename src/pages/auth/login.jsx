@@ -6,18 +6,19 @@ import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import LogoMySMK from "../../image/MySMK.png";
 import SMKMQ from "../../image/MADINATULQURAN.png";
-import { Form, Button, Image, Input, Select } from "semantic-ui-react";
+import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
 
 const LoginSchema = Yup.object().shape({
-  // email: Yup.string().email().required("Wajib di isi"),
-  // password: Yup.string()
-  //   .min(8, "Password minimal 8 Karakter")
-  //   .required("wajib di isi"),
-  // loginAs: Yup.number().required("Wajib di pilih"),
+  email: Yup.string().email().required("Wajib di isi"),
+  password: Yup.string()
+    .min(8, "Password minimal 8 Karakter")
+    .required("wajib di isi"),
+  loginAs: Yup.number().required("Wajib di pilih"),
 });
 
 export default function Login() {
   let [showPassword, setShowPassword] = React.useState(false);
+
   const initialState = {
     email: "",
     password: "",
@@ -34,7 +35,7 @@ export default function Login() {
     { key: 7, value: 7, text: "Keuangan" },
     { key: 9, value: 9, text: "Santri" },
   ];
-  const onSubmit = async (values) => {
+  const onSubmit = async (values, { setErrors }) => {
     try {
       console.log(values);
       const result = await login(values);
@@ -51,12 +52,8 @@ export default function Login() {
         return navigate("/siswa");
       }
     } catch (err) {
-      if (err.response.status === 422) {
-        return console.log(err.response.data.msg);
-      }
-      if (err.response.status === 404) {
-        return console.log(err.response.data.msg);
-      }
+      setErrors(err.response.data);
+
       return console.log("periksa koneksi internet anda");
     }
   };
@@ -90,6 +87,9 @@ export default function Login() {
                         <Image src={SMKMQ} />
                       </div>
                     </div>
+                    {errors.msg !== undefined && (
+                      <Message color="red"> {errors.msg}</Message>
+                    )}
                     <Form.Field
                       control={Input}
                       label="Email"
