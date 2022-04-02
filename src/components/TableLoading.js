@@ -37,11 +37,3 @@ export function TableLoading({
   );
 }
 
-// <option value="semua">Semua Jadwal</option>
-// <option value="senin">Senin</option>
-// <option value="selasa">Selasa</option>
-// <option value="rabu">Rabu</option>
-// <option value="kamis">Kamis</option>
-// <option value="jumat">Jumat</option>
-// <option value="sabtu">Sabtu</option>
-// <option value="ahad">Ahad</option>

@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { listJadwal } from "../../api/guru/absensi";
-import LayoutPage from "../../module/layoutPage";
+import { listJadwal } from "../../../api/guru/absensi";
+import LayoutPage from "../../../module/layoutPage";
 import { Table, Dropdown, Button, Form, Select, Segment } from "semantic-ui-react";
 import { useQuery } from "react-query";
-import { TableLoading } from "../../components";
+import { TableLoading } from "../../../components";
 
-import { formatHari, formatTahun } from "../../utils";
+import { formatHari, formatTahun } from "../../../utils";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();

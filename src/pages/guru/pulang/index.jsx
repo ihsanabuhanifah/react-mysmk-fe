@@ -8,18 +8,25 @@ import {
   Segment,
   Form,
   TextArea,
+  Menu,
+  Icon,
 } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
-import { listPulang, updatePulang } from "../../../api/guru/pulangDanKunjungan";
+import {
+  listPulang,
+  responsePulang,
+  laporanPulang,
+} from "../../../api/guru/pulangDanKunjungan";
 import { TableLoading, ModalFilter } from "../../../components";
 import { handleViewNull, formatDate, statusApproval } from "../../../utils";
 import { Formik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
+import { selisihHari } from "../../../utils/waktu";
 import * as Yup from "yup";
 import FilterPerizinanPulang from "./filterPulang";
 
 import useDebounce from "../../../hook/useDebounce";
-import { approveOptions } from "../../../utils/options";
+import { approveOptions, pageSizeOptions } from "../../../utils/options";
 
 export default function Pulang() {
   let queryClient = useQueryClient();
@@ -28,6 +35,8 @@ export default function Pulang() {
   let [nama, setNama] = React.useState("");
   let debouncedName = useDebounce(nama, 600);
   let [approve, setApprove] = React.useState(false);
+  let [laporan, setLaporan] = React.useState(false);
+  let [updated, setUpdated] = React.useState(false)
   let parameter = {
     page: page,
     pageSize: pageSize,
@@ -50,9 +59,16 @@ export default function Pulang() {
 
   const onSubmit = async (values) => {
     try {
-      const response = await updatePulang(values);
+      let response;
+      console.log(approve)
+      if (approve) {
+        response = await responsePulang(values);
+      } else {
+        response = await laporanPulang(values);
+      }
       queryClient.invalidateQueries("perizinan_pulang");
       setApprove(false);
+      setLaporan(false);
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -71,7 +87,7 @@ export default function Pulang() {
   return (
     <LayoutPage title={"Perizinan Pulang"}>
       <Formik
-        initialValues={data?.data}
+        initialValues={data?.data?.rows}
         enableReinitialize
         // validationSchema={profileSchema}
         onSubmit={onSubmit}
@@ -90,7 +106,7 @@ export default function Pulang() {
         }) => (
           <Form onSubmit={handleSubmit}>
             <Segment>
-              <div className="overflow-auto">
+              <div className="overflow-auto h-full">
                 <div className="space-x-2">
                   <Input
                     onChange={(e) => {
@@ -103,14 +119,16 @@ export default function Pulang() {
                   {/* <ModalFilter header={'Filter'} open={open} setOpen={setOpen}>
             <FilterPerizinanPulang/>
         </ModalFilter> */}
-                  {approve ? (
+                  {approve || laporan ? (
                     <>
                       <Button
                         type="button"
                         color="red"
                         onClick={() => {
                           setApprove(false);
-                          return setValues(data?.data);
+                          setLaporan(false);
+                          setUpdated(false)
+                          return setValues(data?.data?.rows);
                         }}
                         content="Batal"
                       />
@@ -120,7 +138,7 @@ export default function Pulang() {
                         color="blue"
                         type="submit"
                         loading={isSubmitting}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !updated}
                       />
                     </>
                   ) : (
@@ -131,22 +149,24 @@ export default function Pulang() {
                         onClick={() => {
                           setApprove(true);
                         }}
-                        content="Perbaharui"
+                        content="Respon Pengajuan"
                       />
                     </>
                   )}
 
-                  <Button
-                    type="button"
-                    color="olive"
-                    onClick={() => {
-                      setApprove(true);
-                    }}
-                    content="Laporan Kedatangan"
-                  />
+                  {!approve && !laporan && (
+                    <Button
+                      type="button"
+                      color="olive"
+                      onClick={() => {
+                        setLaporan(!laporan);
+                      }}
+                      content="Laporan Kedatangan"
+                    />
+                  )}
                 </div>
 
-                <Table celled selectable>
+                <Table celled padded>
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
@@ -157,23 +177,27 @@ export default function Pulang() {
                       <Table.HeaderCell textAlign="center">
                         Status Approval
                       </Table.HeaderCell>
-                      <Table.HeaderCell>Alasan Ditolak</Table.HeaderCell>
+                      <Table.HeaderCell width={16} content singleLine={approve}>
+                        Alasan Ditolak
+                      </Table.HeaderCell>
                       <Table.HeaderCell>Approve By</Table.HeaderCell>
-                      <Table.HeaderCell>Tanggal Kembali</Table.HeaderCell>
-                      <Table.HeaderCell>Jam Kembali</Table.HeaderCell>
+
+                      <Table.HeaderCell width={16} content singleLine={laporan}>
+                        Jam Kembali
+                      </Table.HeaderCell>
+                      <Table.HeaderCell width={16} content singleLine={laporan}>
+                        Tanggal Kembali
+                      </Table.HeaderCell>
                       <Table.HeaderCell>Terlambat</Table.HeaderCell>
                       <Table.HeaderCell>Denda</Table.HeaderCell>
-                      <Table.HeaderCell>DiLaporkan By</Table.HeaderCell>
-                      <Table.HeaderCell textAlign="center">
-                        Aksi
-                      </Table.HeaderCell>
+                      <Table.HeaderCell>Laporan</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     <TableLoading
-                      count={14}
+                      count={13}
                       isLoading={isLoading}
-                      data={data?.data}
+                      data={data?.data?.rows}
                       messageEmpty={"Tidak Ada Pengajuan Izin"}
                     >
                       {values?.map((value, index) => (
@@ -204,7 +228,7 @@ export default function Pulang() {
                                 selection
                                 search
                                 onChange={(event, data) => {
-                                  console.log("jalan sini");
+                                 setUpdated(true)
                                   setFieldValue(
                                     `[${index}]status_approval`,
                                     data.value
@@ -242,6 +266,7 @@ export default function Pulang() {
                                 }}
                                 search
                                 onChange={(e) => {
+                                  setUpdated(true)
                                   setFieldValue(`[${index}]updated`, true);
                                   setFieldValue(
                                     `[${index}]alasan_ditolak`,
@@ -258,54 +283,131 @@ export default function Pulang() {
                           <Table.Cell>
                             {handleViewNull(value?.pulang_approv_by?.nama_guru)}
                           </Table.Cell>
+
                           <Table.Cell>
-                            {approve === index ? (
+                            {laporan ? (
                               <Input
-                                type="date"
-                                placeholder="Select Friend"
+                                type="time"
                                 fluid
                                 selection
                                 search
+                                value={value.jam_kembali_ke_sekolah}
+                                onChange={(e) => {
+                                   setUpdated(true)
+                                  setFieldValue(`[${index}]updated`, true);
+
+                                  return setFieldValue(
+                                    `[${index}]jam_kembali_ke_sekolah`,
+                                    e.target.value
+                                  );
+                                }}
+                              />
+                            ) : (
+                              handleViewNull(value?.jam_kembali_ke_sekolah)
+                            )}
+                          </Table.Cell>
+                          <Table.Cell collapsing>
+                            {laporan ? (
+                              <Input
+                                type="date"
+                                fluid
+                                name={`[${index}]tanggal_kembali`}
+                                selection
+                                search
                                 value={value.tanggal_kembali}
+                                onChange={(e) => {
+                                  setUpdated(true)
+                                  let selisih = selisihHari(
+                                    value.izin_sampai,
+                                    value.tanggal_kembali
+                                  );
+                                  setFieldValue(`[${index}]updated`, true);
+                                  console.log(selisih);
+                                  if (selisih > 0) {
+                                    setFieldValue(
+                                      `[${index}]jumlah_hari_terlambat`,
+                                      selisih
+                                    );
+                                  
+                                  }
+                                  return setFieldValue(
+                                    `[${index}]tanggal_kembali`,
+                                    e.target.value
+                                  );
+                                }}
                               />
                             ) : (
                               formatDate(value?.tanggal_kembali)
                             )}
                           </Table.Cell>
                           <Table.Cell>
-                            {handleViewNull(value?.jam_kembali_ke_sekolah)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(value?.jumlah_hari_terlambat)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(value?.denda)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(value?.denda)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <div className="space-y-2">
-                              <Button
-                                content={"Approve"}
-                                type="button"
+                            {laporan ? (
+                              <Input
+                                type="number"
+                                placeholder="Terlambat"
                                 fluid
-                                size="medium"
-                                color="green"
+                                disabled
+                                selection
+                                search
+                                value={value.jumlah_hari_terlambat}
                               />
-                              <Button
-                                content={"Report"}
-                                type="button"
+                            ) : (
+                              handleViewNull(value?.jumlah_hari_terlambat)
+                            )}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {laporan ? (
+                              <Input
+                                type="text"
+                                placeholder="Denda"
                                 fluid
-                                size="medium"
-                                color="teal"
+                                disabled
+                                selection
+                                search
+                                value={value.denda}
                               />
-                            </div>
+                            ) : (
+                              handleViewNull(value?.denda)
+                            )}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {handleViewNull(value?.laporan_oleh?.nama_guru)}
                           </Table.Cell>
                         </Table.Row>
                       ))}
                     </TableLoading>
                   </Table.Body>
+                  <Table.Footer>
+                    <Table.Row>
+                      <Table.HeaderCell colSpan="13">
+                        <Dropdown
+                          value={pageSize}
+                          selection
+                          compact
+                          className="absolute"
+                          header
+                          labeled
+                          onChange={(e, data) => {
+                            setPageSize(data.value);
+                          }}
+                          search
+                          options={pageSizeOptions}
+                        />
+                        <Menu floated="right" pagination>
+                          <Menu.Item as="a" icon>
+                            <Icon name="chevron left" />
+                          </Menu.Item>
+                          <Menu.Item as="a">1</Menu.Item>
+                          <Menu.Item as="a">2</Menu.Item>
+                          <Menu.Item as="a">3</Menu.Item>
+                          <Menu.Item as="a">4</Menu.Item>
+                          <Menu.Item as="a" icon>
+                            <Icon name="chevron right" />
+                          </Menu.Item>
+                        </Menu>
+                      </Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Footer>
                 </Table>
               </div>
             </Segment>

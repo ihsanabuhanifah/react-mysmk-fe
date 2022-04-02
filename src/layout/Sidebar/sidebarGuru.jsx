@@ -8,13 +8,24 @@ export default function SidebarGuru() {
     <nav className="flex flex-col space-y-5">
       <NavButton  to="dashboard" title={["Dashoard"]} logo={<LogoDashboard />} />
       <NavButton to="jadwal" title={"Jadwal"} logo={<LogoJadwal />} />
-      <NavButton to="kunjungan" title={"Perizinan Kunjungan"} logo={<LogoJadwal />} />
-      <NavButton to="pulang" title={"Perizinan Pulang"} logo={<LogoJadwal />} />
       <NavButton
         to="halaqoh"
         title={["Sholat dan Halaqoh"]}
         logo={<LogoDashboard />}
       />
+       <NavButton to="mata pelajaran" title={"Mata Pelajaran"} logo={<LogoJadwal />} />
+      <NavButton to="kelas" title={"Kelas"} logo={<LogoJadwal />} />
+      <NavButton to="pelanggaran" title={"Pelanggaran"} logo={<LogoJadwal />} />
+      <NavButton to="prestasi" title={"Prestasi"} logo={<LogoJadwal />} />
+      <NavButton to="penilaian" title={"Penilaian"} logo={<LogoJadwal />} />
+      <NavButton to="perizinan-pulang" title={"Perizinan Pulang"} logo={<LogoJadwal />} />
+      <NavButton to="perizinan-kunjungan" title={"Perizinan Kunjungan"} logo={<LogoJadwal />} />
+     
+    
+      <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
+      <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} />
+     
+     
     </nav>
   );
 }

@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { listAbsensi } from "../../api/guru/absensi";
+import { listAbsensi } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
-import { updateAbsensi } from "../../api/guru/absensi";
-import { listMapel, listKelas } from "../../api/list";
-import { TableLoading } from "../../components";
+import { updateAbsensi } from "../../../api/guru/absensi";
+import { listMapel, listKelas } from "../../../api/list";
+import { TableLoading } from "../../../components";
 import {
   Input,
   Table,
@@ -17,9 +17,9 @@ import {
   TextArea,
   Dropdown,
 } from "semantic-ui-react";
-import { getOptions } from "../../utils/format";
-import { izinOptions } from "../../utils/options";
-import LayoutPage from "../../module/layoutPage";
+import { getOptions } from "../../../utils/format";
+import { izinOptions } from "../../../utils/options";
+import LayoutPage from "../../../module/layoutPage";
 import * as Yup from "yup";
 
 let personalSchema = Yup.object().shape({

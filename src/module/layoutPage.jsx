@@ -7,7 +7,7 @@ export default function LayoutPage({ title, children }) {
       <section className="mt-5 ml-5 mr-5 mb-5">
         <h1 className="text-2xl capitalize mb-5">{title}</h1>
        
-        <div>{children}</div>
+        <div className="h-full">{children}</div>
       </section>
     </React.Fragment>
   );

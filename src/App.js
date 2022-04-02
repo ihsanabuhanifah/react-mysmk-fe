@@ -45,8 +45,8 @@ function App() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="jadwal" element={<Jadwal />} />
-          <Route path="kunjungan" element={<Kunjungan />} />
-          <Route path="pulang" element={<Pulang />} />
+          <Route path="perizinan-kunjungan" element={<Kunjungan />} />
+          <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="halaqoh/:tanggal" element={<Halaqoh />} />
           <Route
             path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal"

@@ -56,13 +56,13 @@ export default function Guru() {
         </div>
       </header>
       <main className="grid grid-cols-12 gap-x-2 h-9/12  ">
-        <div className="col-span-2 border-r-2 pl-10 pt-5">
+        <div className="col-span-2 border-r-2 pl-10 pt-5 h-full">
           <SidebarGuru />
         </div>
-        <div className="content col-span-8 overflow-auto ">
+        <div className="content col-span-8 overflow-auto h-full ">
           <Outlet data={data} />
         </div>
-        <div className="content col-span-2 pr-5 ">
+        <div className="content col-span-2 pr-5 h-full ">
           <Notifikasi />
        
         </div>
@@ -70,3 +70,4 @@ export default function Guru() {
     </div>
   );
 }
+ 
