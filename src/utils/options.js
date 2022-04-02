@@ -9,5 +9,13 @@ const izinOptions = [
   ];
 
 
+  const approveOptions = [
+    { key: "1", value: 'menunggu', text: "Menunggu" },
+    { key: "2", value: 'ditolak', text: "Ditolak" },
+    { key: "3", value: 'disetujui', text: "Disetujui" },
+    
+  ];
 
-  export {izinOptions}
+
+
+  export {izinOptions, approveOptions}

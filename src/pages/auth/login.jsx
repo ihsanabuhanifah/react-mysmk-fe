@@ -168,6 +168,7 @@ export default function Login() {
                       fluid
                       size="medium"
                       color="green"
+                      loading={isSubmitting}
                       disabled={isSubmitting}
                     />
                   </Form>

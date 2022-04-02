@@ -366,6 +366,7 @@ export default function Absensi() {
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
                   type="submit"
                   fluid
+                  loading={isSubmitting}
                   size="medium"
                   color="green"
                   disabled={isSubmitting}

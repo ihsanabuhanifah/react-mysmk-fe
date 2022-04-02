@@ -4,9 +4,12 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.0",
+    "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
+    "@heroicons/react": "^1.0.6",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@wojtekmaj/react-daterange-picker": "^3.4.0",
     "axios": "^0.24.0",
     "clsx": "^1.1.1",
     "dayjs": "^1.10.7",
@@ -14,14 +17,16 @@
     "js-cookie": "^3.0.1",
     "jwt-decode": "^3.1.2",
     "qs": "^6.10.3",
-    "react": "^17.0.2",
+    "react-date-range": "^1.4.0",
     "react-dom": "^17.0.2",
+    "react-modern-calendar-datepicker": "^3.1.6",
     "react-query": "^3.34.15",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.1",
     "react-scripts": "4.0.3",
     "react-select": "^5.2.2",
     "react-select-async-paginate": "^0.6.1",
+    "react-toastify": "^8.2.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.1.2",
     "sweetalert2": "^11.1.9",
@@ -29,7 +34,6 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-  
     "start": "set PORT=2001 &&  TAILWIND_MODE=watch craco start",
     "build": "craco build",
     "test": "craco test",
