@@ -10,6 +10,7 @@ import {
   Halaqoh,
   Kunjungan,
   Pulang,
+  Pelanggaran,
 } from "./pages/guru";
 import NotFound from "./pages/NotFound";
 
@@ -47,6 +48,7 @@ function App() {
           <Route path="jadwal" element={<Jadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
+          <Route path="pelanggaran" element={<Pelanggaran />} />
           <Route path="halaqoh/:tanggal" element={<Halaqoh />} />
           <Route
             path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal"

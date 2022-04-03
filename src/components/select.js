@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import PropTypes from "prop-types";
 
 import { AsyncPaginate } from "react-select-async-paginate";
 
@@ -20,17 +21,14 @@ export function Select({
       "h-8 text-xs": size === "xs",
       "h-10 text-sm": size === "sm",
       "h-12 text-base": size === "normal",
-    
     }
   );
-  let clDiv = clsx('lock w-full relative  ' , {
-    'border border-red-400' : error === true,
-    'border border-red-400' : errors !== undefined,
+  let clDiv = clsx("lock w-full relative  ", {
+    "border border-red-400": error === true,
+    "border border-red-400": errors !== undefined,
     "w-full": width === true,
-    
-  })
+  });
 
-  
   return (
     <div className={clDiv}>
       <select className={cl} {...props}>
@@ -49,13 +47,49 @@ export function Select({
   );
 }
 
-export function ReactSelectAsync({ error = false, ...props }) {
-  let cl = clsx('w-48 rounded-md' , {
-    'border border-red-400' : error === true
-  })
+export function ReactSelectAsync({
+  error = false,
+  size = "default",
+  zIndex = null,
+  ...props
+}) {
+  let cl = clsx(" rounded-md", {
+    "  w-full": error === true,
+  });
+
+  const customStyles = {
+    input: (provided, state) => ({
+      ...provided,
+      borderColor: error ? '#FBD6D2' : null,
+     
+    }),
+    control: (provided, state) => ({
+      ...provided,
+
+      borderColor: error ? '#FBD6D2' : '#e2e8f0',
+      fontSize: '0.875rem',
+      backgroundColor : error ? '#FBD6D2' : '',
+      paddingLeft: 5,
+    }),
+    placeholder: (provided, state) => ({
+      ...provided,
+      color: '#a0aec0',
+      fontSize: '0.875rem',
+    }),
+    container: (provided, state) => ({
+      ...provided,
+      backgroundColor: '56565',
+      zIndex: zIndex,
+    }),
+  };
+    
   return (
     <div className={cl}>
-      <AsyncPaginate {...props} />
+      <AsyncPaginate styles={customStyles}  defaultOptions {...props} />
     </div>
   );
 }
+
+ReactSelectAsync.propTypes = {
+  error: PropTypes.bool,
+};

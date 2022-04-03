@@ -4,5 +4,6 @@ import Dashboard from "./dashboard";
 import Halaqoh from "../musyrif/halaqoh";
 import Kunjungan from "./kunjungan";
 import Pulang from "./pulang";
+import Pelanggaran from "./pelanggaran";
 
-export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang };
+export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang, Pelanggaran };

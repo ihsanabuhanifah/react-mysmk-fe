@@ -3,6 +3,7 @@ import { Select, ReactSelectAsync } from "./select";
 import { Button } from "./button";
 import { TableLoading } from "./TableLoading";
 import { FormLabel } from "./FormLabel";
+import {EditButton, DeleteButton , ViewButton} from "./buttonAksi/editButton";
 import ModalFilter from "./Modal";
 export {
   Input,
@@ -14,5 +15,8 @@ export {
   ReactSelectAsync,
   TableLoading, 
   ModalFilter,
-  FormLabel
+  FormLabel,
+  EditButton,
+  DeleteButton,
+  ViewButton
 };

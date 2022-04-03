@@ -101,7 +101,7 @@ export default function Absensi() {
   );
 
   const onSubmit = async (values) => {
-    return console.log(values);
+  
     const result = await updateAbsensi(values);
     queryClient.invalidateQueries("absensi");
     queryClient.invalidateQueries("notifikasi");
@@ -206,7 +206,7 @@ export default function Absensi() {
                           type="number"
                           value={value?.dari_ayat}
                           placeholder="Dari Ayat"
-                          onBlur={handleBlur}
+                         
                           error={
                             errors?.absensi_kehadiran?.[index]?.dari_ayat &&
                             touched?.absensi_kehadiran?.[index]?.dari_ayat
@@ -261,7 +261,7 @@ export default function Absensi() {
                           type="number"
                           value={value?.sampai_ayat}
                           placeholder="Sampai Ayat"
-                          onBlur={handleBlur}
+                      
                           error={
                             errors?.absensi_kehadiran?.[index]?.sampai_ayat &&
                             touched?.absensi_kehadiran?.[index]?.sampai_ayat
@@ -286,7 +286,7 @@ export default function Absensi() {
                           type="number"
                           value={value?.total_halaman}
                           placeholder="Total Halaman"
-                          onBlur={handleBlur}
+                       
                           error={
                             errors?.absensi_kehadiran?.[index]?.total_halaman &&
                             touched?.absensi_kehadiran?.[index]?.total_halaman

@@ -15,6 +15,22 @@ const izinOptions = [
     { key: "3", value: 'disetujui', text: "Disetujui" },
     
   ];
+  const semesterOptions = [
+    { key: "1", value: 1, text: "Semester 1" },
+    { key: "2", value: 2, text: "Semester 2" },
+    { key: "3", value: 3, text: "Semester 3" },
+    { key: "2", value: 4, text: "Semester 4" },
+    { key: "3", value: 5, text: "Semester 5" },
+    { key: "3", value: 6, text: "Semester 6" },
+    
+  ];
+
+  const kategoriPelanggaranOptions = [
+    { key: "1", value: 'ringan', text: "Ringan" },
+    { key: "2", value: 'sedang', text: "Sedang" },
+    { key: "3", value: 'berat', text: "Berat" },
+    
+  ];
 
   const pageSizeOptions = [
     { key: "1", value: 1, text: "1" },
@@ -27,4 +43,4 @@ const izinOptions = [
 
 
 
-  export {izinOptions, approveOptions, pageSizeOptions}
+  export {izinOptions, approveOptions,semesterOptions, pageSizeOptions, kategoriPelanggaranOptions}

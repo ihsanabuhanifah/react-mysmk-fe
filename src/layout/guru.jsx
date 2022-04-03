@@ -34,7 +34,7 @@ export default function Guru() {
 
   return (
     <div className="h-screen antialiased text-gray-700 border">
-      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-10 overflow-auto" >
+      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-10 " >
         <div className="h-24 w-24 col-span-2 ">
           <Image src={LogoMySMK} />
           <Image src={SMKMQ} />
