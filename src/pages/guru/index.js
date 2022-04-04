@@ -5,5 +5,7 @@ import Halaqoh from "../musyrif/halaqoh";
 import Kunjungan from "./kunjungan";
 import Pulang from "./pulang";
 import Pelanggaran from "./pelanggaran";
+import Prestasi from "./prestasi";
 
-export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang, Pelanggaran };
+export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang, Pelanggaran, Prestasi };
+ 

@@ -4,6 +4,7 @@ import { Button } from "./button";
 import { TableLoading } from "./TableLoading";
 import { FormLabel } from "./FormLabel";
 import {EditButton, DeleteButton , ViewButton} from "./buttonAksi/editButton";
+import ModalAlert from "./ModalAlert";
 import ModalFilter from "./Modal";
 export {
   Input,
@@ -18,5 +19,6 @@ export {
   FormLabel,
   EditButton,
   DeleteButton,
-  ViewButton
+  ViewButton,
+  ModalAlert
 };

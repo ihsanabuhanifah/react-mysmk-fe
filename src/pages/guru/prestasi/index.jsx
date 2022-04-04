@@ -47,7 +47,7 @@ let pelanggaranSchema = Yup.object().shape({
 let pelanggaranArraySchema = Yup.object().shape({
   pelanggaran: Yup.array().of(pelanggaranSchema),
 });
-export default function Pelanggaran() {
+export default function Prestasi() {
   let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
   let [nama, setNama] = React.useState("");
@@ -149,7 +149,7 @@ export default function Pelanggaran() {
   };
 
   return (
-    <LayoutPage title={"Pelanggaran"}>
+    <LayoutPage title={"Pestasi"}>
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}

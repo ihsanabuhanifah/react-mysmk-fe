@@ -7,6 +7,18 @@ export function listPelanggaran(params) {
 
 export function createPelanggaran(payload) {
   return axios.post("/guru/pelanggaran/create", {
-    payload : payload?.pelanggaran,
+    payload: payload?.pelanggaran,
+  });
+}
+
+export function updatePelanggaran(payload) {
+  return axios.put("/guru/pelanggaran/update", {
+    payload: payload?.pelanggaran[0],
+  });
+}
+
+export function deletePelanggaran(id) {
+  return axios.post("/guru/pelanggaran/delete", {
+    payload: [id],
   });
 }
