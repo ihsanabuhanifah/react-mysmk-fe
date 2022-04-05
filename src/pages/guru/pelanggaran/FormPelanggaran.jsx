@@ -315,6 +315,7 @@ export default function FormPelanggaran({
                 content={"Batal"}
                 type="button"
                 fluid
+                basic
                 onClick={() => {
                   // setValues(initialValue);
                   setIsOpen(false)
@@ -328,6 +329,7 @@ export default function FormPelanggaran({
                 content={mode === "update" ? "Perbahrui" : "Simpan"}
                 type="submit"
                 fluid
+                basic
                 size="medium"
                 color="teal"
                 loading={isSubmitting}

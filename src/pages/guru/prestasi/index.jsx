@@ -12,13 +12,13 @@ import {
   Button,
 } from "semantic-ui-react";
 import { useQuery } from "react-query";
-import FormPelanggaran from "./FormPelanggaran";
+import FormPelanggaran from "./FormPrestasi";
 import useDelete from "../../../hook/useDelete";
 import {
-  listPelanggaran,
-  createPelanggaran,
-  updatePelanggaran,
+  createPrestasi,
+  updatePrestasi,
   deletePelanggaran,
+  listPrestasi,
 } from "../../../api/guru/pelanggaran";
 import {
   TableLoading,
@@ -28,6 +28,7 @@ import {
   ViewButton,
   ModalAlert,
 } from "../../../components";
+import FormPrestasi from "./FormPrestasi";
 import { handleViewNull, formatDate } from "../../../utils";
 import { useQueryClient } from "react-query";
 import useDebounce from "../../../hook/useDebounce";
@@ -36,16 +37,17 @@ import { Collapse } from "react-collapse";
 
 import { toast } from "react-toastify";
 
-let pelanggaranSchema = Yup.object().shape({
+let prestasiSchema = Yup.object().shape({
   tanggal: Yup.string().required("wajib diisi"),
   student_id: Yup.string().required("wajib pilih"),
-  pelanggaran_id: Yup.string().required("wajib diisi"),
   semester: Yup.string().required("wajib diisi"),
+  kategori: Yup.string().required("wajib diisi"),
+  prestasi: Yup.string().required("wajib diisi"),
   ta_id: Yup.string().required("wajib diisi"),
 });
 
-let pelanggaranArraySchema = Yup.object().shape({
-  pelanggaran: Yup.array().of(pelanggaranSchema),
+let prestasiArraySchema = Yup.object().shape({
+  prestasi: Yup.array().of(prestasiSchema),
 });
 export default function Prestasi() {
   let [page, setPage] = React.useState(1);
@@ -68,25 +70,15 @@ export default function Prestasi() {
     },
   });
   const initialValue = {
-    pelanggaran: [
+    prestasi: [
       {
         tanggal: "",
         student_id: "",
-        pelapor: "",
-        pelanggaran_id: "",
-        status: "",
-        tindakan: "",
-        penindak: null,
+        kategori: "",
+        prestasi: "",
         semester: "",
         ta_id: "",
-        tahun_ajaran: null,
         nama_siswa: null,
-
-        tahun_ajaran: null,
-        tipe: "",
-        kategori: "",
-        point: "",
-        nama_pelanggaran: null,
       },
     ],
   };
@@ -99,9 +91,9 @@ export default function Prestasi() {
 
   let { data, isLoading, isFetching } = useQuery(
     //query key
-    ["list_pelanggaran", parameter],
+    ["list_prestasi", parameter],
     //axios function,triggered when page/pageSize change
-    () => listPelanggaran(parameter),
+    () => listPrestasi(parameter),
     //configuration
     {
       refetchInterval: 1000 * 60 * 60,
@@ -115,14 +107,14 @@ export default function Prestasi() {
     try {
       let response;
       if (mode === "update") {
-        response = await updatePelanggaran(values);
+        response = await updatePrestasi(values);
       } else {
-        response = await createPelanggaran(values);
+        response = await createPrestasi(values);
       }
       console.log(response);
-      queryClient.invalidateQueries("list_pelanggaran");
+      queryClient.invalidateQueries("list_prestasi");
       resetForm();
-      setIsOpen(false)
+      setIsOpen(false);
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -134,7 +126,20 @@ export default function Prestasi() {
         theme: "colored",
       });
     } catch (err) {
-      console.log(err);
+      console.log(err.response.status);
+
+      if (err.response.status === 422) {
+        return toast.warning(err.response.data.msg, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
       return toast.error("Ada Kesalahan", {
         position: "top-right",
         autoClose: 1000,
@@ -149,18 +154,18 @@ export default function Prestasi() {
   };
 
   return (
-    <LayoutPage title={"Pestasi"}>
+    <LayoutPage title={"Prestasi"}>
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
         loading={deleteLoading}
         onConfirm={onConfirmDelete}
-        title={'Apakah yakin akan menghapus pelanggaran terpilih ?'}
+        title={"Apakah yakin akan menghapus pelanggaran terpilih ?"}
       />
       <Formik
         initialValues={initialValue}
         enableReinitialize
-        validationSchema={pelanggaranArraySchema}
+        validationSchema={prestasiArraySchema}
         onSubmit={onSubmit}
       >
         {({
@@ -181,7 +186,7 @@ export default function Prestasi() {
               theme={{ collapse: "foo", content: "bar" }}
               isOpened={isOpen}
             >
-              <FormPelanggaran
+              <FormPrestasi
                 data={data?.data?.rows}
                 values={values}
                 setValues={setValues}
@@ -217,7 +222,7 @@ export default function Prestasi() {
                       setMode("add");
                       return window.scrollTo(0, 0);
                     }}
-                    content="Buat Laporan"
+                    content="Buat Catatan Prestasi"
                   />
                   <Table celled selectable>
                     <Table.Header>
@@ -228,30 +233,21 @@ export default function Prestasi() {
                         <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                         <Table.HeaderCell>Tanggal</Table.HeaderCell>
 
-                        <Table.HeaderCell>Nama Pelanggaran</Table.HeaderCell>
-                        <Table.HeaderCell>Tipe Pelanggaran</Table.HeaderCell>
-                        <Table.HeaderCell>Jenis Pelanggaran</Table.HeaderCell>
-                        <Table.HeaderCell textAlign="center">
-                          Status
-                        </Table.HeaderCell>
-                        <Table.HeaderCell content>
-                          Tindakan/Hukuman
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>Guru Pelapor</Table.HeaderCell>
-                        <Table.HeaderCell>Guru Penindak</Table.HeaderCell>
+                        <Table.HeaderCell>Kategori</Table.HeaderCell>
+                        <Table.HeaderCell>Prestasi</Table.HeaderCell>
+                        <Table.HeaderCell>Nama Guru</Table.HeaderCell>
                         <Table.HeaderCell>Semester</Table.HeaderCell>
-                        <Table.HeaderCell singleLine>
-                          Tahun Ajaran
-                        </Table.HeaderCell>
+                        <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+
                         <Table.HeaderCell singleLine>Aksi</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
                       <TableLoading
-                        count={13}
+                        count={10}
                         isLoading={isLoading}
                         data={data?.data?.rows}
-                        messageEmpty={"Tidak Ada Pengajuan Izin"}
+                        messageEmpty={"Tidak Ada Catatan Prestasi"}
                       >
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>
@@ -268,38 +264,18 @@ export default function Prestasi() {
                             </Table.Cell>
 
                             <Table.Cell textAlign="left">
-                              {handleViewNull(
-                                value?.pelanggaran?.nama_pelanggaran
-                              )}
+                              {handleViewNull(value?.kategori)}
                             </Table.Cell>
                             <Table.Cell textAlign="left">
                               <span className="capitalize">
                                 {" "}
-                                {handleViewNull(value?.pelanggaran?.tipe)}
+                                {handleViewNull(value?.prestasi)}
                               </span>
                             </Table.Cell>
                             <Table.Cell textAlign="left">
                               <span className="capitalize">
                                 {" "}
-                                {handleViewNull(value?.pelanggaran?.kategori)}
-                              </span>
-                            </Table.Cell>
-                            <Table.Cell textAlign="left">
-                              {handleViewNull(value?.status)}
-                            </Table.Cell>
-                            <Table.Cell textAlign="left">
-                              {handleViewNull(value?.tindakan)}
-                            </Table.Cell>
-                            <Table.Cell textAlign="left">
-                              <span className="capitalize">
-                                {" "}
-                                {handleViewNull(value?.pelaporan?.nama_guru)}
-                              </span>
-                            </Table.Cell>
-                            <Table.Cell textAlign="left">
-                              <span className="capitalize">
-                                {" "}
-                                {handleViewNull(value?.penindakan?.nama_guru)}
+                                {handleViewNull(value?.guru?.nama_guru)}
                               </span>
                             </Table.Cell>
                             <Table.Cell textAlign="left">
@@ -310,6 +286,7 @@ export default function Prestasi() {
                                 value?.tahun_ajaran?.nama_tahun_ajaran
                               )}
                             </Table.Cell>
+
                             <Table.Cell textAlign="left">
                               <div className="flex items-center">
                                 {" "}
@@ -319,41 +296,25 @@ export default function Prestasi() {
                                     setIsOpen(true);
                                     window.scrollTo(0, 0);
                                     setValues({
-                                      pelanggaran: [
+                                      prestasi: [
                                         {
                                           id: value?.id,
                                           tanggal: value?.tanggal,
-                                          student_id: value?.siswa?.id,
-                                          pelapor: value?.pelaporan?.id,
-                                          pelanggaran_id:
-                                            value?.pelanggaran?.id,
-                                          status: value?.status,
-                                          tindakan: value?.tindakan,
-                                          penindak: value?.penindakan,
+                                          student_id: value?.student_id,
+                                          kategori: value?.kategori,
+                                          prestasi: value?.prestasi,
                                           semester: value?.semester,
-                                          ta_id: value?.tahun_ajaran?.id,
-                                          tahun_ajaran: value?.tahun_ajaran?.id,
+                                          ta_id: value?.ta_id,
+                                          teacher_id: value?.teacher_id,
                                           nama_siswa: {
-                                            value: value?.siswa?.id,
                                             label: value?.siswa?.nama_siswa,
-                                          },
-                                          tahun_ajaran: null,
-                                          tipe: value?.pelanggaran?.tipe,
-                                          kategori:
-                                            value?.pelanggaran?.kategori,
-                                          point: value?.pelanggaran?.point,
-                                          nama_pelanggaran: {
-                                            value: value?.pelanggaran?.id,
-                                            label:
-                                              value?.pelanggaran
-                                                ?.nama_pelanggaran,
+                                            value: value?.siswa?.id,
                                           },
                                         },
                                       ],
                                     });
                                   }}
                                 />
-                                
                                 <DeleteButton
                                   onClick={() => confirmDelete(value?.id)}
                                 />

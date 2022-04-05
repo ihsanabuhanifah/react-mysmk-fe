@@ -116,6 +116,7 @@ export default function Kunjungan() {
                       <Button
                         type="button"
                         color="red"
+                        basic
                         onClick={() => {
                           setApprove(false);
                           setLaporan(false);
@@ -127,7 +128,8 @@ export default function Kunjungan() {
 
                       <Button
                         content="Simpan"
-                        color="blue"
+                        color="teal"
+                        basic
                         type="submit"
                         loading={isSubmitting}
                         disabled={isSubmitting || !updated}

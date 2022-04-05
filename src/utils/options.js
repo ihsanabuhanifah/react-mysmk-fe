@@ -41,6 +41,14 @@ const izinOptions = [
     { key: "100", value: 100, text: "100" },
   ]
 
+  const kategoriOptions = [
+    { key: "1", value: 'Sekolah', text: "Sekolah" },
+    { key: "2", value: 'Nasional', text: "Nasional" },
+    { key: "3", value: 'Internasional', text: "Internasional" },
+    
+    
+  ];
 
 
-  export {izinOptions, approveOptions,semesterOptions, pageSizeOptions, kategoriPelanggaranOptions}
+
+  export {izinOptions, kategoriOptions, approveOptions,semesterOptions, pageSizeOptions, kategoriPelanggaranOptions}

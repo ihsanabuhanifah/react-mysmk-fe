@@ -8,12 +8,11 @@ export function listPulang(params) {
 export function responsePulang(values) {
   console.log("haha");
 
- 
   const payload = values.filter((data) => {
-    return (data.updated === true);
+    return data.updated === true;
   });
-  
-  console.log(payload)
+
+  console.log(payload);
   return axios.put(`guru/pulang/response`, {
     payload,
   });
@@ -21,17 +20,16 @@ export function responsePulang(values) {
 export function laporanPulang(values) {
   console.log("haha");
 
- console.log(values);
+  console.log(values);
   const payload = values.filter((data) => {
-    return (data.updated === true);
+    return data.updated === true;
   });
-  
-  console.log(payload)
+
+  console.log(payload);
   return axios.put(`guru/pulang/laporan`, {
     payload,
   });
 }
-
 
 //kunjungan
 
@@ -42,12 +40,11 @@ export function listKunjungan(params) {
 export function responseKunjungan(values) {
   console.log("haha");
 
- 
   const payload = values.filter((data) => {
-    return (data.updated === true);
+    return data.updated === true;
   });
-  
-  console.log(payload)
+
+  console.log(payload);
   return axios.put(`guru/kunjungan/response`, {
     payload,
   });

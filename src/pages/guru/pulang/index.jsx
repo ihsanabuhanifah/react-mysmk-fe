@@ -123,6 +123,7 @@ export default function Pulang() {
                     <>
                       <Button
                         type="button"
+                        basic
                         color="red"
                         onClick={() => {
                           setApprove(false);
@@ -135,7 +136,8 @@ export default function Pulang() {
 
                       <Button
                         content="Simpan"
-                        color="blue"
+                        color="teal"
+                        basic
                         type="submit"
                         loading={isSubmitting}
                         disabled={isSubmitting || !updated}
