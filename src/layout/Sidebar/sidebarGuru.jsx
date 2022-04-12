@@ -10,7 +10,12 @@ export default function SidebarGuru() {
       <NavButton to="jadwal" title={"Jadwal"} logo={<LogoJadwal />} />
       <NavButton
         to="halaqoh"
-        title={["Sholat dan Halaqoh"]}
+        title={["Sholat Halaqoh"]}
+        logo={<LogoDashboard />}
+      />
+       <NavButton
+        to="sholat"
+        title={["Sholat"]}
         logo={<LogoDashboard />}
       />
        <NavButton to="mata pelajaran" title={"Mata Pelajaran"} logo={<LogoJadwal />} />

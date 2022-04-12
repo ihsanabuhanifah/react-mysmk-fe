@@ -6,6 +6,7 @@ import Kunjungan from "./kunjungan";
 import Pulang from "./pulang";
 import Pelanggaran from "./pelanggaran";
 import Prestasi from "./prestasi";
+import Sholat from "./sholat";
 
-export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang, Pelanggaran, Prestasi };
+export { Absensi, Jadwal, Dashboard, Halaqoh, Kunjungan, Pulang, Pelanggaran, Prestasi, Sholat };
  

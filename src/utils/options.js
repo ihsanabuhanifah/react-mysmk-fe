@@ -32,6 +32,26 @@ const izinOptions = [
     
   ];
 
+
+ 
+  const waktusholatOptions = [
+    { key: "1", value: 1, text: "Subuh" },
+    { key: "2", value: 2, text: "Dhuhur" },
+    { key: "3", value: 3, text: "Ashar" },
+    { key: "4", value: 4, text: "Magrib" },
+    { key: "5", value: 5, text: "Isya" },
+    { key: "6", value: 6, text: "Tahajud" },
+    { key: "7", value: 6, text: "Dhuha" },
+  ]
+  const alasanTidakSholatOptions = [
+    { key: "1", value: 1, text: "Tidak Berjamaah" },
+    { key: "2", value: 2, text: "Masbuk" },
+    // { key: "3", value: 3, text: "Ashar" },
+    // { key: "4", value: 4, text: "Magrib" },
+    // { key: "5", value: 5, text: "Isya" },
+    // { key: "6", value: 6, text: "Tahajud" },
+    // { key: "6", value: 6, text: "Dhuha" },
+  ]
   const pageSizeOptions = [
     { key: "1", value: 1, text: "1" },
     { key: "5", value: 5, text: "5" },
@@ -51,4 +71,4 @@ const izinOptions = [
 
 
 
-  export {izinOptions, kategoriOptions, approveOptions,semesterOptions, pageSizeOptions, kategoriPelanggaranOptions}
+  export {izinOptions, kategoriOptions, approveOptions,semesterOptions, pageSizeOptions, kategoriPelanggaranOptions, waktusholatOptions, alasanTidakSholatOptions};
