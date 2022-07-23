@@ -15,6 +15,7 @@ import { TableLoading } from "../../../components";
 import {
   absensiManualCreate,
   halaqohManualCreate,
+  listAbsensi,
 } from "../../../api/guru/absensi";
 
 import { formatHari, formatTahun } from "../../../utils";
@@ -30,7 +31,9 @@ export default function Jadwal() {
       hari,
     }),
   };
-  let { data, isLoading, isFetching } = useQuery(
+  let [dariTanggal] = React.useState(formatTahun(date));
+  let [sampaiTanggal] = React.useState(formatTahun(date));
+  let { data, isFetching } = useQuery(
     //query key
     ["jadwal", parameter],
     //axios function,triggered when page/pageSize change
@@ -55,6 +58,23 @@ export default function Jadwal() {
   ];
 
   const [loading, setLoading] = React.useState(false);
+  let params = {
+    dariTanggal,
+    sampaiTanggal,
+  };
+  let { data: absensi } = useQuery(
+    //query key
+    ["absensi", params],
+    //axios function,triggered when page/pageSize change
+    () => listAbsensi(params),
+    //configuration
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+    }
+  );
+
+  console.log(absensi);
   const creeteJadwal = async () => {
     setLoading(true);
     try {
@@ -63,6 +83,7 @@ export default function Jadwal() {
       setLoading(false);
       queryClient.invalidateQueries("jadwal");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
+      queryClient.invalidateQueries("absensi");
       queryClient.invalidateQueries("notifikasi_absensi_kelas");
       return toast.success(response?.data?.msg, {
         position: "top-right",
@@ -153,6 +174,7 @@ export default function Jadwal() {
                       content={"Absensi"}
                       type="button"
                       fluid
+                      disabled={absensi?.absensi?.length === 0 ? true :false}
                       size="medium"
                       color="green"
                       onClick={() => {
@@ -170,18 +192,20 @@ export default function Jadwal() {
           </Table.Body>
         </Table>
       </Segment>
-      <Segment>
-        <Button
-          content={"Create"}
-          type="submit"
-          fluid
-          loading={loading}
-          size="medium"
-          color="green"
-          disabled={loading}
-          onClick={creeteJadwal}
-        />
-      </Segment>
+      {absensi?.absensi?.length === 0 && (
+        <Segment>
+          <Button
+            content={"Buat Absensi"}
+            type="submit"
+            fluid
+            loading={loading}
+            size="medium"
+            color="green"
+            disabled={loading}
+            onClick={creeteJadwal}
+          />
+        </Segment>
+      )}
     </LayoutPage>
   );
 }

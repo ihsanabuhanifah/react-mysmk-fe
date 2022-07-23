@@ -4,7 +4,9 @@ const izinOptions = [
     { key: "3", value: 3, text: "Izin Pulang" },
     { key: "4", value: 4, text: "Dispensasi" },
     { key: "5", value: 5, text: "Tanpa Keterangan" },
+    { key: "7", value: 7, text: "Izin Kegiatan " },
     { key: "6", value: 6, text: "Belum Absensi" },
+
    
   ];
 

@@ -1,12 +1,10 @@
+/* eslint-disable eqeqeq */
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { listAbsensi } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
-import {
-  updateAbsensi,
- 
-} from "../../../api/guru/absensi";
+import { updateAbsensi } from "../../../api/guru/absensi";
 import { listMapel, listKelas } from "../../../api/list";
 import { TableLoading } from "../../../components";
 import {
@@ -23,6 +21,7 @@ import {
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
 import LayoutPage from "../../../module/layoutPage";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 let personalSchema = Yup.object().shape({
@@ -124,9 +123,35 @@ export default function Absensi() {
   );
 
   const onSubmit = async (values) => {
-    const result = await updateAbsensi(values);
-    queryClient.invalidateQueries("absensi");
-    queryClient.invalidateQueries("notifikasi");
+    try {
+      const response = await updateAbsensi(values);
+      queryClient.invalidateQueries("absensi");
+      queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
+      queryClient.invalidateQueries("notifikasi_absensi_kelas");
+      return toast.success(response?.data?.msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      console.log(err);
+
+      return toast.error("Ada Kesalahan", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
   //   console.log(initialState);
@@ -238,24 +263,26 @@ export default function Absensi() {
               <div>
                 <Segment raised>
                   <Header as={"h3"}>Materi</Header>
-                  {values?.agenda_kelas?.map((value, index) => (
-                    <React.Fragment key={index}>
-                      <div>
-                        <Form.Field
-                          control={Input}
-                          label={`Jam ke-${value?.jam_ke}`}
-                          placeholder="Materi"
-                          name={`agenda_kelas[${index}]materi`}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={value?.materi}
-                          disabled={isSubmitting}
-                          fluid
-                          type="email"
-                        />
-                      </div>
-                    </React.Fragment>
-                  ))}
+                  <div className="space-y-5">
+                    {values?.agenda_kelas?.map((value, index) => (
+                      <React.Fragment key={index}>
+                        <div>
+                          <Form.Field
+                            control={Input}
+                            label={`Jam ke-${value?.jam_ke + index}`}
+                            placeholder="Materi"
+                            name={`agenda_kelas[${index}]materi`}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={value?.materi}
+                            disabled={isSubmitting}
+                            fluid
+                            type="text"
+                          />
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  </div>
                 </Segment>
               </div>
             )}
@@ -299,7 +326,7 @@ export default function Absensi() {
                     count={8}
                     isLoading={isFetching}
                     data={values?.absensi_kehadiran}
-                    messageEmpty={"Tidak Ada Jadwal Pelajaran"}
+                    messageEmpty={"Tidak Terdapat Riwayat Absensi"}
                   >
                     {values?.absensi_kehadiran?.map((value, index) => (
                       <Table.Row key={index}>
@@ -379,8 +406,6 @@ export default function Absensi() {
           </Form>
         )}
       </Formik>
-
-     
     </LayoutPage>
   );
 }
