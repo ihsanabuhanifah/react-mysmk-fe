@@ -55,7 +55,7 @@ export default function Notifikasi() {
                 <div>
                   {" "}
                   Anda Belum melakukan abensi pada mata pelajaran{" "}
-                  {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas}
+                  {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas} di tanggal  {dayjs(value?.tanggal).format("YYYY-MM-DD")}
                 </div>
               </button>
             </div>

@@ -35,3 +35,17 @@ export async function updateAbsensi(values) {
 export function notifikasiAbsensi() {
   return axios.get("/guru/absensi/notifikasi");
 }
+
+
+export function absensiManualCreate() {
+  return axios.get("/guru/absensi/manual");
+}
+export function halaqohManualCreate() {
+  return axios.get("/guru/halaqoh/manual");
+}
+
+export function monitor() {
+  return axios.get("/monitor");
+}
+
+

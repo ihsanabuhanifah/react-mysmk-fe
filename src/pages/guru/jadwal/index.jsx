@@ -2,14 +2,28 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Dropdown, Button, Form, Select, Segment } from "semantic-ui-react";
-import { useQuery } from "react-query";
+import {
+  Table,
+  Dropdown,
+  Button,
+  Form,
+  Select,
+  Segment,
+} from "semantic-ui-react";
+import { useQuery, useQueryClient } from "react-query";
 import { TableLoading } from "../../../components";
+import {
+  absensiManualCreate,
+  halaqohManualCreate,
+} from "../../../api/guru/absensi";
 
 import { formatHari, formatTahun } from "../../../utils";
+
+import { toast } from "react-toastify";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
+  let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   const parameter = {
     ...(hari !== "semua" && {
@@ -40,6 +54,42 @@ export default function Jadwal() {
     { key: "8", value: "minggu", text: "Minggu" },
   ];
 
+  const [loading, setLoading] = React.useState(false);
+  const creeteJadwal = async () => {
+    setLoading(true);
+    try {
+      const response = await absensiManualCreate();
+      await halaqohManualCreate();
+      setLoading(false);
+      queryClient.invalidateQueries("jadwal");
+      queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
+      queryClient.invalidateQueries("notifikasi_absensi_kelas");
+      return toast.success(response?.data?.msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      return toast.error("Ada Kesalahan", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
+
   return (
     <LayoutPage title="jadwal">
       <div>
@@ -60,67 +110,78 @@ export default function Jadwal() {
             value={hari}
             placeholder="Pilih Hari"
             search
-            
             searchInput={{ id: "hari", name: "hari" }}
           />
         </Form>
       </div>
-     <Segment raised> 
-     <Table celled selectable>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
-            <Table.HeaderCell>Hari</Table.HeaderCell>
-            <Table.HeaderCell>Kelas</Table.HeaderCell>
-            <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-            <Table.HeaderCell textAlign="center">Jam_ke</Table.HeaderCell>
-            <Table.HeaderCell>Semester</Table.HeaderCell>
-            <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-            <Table.HeaderCell textAlign="center">Aksi</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          <TableLoading
-            count={8}
-            isLoading={isFetching}
-            data={data?.data?.rows}
-            messageEmpty={"Tidak Ada Jadwal Pelajaran"}
-          >
-            {data?.data?.rows?.map((value, index) => (
-              <Table.Row key={index}>
-                <Table.Cell textAlign="center">{index + 1}</Table.Cell>
-                <Table.Cell>
-                  <span className="capitalize">{value?.hari}</span>
-                </Table.Cell>
-                <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                <Table.Cell textAlign="center">{value?.jam_ke}</Table.Cell>
-                <Table.Cell>Semester {value?.semester}</Table.Cell>
-                <Table.Cell>
-                  {value?.tahun_ajaran?.nama_tahun_ajaran}
-                </Table.Cell>
-                <Table.Cell>
-                  <Button
-                    content={"Absensi"}
-                    type="button"
-                    fluid
-                    size="medium"
-                    color="green"
-                    onClick={() => {
-                      return navigate(
-                        `/guru/jadwal/absensi/${value?.kelas?.id}/${
-                          value?.mapel?.id
-                        }/${formatTahun(date)}`
-                      );
-                    }}
-                  />
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </TableLoading>
-        </Table.Body>
-      </Table>
-     </Segment>
+      <Segment raised>
+        <Table celled selectable>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
+              <Table.HeaderCell>Hari</Table.HeaderCell>
+              <Table.HeaderCell>Kelas</Table.HeaderCell>
+              <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+              <Table.HeaderCell textAlign="center">Jam_ke</Table.HeaderCell>
+              <Table.HeaderCell>Semester</Table.HeaderCell>
+              <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+              <Table.HeaderCell textAlign="center">Aksi</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <TableLoading
+              count={8}
+              isLoading={isFetching}
+              data={data?.data?.rows}
+              messageEmpty={"Tidak Ada Jadwal Pelajaran"}
+            >
+              {data?.data?.rows?.map((value, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell textAlign="center">{index + 1}</Table.Cell>
+                  <Table.Cell>
+                    <span className="capitalize">{value?.hari}</span>
+                  </Table.Cell>
+                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                  <Table.Cell textAlign="center">{value?.jam_ke}</Table.Cell>
+                  <Table.Cell>Semester {value?.semester}</Table.Cell>
+                  <Table.Cell>
+                    {value?.tahun_ajaran?.nama_tahun_ajaran}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Button
+                      content={"Absensi"}
+                      type="button"
+                      fluid
+                      size="medium"
+                      color="green"
+                      onClick={() => {
+                        return navigate(
+                          `/guru/jadwal/absensi/${value?.kelas?.id}/${
+                            value?.mapel?.id
+                          }/${formatTahun(date)}`
+                        );
+                      }}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </TableLoading>
+          </Table.Body>
+        </Table>
+      </Segment>
+      <Segment>
+        <Button
+          content={"Create"}
+          type="submit"
+          fluid
+          loading={loading}
+          size="medium"
+          color="green"
+          disabled={loading}
+          onClick={creeteJadwal}
+        />
+      </Segment>
     </LayoutPage>
   );
 }

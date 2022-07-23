@@ -3,7 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { listAbsensi } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
-import { updateAbsensi } from "../../../api/guru/absensi";
+import {
+  updateAbsensi,
+ 
+} from "../../../api/guru/absensi";
 import { listMapel, listKelas } from "../../../api/list";
 import { TableLoading } from "../../../components";
 import {
@@ -376,6 +379,8 @@ export default function Absensi() {
           </Form>
         )}
       </Formik>
+
+     
     </LayoutPage>
   );
 }
