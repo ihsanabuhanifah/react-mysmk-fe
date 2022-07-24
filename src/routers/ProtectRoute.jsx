@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { authme } from "../api/auth";
 import { useQuery } from "react-query";
+import { LoadingPage } from "../components";
 export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
   let [loading, setLoading] = React.useState(true);
@@ -29,7 +30,7 @@ export default function ProtectRoute({ children, userRole }) {
     }
   );
   if (isLoading) {
-    return <div>Loading</div>;
+    return <LoadingPage></LoadingPage>;
   }
   return auth !== undefined ? children : <Navigate to="/login" />;
 }
