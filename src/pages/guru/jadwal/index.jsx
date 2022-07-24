@@ -74,7 +74,7 @@ export default function Jadwal() {
     }
   );
 
-  console.log(absensi);
+
   const creeteJadwal = async () => {
     setLoading(true);
     try {
@@ -135,7 +135,7 @@ export default function Jadwal() {
           />
         </Form>
       </div>
-      <Segment raised>
+      <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
         <Table celled selectable>
           <Table.Header>
             <Table.Row>
@@ -193,7 +193,7 @@ export default function Jadwal() {
         </Table>
       </Segment>
       {absensi?.absensi?.length === 0 && (
-        <Segment>
+        <Segment >
           <Button
             content={"Buat Absensi"}
             type="submit"

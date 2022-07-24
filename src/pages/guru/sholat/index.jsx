@@ -156,7 +156,7 @@ export default function Sholat() {
   };
 
   return (
-    <LayoutPage title={"Prestasi"}>
+    <LayoutPage title={"Catatan Pelanggaran Sholat"}>
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
@@ -248,7 +248,7 @@ export default function Sholat() {
                         count={10}
                         isLoading={isLoading}
                         data={data?.data?.rows}
-                        messageEmpty={"Tidak Ada Catatan Prestasi"}
+                        messageEmpty={"Tidak Ada Catatan Pelanggaran Sholat"}
                       >
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>

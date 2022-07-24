@@ -1,15 +1,15 @@
 import React from "react";
-import { NavLink, NLink, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 import Notifikasi from "../module/notifikasi";
-import { formatTahun } from "../utils";
 import LogoMySMK from "../image/MySMK.png";
 import SMKMQ from "../image/MADINATULQURAN.png";
 import LogoNotif from "../image/notifikasi.png";
 import { Image, Input } from "semantic-ui-react";
 import SidebarGuru from "./Sidebar/sidebarGuru";
+import { MdMenu } from "react-icons/md";
 export default function Guru() {
   React.useEffect(() => {
     document.title = "Guru";
@@ -32,42 +32,78 @@ export default function Guru() {
     }
   );
 
+  const [sidebar, setSidebar] = React.useState(false);
+  const [notif, setNotif] = React.useState(false);
+
+  console.log(sidebar);
+
   return (
     <div className="h-screen antialiased text-gray-700 border">
-      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-10 " >
-        <div className="h-24 w-24 col-span-2 ">
+      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-5 lg:px-10 ">
+        <div className="h-24 w-24 mt-2 col-span-8 lg:col-span-2 ">
           <Image src={LogoMySMK} />
           <Image src={SMKMQ} />
         </div>
-        <div className="rounded-xl col-span-6 ">
-          <Input
-            classN
-            fluid
-            loading={false}
-            icon="search"
-            iconPosition="left"
-            placeholder="Search..."
-          />
-        </div>
-        <div className="col-span-2">
-          <div className="border-2 h-10 w-10 rounded-full p-2">
-            <img className="w-5 h-5" src={LogoNotif} alt="" />
+        <div className="rounded-xl hidden lg:block lg:col-span-6 ">
+          <div className="hidden lg:block">
+            <Input
+              classN
+              fluid
+              loading={false}
+              icon="search"
+              iconPosition="left"
+              placeholder="Search..."
+            />
           </div>
         </div>
-      </header>
-      <main className="grid grid-cols-12 gap-x-2 h-9/12  ">
-        <div className="col-span-2 border-r-2 pl-10 pt-5 h-full">
-          <SidebarGuru />
+        <div className=" col-span-1 lg:col-span-2">
+          <div className="border-2 h-10 w-10 rounded-full p-2">
+            <img
+              onClick={() => {
+                setNotif(!notif);
+              }}
+              className="w-5 h-5"
+              src={LogoNotif}
+              alt=""
+            />
+          </div>
         </div>
-        <div className="content col-span-8 overflow-auto h-full ">
+        <div className="block lg:hidden">
+          <button
+            className="mb-5"
+            onClick={() => {
+              setSidebar(!sidebar);
+            }}
+          >
+            <MdMenu className="w-10 h-10" />
+          </button>
+        </div>
+      </header>
+      <main className="flex gap-x-2 h-9/12   ">
+        <div
+          className={` w-full h-full  bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
+            !sidebar
+              ? "transform -translate-y-full   lg:-translate-y-0"
+              : "transform -translate-y-0 transition  duration-500 "
+          } h-full z-10 fixed top-0 bottom-0 lg:w-[15%]  lg:relative  `}
+        >
+          <SidebarGuru setSidebar={setSidebar} />
+        </div>
+        <div className="content  overflow-auto h-full w-full lg:w-[65%] ">
           <Outlet data={data} />
         </div>
-        <div className="content col-span-2 pr-5 h-full ">
-          <Notifikasi />
-       
+        <div
+          className={` w-full h-full  bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
+            !notif
+              ? "transform -translate-y-full   lg:-translate-y-0"
+              : "transform -translate-y-0 transition  duration-500 "
+          } h-full z-10 fixed top-0 bottom-0 lg:w-[20%]  lg:relative  `}
+        >
+          <Notifikasi setNotif={setNotif} />
         </div>
       </main>
     </div>
   );
 }
- 
+
+// className={`w-full h-full flex  h-full z-10 fixed top-0 bottom-0 lg:w-3/12  lg:relative text-white`}

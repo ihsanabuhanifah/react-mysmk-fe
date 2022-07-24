@@ -60,20 +60,23 @@ export function ReactSelectAsync({
   const customStyles = {
     input: (provided, state) => ({
       ...provided,
-      borderColor: error ? '#FBD6D2' : null,
+      borderColor: error ? '#e0b4b4' : null,
+      color: '#9f3a38',
+      width: 150,
      
     }),
     control: (provided, state) => ({
       ...provided,
 
-      borderColor: error ? '#FBD6D2' : '#e2e8f0',
+      borderColor: error ? '#e0b4b4' : '#e2e8f0',
       fontSize: '0.875rem',
-      backgroundColor : error ? '#FBD6D2' : '',
+      backgroundColor : error ? '#fff6f6' : '',
       paddingLeft: 5,
+      color: 'rgba(0,0,0,.87)',
     }),
     placeholder: (provided, state) => ({
       ...provided,
-      color: '#a0aec0',
+      color:  "rgba(0,0,0,.87)",
       fontSize: '0.875rem',
     }),
     container: (provided, state) => ({

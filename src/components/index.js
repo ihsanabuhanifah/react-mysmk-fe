@@ -6,6 +6,7 @@ import { FormLabel } from "./FormLabel";
 import {EditButton, DeleteButton , ViewButton} from "./buttonAksi/editButton";
 import ModalAlert from "./ModalAlert";
 import ModalFilter from "./Modal";
+import ModalLogout from "./ModalLogout";
 export {
   Input,
   Label,
@@ -20,5 +21,5 @@ export {
   EditButton,
   DeleteButton,
   ViewButton,
-  ModalAlert
+  ModalAlert, ModalLogout
 };

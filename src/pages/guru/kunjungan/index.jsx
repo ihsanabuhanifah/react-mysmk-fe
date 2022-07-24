@@ -173,7 +173,7 @@ export default function Kunjungan() {
                       count={13}
                       isLoading={isLoading}
                       data={data?.data?.rows}
-                      messageEmpty={"Tidak Ada Pengajuan Izin"}
+                      messageEmpty={"Tidak Ada Pengajuan Izin Kunjungan"}
                     >
                       {values?.map((value, index) => (
                         <Table.Row key={index}>

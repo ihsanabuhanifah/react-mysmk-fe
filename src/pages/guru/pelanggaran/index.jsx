@@ -251,7 +251,7 @@ export default function Pelanggaran() {
                         count={13}
                         isLoading={isLoading}
                         data={data?.data?.rows}
-                        messageEmpty={"Tidak Ada Pengajuan Izin"}
+                        messageEmpty={"Tidak Ada Catatan Pelanggaran"}
                       >
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>

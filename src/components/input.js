@@ -16,7 +16,8 @@ export function Input({
       "h-8 text-xs": size === "xs",
       "h-10 text-sm": size == "sm",
       "h-12 text-base": size == "normal",
-      "w-full" : width === true
+      "w-full" : width === true,
+      
     }
   );
   return <input className={cl} {...props} />;

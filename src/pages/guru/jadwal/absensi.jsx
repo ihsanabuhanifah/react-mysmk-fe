@@ -153,8 +153,7 @@ export default function Absensi() {
       });
     }
   };
-
-  //   console.log(initialState);
+console.log('absens', data)
 
   React.useEffect(() => {
     setDariTanggal(tanggal);
@@ -181,18 +180,11 @@ export default function Absensi() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment>
-              <section className="grid grid-cols-7 gap-5">
-                {/* <Input
-                type="date"
-                value={tanggalActive}
-                placeholder="tanggal"
-                onChange={(e) => {
-                  setTanggalActive(e.target.value);
-                }}
-              /> */}
+            <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
+              <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5">
+              
 
-                <div className="col-span-2">
+                <div className="col-span-2 ">
                   <Form.Field
                     control={Input}
                     label="Tanggal"
@@ -261,7 +253,7 @@ export default function Absensi() {
             </Segment>
             {!isFetching && (
               <div>
-                <Segment raised>
+                <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
                   <Header as={"h3"}>Materi</Header>
                   <div className="space-y-5">
                     {values?.agenda_kelas?.map((value, index) => (
@@ -286,8 +278,8 @@ export default function Absensi() {
                 </Segment>
               </div>
             )}
-            <Segment raised content>
-              <Header as={"h3"}>Absensi Kelas</Header>
+            <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
+              <Header as={"h3"}>Absensi Kelas dd</Header>
               <Table>
                 <Table.Header>
                   <Table.Row>
@@ -348,10 +340,10 @@ export default function Absensi() {
                                   data.value
                                 );
                               }}
-                              errors={
+                              error={
                                 errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan &&
-                                touched?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan !== undefined &&
+                                errors?.absensi_kehadiran?.[index]?.kehadiran
                                   ?.alasan
                               }
                               value={value?.kehadiran?.id}
@@ -391,7 +383,7 @@ export default function Absensi() {
               </Table>
             </Segment>
             <div>
-              {!isFetching && (
+            {!isFetching && (
                 <Button
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
                   type="submit"

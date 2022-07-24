@@ -12,8 +12,10 @@ import {
   Pulang,
   Pelanggaran,
   Prestasi,
-  Sholat
+  Sholat,
+  AbsensiHalaqoh,
 } from "./pages/guru";
+
 import NotFound from "./pages/NotFound";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -52,7 +54,7 @@ function App() {
           <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="pelanggaran" element={<Pelanggaran />} />
           <Route path="prestasi" element={<Prestasi />} />
-          <Route path="halaqoh/:tanggal" element={<Halaqoh />} />
+          <Route path="halaqoh/absensi/:tanggal" element={<AbsensiHalaqoh />} />
           <Route path="sholat" element={<Sholat />} />
           <Route
             path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal"
