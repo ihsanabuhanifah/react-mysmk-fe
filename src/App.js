@@ -1,6 +1,8 @@
 import React from "react";
 import { Routes, Route, Navigate, Link } from "react-router-dom";
 import Login from "./pages/auth/login";
+import LupaPassword from "./pages/auth/lupa-password";
+import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import {
@@ -39,6 +41,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/lupa-password" element={<LupaPassword />} />
+        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+
 
         <Route
           path="/guru"

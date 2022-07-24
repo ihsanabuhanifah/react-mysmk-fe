@@ -1,30 +1,37 @@
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { login } from "../../api/auth";
+import { postResetPassword } from "../../api/auth";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import LogoMySMK from "../../image/MySMK.png";
 import SMKMQ from "../../image/MADINATULQURAN.png";
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
+import { toast } from "react-toastify";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email().required("Wajib di isi"),
-  password: Yup.string()
-    .min(8, "Password minimal 8 Karakter")
-    .required("wajib di isi"),
-  loginAs: Yup.number().required("Wajib di pilih"),
+  newPassword: Yup.string()
+    .min(8, "Password minimal 8 karakter")
+    .required("Password Wajib diisi"),
+  confirmPassword: Yup.string()
+    .min(8, "Konfirmasi Password minimal 8 karakter")
+    .oneOf(
+      [Yup.ref("newPassword")],
+      "Password dan Password Konfirmasi tidak sama"
+    )
+    .required("Password Wajib diisi"),
 });
 
-export default function Login() {
+export default function ResetPassword() {
   let [showPassword, setShowPassword] = React.useState(false);
 
   const initialState = {
-    email: "",
-    password: "",
-    loginAs: 4,
+    newPassword: "",
+    confirmPassword: "",
   };
   let navigate = useNavigate();
+  let { id, token } = useParams();
+
   const rolesOptions = [
     { key: 1, value: 1, text: "Super Admin" },
     { key: 2, value: 2, text: "Admin" },
@@ -38,23 +45,23 @@ export default function Login() {
   const onSubmit = async (values, { setErrors }) => {
     try {
       console.log(values);
-      const result = await login(values);
+      const result = await postResetPassword(id, token, values);
 
-      Cookies.set("mysmk_token", result.data.token, {
-        expires: 7,
+      console.log(result);
+
+      toast.success(result.data?.status, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
       });
-
-      if (result.data.role === "Guru") {
-        return navigate("/guru/dashboard");
-      }
-      console.log(result.data.role);
-      if (result.data.role === "Wali Santri") {
-        return navigate("/siswa/dashboard");
-      }
+      return navigate("/login");
     } catch (err) {
       setErrors(err.response.data);
-
-      return console.log("periksa koneksi internet anda");
     }
   };
 
@@ -80,8 +87,8 @@ export default function Login() {
             <div className="grid grid-cols-8  h-full ">
               <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
               <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
-                 <div className="w-[80%]">
-                 <Form onSubmit={handleSubmit}>
+                <div className="w-[80%]">
+                  <Form onSubmit={handleSubmit}>
                     <div className="flex justify-center items-center mb-14">
                       <div>
                         <Image src={LogoMySMK} />
@@ -89,37 +96,27 @@ export default function Login() {
                       </div>
                     </div>
                     {errors.msg !== undefined && (
-                      <Message color="red"> {errors.msg}</Message>
+                      <Message color="red">
+                        {" "}
+                        {errors.msg},{" "}
+                        <button type="button"
+                          onClick={() => {
+                            return navigate("/lupa-password");
+                          }}
+                        >
+                          Klik disini
+                        </button>{" "}
+                        untuk Request Ulang
+                      </Message>
                     )}
                     <Form.Field
                       control={Input}
-                      label="Email"
-                      placeholder="Masukan Email"
-                      name="email"
+                      label="Kata Sandi Baru"
+                      placeholder="Masukan Kata Sandi Baru"
+                      name="newPassword"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.email}
-                      disabled={isSubmitting}
-                      fluid
-                      icon={"envelope"}
-                      iconPosition="left"
-                      error={
-                        errors.email &&
-                        touched.email && {
-                          content: `${errors?.email}`,
-                          pointing: "above",
-                        }
-                      }
-                      type="email"
-                    />
-                    <Form.Field
-                      control={Input}
-                      label="Kata Sandi"
-                      placeholder="Masukan Kata Sandi"
-                      name="password"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
+                      value={values.newPassword}
                       disabled={isSubmitting}
                       fluid
                       icon={{
@@ -130,39 +127,40 @@ export default function Login() {
                       }}
                       iconPosition="left"
                       error={
-                        errors.password &&
-                        touched.password && {
-                          content: `${errors?.password}`,
+                        errors.newPassword &&
+                        touched.newPassword && {
+                          content: `${errors?.newPassword}`,
                           pointing: "above",
                         }
                       }
                       type={showPassword ? "text" : "password"}
                     />{" "}
                     <Form.Field
-                      control={Select}
-                      options={rolesOptions}
-                      label={{
-                        children: "Masuk Sebagai",
-                        htmlFor: "loginAs",
-                        name: "loginAs",
-                      }}
-                      onChange={(event, data) => {
-                        setFieldValue("loginAs", data.value);
-                      }}
+                      control={Input}
+                      label="Kata Sandi Konfirmasi"
+                      placeholder="Masukan Kata Sandi Konfirmasi"
+                      name="confirmPassword"
+                      onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values.loginAs}
+                      value={values.confirmPassword}
                       disabled={isSubmitting}
-                      placeholder="Pilih Role"
+                      fluid
+                      icon={{
+                        name: showPassword ? "eye slash" : "eye",
+                        circular: true,
+                        link: true,
+                        onClick: () => setShowPassword(!showPassword),
+                      }}
+                      iconPosition="left"
                       error={
-                        errors.loginAs &&
-                        touched.loginAs && {
-                          content: `${errors?.loginAs}`,
+                        errors.confirmPassword &&
+                        touched.confirmPassword && {
+                          content: `${errors?.confirmPassword}`,
                           pointing: "above",
                         }
                       }
-                      search
-                      searchInput={{ id: "loginAs", name: "loginAs" }}
-                    />
+                      type={showPassword ? "text" : "password"}
+                    />{" "}
                     <Button
                       content={isSubmitting ? "Proses" : "Masuk"}
                       type="submit"
@@ -172,16 +170,9 @@ export default function Login() {
                       loading={isSubmitting}
                       disabled={isSubmitting}
                     />
-                     <div className="flex items-center justify-center">
-                     <button className="text-green-500 mt-5" onClick={()=> {
-                      return navigate('/lupa-password')
-                     }} type="button ">Lupa Password ?</button>
-                     </div>
                   </Form>
-                 </div>
-                
                 </div>
-             
+              </div>
             </div>
           </div>
         )}
