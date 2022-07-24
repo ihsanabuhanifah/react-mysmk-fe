@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { listJadwal } from "../../../api/guru/absensi";
+import { belumAbsen, listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
 import {
   Table,
@@ -18,7 +18,7 @@ import {
   listAbsensi,
 } from "../../../api/guru/absensi";
 
-import { formatHari, formatTahun } from "../../../utils";
+import { formatDate, formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
 export default function Jadwal() {
@@ -38,6 +38,19 @@ export default function Jadwal() {
     ["jadwal", parameter],
     //axios function,triggered when page/pageSize change
     () => listJadwal(parameter),
+    //configuration
+    {
+      refetchInterval: 1000 * 60 * 60,
+      select: (response) => {
+        return response.data;
+      },
+    }
+  );
+  let { data: dataBelumAbsen, isFetching: isFetchingBelumAbsen } = useQuery(
+    //query key
+    ["belum_absensi", parameter],
+    //axios function,triggered when page/pageSize change
+    () => belumAbsen(),
     //configuration
     {
       refetchInterval: 1000 * 60 * 60,
@@ -73,7 +86,6 @@ export default function Jadwal() {
       select: (response) => response.data,
     }
   );
-
 
   const creeteJadwal = async () => {
     setLoading(true);
@@ -111,6 +123,8 @@ export default function Jadwal() {
     }
   };
 
+  console.log('data belm', dataBelumAbsen)
+
   return (
     <LayoutPage title="jadwal">
       <div>
@@ -135,10 +149,10 @@ export default function Jadwal() {
           />
         </Form>
       </div>
-      <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
+      <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
         <Table celled selectable>
-          <Table.Header >
-            <Table.Row> 
+          <Table.Header>
+            <Table.Row>
               <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Hari</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
@@ -174,7 +188,7 @@ export default function Jadwal() {
                       content={"Absensi"}
                       type="button"
                       fluid
-                      disabled={absensi?.absensi?.length === 0 ? true :false}
+                      disabled={absensi?.absensi?.length === 0 ? true : false}
                       size="medium"
                       color="green"
                       onClick={() => {
@@ -193,7 +207,7 @@ export default function Jadwal() {
         </Table>
       </Segment>
       {absensi?.absensi?.length === 0 && (
-        <Segment >
+        <Segment>
           <Button
             content={"Buat Absensi"}
             type="submit"
@@ -206,6 +220,43 @@ export default function Jadwal() {
           />
         </Segment>
       )}
+
+      <Segment>
+        <h3>List Guru Belum Absensi</h3>
+        <Table celled selectable>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>No</Table.HeaderCell>
+              <Table.HeaderCell>Tanggal</Table.HeaderCell>
+              <Table.HeaderCell>Nama Guru</Table.HeaderCell>
+              <Table.HeaderCell>Kelas</Table.HeaderCell>
+             
+              <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+             
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            <TableLoading
+              count={8}
+              isLoading={isFetchingBelumAbsen}
+              data={dataBelumAbsen?.data}
+              messageEmpty={"Tidak Ada Guru Belum Absen"}
+            >
+              {dataBelumAbsen?.data?.map((value, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{formatDate(value?.tanggal)}</Table.Cell>
+                  <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                 
+                
+                </Table.Row>
+              ))}
+            </TableLoading>
+          </Table.Body>
+        </Table>
+      </Segment>
     </LayoutPage>
   );
 }

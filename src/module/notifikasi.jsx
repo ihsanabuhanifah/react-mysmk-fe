@@ -78,7 +78,7 @@ export default function Notifikasi({ setNotif }) {
               <button
                 onClick={() => {
                   return navigate(
-                    `/guru/halaqoh/${dayjs(value?.tanggal).format(
+                    `/guru/halaqoh/absensi/${dayjs(value?.tanggal).format(
                       "YYYY-MM-DD"
                     )}`
                   );

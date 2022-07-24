@@ -36,7 +36,6 @@ export function notifikasiAbsensi() {
   return axios.get("/guru/absensi/notifikasi");
 }
 
-
 export function absensiManualCreate() {
   return axios.get("/guru/absensi/manual");
 }
@@ -48,4 +47,6 @@ export function monitor() {
   return axios.get("/monitor");
 }
 
-
+export function belumAbsen() {
+  return axios.get("/guru/absensi/guru-belum-absen");
+}
