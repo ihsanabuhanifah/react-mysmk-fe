@@ -137,16 +137,16 @@ export default function Jadwal() {
       </div>
       <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
         <Table celled selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
+          <Table.Header >
+            <Table.Row> 
+              <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Hari</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell textAlign="center">Jam_ke</Table.HeaderCell>
+              <Table.HeaderCell>Jam_ke</Table.HeaderCell>
               <Table.HeaderCell>Semester</Table.HeaderCell>
               <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-              <Table.HeaderCell textAlign="center">Aksi</Table.HeaderCell>
+              <Table.HeaderCell>Aksi</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -158,13 +158,13 @@ export default function Jadwal() {
             >
               {data?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>
-                  <Table.Cell textAlign="center">{index + 1}</Table.Cell>
+                  <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>
                     <span className="capitalize">{value?.hari}</span>
                   </Table.Cell>
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                   <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                  <Table.Cell textAlign="center">{value?.jam_ke}</Table.Cell>
+                  <Table.Cell>{value?.jam_ke}</Table.Cell>
                   <Table.Cell>Semester {value?.semester}</Table.Cell>
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}

@@ -77,10 +77,11 @@ export default function Login() {
           isSubmitting,
         }) => (
           <div className="w-screen h-screen">
-            <div className="grid grid-cols-5 h-full content-center ">
-              <div className="col-start-3 h-full w-full  ">
-                <div className="w-full h-full">
-                  <Form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-8  h-full ">
+              <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
+              <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
+                 <div className="w-[80%]">
+                 <Form onSubmit={handleSubmit}>
                     <div className="flex justify-center items-center mb-14">
                       <div>
                         <Image src={LogoMySMK} />
@@ -172,8 +173,9 @@ export default function Login() {
                       disabled={isSubmitting}
                     />
                   </Form>
+                 </div>
                 </div>
-              </div>
+             
             </div>
           </div>
         )}

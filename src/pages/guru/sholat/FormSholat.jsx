@@ -1,10 +1,10 @@
-import {
-  listSiswaOptions,
-  listTahunAjaran,
-} from "../../../api/list";
+import { listSiswaOptions, listTahunAjaran } from "../../../api/list";
 
 import { useQuery } from "react-query";
-import { waktusholatOptions, alasanTidakSholatOptions } from "../../../utils/options";
+import {
+  waktusholatOptions,
+  alasanTidakSholatOptions,
+} from "../../../utils/options";
 import {
   Input,
   Segment,
@@ -47,18 +47,18 @@ export default function FormSholat({
     }
   );
 
-  console.log(values)
+  console.log(values);
 
   return (
     <Segment>
-      <div className="p-5">
+      <div className="p-0 lg:p-5">
         <Header>Form Pencatatan Sholat</Header>
         <Divider></Divider>
         <Form onSubmit={handleSubmit}>
           {values?.sholat?.map((value, index) => (
             <div
               key={index}
-              className="grid grid-cols-3 gap-2 border p-5 mt-3 shadow-md"
+              className="grid grid-cols-1 lg:grid-cols-3 gap-2 border p-5 mt-3 shadow-md"
             >
               <div className="col-span-3 flex justify-end ">
                 <DeleteButton
@@ -73,7 +73,8 @@ export default function FormSholat({
                   size="small"
                 />
               </div>
-              <Form.Field
+              <div className="col-span-3 lg:col-span-1">
+             <Form.Field
                 control={Input}
                 label="Tanggal"
                 placeholder="Tanggal"
@@ -95,91 +96,98 @@ export default function FormSholat({
                 type="date"
               />
 
-              <FormLabel
-                error={
-                  errors?.sholat?.[index]?.student_id &&
-                  touched?.sholat?.[index]?.student_id
-                }
-                label={"Nama Siswa"}
-              >
-                <ReactSelectAsync
-                  debounceTimeout={300}
-                  value={value?.nama_siswa}
-                  loadOptions={listSiswaOptions}
-                  isDisabled={isSubmitting}
-                  onChange={(data) => {
-                    console.log(data);
-                    setFieldValue(`sholat[${index}]nama_siswa`, data);
-                    setFieldValue(`sholat[${index}]student_id`, data.value);
-                  }}
+             </div>
+              <div className="col-span-3 lg:col-span-1">
+                <FormLabel
                   error={
                     errors?.sholat?.[index]?.student_id &&
                     touched?.sholat?.[index]?.student_id
                   }
-                  placeholder="Nama Siswa"
-                  additional={{
-                    page: 1,
+                  label={"Nama Siswa"}
+                >
+                  <ReactSelectAsync
+                    debounceTimeout={300}
+                    value={value?.nama_siswa}
+                    loadOptions={listSiswaOptions}
+                    isDisabled={isSubmitting}
+                    onChange={(data) => {
+                      console.log(data);
+                      setFieldValue(`sholat[${index}]nama_siswa`, data);
+                      setFieldValue(`sholat[${index}]student_id`, data.value);
+                    }}
+                    error={
+                      errors?.sholat?.[index]?.student_id &&
+                      touched?.sholat?.[index]?.student_id
+                    }
+                    placeholder="Nama Siswa"
+                    additional={{
+                      page: 1,
+                    }}
+                  />
+                </FormLabel>
+              </div>
+              <div className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Select}
+                  options={waktusholatOptions}
+                  label={{
+                    children: "Waktu",
+                    htmlFor: `sholat[${index}]waktu`,
+                    name: `sholat[${index}]waktu`,
+                  }}
+                  onChange={(event, data) => {
+                    setFieldValue(`sholat[${index}]waktu`, data.value);
+                  }}
+                  onBlur={handleBlur}
+                  value={value?.waktu}
+                  placeholder="Pilih Waktu"
+                  error={
+                    errors?.sholat?.[index]?.waktu &&
+                    touched?.sholat?.[index]?.waktu && {
+                      content: `${errors?.sholat?.[index]?.waktu}`,
+                      pointing: "above",
+                    }
+                  }
+                  disabled={isSubmitting}
+                  search
+                  searchInput={{
+                    id: `sholat[${index}]waktu`,
+                    name: `sholat[${index}]waktu`,
                   }}
                 />
-              </FormLabel>
-              <Form.Field
-                control={Select}
-                options={waktusholatOptions}
-                label={{
-                  children: "Waktu",
-                  htmlFor: `sholat[${index}]waktu`,
-                  name: `sholat[${index}]waktu`,
-                }}
-                onChange={(event, data) => {
-                  setFieldValue(`sholat[${index}]waktu`, data.value);
-                }}
-                onBlur={handleBlur}
-                value={value?.waktu}
-                placeholder="Pilih Waktu"
-                error={
-                  errors?.sholat?.[index]?.waktu &&
-                  touched?.sholat?.[index]?.waktu && {
-                    content: `${errors?.sholat?.[index]?.waktu}`,
-                    pointing: "above",
-                  }
-                }
-                disabled={isSubmitting}
-                search
-                searchInput={{
-                  id: `sholat[${index}]waktu`,
-                  name: `sholat[${index}]waktu`,
-                }}
-              />
+              </div>
 
-              <Form.Field
-                control={Select}
-                options={alasanTidakSholatOptions}
-                label={{
-                  children: "Jenis Pelanggaran",
-                  htmlFor: `sholat[${index}]keterangan`,
-                  name: `sholat[${index}]keterangan`,
-                }}
-                onChange={(event, data) => {
-                  setFieldValue(`sholat[${index}]keterangan`, data.value);
-                }}
-                onBlur={handleBlur}
-                value={value?.keterangan}
-                placeholder="Pilih Katerangan"
-                error={
-                  errors?.sholat?.[index]?.keterangan &&
-                  touched?.sholat?.[index]?.keterangan && {
-                    content: `${errors?.sholat?.[index]?.keterangan}`,
-                    pointing: "above",
+              <div className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Select}
+                  options={alasanTidakSholatOptions}
+                  label={{
+                    children: "Jenis Pelanggaran",
+                    htmlFor: `sholat[${index}]keterangan`,
+                    name: `sholat[${index}]keterangan`,
+                  }}
+                  onChange={(event, data) => {
+                    setFieldValue(`sholat[${index}]keterangan`, data.value);
+                  }}
+                  onBlur={handleBlur}
+                  value={value?.keterangan}
+                  placeholder="Pilih Katerangan"
+                  error={
+                    errors?.sholat?.[index]?.keterangan &&
+                    touched?.sholat?.[index]?.keterangan && {
+                      content: `${errors?.sholat?.[index]?.keterangan}`,
+                      pointing: "above",
+                    }
                   }
-                }
-                disabled={isSubmitting}
-                search
-                searchInput={{
-                  id: `sholat[${index}]keterangan`,
-                  name: `sholat[${index}]keterangan`,
-                }}
-              />
-             
+                  disabled={isSubmitting}
+                  search
+                  searchInput={{
+                    id: `sholat[${index}]keterangan`,
+                    name: `sholat[${index}]keterangan`,
+                  }}
+                />
+              </div>
+
               <div className="col-span-3 col-start-1">
                 <Form.Field
                   control={TextArea}
@@ -206,6 +214,7 @@ export default function FormSholat({
             {mode === "add" && (
               <Button
                 basic
+                fluid
                 type="button"
                 onClick={() => {
                   setFieldValue("sholat", [
@@ -213,10 +222,9 @@ export default function FormSholat({
                     {
                       tanggal: "",
                       student_id: "",
-                      waktu : "",
+                      waktu: "",
                       alasan: "",
                       keterangan: "",
-                     
                     },
                   ]);
                 }}
@@ -228,8 +236,8 @@ export default function FormSholat({
             )}
           </Segment>
 
-          <div className="grid grid-cols-3 gap-5">
-            <div className="col-start-3 grid grid-cols-2 gap-x-5">
+          <div className="grid grid-cols-3 gap-5 ">
+            <div className="col-start-1 lg:col-start-3 grid col-span-3  grid-cols-2  gap-x-5">
               <Button
                 content={"Batal"}
                 type="button"

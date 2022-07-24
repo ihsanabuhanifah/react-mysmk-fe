@@ -15,7 +15,6 @@ import { useQuery, useQueryClient } from "react-query";
 import {
   listKunjungan,
   responseKunjungan,
-
 } from "../../../api/guru/pulangDanKunjungan";
 import { TableLoading, ModalFilter } from "../../../components";
 import { handleViewNull, formatDate, statusApproval } from "../../../utils";
@@ -101,68 +100,76 @@ export default function Kunjungan() {
           <Form onSubmit={handleSubmit}>
             <Segment>
               <div className="overflow-auto h-full">
-                <div className="space-x-2">
-                  <Input
-                    onChange={(e) => {
-                      setNama(e.target.value);
-                    }}
-                    value={nama}
-                    icon="search"
-                    placeholder="Nama Siswa..."
-                  />
-                 
-                  {approve  ? (
-                    <>
-                      <Button
-                        type="button"
-                        color="red"
-                        basic
-                        onClick={() => {
-                          setApprove(false);
-                          setLaporan(false);
-                          setUpdated(false);
-                          return setValues(data?.data?.rows);
-                        }}
-                        content="Batal"
-                      />
+                <div className="grid grid-cols-8 gap-5">
+                  <div className=" col-span-8 lg:col-span-4">
+                    <Input
+                      onChange={(e) => {
+                        setNama(e.target.value);
+                      }}
+                      value={nama}
+                      fluid
+                      icon="search"
+                      placeholder="Nama Siswa..."
+                    />
+                  </div>
 
-                      <Button
-                        content="Simpan"
-                        color="teal"
-                        basic
-                        type="submit"
-                        loading={isSubmitting}
-                        disabled={isSubmitting || !updated}
-                      />
+                  {approve ? (
+                    <>
+                      <div className="col-span-4 lg:col-span-1">
+                        <Button
+                          type="button"
+                          color="red"
+                          basic
+                          fluid
+                          onClick={() => {
+                            setApprove(false);
+                            setLaporan(false);
+                            setUpdated(false);
+                            return setValues(data?.data?.rows);
+                          }}
+                          content="Batal"
+                        />
+                      </div>
+                      <div className="col-span-4 lg:col-span-1">
+                       
+                        <Button
+                          content="Simpan"
+                          color="teal"
+                          basic
+                          fluid
+                          type="submit"
+                          loading={isSubmitting}
+                          disabled={isSubmitting || !updated}
+                        />
+                      </div>
                     </>
                   ) : (
-                    <>
+                    <div className="col-span-8 lg:col-span-2">
                       <Button
                         type="button"
                         color="teal"
+                        fluid
                         onClick={() => {
                           setApprove(true);
                         }}
                         content="Respon Pengajuan"
                       />
-                    </>
+                    </div>
                   )}
-
-                  
                 </div>
 
                 <Table celled padded>
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
+                      <Table.HeaderCell>No</Table.HeaderCell>
                       <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                       <Table.HeaderCell>Tanggal</Table.HeaderCell>
-                     
+
                       <Table.HeaderCell>Kepentingan</Table.HeaderCell>
-                      <Table.HeaderCell textAlign="center">
+                      <Table.HeaderCell>
                         Status Approval
                       </Table.HeaderCell>
-                      <Table.HeaderCell  content singleLine={approve}>
+                      <Table.HeaderCell content singleLine={approve}>
                         Alasan Ditolak
                       </Table.HeaderCell>
                       <Table.HeaderCell>Approve By</Table.HeaderCell>
@@ -177,7 +184,7 @@ export default function Kunjungan() {
                     >
                       {values?.map((value, index) => (
                         <Table.Row key={index}>
-                          <Table.Cell textAlign="center">
+                          <Table.Cell>
                             {index + 1}
                           </Table.Cell>
                           <Table.Cell>
@@ -185,10 +192,8 @@ export default function Kunjungan() {
                               {handleViewNull(value?.siswa?.nama_siswa)}
                             </span>
                           </Table.Cell>
-                          <Table.Cell>
-                            {formatDate(value?.tanggal)}
-                          </Table.Cell>
-                        
+                          <Table.Cell>{formatDate(value?.tanggal)}</Table.Cell>
+
                           <Table.Cell textAlign="left">
                             {handleViewNull(value?.kepentingan)}
                           </Table.Cell>
@@ -254,7 +259,9 @@ export default function Kunjungan() {
                             )}
                           </Table.Cell>
                           <Table.Cell>
-                            {handleViewNull(value?.kunjungan_approv_by?.nama_guru)}
+                            {handleViewNull(
+                              value?.kunjungan_approv_by?.nama_guru
+                            )}
                           </Table.Cell>
                         </Table.Row>
                       ))}

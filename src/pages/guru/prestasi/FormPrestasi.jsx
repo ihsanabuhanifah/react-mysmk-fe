@@ -54,7 +54,7 @@ export default function FormPrestasi({
 
   return (
     <Segment>
-      <div className="p-5">
+      <div className="p-0 lg:p-5">
         <Header>Form Pencatatan Prestasi</Header>
         <Divider></Divider>
         <Form onSubmit={handleSubmit}>
@@ -76,7 +76,8 @@ export default function FormPrestasi({
                   size="small"
                 />
               </div>
-              <Form.Field
+           <div className="col-span-3 lg:col-span-1">
+            <Form.Field
                 control={Input}
                 label="Tanggal"
                 placeholder="Tanggal"
@@ -97,8 +98,10 @@ export default function FormPrestasi({
                 }
                 type="date"
               />
+            </div>
 
-              <FormLabel
+           <div className="col-span-3 lg:col-span-1">
+            <FormLabel
                 error={
                   errors?.prestasi?.[index]?.student_id &&
                   touched?.prestasi?.[index]?.student_id
@@ -125,6 +128,8 @@ export default function FormPrestasi({
                   }}
                 />
               </FormLabel>
+            </div>
+             <div className="col-span-3 lg:col-span-1">
               <Form.Field
                 control={Select}
                 options={kategoriOptions}
@@ -153,7 +158,9 @@ export default function FormPrestasi({
                   name: `prestasi[${index}]kategori`,
                 }}
               />
+              </div>
 
+             <div className="col-span-3 lg:col-span-1">
               <Form.Field
                 control={Select}
                 options={semesterOptions}
@@ -182,7 +189,9 @@ export default function FormPrestasi({
                   name: `prestasi[${index}]semester`,
                 }}
               />
-              <Form.Field
+              </div>
+            <div className="col-span-3 lg:col-span-1">
+             <Form.Field
                 control={Select}
                 options={getOptions(dataTahunAjaran?.data, "nama_tahun_ajaran")}
                 label={{
@@ -210,6 +219,7 @@ export default function FormPrestasi({
                 }}
                 disabled={isSubmitting}
               />
+             </div>
               <div className="col-span-3 col-start-1">
                 <Form.Field
                   control={TextArea}
@@ -236,6 +246,7 @@ export default function FormPrestasi({
             {mode === "add" && (
               <Button
                 basic
+                fluid
                 type="button"
                 onClick={() => {
                   setFieldValue("prestasi", [
@@ -259,8 +270,8 @@ export default function FormPrestasi({
             )}
           </Segment>
 
-          <div className="grid grid-cols-3 gap-5">
-            <div className="col-start-3 grid grid-cols-2 gap-x-5">
+          <div className="grid grid-cols-3 gap-5 ">
+            <div className="col-start-1 lg:col-start-3 grid col-span-3  grid-cols-2  gap-x-5">
               <Button
                 content={"Batal"}
                 type="button"

@@ -36,7 +36,7 @@ export default function Pulang() {
   let debouncedName = useDebounce(nama, 600);
   let [approve, setApprove] = React.useState(false);
   let [laporan, setLaporan] = React.useState(false);
-  let [updated, setUpdated] = React.useState(false)
+  let [updated, setUpdated] = React.useState(false);
   let parameter = {
     page: page,
     pageSize: pageSize,
@@ -60,7 +60,7 @@ export default function Pulang() {
   const onSubmit = async (values) => {
     try {
       let response;
-      console.log(approve)
+      console.log(approve);
       if (approve) {
         response = await responsePulang(values);
       } else {
@@ -107,76 +107,89 @@ export default function Pulang() {
           <Form onSubmit={handleSubmit}>
             <Segment>
               <div className="overflow-auto h-full">
-                <div className="space-x-2">
-                  <Input
-                    onChange={(e) => {
-                      setNama(e.target.value);
-                    }}
-                    value={nama}
-                    icon="search"
-                    placeholder="Nama Siswa..."
-                  />
+                <div className=" grid grid-cols-8 gap-5">
+                  <div className="col-span-8 lg:col-span-4">
+                    <Input
+                      onChange={(e) => {
+                        setNama(e.target.value);
+                      }}
+                      fluid
+                      value={nama}
+                      icon="search"
+                      placeholder="Nama Siswa..."
+                    />
+                  </div>
                   {/* <ModalFilter header={'Filter'} open={open} setOpen={setOpen}>
             <FilterPerizinanPulang/>
         </ModalFilter> */}
                   {approve || laporan ? (
                     <>
-                      <Button
-                        type="button"
-                        basic
-                        color="red"
-                        onClick={() => {
-                          setApprove(false);
-                          setLaporan(false);
-                          setUpdated(false)
-                          return setValues(data?.data?.rows);
-                        }}
-                        content="Batal"
-                      />
+                      <div className="col-span-4 lg:col-span-1">
+                        <Button
+                          type="button"
+                          basic
+                          fluid
+                          color="red"
+                          onClick={() => {
+                            setApprove(false);
+                            setLaporan(false);
+                            setUpdated(false);
+                            return setValues(data?.data?.rows);
+                          }}
+                          content="Batal"
+                        />
+                      </div>
 
-                      <Button
-                        content="Simpan"
-                        color="teal"
-                        basic
-                        type="submit"
-                        loading={isSubmitting}
-                        disabled={isSubmitting || !updated}
-                      />
+                      <div className="col-span-4 lg:col-span-1">
+                        <Button
+                          content="Simpan"
+                          color="teal"
+                          basic
+                          fluid
+                          type="submit"
+                          loading={isSubmitting}
+                          disabled={isSubmitting || !updated}
+                        />
+                      </div>
                     </>
                   ) : (
-                    <>
+                    <div className="col-span-8 lg:col-span-2">
                       <Button
                         type="button"
                         color="teal"
+                        fluid
                         onClick={() => {
                           setApprove(true);
                         }}
                         content="Respon Pengajuan"
                       />
-                    </>
+                    </div>
                   )}
 
                   {!approve && !laporan && (
-                    <Button
-                      type="button"
-                      color="olive"
-                      onClick={() => {
-                        setLaporan(!laporan);
-                      }}
-                      content="Laporan Kedatangan"
-                    />
+                    <div className="col-span-8 lg:col-span-2">
+                      <Button
+                        type="button"
+                        color="olive"
+                        fluid
+                        onClick={() => {
+                          setLaporan(!laporan);
+                        }}
+                        content="Laporan Kedatangan"
+                      />
+                    </div>
                   )}
                 </div>
 
                 <Table celled padded>
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell textAlign="center">No</Table.HeaderCell>
+                      <Table.HeaderCell >No</Table.HeaderCell>
                       <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                       <Table.HeaderCell>Pulang Dari</Table.HeaderCell>
                       <Table.HeaderCell>Pulang Sampai</Table.HeaderCell>
                       <Table.HeaderCell>Kepentingan</Table.HeaderCell>
-                      <Table.HeaderCell textAlign="center">
+                      <Table.HeaderCell >
                         Status Approval
                       </Table.HeaderCell>
                       <Table.HeaderCell width={16} content singleLine={approve}>
@@ -200,11 +213,11 @@ export default function Pulang() {
                       count={13}
                       isLoading={isLoading}
                       data={data?.data?.rows}
-                      messageEmpty={"Tidak Ada Pengajuan Izin Pulang"}
+                      messageEmpty={"Tidak Ada Pengajuan Izin"}
                     >
                       {values?.map((value, index) => (
                         <Table.Row key={index}>
-                          <Table.Cell textAlign="center">
+                          <Table.Cell >
                             {index + 1}
                           </Table.Cell>
                           <Table.Cell>
@@ -230,7 +243,7 @@ export default function Pulang() {
                                 selection
                                 search
                                 onChange={(event, data) => {
-                                 setUpdated(true)
+                                  setUpdated(true);
                                   setFieldValue(
                                     `[${index}]status_approval`,
                                     data.value
@@ -268,7 +281,7 @@ export default function Pulang() {
                                 }}
                                 search
                                 onChange={(e) => {
-                                  setUpdated(true)
+                                  setUpdated(true);
                                   setFieldValue(`[${index}]updated`, true);
                                   setFieldValue(
                                     `[${index}]alasan_ditolak`,
@@ -295,7 +308,7 @@ export default function Pulang() {
                                 search
                                 value={value.jam_kembali_ke_sekolah}
                                 onChange={(e) => {
-                                   setUpdated(true)
+                                  setUpdated(true);
                                   setFieldValue(`[${index}]updated`, true);
 
                                   return setFieldValue(
@@ -318,7 +331,7 @@ export default function Pulang() {
                                 search
                                 value={value.tanggal_kembali}
                                 onChange={(e) => {
-                                  setUpdated(true)
+                                  setUpdated(true);
                                   let selisih = selisihHari(
                                     value.izin_sampai,
                                     value.tanggal_kembali
@@ -330,7 +343,6 @@ export default function Pulang() {
                                       `[${index}]jumlah_hari_terlambat`,
                                       selisih
                                     );
-                                  
                                   }
                                   return setFieldValue(
                                     `[${index}]tanggal_kembali`,

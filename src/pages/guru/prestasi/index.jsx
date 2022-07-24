@@ -205,29 +205,36 @@ export default function Prestasi() {
             </Collapse>
             <Segment>
               <div className="overflow-auto">
-                <div className="space-x-2">
-                  <Input
-                    onChange={(e) => {
-                      setNama(e.target.value);
-                    }}
-                    value={nama}
-                    icon="search"
-                    placeholder="Nama Siswa..."
-                  />
-                  <Button
-                    type="button"
-                    color="teal"
-                    onClick={() => {
-                      setIsOpen(true);
-                      setMode("add");
-                      return window.scrollTo(0, 0);
-                    }}
-                    content="Buat Catatan Prestasi"
-                  />
+              <div className="">
+                  <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+                    <div className=" grid-cols-1 lg:col-span-3">
+                      <Input
+                        onChange={(e) => {
+                          setNama(e.target.value);
+                        }}
+                        fluid
+                        value={nama}
+                        icon="search"
+                        placeholder="Nama Siswa..."
+                      />
+                    </div>
+                    <div className="col-span-1 lg:col-span-2">
+                      <Button
+                        type="button"
+                        color="teal"
+                        onClick={() => {
+                          setIsOpen(true);
+                          setMode("add");
+                          return window.scrollTo(0, 0);
+                        }}
+                        content="Buat Catatan Prestasi"
+                      />
+                    </div>
+                  </div>
                   <Table celled selectable>
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell textAlign="center">
+                        <Table.HeaderCell >
                           No
                         </Table.HeaderCell>
                         <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
@@ -251,7 +258,7 @@ export default function Prestasi() {
                       >
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>
-                            <Table.Cell textAlign="center">
+                            <Table.Cell >
                               {index + 1}
                             </Table.Cell>
                             <Table.Cell>
