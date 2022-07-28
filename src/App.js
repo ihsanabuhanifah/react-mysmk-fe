@@ -27,7 +27,7 @@ import ProtectRoute from "./routers/ProtectRoute";
 
 function App() {
   return (
-    <>
+    <div className="font-poppins">
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -80,7 +80,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

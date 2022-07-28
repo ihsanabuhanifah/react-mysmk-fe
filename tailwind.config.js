@@ -10,6 +10,9 @@ module.exports = {
         "3/12": "24.9%",
         "9/12": "91.7%",
       },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'] 
+      },
     },
   },
   variants: {

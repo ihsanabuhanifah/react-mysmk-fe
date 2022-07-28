@@ -38,9 +38,9 @@ export default function Guru() {
   console.log(sidebar);
 
   return (
-    <div className="h-screen antialiased text-gray-700 border">
-      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border px-5 lg:px-10 ">
-        <div className="h-24 w-24 mt-2 col-span-8 lg:col-span-2 ">
+    <div className="h-screen antialiased text-gray-700 border ">
+      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border  ">
+        <div className="h-24 w-36 mt-2 col-span-4 lg:col-span-2 pl-5 lg:pl-10 ">
           <Image src={LogoMySMK} />
           <Image src={SMKMQ} />
         </div>
@@ -56,8 +56,8 @@ export default function Guru() {
             />
           </div>
         </div>
-        <div className=" col-span-1 lg:col-span-2">
-          <div className="border-2 h-10 w-10 rounded-full p-2">
+        <div className=" col-span-6 lg:col-span-2 flex justify-end space-x-5 pr-5 lg:pr-10 ">
+          <div className="border-2 lg:h-12 lg:w-12 w-10 h-10 rounded-full p-2">
             <img
               onClick={() => {
                 setNotif(!notif);
@@ -65,10 +65,10 @@ export default function Guru() {
               className="w-5 h-5"
               src={LogoNotif}
               alt=""
-            />
+            /> 
           </div>
-        </div>
-        <div className="block lg:hidden">
+          <div className="lg:block hidden lg:h-12 lg:w-12 border bg-green-200 rounded-full"></div>
+          <div className="block lg:hidden">
           <button
             className="mb-5"
             onClick={() => {
@@ -78,8 +78,10 @@ export default function Guru() {
             <MdMenu className="w-10 h-10" />
           </button>
         </div>
+        </div>
+       
       </header>
-      <main className="flex gap-x-2 h-9/12   ">
+      <main className="flex gap-x-2 h-9/12 lg:h-full   ">
         <div
           className={` w-full h-full  bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
             !sidebar
@@ -93,7 +95,7 @@ export default function Guru() {
           <Outlet data={data} />
         </div>
         <div
-          className={` w-full h-full  bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
+          className={` w-full h-full   bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
             !notif
               ? "transform -translate-y-full   lg:-translate-y-0"
               : "transform -translate-y-0 transition  duration-500 "

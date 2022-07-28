@@ -76,17 +76,21 @@ export default function Login() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <div className="w-screen h-screen">
-            <div className="grid grid-cols-8  h-full ">
+          <div className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
+            <div className="grid grid-cols-8 h-full w-full  lg:h-2/3 lg:w-2/3 bg-white border  ">
               <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
               <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
                  <div className="w-[80%]">
                  <Form onSubmit={handleSubmit}>
-                    <div className="flex justify-center items-center mb-14">
-                      <div>
+                    {/* <div className="flex justify-center items-center mb-14">
+                      <div className="h-24 w-24">
                         <Image src={LogoMySMK} />
                         <Image src={SMKMQ} />
                       </div>
+                    </div> */}
+                    <div className="mb-5">
+                      <h1>Login</h1>
+                      <p>Silahkan Login mengguankan akun yang sudah diberikan</p>
                     </div>
                     {errors.msg !== undefined && (
                       <Message color="red"> {errors.msg}</Message>

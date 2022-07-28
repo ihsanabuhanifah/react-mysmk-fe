@@ -162,7 +162,13 @@ export default function SidebarGuru({ setSidebar }) {
         >
           <MdLogout className="w-10 h-10" />
           <div className="h-10 w-10 ml-2 mt-2 ">
-            <h3>Logout</h3>
+            <button
+              className={`ml-5 text-lg font-poppins 
+           text-gray-600 
+         font-bold `}
+            >
+              Logout
+            </button>
           </div>
         </button>
       </div>
@@ -179,7 +185,7 @@ function NavButton({ to, title, logo, handleSidebar }) {
     <div className="flex items-center  ">
       <div className="w-8 h-8">{logo}</div>
       <button
-        className={`ml-5 text-lg ${
+        className={`ml-5 text-lg font-poppins ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
         onClick={() => {

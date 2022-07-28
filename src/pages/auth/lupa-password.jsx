@@ -61,17 +61,23 @@ export default function LupaPassword() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <div className="w-screen h-screen">
-            <div className="grid grid-cols-8  h-full ">
-              <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
+          <div className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
+          <div className="grid grid-cols-8  h-full w-full  lg:h-2/3 lg:w-2/3 bg-white border  ">
+            <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
               <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
                 <div className="w-[80%]">
                   <Form onSubmit={handleSubmit}>
-                    <div className="flex justify-center items-center mb-14">
+                    {/* <div className="flex justify-center items-center mb-14">
                       <div>
                         <Image src={LogoMySMK} />
                         <Image src={SMKMQ} />
                       </div>
+                    </div> */}
+                     <div className="mb-5">
+                      <h1>Lupa Password</h1>
+                      <p className="text-justify">Input Email yang terdaftar untuk meminta perubahan password
+
+</p>
                     </div>
                     {errors.msg !== undefined && (
                       <Message color="red"> {errors.msg}</Message>
@@ -118,7 +124,7 @@ export default function LupaPassword() {
                     />
                   </Form>
                   <div className="flex items-center justify-center">
-                  <button className="text-green-500 mt-5 " onClick={()=> {
+                  <button className="text-green-500 mt-5 font-poppins " onClick={()=> {
                       return navigate('/login')
                      }} type="button ">Kembali</button>
                   </div>
