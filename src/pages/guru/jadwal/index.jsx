@@ -33,7 +33,7 @@ export default function Jadwal() {
   };
   let [dariTanggal] = React.useState(formatTahun(date));
   let [sampaiTanggal] = React.useState(formatTahun(date));
-  let { data, isFetching } = useQuery(
+  let { data, isLoading} = useQuery(
     //query key
     ["jadwal", parameter],
     //axios function,triggered when page/pageSize change
@@ -46,7 +46,7 @@ export default function Jadwal() {
       },
     }
   );
-  let { data: dataBelumAbsen, isFetching: isFetchingBelumAbsen } = useQuery(
+  let { data: dataBelumAbsen, isLoading: isLoadingBelumAbsen } = useQuery(
     //query key
     ["belum_absensi", parameter],
     //axios function,triggered when page/pageSize change
@@ -91,7 +91,7 @@ export default function Jadwal() {
     setLoading(true);
     try {
       const response = await absensiManualCreate();
-      await halaqohManualCreate();
+      // await halaqohManualCreate();
       setLoading(false);
       queryClient.invalidateQueries("jadwal");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
@@ -122,8 +122,6 @@ export default function Jadwal() {
       });
     }
   };
-
-  console.log('data belm', dataBelumAbsen)
 
   return (
     <LayoutPage title="jadwal">
@@ -158,6 +156,7 @@ export default function Jadwal() {
               <Table.HeaderCell>Kelas</Table.HeaderCell>
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
               <Table.HeaderCell>Jam_ke</Table.HeaderCell>
+              <Table.HeaderCell>Jumlah Jam</Table.HeaderCell>
               <Table.HeaderCell>Semester</Table.HeaderCell>
               <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
               <Table.HeaderCell>Aksi</Table.HeaderCell>
@@ -166,7 +165,7 @@ export default function Jadwal() {
           <Table.Body>
             <TableLoading
               count={8}
-              isLoading={isFetching}
+              isLoading={isLoading}
               data={data?.data?.rows}
               messageEmpty={"Tidak Ada Jadwal Pelajaran"}
             >
@@ -179,6 +178,7 @@ export default function Jadwal() {
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                   <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                   <Table.Cell>{value?.jam_ke}</Table.Cell>
+                  <Table.Cell>{value?.jumlah_jam}</Table.Cell>
                   <Table.Cell>Semester {value?.semester}</Table.Cell>
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
@@ -238,7 +238,7 @@ export default function Jadwal() {
           <Table.Body>
             <TableLoading
               count={8}
-              isLoading={isFetchingBelumAbsen}
+              isLoading={isLoadingBelumAbsen}
               data={dataBelumAbsen?.data}
               messageEmpty={"Tidak Ada Guru Belum Absen"}
             >

@@ -60,35 +60,42 @@ export function ReactSelectAsync({
   const customStyles = {
     input: (provided, state) => ({
       ...provided,
-      borderColor: error ? '#e0b4b4' : null,
-      color: '#9f3a38',
+      borderColor: error ? "#e0b4b4" : null,
+      color: "#9f3a38",
       width: 150,
-     
     }),
+    menuPortal: (provided) => {
+      return { ...provided, zIndex: 9999 };
+    },
     control: (provided, state) => ({
       ...provided,
 
-      borderColor: error ? '#e0b4b4' : '#e2e8f0',
-      fontSize: '0.875rem',
-      backgroundColor : error ? '#fff6f6' : '',
+      borderColor: error ? "#e0b4b4" : "#e2e8f0",
+      fontSize: "0.875rem",
+      backgroundColor: error ? "#fff6f6" : "",
       paddingLeft: 5,
-      color: 'rgba(0,0,0,.87)',
+      color: "rgba(0,0,0,.87)",
     }),
     placeholder: (provided, state) => ({
       ...provided,
-      color:  "rgba(0,0,0,.87)",
-      fontSize: '0.875rem',
+      color: "rgba(0,0,0,.87)",
+      fontSize: "0.875rem",
     }),
     container: (provided, state) => ({
       ...provided,
-      backgroundColor: '56565',
+      backgroundColor: "56565",
       zIndex: zIndex,
     }),
   };
-    
+
   return (
     <div className={cl}>
-      <AsyncPaginate styles={customStyles}  defaultOptions {...props} />
+      <AsyncPaginate
+        menuPortalTarget={document.body}
+        styles={customStyles}
+        defaultOptions
+        {...props}
+      />
     </div>
   );
 }

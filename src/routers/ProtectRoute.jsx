@@ -7,7 +7,7 @@ import { LoadingPage } from "../components";
 export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
   let [loading, setLoading] = React.useState(true);
-  let { data, isFetching, isLoading } = useQuery(
+  let { isLoading } = useQuery(
     //query key
     ["authme", auth],
     //axios function,triggered when page/pageSize change
@@ -21,7 +21,7 @@ export default function ProtectRoute({ children, userRole }) {
         console.log('rile', role);
         if (role !== userRole) {
           Cookies.remove("mysmk_token");
-          return <Navigate to="/logn" />;
+          return <Navigate to="/login" />;
         }
       },
       onSuccess: () => {

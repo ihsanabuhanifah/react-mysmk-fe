@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, Link } from "react-router-dom";
 import Login from "./pages/auth/login";
 import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
+import LoginRoute from "./routers/loginRoute";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import {

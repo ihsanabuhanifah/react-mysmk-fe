@@ -7,6 +7,7 @@ import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
 import { listMapel, listKelas } from "../../../api/list";
 import { TableLoading } from "../../../components";
+import { compareValues } from "../../../utils/sort";
 import {
   Input,
   Table,
@@ -17,6 +18,7 @@ import {
   Header,
   TextArea,
   Dropdown,
+  Dimmer,
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
@@ -153,7 +155,7 @@ export default function Absensi() {
       });
     }
   };
-console.log('absens', data)
+  console.log("absens", initialState);
 
   React.useEffect(() => {
     setDariTanggal(tanggal);
@@ -180,10 +182,8 @@ console.log('absens', data)
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
+            <Segment simple style={{ overflow: "auto", maxWidth: "100%" }} padded>
               <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5">
-              
-
                 <div className="col-span-2 ">
                   <Form.Field
                     control={Input}
@@ -216,8 +216,9 @@ console.log('absens', data)
                   />
                 </div>
 
-                <div className="col-span-2">
+                <div className="col-span-2" style={{position: 'relative' , zIndex:999}}>
                   <Form.Field
+                  
                     control={Select}
                     options={getOptions(dataKelas?.data, "nama_kelas")}
                     label={{
@@ -253,7 +254,7 @@ console.log('absens', data)
             </Segment>
             {!isFetching && (
               <div>
-                <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
+                <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
                   <Header as={"h3"}>Materi</Header>
                   <div className="space-y-5">
                     {values?.agenda_kelas?.map((value, index) => (
@@ -278,17 +279,16 @@ console.log('absens', data)
                 </Segment>
               </div>
             )}
-            <Segment  style={{ overflow: "auto", maxWidth: '100%' }} padded>
-              <Header as={"h3"}>Absensi Kelas dd</Header>
+            <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
+              <Header as={"h3"}>Absensi - {values?.absensi_kehadiran[0]?.kelas?.nama_kelas} - {values?.absensi_kehadiran[0]?.mapel?.nama_mapel} </Header>
               <Table>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>No</Table.HeaderCell>
                     <Table.HeaderCell>Nama</Table.HeaderCell>
-                    <Table.HeaderCell>Kelas</Table.HeaderCell>
-                    <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                   
                     <Table.HeaderCell>
-                      <div className="flex items-center">
+                      <div className="flex items-center justify-between">
                         {" "}
                         <span className="mr-2">Kehadiran</span>
                         <input
@@ -316,74 +316,79 @@ console.log('absens', data)
                 <Table.Body>
                   <TableLoading
                     count={8}
-                    isLoading={isFetching}
+                    isLoading={isLoading}
                     data={values?.absensi_kehadiran}
                     messageEmpty={"Tidak Terdapat Riwayat Absensi"}
                   >
-                    {values?.absensi_kehadiran?.map((value, index) => (
-                      <Table.Row key={index}>
-                        <Table.Cell>{index + 1}</Table.Cell>
-                        <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
-                        <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                        <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                        <Table.Cell>
-                          <div className="flex flex-col">
-                            <Dropdown
-                              selection
-                              search
-                              options={izinOptions}
-                              id={`absensi_kehadiran[${index}]kehadiran.id`}
-                              name={`absensi_kehadiran[${index}]kehadiran.id`}
-                              onChange={(e, data) => {
-                                setFieldValue(
-                                  `absensi_kehadiran[${index}]kehadiran.id`,
-                                  data.value
-                                );
-                              }}
-                              error={
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan !== undefined &&
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan
-                              }
-                              value={value?.kehadiran?.id}
-                            />
-
-                            {errors?.absensi_kehadiran?.[index]?.kehadiran
-                              ?.alasan !== undefined && (
-                              <span className="text-xs font-bold text-red-500 italic">
-                                {
+                    {values?.absensi_kehadiran
+                      ?.sort(compareValues("value.siswa.nama_siswa", "asc"))
+                      .map((value, index) => (
+                        <Table.Row key={index}>
+                          <Table.Cell>{index + 1}</Table.Cell>
+                          <Table.Cell>
+                            <p className="uppercase">
+                              {value?.siswa?.nama_siswa}
+                            </p>
+                          </Table.Cell>
+                         
+                          <Table.Cell>
+                            <div className="flex flex-col">
+                              <Dropdown
+                                selection
+                                search
+                                options={izinOptions}
+                                id={`absensi_kehadiran[${index}]kehadiran.id`}
+                                name={`absensi_kehadiran[${index}]kehadiran.id`}
+                                onChange={(e, data) => {
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]kehadiran.id`,
+                                    data.value
+                                  );
+                                }}
+                                error={
+                                  errors?.absensi_kehadiran?.[index]?.kehadiran
+                                    ?.alasan !== undefined &&
                                   errors?.absensi_kehadiran?.[index]?.kehadiran
                                     ?.alasan
                                 }
-                              </span>
-                            )}
-                          </div>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <TextArea
-                            rows={2}
-                            id={`absensi_kehadiran[${index}]keterangan`}
-                            name={`absensi_kehadiran[${index}]keterangan`}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            type="text"
-                            placeholder="Keterangan"
-                            value={value?.keterangan}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>semester {value?.semester}</Table.Cell>
-                        <Table.Cell>
-                          {value?.tahun_ajaran?.nama_tahun_ajaran}
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
+                                value={value?.kehadiran?.id}
+                              />
+
+                              {errors?.absensi_kehadiran?.[index]?.kehadiran
+                                ?.alasan !== undefined && (
+                                <span className="text-xs font-bold text-red-500 italic">
+                                  {
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.kehadiran?.alasan
+                                  }
+                                </span>
+                              )}
+                            </div>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <TextArea
+                              rows={2}
+                              id={`absensi_kehadiran[${index}]keterangan`}
+                              name={`absensi_kehadiran[${index}]keterangan`}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              type="text"
+                              placeholder="Keterangan"
+                              value={value?.keterangan}
+                            />
+                          </Table.Cell>
+                          <Table.Cell>Semester {value?.semester}</Table.Cell>
+                          <Table.Cell>
+                            {value?.tahun_ajaran?.nama_tahun_ajaran}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
                   </TableLoading>
                 </Table.Body>
               </Table>
             </Segment>
             <div>
-            {!isFetching && (
+              {!isFetching && (
                 <Button
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
                   type="submit"
