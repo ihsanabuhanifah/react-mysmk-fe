@@ -89,7 +89,7 @@ export default function Login() {
                       </div>
                     </div> */}
                     <div className="mb-5">
-                      <h1>Login</h1>
+                      <h1 className="text-3xl">Login</h1>
                       <p>Silahkan Login mengguankan akun yang sudah diberikan</p>
                     </div>
                     {errors.msg !== undefined && (

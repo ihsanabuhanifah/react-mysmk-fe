@@ -74,7 +74,7 @@ export default function LupaPassword() {
                       </div>
                     </div> */}
                      <div className="mb-5">
-                      <h1>Lupa Password</h1>
+                      <h1 className="text-3xl">Lupa Password</h1>
                       <p className="text-justify">Input Email yang terdaftar untuk meminta perubahan password
 
 </p>

@@ -96,7 +96,7 @@ export default function ResetPassword() {
                       </div>
                     </div> */}
                      <div className="mb-5">
-                      <h1>Lupa Password</h1>
+                      <h1 className="text-3xl">Lupa Password</h1>
                       <p>Input Perubahan Passwword</p>
                     </div>
                     {errors.msg !== undefined && (
