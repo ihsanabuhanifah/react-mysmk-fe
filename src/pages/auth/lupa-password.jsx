@@ -2,12 +2,12 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { postLupaPassword } from "../../api/auth";
-import Cookies from "js-cookie";
+
 import { useNavigate } from "react-router-dom";
-import LogoMySMK from "../../image/MySMK.png";
-import SMKMQ from "../../image/MADINATULQURAN.png";
+
 import { toast } from "react-toastify";
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
+import Layout from "./Layout";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required("Wajib di isi"),
@@ -44,7 +44,7 @@ export default function LupaPassword() {
   };
 
   return (
-    <React.Fragment>
+    <Layout>
       <Formik
         initialValues={initialState}
         validationSchema={LoginSchema}
@@ -61,11 +61,7 @@ export default function LupaPassword() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <div className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
-          <div className="grid grid-cols-8  h-full w-full  lg:h-2/3 lg:w-2/3 bg-white border  ">
-            <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
-              <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
-                <div className="w-[80%]">
+          
                   <Form onSubmit={handleSubmit}>
                     {/* <div className="flex justify-center items-center mb-14">
                       <div>
@@ -73,8 +69,8 @@ export default function LupaPassword() {
                         <Image src={SMKMQ} />
                       </div>
                     </div> */}
-                     <div className="mb-5">
-                      <h1 className="text-3xl">Lupa Password</h1>
+                    <div className="mb-5 space-y-5">
+                      <h1 className="text-3xl font-black">Lupa Password</h1>
                       <p className="text-justify">Input Email yang terdaftar untuk meminta perubahan password
 
 </p>
@@ -122,18 +118,16 @@ export default function LupaPassword() {
                       loading={isSubmitting}
                       disabled={isSubmitting || pesan !== ""}
                     />
-                  </Form>
-                  <div className="flex items-center justify-center">
+                     <div className="flex items-center justify-center">
                   <button className="text-green-500 mt-5 font-poppins " onClick={()=> {
                       return navigate('/login')
                      }} type="button ">Kembali</button>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </Form>
+                 
+              
         )}
       </Formik>
-    </React.Fragment>
+    </Layout>
   );
 }

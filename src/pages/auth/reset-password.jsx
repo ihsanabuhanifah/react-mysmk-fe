@@ -4,10 +4,10 @@ import * as Yup from "yup";
 import { postResetPassword } from "../../api/auth";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
-import LogoMySMK from "../../image/MySMK.png";
-import SMKMQ from "../../image/MADINATULQURAN.png";
+
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
 import { toast } from "react-toastify";
+import Layout from "./Layout";
 
 const LoginSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -66,7 +66,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <React.Fragment>
+    <Layout>
       <Formik
         initialValues={initialState}
         validationSchema={LoginSchema}
@@ -83,104 +83,96 @@ export default function ResetPassword() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <div className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
-            <div className="grid grid-cols-8  h-full w-full  lg:h-2/3 lg:w-2/3 bg-white border  ">
-              <div className=" col-span-1 lg:col-span-5  h-full w-full bg-green-500 "></div>
-              <div className=" col-span-7 lg:col-span-3 h-full w-full flex items-center justify-center ">
-                <div className="w-[80%]">
-                  <Form onSubmit={handleSubmit}>
-                    {/* <div className="flex justify-center items-center mb-14">
+          <Form onSubmit={handleSubmit}>
+            {/* <div className="flex justify-center items-center mb-14">
                       <div>
                         <Image src={LogoMySMK} />
                         <Image src={SMKMQ} />
                       </div>
                     </div> */}
-                     <div className="mb-5">
-                      <h1 className="text-3xl">Lupa Password</h1>
-                      <p>Input Perubahan Passwword</p>
-                    </div>
-                    {errors.msg !== undefined && (
-                      <Message color="red">
-                        {" "}
-                        {errors.msg},{" "}
-                        <button type="button"
-                          onClick={() => {
-                            return navigate("/lupa-password");
-                          }}
-                        >
-                          Klik disini
-                        </button>{" "}
-                        untuk Request Ulang
-                      </Message>
-                    )}
-                    <Form.Field
-                      control={Input}
-                      label="Kata Sandi Baru"
-                      placeholder="Masukan Kata Sandi Baru"
-                      name="newPassword"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.newPassword}
-                      disabled={isSubmitting}
-                      fluid
-                      icon={{
-                        name: showPassword ? "eye slash" : "eye",
-                        circular: true,
-                        link: true,
-                        onClick: () => setShowPassword(!showPassword),
-                      }}
-                      iconPosition="left"
-                      error={
-                        errors.newPassword &&
-                        touched.newPassword && {
-                          content: `${errors?.newPassword}`,
-                          pointing: "above",
-                        }
-                      }
-                      type={showPassword ? "text" : "password"}
-                    />{" "}
-                    <Form.Field
-                      control={Input}
-                      label="Kata Sandi Konfirmasi"
-                      placeholder="Masukan Kata Sandi Konfirmasi"
-                      name="confirmPassword"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.confirmPassword}
-                      disabled={isSubmitting}
-                      fluid
-                      icon={{
-                        name: showPassword ? "eye slash" : "eye",
-                        circular: true,
-                        link: true,
-                        onClick: () => setShowPassword(!showPassword),
-                      }}
-                      iconPosition="left"
-                      error={
-                        errors.confirmPassword &&
-                        touched.confirmPassword && {
-                          content: `${errors?.confirmPassword}`,
-                          pointing: "above",
-                        }
-                      }
-                      type={showPassword ? "text" : "password"}
-                    />{" "}
-                    <Button
-                      content={isSubmitting ? "Proses" : "Masuk"}
-                      type="submit"
-                      fluid
-                      size="medium"
-                      color="green"
-                      loading={isSubmitting}
-                      disabled={isSubmitting}
-                    />
-                  </Form>
-                </div>
-              </div>
+            <div className="mb-5 space-y-5">
+              <h1 className="text-3xl font-black">Lupa Password</h1>
+              <p>Input Perubahan Passwword</p>
             </div>
-          </div>
+            {errors.msg !== undefined && (
+              <Message color="red">
+                {" "}
+                {errors.msg},{" "}
+                <button
+                  type="button"
+                  onClick={() => {
+                    return navigate("/lupa-password");
+                  }}
+                >
+                  Klik disini
+                </button>{" "}
+                untuk Request Ulang
+              </Message>
+            )}
+            <Form.Field
+              control={Input}
+              label="Kata Sandi Baru"
+              placeholder="Masukan Kata Sandi Baru"
+              name="newPassword"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.newPassword}
+              disabled={isSubmitting}
+              fluid
+              icon={{
+                name: showPassword ? "eye slash" : "eye",
+                circular: true,
+                link: true,
+                onClick: () => setShowPassword(!showPassword),
+              }}
+              iconPosition="left"
+              error={
+                errors.newPassword &&
+                touched.newPassword && {
+                  content: `${errors?.newPassword}`,
+                  pointing: "above",
+                }
+              }
+              type={showPassword ? "text" : "password"}
+            />{" "}
+            <Form.Field
+              control={Input}
+              label="Kata Sandi Konfirmasi"
+              placeholder="Masukan Kata Sandi Konfirmasi"
+              name="confirmPassword"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.confirmPassword}
+              disabled={isSubmitting}
+              fluid
+              icon={{
+                name: showPassword ? "eye slash" : "eye",
+                circular: true,
+                link: true,
+                onClick: () => setShowPassword(!showPassword),
+              }}
+              iconPosition="left"
+              error={
+                errors.confirmPassword &&
+                touched.confirmPassword && {
+                  content: `${errors?.confirmPassword}`,
+                  pointing: "above",
+                }
+              }
+              type={showPassword ? "text" : "password"}
+            />{" "}
+            <Button
+              content={isSubmitting ? "Proses" : "Masuk"}
+              type="submit"
+              fluid
+              size="medium"
+              color="green"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+            />
+          </Form>
         )}
       </Formik>
-    </React.Fragment>
+    </Layout>
   );
 }
