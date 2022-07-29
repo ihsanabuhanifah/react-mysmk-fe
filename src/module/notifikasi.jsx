@@ -7,7 +7,8 @@ import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
 export default function Notifikasi({ setNotif }) {
   let navigate = useNavigate();
-  const [hari, setHari] = React.useState("senin");
+  // eslint-disable-next-line no-empty-pattern
+  const [] = React.useState("senin");
   let { data } = useQuery(
     //query key
     ["notifikasi_absensi_kelas"],

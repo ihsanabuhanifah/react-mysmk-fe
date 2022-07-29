@@ -6,7 +6,7 @@ import { postLupaPassword } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
-import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
+import { Form, Button, Input, Message } from "semantic-ui-react";
 import Layout from "./Layout";
 
 const LoginSchema = Yup.object().shape({

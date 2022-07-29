@@ -2,10 +2,9 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { postResetPassword } from "../../api/auth";
-import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
+import { Form, Button, Input, Message } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import Layout from "./Layout";
 
@@ -32,16 +31,6 @@ export default function ResetPassword() {
   let navigate = useNavigate();
   let { id, token } = useParams();
 
-  const rolesOptions = [
-    { key: 1, value: 1, text: "Super Admin" },
-    { key: 2, value: 2, text: "Admin" },
-    { key: 3, value: 3, text: "Kepala Sekolah" },
-    { key: 4, value: 4, text: "Guru" },
-    { key: 5, value: 5, text: "Musyrif" },
-    { key: 6, value: 6, text: "Wali Kelas" },
-    { key: 7, value: 7, text: "Keuangan" },
-    { key: 9, value: 9, text: "Santri" },
-  ];
   const onSubmit = async (values, { setErrors }) => {
     try {
       console.log(values);

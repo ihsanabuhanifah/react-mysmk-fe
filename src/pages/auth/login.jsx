@@ -1,11 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { login } from "../../api/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import LogoMySMK from "../../image/MySMK.png";
-import SMKMQ from "../../image/MADINATULQURAN.png";
 import LoginImage from "../../image/login.png";
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
 import Layout from "./Layout";
@@ -175,7 +174,7 @@ export default function Login() {
             />
             <div className="flex items-center justify-center">
               <button
-                className="text-green-500 mt-5"
+                className="text-green-500 mt-5 font-poppins"
                 onClick={() => {
                   return navigate("/lupa-password");
                 }}

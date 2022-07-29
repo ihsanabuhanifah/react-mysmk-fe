@@ -1,5 +1,4 @@
 import React from "react";
-import { Divider, Segment } from "semantic-ui-react";
 
 export default function LayoutPage({ title, children }) {
   return (

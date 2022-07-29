@@ -39,10 +39,10 @@ export default function Guru() {
 
   return (
     <div className="h-screen antialiased text-gray-700 border ">
-      <header className="h-1/12 w-full pt-5 grid grid-cols-10 gap-x-5 border  ">
-        <div className="h-24 w-36 mt-2 col-span-4 lg:col-span-2 pl-5 lg:pl-10 ">
-          <Image src={LogoMySMK} />
-          <Image src={SMKMQ} />
+      <header className="h-[8%] lg:h-1/12 w-full flex items-center grid grid-cols-10 gap-x-5 border  ">
+        <div className=" col-span-4 lg:col-span-2 pl-5 lg:pl-10  h-full w-full   relative flex items-center" >
+          <img className="absolute" style={{maxWidth : '60%' , maxHeight : '60%'}} src={LogoMySMK} />
+         
         </div>
         <div className="rounded-xl hidden lg:block lg:col-span-6 ">
           <div className="hidden lg:block">
@@ -56,7 +56,7 @@ export default function Guru() {
             />
           </div>
         </div>
-        <div className=" col-span-6 lg:col-span-2 flex justify-end space-x-5 pr-5 lg:pr-10 ">
+        <div className=" col-span-6 lg:col-span-2 flex items-center justify-end space-x-5 pr-5 lg:pr-10  h-full w-full ">
           <div className="border-2 lg:h-12 lg:w-12 w-10 h-10 rounded-full p-2">
             <img
               onClick={() => {
@@ -67,10 +67,10 @@ export default function Guru() {
               alt=""
             /> 
           </div>
-          <div className="lg:block hidden lg:h-12 lg:w-12 border bg-green-200 rounded-full"></div>
-          <div className="block lg:hidden">
+          <div className="lg:block hidden lg:h-12 lg:w-12 w-10 h-10 border bg-green-200 rounded-full"></div>
+          <div className="block lg:hidden  lg:h-12 lg:w-12 w-10 h-10 ">
           <button
-            className="mb-5"
+            className="mb-5 "
             onClick={() => {
               setSidebar(!sidebar);
             }}
@@ -81,9 +81,9 @@ export default function Guru() {
         </div>
        
       </header>
-      <main className="flex gap-x-2 h-9/12 lg:h-full   ">
+      <main className="flex gap-x-2 h-[92%] lg:h-11/12 lg:h-full   ">
         <div
-          className={` w-full h-full  bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
+          className={` w-full h-full   bg-[#46C7C7] text-white lg:text-gray-700 lg:bg-white  border-r-2 pl-0 lg:pl-10 pt-5   ${
             !sidebar
               ? "transform -translate-y-full   lg:-translate-y-0"
               : "transform -translate-y-0 transition  duration-500 "
@@ -108,4 +108,4 @@ export default function Guru() {
   );
 }
 
-// className={`w-full h-full flex  h-full z-10 fixed top-0 bottom-0 lg:w-3/12  lg:relative text-white`}
+// className={`w-full h-full flex z-10 fixed top-0 bottom-0 lg:w-3/12  lg:relative text-white`}

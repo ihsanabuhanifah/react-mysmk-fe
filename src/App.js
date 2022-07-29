@@ -1,16 +1,14 @@
 import React from "react";
-import { Routes, Route, Navigate, Link } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import Login from "./pages/auth/login";
 import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
-import LoginRoute from "./routers/loginRoute";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import {
   Jadwal,
   Absensi,
   Dashboard,
-  Halaqoh,
   Kunjungan,
   Pulang,
   Pelanggaran,
@@ -21,7 +19,7 @@ import {
 
 import NotFound from "./pages/NotFound";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 

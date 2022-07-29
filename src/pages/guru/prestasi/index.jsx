@@ -12,7 +12,6 @@ import {
   Button,
 } from "semantic-ui-react";
 import { useQuery } from "react-query";
-import FormPelanggaran from "./FormPrestasi";
 import useDelete from "../../../hook/useDelete";
 import {
   createPrestasi,
@@ -22,9 +21,11 @@ import {
 } from "../../../api/guru/pelanggaran";
 import {
   TableLoading,
+  // eslint-disable-next-line no-unused-vars
   ModalFilter,
   EditButton,
   DeleteButton,
+  // eslint-disable-next-line no-unused-vars
   ViewButton,
   ModalAlert,
 } from "../../../components";
@@ -50,7 +51,7 @@ let prestasiArraySchema = Yup.object().shape({
   prestasi: Yup.array().of(prestasiSchema),
 });
 export default function Prestasi() {
-  let [page, setPage] = React.useState(1);
+  let [page] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
   let [nama, setNama] = React.useState("");
   let debouncedName = useDebounce(nama, 600);
@@ -89,7 +90,7 @@ export default function Prestasi() {
     nama_siswa: debouncedName,
   };
 
-  let { data, isLoading, isFetching } = useQuery(
+  let { data, isLoading } = useQuery(
     //query key
     ["list_prestasi", parameter],
     //axios function,triggered when page/pageSize change

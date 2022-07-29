@@ -10,14 +10,12 @@ import {
   MdOutlineLibraryBooks,
   MdLogout,
 } from "react-icons/md";
-import { Image, Input, Button, Header, Icon, Modal } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 import LogoMySMK from "../../image/MySMK.png";
 import SMKMQ from "../../image/MADINATULQURAN.png";
-import useDelete from "../../hook/useDelete";
-import Cookies from "js-cookie";
+
 import { ModalLogout } from "../../components";
 
-let date = new Date();
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
 
@@ -34,10 +32,10 @@ export default function SidebarGuru({ setSidebar }) {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="lg:hidden block border-b-2 flex items-center justify-between h-12 w-full px-5 mt-5">
-        <div className="h-24 w-24  flex-col mt-12 items-center">
+      <div className="lg:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 ">
+        <div className="h-24 w-24   flex-col mt-12 items-center">
           <Image src={LogoMySMK} />
-          <Image src={SMKMQ} />
+        
         </div>
 
         <button className="mb-5" onClick={handleSiderbar}>
@@ -180,6 +178,8 @@ function NavButton({ to, title, logo, handleSidebar }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
   const navigate = useNavigate();
+
+  console.log(to, url);
 
   return (
     <div className="flex items-center  ">

@@ -1,6 +1,5 @@
 import {
   listSiswaOptions,
-  listPelanggaranOptions,
   listTahunAjaran,
 } from "../../../api/list";
 
@@ -68,7 +67,7 @@ export default function FormPrestasi({
                   disabled={values.prestasi.length <= 1}
                   onClick={() => {
                     let filtered = values.prestasi.filter((i, itemIndex) => {
-                      return itemIndex != index;
+                      return itemIndex !== index;
                     });
 
                     setFieldValue("prestasi", filtered);
