@@ -40,9 +40,9 @@ export default function Notifikasi({ setNotif }) {
     setNotif(false);
   };
   return (
-    <div className="mt-5  lg:border p-3 h-9/12 overflow-auto lg:rounded-lg">
+    <div className=" mt-0 lg:mt-5  lg:border p-3 h-full lg:h-9/12 overflow-auto lg:rounded-lg">
       <div className="px-2 flex items-center justify-between">
-        <h2 className="font-poppins">Notifikasi</h2>
+        <h2 className="font-poppins font-bold text-3xl">Notifikasi</h2>
         <button className="mb-5 lg:hidden block" onClick={handleNotif}>
           <MdClose className="w-10 h-10" />
         </button>

@@ -32,9 +32,9 @@ export default function SidebarGuru({ setSidebar }) {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="lg:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 ">
+      <div className="lg:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 relative ">
         <div className="h-24 w-24   flex-col mt-12 items-center">
-          <Image src={LogoMySMK} />
+          <img className="absolute" style={{maxWidth : '60%' , maxHeight : '60%'}} src={LogoMySMK} />
         
         </div>
 
