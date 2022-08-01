@@ -8,6 +8,8 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import 'semantic-ui-css/semantic.min.css'
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 const queryClient = new QueryClient();
 
 

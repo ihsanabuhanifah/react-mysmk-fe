@@ -33,7 +33,7 @@ export default function Jadwal() {
   };
   let [dariTanggal] = React.useState(formatTahun(date));
   let [sampaiTanggal] = React.useState(formatTahun(date));
-  let { data, isLoading} = useQuery(
+  let { data, isLoading } = useQuery(
     //query key
     ["jadwal", parameter],
     //axios function,triggered when page/pageSize change
@@ -148,6 +148,20 @@ export default function Jadwal() {
         </Form>
       </div>
       <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
+        <section className="grid grid-cols-6 gap-5">
+          <div className="col-start-6">
+            <Button
+              content={"Rekap Absensi"}
+              type="button"
+              fluid
+              size="medium"
+              color="teal"
+              onClick={() => {
+                return navigate("/guru/absensi/rekap");
+              }}
+            />
+          </div>
+        </section>
         <Table celled selectable>
           <Table.Header>
             <Table.Row>
@@ -188,7 +202,7 @@ export default function Jadwal() {
                       content={"Absensi"}
                       type="button"
                       fluid
-                      disabled={absensi?.absensi?.length === 0 ? true : false}
+                      // disabled={absensi?.absensi?.length === 0 ? true : false}
                       size="medium"
                       color="green"
                       onClick={() => {
@@ -214,7 +228,7 @@ export default function Jadwal() {
             fluid
             loading={loading}
             size="medium"
-            color="green"
+            color="teal"
             disabled={loading}
             onClick={creeteJadwal}
           />
@@ -222,7 +236,7 @@ export default function Jadwal() {
       )}
 
       <Segment>
-        <h3>List Guru Belum Absensi</h3>
+        <h3 className="text-2xl font-poppins">List Guru Belum Absensi</h3>
         <Table celled selectable>
           <Table.Header>
             <Table.Row>
@@ -230,9 +244,8 @@ export default function Jadwal() {
               <Table.HeaderCell>Tanggal</Table.HeaderCell>
               <Table.HeaderCell>Nama Guru</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
-             
+
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-             
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -249,8 +262,6 @@ export default function Jadwal() {
                   <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                   <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                 
-                
                 </Table.Row>
               ))}
             </TableLoading>

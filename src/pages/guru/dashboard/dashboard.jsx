@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import LayoutPage from "../../module/layoutPage";
+import LayoutPage from "../../../module/layoutPage";
 export default function Dashboard() {
   let navigate = useNavigate();
   return (

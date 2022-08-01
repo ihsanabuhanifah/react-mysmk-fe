@@ -10,7 +10,7 @@ export function login(values) {
 
 export function authme() {
   syncToken();
-  console.log("roe");
+
   return axios.get("/authme");
 }
 

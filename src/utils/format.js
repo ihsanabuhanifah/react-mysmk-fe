@@ -1,12 +1,29 @@
 const getOptions = (array, text) => {
   const options = [];
 
-  console.log("sss", array);
+  
 
   array?.map((data, index) => {
     let option = {
       key: index,
       value: data.id,
+      text: data[`${text}`],
+    };
+    options.push(option);
+  });
+
+  return options;
+};
+
+const getOptionsText = (array, text) => {
+  const options = [];
+
+  
+
+  array?.map((data, index) => {
+    let option = {
+      key: index,
+      value: data[`${text}`],
       text: data[`${text}`],
     };
     options.push(option);
@@ -77,4 +94,5 @@ export {
   statusApproval,
   formatAlasanTidakShoalt,
   formatWaktuSholat,
+  getOptionsText
 };

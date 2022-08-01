@@ -79,11 +79,14 @@ export function ReactSelectAsync({
     placeholder: (provided, state) => ({
       ...provided,
       color: "rgba(0,0,0,.87)",
-      fontSize: "0.875rem",
+      fontSize: "1em",
+      fontFamily: 'Lato'
+      
     }),
     container: (provided, state) => ({
       ...provided,
-      backgroundColor: "56565",
+      backgroundColor: '#fff',
+      fontSize: '1em',
       zIndex: zIndex,
     }),
   };

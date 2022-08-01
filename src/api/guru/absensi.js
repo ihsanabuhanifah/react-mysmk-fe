@@ -1,18 +1,21 @@
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-
 export function listJadwal(params) {
+  syncToken()
   return axios.get("/guru/jadwal/list", { params });
 }
 
 export function listAbsensi(params) {
+  syncToken()
   console.log(params);
   return axios.get("guru/absensi/list", { params });
 }
 
 export async function updateAbsensi(values) {
+  syncToken()
   let absensi_kehadiran = [];
   await Promise.all(
+    // eslint-disable-next-line array-callback-return
     values?.absensi_kehadiran?.map((data, index) => {
       let absensi = {
         id: data?.id,
@@ -22,8 +25,7 @@ export async function updateAbsensi(values) {
       };
       data = absensi;
       absensi_kehadiran.push(absensi);
-      console.log("sini", absensi);
-      console.log(data);
+     
     })
   );
 
@@ -33,20 +35,25 @@ export async function updateAbsensi(values) {
 }
 
 export function notifikasiAbsensi() {
+  syncToken()
   return axios.get("/guru/absensi/notifikasi");
 }
 
 export function absensiManualCreate() {
+  syncToken()
   return axios.get("/guru/absensi/manual");
 }
 export function halaqohManualCreate() {
+  syncToken()
   return axios.get("/guru/halaqoh/manual");
 }
 
 export function monitor() {
+  syncToken()
   return axios.get("/monitor");
 }
 
 export function belumAbsen() {
+  syncToken()
   return axios.get("/guru/absensi/guru-belum-absen");
 }

@@ -112,7 +112,7 @@ export default function AbsensiHalaqoh() {
     setLoading(true);
     try {
       const response = await halaqohManualCreate();
-      await halaqohManualCreate();
+     
       setLoading(false);
       queryClient.invalidateQueries("jadwal");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");

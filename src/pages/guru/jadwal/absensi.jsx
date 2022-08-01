@@ -18,7 +18,6 @@ import {
   Header,
   TextArea,
   Dropdown,
-  Dimmer,
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
@@ -182,7 +181,7 @@ export default function Absensi() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment simple style={{ overflow: "auto", maxWidth: "100%" }} padded>
+            <div className="border rounded-lg border mb-5 p-5 overflow-x-visible w-full ">
               <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5">
                 <div className="col-span-2 ">
                   <Form.Field
@@ -216,9 +215,8 @@ export default function Absensi() {
                   />
                 </div>
 
-                <div className="col-span-2" style={{position: 'relative' , zIndex:999}}>
+                <div className="col-span-2">
                   <Form.Field
-                  
                     control={Select}
                     options={getOptions(dataKelas?.data, "nama_kelas")}
                     label={{
@@ -251,7 +249,7 @@ export default function Absensi() {
                   />
                 </div>
               </section>
-            </Segment>
+            </div>
             {!isFetching && (
               <div>
                 <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
@@ -280,13 +278,16 @@ export default function Absensi() {
               </div>
             )}
             <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
-              <Header as={"h3"}>Absensi - {values?.absensi_kehadiran[0]?.kelas?.nama_kelas} - {values?.absensi_kehadiran[0]?.mapel?.nama_mapel} </Header>
+              <Header as={"h3"}>
+                Absensi - {values?.absensi_kehadiran[0]?.kelas?.nama_kelas} -{" "}
+                {values?.absensi_kehadiran[0]?.mapel?.nama_mapel}{" "}
+              </Header>
               <Table>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>No</Table.HeaderCell>
                     <Table.HeaderCell>Nama</Table.HeaderCell>
-                   
+
                     <Table.HeaderCell>
                       <div className="flex items-center justify-between">
                         {" "}
@@ -318,7 +319,9 @@ export default function Absensi() {
                     count={8}
                     isLoading={isLoading}
                     data={values?.absensi_kehadiran}
-                    messageEmpty={"Tidak Terdapat Riwayat Absensi"}
+                    messageEmpty={
+                      "Tidak Terdapat Riwayat Absensi pada tanggal yang dipilih"
+                    }
                   >
                     {values?.absensi_kehadiran
                       ?.sort(compareValues("value.siswa.nama_siswa", "asc"))
@@ -330,7 +333,7 @@ export default function Absensi() {
                               {value?.siswa?.nama_siswa}
                             </p>
                           </Table.Cell>
-                         
+
                           <Table.Cell>
                             <div className="flex flex-col">
                               <Dropdown
@@ -388,17 +391,20 @@ export default function Absensi() {
               </Table>
             </Segment>
             <div>
-              {!isFetching && (
-                <Button
-                  content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  type="submit"
-                  fluid
-                  loading={isSubmitting}
-                  size="medium"
-                  color="green"
-                  disabled={isSubmitting}
-                />
-              )}
+              {!isFetching &&
+                (values?.absensi_kehadiran.length === 0 ? (
+                  ""
+                ) : (
+                  <Button
+                    content={isSubmitting ? "Menyimpan" : "Simpan"}
+                    type="submit"
+                    fluid
+                    loading={isSubmitting}
+                    size="medium"
+                    color="green"
+                    disabled={isSubmitting}
+                  />
+                ))}
             </div>
           </Form>
         )}

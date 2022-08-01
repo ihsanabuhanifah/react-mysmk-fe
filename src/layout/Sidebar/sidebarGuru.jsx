@@ -58,7 +58,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="jadwal"
-          title={"Jadwal"}
+          title={"Jadwal dan Rekap"}
           logo={
             <MdOutlineCalendarToday
               className={`h-8 w-8 ${
@@ -146,6 +146,20 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
+          <NavButton
+          handleSidebar={handleSiderbar}
+          to="laporan-guru-piket"
+          title={"Laporan Guru Piket"}
+          logo={
+            <MdOutlineLibraryBooks
+              className={`h-8 w-8 ${
+                url === "laporan-guru-piket"
+                  ? "text-white-400"
+                  : "text-gray-600"
+              }`}
+            />
+          }
+        />
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
@@ -179,7 +193,6 @@ function NavButton({ to, title, logo, handleSidebar }) {
   let url = pathname.split("/")[2];
   const navigate = useNavigate();
 
-  console.log(to, url);
 
   return (
     <div className="flex items-center  ">

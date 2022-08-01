@@ -33,6 +33,10 @@ export async function listTahunAjaranOptions(keyword, loadedOptions, additional)
   };
 }
 
+export function listtahunajaran(){
+  return axios.get('/list/tahun-ajaran');
+}
+
 export function listGuru() {
   return axios.get("/list/guru");
 }

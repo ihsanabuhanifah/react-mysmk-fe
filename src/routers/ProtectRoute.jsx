@@ -18,7 +18,7 @@ export default function ProtectRoute({ children, userRole }) {
       select: (response) => {
         const role = response?.data?.role;
 
-        console.log('rile', role);
+      
         if (role !== userRole) {
           Cookies.remove("mysmk_token");
           return <Navigate to="/login" />;

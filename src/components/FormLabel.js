@@ -7,9 +7,9 @@ export function FormLabel({ label, htmlFor, children, error = false }) {
       <div className=" w-full  ">
         <Label
           as={"label"}
-          style={{ border: "none", paddingLeft: 0 }}
+          style={{ border: "none", paddingLeft: 0 , backgroundColor: "transparent"}}
           basic
-          size="large"
+          size="medium"
           htmlFor={htmlFor}
         >
           {label}

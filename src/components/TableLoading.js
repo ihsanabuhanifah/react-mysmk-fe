@@ -17,8 +17,8 @@ export function TableLoading({
           <Table.Cell colSpan={count} positive>
          
               <Dimmer active inverted>
-                <Loader className="text-green-400" size="medium"> 
-                <h3 className="font-bold text-green-400">Loading</h3>
+                <Loader className="" size="medium"> 
+                <h3 className="font-bold ">Loading</h3>
                 </Loader>
               </Dimmer>
            
