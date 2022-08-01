@@ -15,7 +15,7 @@ import Filter from "./filter";
 
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
-export default function RekapAbsensi( {listKelas, listGuru, listTa, listMapel} ) {
+export default function RekapAbsensi(  ) {
     let [visible, setVisible] = React.useState(false);
   return (
     <LayoutPage
@@ -34,7 +34,7 @@ export default function RekapAbsensi( {listKelas, listGuru, listTa, listMapel} )
         visible={visible}
         width="wide"
       >
-        <Filter listGuru={listGuru} listKelas={listKelas} listTa={listTa} listMapel={listMapel} />
+        <Filter  />
       </Sidebar>
       <Segment>
         <section className="grid grid-cols-6 gap-5">

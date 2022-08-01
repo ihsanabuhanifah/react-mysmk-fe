@@ -14,8 +14,15 @@ import { Formik } from "formik";
 import { getOptionsText } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
 import { ReactSelectAsync, FormLabel } from "../../../components";
-import { listSiswaOptions } from "../../../api/list";
-export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
+import {
+  listSiswaOptions,
+
+} from "../../../api/list";
+
+import useList from "../../../hook/useList";
+
+export default function Filter() {
+ const {dataGuru, dataKelas, dataMapel, dataTa} = useList()
   return (
     <Formik>
       {({
@@ -74,7 +81,7 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
               <Form.Field
                 control={Select}
                 // value={absen?.nama_kelas}
-                options={getOptionsText(listKelas?.data, "nama_kelas")}
+                options={getOptionsText(dataKelas?.data, "nama_kelas")}
                 label={{
                   children: "Kelas",
                   //   htmlFor: `laporan.guru.absen[${index}]nama_kelas`,
@@ -101,7 +108,7 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
               <Form.Field
                 control={Select}
                 // value={absen?.nama_guru}
-                options={getOptionsText(listGuru?.data, "nama_guru")}
+                options={getOptionsText(dataGuru?.data, "nama_guru")}
                 label={{
                   children: "Nama Guru",
                   //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
@@ -128,7 +135,7 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
               <Form.Field
                 control={Select}
                 // value={absen?.nama_guru}
-                options={getOptionsText(listMapel?.data, "nama_mapel")}
+                options={getOptionsText(dataMapel?.data, "nama_mapel")}
                 label={{
                   children: "Mata Pelajaran",
                   //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
@@ -155,7 +162,7 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
               <Form.Field
                 control={Select}
                 // value={absen?.nama_guru}
-                options={getOptionsText(listTa?.data, "nama_tahun_ajaran")}
+                options={getOptionsText(dataTa?.data, "nama_tahun_ajaran")}
                 label={{
                   children: "Tahun Pelajaran",
                   //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
@@ -180,31 +187,27 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
             </div>
 
             <div className="text-left">
-                <FormLabel
-              
-                  label={"Nama Siswa"}
-                >
-                  <ReactSelectAsync
-                    debounceTimeout={300}
-                    // value={value?.nama_siswa}
-                    loadOptions={listSiswaOptions}
-                    isClearable
-                    onChange={(data) => {
+              <FormLabel label={"Nama Siswa"}>
+                <ReactSelectAsync
+                  debounceTimeout={300}
+                  // value={value?.nama_siswa}
+                  loadOptions={listSiswaOptions}
+                  isClearable
+                  onChange={(data) => {
                     //   console.log(data);
                     //   setFieldValue(`pelanggaran[${index}]nama_siswa`, data);
                     //   setFieldValue(
                     //     `pelanggaran[${index}]student_id`,
                     //     data.value
                     //   );
-                    }}
-                  
-                    placeholder="Nama Siswa"
-                    additional={{
-                      page: 1,
-                    }}
-                  />
-                </FormLabel>
-              </div>
+                  }}
+                  placeholder="Nama Siswa"
+                  additional={{
+                    page: 1,
+                  }}
+                />
+              </FormLabel>
+            </div>
 
             <div className="text-left">
               <Form.Field
@@ -233,7 +236,6 @@ export default function Filter({ listGuru, listKelas, listTa, listMapel }) {
                   }
                 }
               />
-             
             </div>
             {/* <div>
             <InputRangeDate />

@@ -24,6 +24,7 @@ import { izinOptions } from "../../../utils/options";
 import LayoutPage from "../../../module/layoutPage";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import useList from "../../../hook/useList";
 
 let personalSchema = Yup.object().shape({
   kehadiran: Yup.object().shape({
@@ -98,30 +99,7 @@ export default function Absensi() {
       },
     }
   );
-  let { data: dataMapel } = useQuery(
-    //query key
-    ["list_mapel"],
-    //axios function,triggered when page/pageSize change
-    () => listMapel(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
-    }
-  );
-  let { data: dataKelas } = useQuery(
-    //query key
-    ["list_kelas"],
-    //axios function,triggered when page/pageSize change
-    () => listKelas(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
-    }
-  );
+ const {dataKelas, dataMapel} = useList()
 
   const onSubmit = async (values) => {
     try {

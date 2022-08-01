@@ -11,8 +11,9 @@ import {
 } from "../../../api/guru/laporan";
 
 import { formatDate, formatHari, formatTahun } from "../../../utils";
+import useList from "../../../hook/useList";
 
-export default function ListGuruPiketToday({ identitas }) {
+export default function ListGuruPiketToday() {
   const navigate = useNavigate();
   let date = new Date();
 
@@ -36,6 +37,8 @@ export default function ListGuruPiketToday({ identitas }) {
       },
     }
   );
+
+  const { identitas } = useList();
 
   let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
@@ -133,25 +136,26 @@ export default function ListGuruPiketToday({ identitas }) {
       <Segment>
         <div className="flex items-center justify-between ">
           <div>
-            <h3 className="text-2xl font-poppins">{status === 0 ? 'List Guru Piket Belum' : 'List Laporan Guru Piket'}</h3>
+            <h3 className="text-2xl font-poppins">
+              {status === 0
+                ? "List Guru Piket Belum"
+                : "List Laporan Guru Piket"}
+            </h3>
           </div>
           <div className="flex items-center space-x-2">
             <input
               checked={status === 0}
               onChange={() => {
-                if(status === 0){
-                    setStatus(1)
+                if (status === 0) {
+                  setStatus(1);
                 }
-                if(status === 1){
-                    setStatus(0)
+                if (status === 1) {
+                  setStatus(0);
                 }
-              
               }}
               type={"checkbox"}
             />
-            <label>
-             Belum Laporan
-            </label>
+            <label>Belum Laporan</label>
           </div>
         </div>
         <Table celled selectable>
@@ -161,7 +165,7 @@ export default function ListGuruPiketToday({ identitas }) {
               <Table.HeaderCell>Tanggal</Table.HeaderCell>
               <Table.HeaderCell>Nama Guru</Table.HeaderCell>
               <Table.HeaderCell>Tahun Pelajaran</Table.HeaderCell>
-             
+
               <Table.HeaderCell>Aksi</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -170,7 +174,11 @@ export default function ListGuruPiketToday({ identitas }) {
               count={8}
               isLoading={isLoadingListLaporan}
               data={listLaporan?.data}
-              messageEmpty={status === 0 ? 'Tidak Ada Guru Piket yang belum buat Laporan' : 'Belum ada laporan piket yang masuk'}
+              messageEmpty={
+                status === 0
+                  ? "Tidak Ada Guru Piket yang belum buat Laporan"
+                  : "Belum ada laporan piket yang masuk"
+              }
             >
               {listLaporan?.data?.map((value, index) => (
                 <Table.Row key={index}>
@@ -180,38 +188,41 @@ export default function ListGuruPiketToday({ identitas }) {
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
                   </Table.Cell>
-                 
+
                   <Table.Cell>
-                    {status === 1 ?  <Button
-                      content={"Lihat Laporan"}
-                      type="button"
-                      fluid
-                      disabled={value?.teacher_id !== identitas?.teacher_id}
-                      size="medium"
-                      color="blue"
-                      onClick={() => {
-                        return navigate(
-                          `/guru/laporan-guru-piket/lihat-laporan/${
-                            value.id
-                          }/${formatTahun(date)}`
-                        );
-                      }}
-                    /> :  <Button
-                    content={"Buat Laporan"}
-                    type="button"
-                    fluid
-                    disabled={value?.teacher_id !== identitas?.teacher_id}
-                    size="medium"
-                    color="green"
-                    onClick={() => {
-                      return navigate(
-                        `/guru/laporan-guru-piket/buat-laporan/${
-                          value.id
-                        }/${formatTahun(date)}`
-                      );
-                    }}
-                  />}
-                   
+                    {status === 1 ? (
+                      <Button
+                        content={"Lihat Laporan"}
+                        type="button"
+                        fluid
+                        disabled={value?.teacher_id !== identitas?.teacher_id}
+                        size="medium"
+                        color="blue"
+                        onClick={() => {
+                          return navigate(
+                            `/guru/laporan-guru-piket/lihat-laporan/${
+                              value.id
+                            }/${formatTahun(date)}`
+                          );
+                        }}
+                      />
+                    ) : (
+                      <Button
+                        content={"Buat Laporan"}
+                        type="button"
+                        fluid
+                        disabled={value?.teacher_id !== identitas?.teacher_id}
+                        size="medium"
+                        color="green"
+                        onClick={() => {
+                          return navigate(
+                            `/guru/laporan-guru-piket/buat-laporan/${
+                              value.id
+                            }/${formatTahun(date)}`
+                          );
+                        }}
+                      />
+                    )}
                   </Table.Cell>
                 </Table.Row>
               ))}

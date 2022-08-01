@@ -20,6 +20,7 @@ import { ReactSelectAsync, FormLabel } from "../../../components";
 
 import { getOptions } from "../../../utils/format";
 import dayjs from "dayjs";
+import useList from "../../../hook/useList";
 
 export default function FormPrestasi({
   values,
@@ -36,20 +37,7 @@ export default function FormPrestasi({
   mode,
   setIsOpen,
 }) {
-  let { data: dataTahunAjaran } = useQuery(
-    //query key
-    ["list_tahun_ajaran"],
-    //axios function,triggered when page/pageSize change
-    () => listTahunAjaran(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
-    }
-  );
-
-  console.log(values)
+  const {dataTa} = useList()
 
   return (
     <Segment>
@@ -192,7 +180,7 @@ export default function FormPrestasi({
             <div className="col-span-3 lg:col-span-1">
              <Form.Field
                 control={Select}
-                options={getOptions(dataTahunAjaran?.data, "nama_tahun_ajaran")}
+                options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
                 label={{
                   children: "Tahun Ajaran",
                   htmlFor: `prestasi[${index}]ta_id`,

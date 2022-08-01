@@ -202,7 +202,7 @@ export default function Jadwal() {
                       content={"Absensi"}
                       type="button"
                       fluid
-                      // disabled={absensi?.absensi?.length === 0 ? true : false}
+                    
                       size="medium"
                       color="green"
                       onClick={() => {

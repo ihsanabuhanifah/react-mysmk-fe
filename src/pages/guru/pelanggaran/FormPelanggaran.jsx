@@ -24,6 +24,7 @@ import { ReactSelectAsync, FormLabel } from "../../../components";
 
 import { getOptions } from "../../../utils/format";
 import dayjs from "dayjs";
+import useList from "../../../hook/useList";
 
 export default function FormPelanggaran({
   values,
@@ -40,18 +41,7 @@ export default function FormPelanggaran({
   mode,
   setIsOpen,
 }) {
-  let { data: dataTahunAjaran } = useQuery(
-    //query key
-    ["list_tahun_ajaran"],
-    //axios function,triggered when page/pageSize change
-    () => listTahunAjaran(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data,
-    }
-  );
+ const {dataTa} = useList()
 
   return (
     <Segment>
@@ -216,7 +206,7 @@ export default function FormPelanggaran({
                 <Form.Field
                   control={Select}
                   options={getOptions(
-                    dataTahunAjaran?.data,
+                    dataTa?.data,
                     "nama_tahun_ajaran"
                   )}
                   label={{

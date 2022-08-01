@@ -9,25 +9,22 @@ import { useQuery } from "react-query";
 import { getOptionsText } from "../../../utils/format";
 import { DeleteButton } from "../../../components";
 import {
-  Input,
-  Table,
   Select,
   Form,
   Button,
   Segment,
   Radio,
-  Header,
   TextArea,
-  Dropdown,
 } from "semantic-ui-react";
 import { izinGuruOptions } from "../../../utils/options";
 import {
   postLaporanGuruPiket,
   getDetailLaporanGuruPiket,
 } from "../../../api/guru/laporan";
-const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 
-export default function LaporanGuruPiket({ listKelas, listGuru }) {
+import useList from "../../../hook/useList";
+
+export default function LaporanGuruPiket() {
   let { tanggal, id } = useParams();
   const [initialState, setInitialState] = React.useState({
     id: id,
@@ -44,25 +41,26 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
 
   let { data, isLoading } = useQuery(
     //query key
-    ["laporan_guru_piket" , {id, tanggal} ],
+    ["laporan_guru_piket", { id, tanggal }],
     //axios function,triggered when page/pageSize change
     () => getDetailLaporanGuruPiket(id, tanggal),
     //configuration
     {
       enabled: tanggal !== undefined && id !== undefined,
-    //   refetchOnWindowFocus: false,
-    //   refetchOnmount: false,
-    //   refetchOnReconnect: false,
-    //   retry: false,
-    //   staleTime: twentyFourHoursInMs,
+      //   refetchOnWindowFocus: false,
+      //   refetchOnmount: false,
+      //   refetchOnReconnect: false,
+      //   retry: false,
+      //   staleTime: twentyFourHoursInMs,
       select: (response) => {
         return response.data.data;
       },
       onSuccess: (data) => {
-        setInitialState(data)
+        setInitialState(data);
       },
     }
   );
+  let { dataKelas, dataGuru } = useList();
 
   console.log(data);
   const onSubmit = async (values) => {
@@ -147,14 +145,14 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                       onChange={() => {
                         setFieldValue("laporan.guru.isSemuaHadir", false);
                         setFieldValue("laporan.guru.absen", [
-                            {
-                              nama_guru: "",
-                              nama_kelas: "",
-                              alasan: "",
-                              tugas: null,
-                            },
-                          ]);
-                       
+                          {
+                            nama_guru: "",
+                            nama_kelas: "",
+                            alasan: "",
+                            tugas: null,
+                          },
+                        ]);
+
                         console.log(values?.laporan?.guru?.isSemuaHadir);
                       }}
                       label="Ya"
@@ -172,8 +170,6 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                         setFieldValue("laporan.guru.isSemuaHadir", true);
                         setFieldValue("laporan.guru.absen", []);
 
-                       
-
                         console.log(values?.laporan?.guru?.isSemuaHadir);
                       }}
                       label="Tidak"
@@ -184,12 +180,12 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                       {values?.laporan?.guru?.absen?.map((absen, index) => (
                         <>
                           <section className="grid grid-cols-12  gap-5 ">
-                          <div className=" col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-3 ">
+                            <div className=" col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-3 ">
                               <Form.Field
                                 control={Select}
                                 value={absen?.nama_kelas}
                                 options={getOptionsText(
-                                  listKelas?.data,
+                                  dataKelas?.data,
                                   "nama_kelas"
                                 )}
                                 label={{
@@ -216,7 +212,7 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                                 control={Select}
                                 value={absen?.nama_guru}
                                 options={getOptionsText(
-                                  listGuru?.data,
+                                  dataGuru?.data,
                                   "nama_guru"
                                 )}
                                 label={{
@@ -238,7 +234,7 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                                 }}
                               />
                             </div>
-                          
+
                             <div className="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-2">
                               <Form.Dropdown
                                 selection
@@ -268,7 +264,7 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                             </div>
 
                             <div className="col-span-12 md:col-span-12 :col-span-12 xl:col-span-3  flex  xl:justify-end">
-                              <Form.Group grouped> 
+                              <Form.Group grouped>
                                 <label>Sudah diberikan Tugas?</label>
                                 <Form.Group inline className=" h-12" as="div">
                                   <Form.Field
@@ -302,7 +298,7 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                                 </Form.Group>
                               </Form.Group>
                             </div>
-                            <div className="col-start-1 col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-1 flex justify-end" >
+                            <div className="col-start-1 col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-1 flex justify-end">
                               <DeleteButton
                                 disabled={
                                   values.laporan.guru.absen?.length <= 1
@@ -320,7 +316,6 @@ export default function LaporanGuruPiket({ listKelas, listGuru }) {
                                 size="small"
                               />
                             </div>
-                           
                           </section>
                         </>
                       ))}
