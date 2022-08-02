@@ -69,5 +69,5 @@ export default function useList() {
     }
   );
 
-  return { dataKelas, dataGuru, dataMapel, dataTa };
+  return { dataKelas, dataGuru, dataMapel, dataTa, identitas };
 }

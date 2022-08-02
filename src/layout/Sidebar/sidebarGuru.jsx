@@ -10,10 +10,8 @@ import {
   MdOutlineLibraryBooks,
   MdLogout,
 } from "react-icons/md";
-import { Image } from "semantic-ui-react";
-import LogoMySMK from "../../image/MySMK.png";
-import SMKMQ from "../../image/MADINATULQURAN.png";
 
+import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
 
 export default function SidebarGuru({ setSidebar }) {
@@ -32,7 +30,7 @@ export default function SidebarGuru({ setSidebar }) {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="lg:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 relative ">
+      <div className="xl:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 relative ">
         <div className="h-24 w-24   flex-col mt-12 items-center">
           <img className="absolute" style={{maxWidth : '60%' , maxHeight : '60%'}} src={LogoMySMK} />
         
@@ -42,7 +40,11 @@ export default function SidebarGuru({ setSidebar }) {
           <MdClose className="w-10 h-10" />
         </button>
       </div>
-      <nav className="flex flex-col space-y-5 p-5 lg:p-0">
+      <nav className="flex flex-col space-y-5 p-5 xl:p-0">
+      <div className="h-12 w-12  hidden xl:flex mb-10">
+          <img className="absolute" style={{maxWidth : '50%' , maxHeight : '50%'}} src={LogoMySMK} />
+        
+        </div>
         <NavButton
           handleSidebar={handleSiderbar}
           to="dashboard"
@@ -167,7 +169,7 @@ export default function SidebarGuru({ setSidebar }) {
 
       <div className="fixed bottom-0 ">
         <button
-          className="mb-5 flex items-center px-5 lg:px-0 text-gray-700"
+          className="mb-5 flex items-center px-5 xl:px-0 text-gray-700"
           onClick={() => {
             return setOpen(true);
           }}
@@ -175,7 +177,7 @@ export default function SidebarGuru({ setSidebar }) {
           <MdLogout className="w-10 h-10" />
           <div className="h-10 w-10 ml-2 mt-2 ">
             <button
-              className={`ml-5 text-lg font-poppins 
+              className={`ml-5 text-xl font-poppins 
            text-gray-600 
          font-bold `}
             >
@@ -195,10 +197,10 @@ function NavButton({ to, title, logo, handleSidebar }) {
 
 
   return (
-    <div className="flex items-center  ">
-      <div className="w-8 h-8">{logo}</div>
+    <div className="flex items-center   ">
+      <div className="w-6 h-6">{logo}</div>
       <button
-        className={`ml-5 text-lg font-poppins ${
+        className={`ml-5 text-sm 2xl:text-md font-poppins text-left ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
         onClick={() => {

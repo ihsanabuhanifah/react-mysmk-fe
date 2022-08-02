@@ -184,7 +184,7 @@ export default function AbsensiHalaqoh() {
               type="button"
               fluid
               size="medium"
-              color="green"
+              color="teal"
               onClick={() => {
                 return navigate(`/guru/halaqoh/absensi/${tanggalActive}`);
               }}
@@ -197,7 +197,7 @@ export default function AbsensiHalaqoh() {
               fluid
               loading={loading}
               size="medium"
-              color="green"
+              color="teal"
               disabled={loading}
               onClick={creeteJadwal}
             />
@@ -469,7 +469,7 @@ export default function AbsensiHalaqoh() {
                   fluid
                   loading={isSubmitting}
                   size="medium"
-                  color="green"
+                  color="teal"
                   disabled={isSubmitting}
                 />
               )}

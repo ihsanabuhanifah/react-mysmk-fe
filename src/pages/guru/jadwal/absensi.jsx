@@ -159,7 +159,7 @@ export default function Absensi() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <div className="border rounded-lg border mb-5 p-5 overflow-x-visible w-full ">
+            <div className="border rounded-lg border mb-5 overflow-x-visible w-full ">
               <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5">
                 <div className="col-span-2 ">
                   <Form.Field

@@ -197,7 +197,7 @@ export default function ListGuruPiketToday() {
                         content={"Lihat Laporan"}
                         type="button"
                         fluid
-                        disabled={value?.teacher_id !== identitas?.teacher_id}
+                        // disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
                         color="blue"
                         onClick={() => {
@@ -213,7 +213,7 @@ export default function ListGuruPiketToday() {
                         content={"Buat Laporan"}
                         type="button"
                         fluid
-                        // disabled={value?.teacher_id !== identitas?.teacher_id}
+                        disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
                         color="green"
                         onClick={() => {

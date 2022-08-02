@@ -21,8 +21,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-
-    console.log('err',error)
+    console.log("err", error);
     if (401 === error?.response?.status) {
       Cookies.remove("mysmk_token");
 
