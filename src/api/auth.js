@@ -15,7 +15,7 @@ export function authme() {
 }
 
 export function postLupaPassword(values) {
-  return axios.post("/forgotPassword", values);
+  return axios.post("/forgot-password", values);
 }
 
 export function postResetPassword(id, token, values) {

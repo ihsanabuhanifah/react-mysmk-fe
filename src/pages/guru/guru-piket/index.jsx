@@ -73,6 +73,8 @@ export default function ListGuruPiketToday() {
     { key: "8", value: "minggu", text: "Minggu" },
   ];
 
+  console.log(identitas)
+
   return (
     <LayoutPage title="Jadwal Guru Piket">
       <div>
@@ -211,7 +213,7 @@ export default function ListGuruPiketToday() {
                         content={"Buat Laporan"}
                         type="button"
                         fluid
-                        disabled={value?.teacher_id !== identitas?.teacher_id}
+                        // disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
                         color="green"
                         onClick={() => {
