@@ -204,7 +204,7 @@ export default function Jadwal() {
                       fluid
                     
                       size="medium"
-                      color="green"
+                      color="teal"
                       onClick={() => {
                         return navigate(
                           `/guru/jadwal/absensi/${value?.kelas?.id}/${

@@ -204,7 +204,7 @@ export default function ListGuruPiketToday() {
                           return navigate(
                             `/guru/laporan-guru-piket/lihat-laporan/${
                               value.id
-                            }/${formatTahun(date)}`
+                            }/${formatTahun(value?.tanggal)}`
                           );
                         }}
                       />
@@ -220,7 +220,7 @@ export default function ListGuruPiketToday() {
                           return navigate(
                             `/guru/laporan-guru-piket/buat-laporan/${
                               value.id
-                            }/${formatTahun(date)}`
+                            }/${formatTahun(value?.tanggal)}`
                           );
                         }}
                       />

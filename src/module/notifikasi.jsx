@@ -20,7 +20,7 @@ export default function Notifikasi({ setNotif }) {
 
   return (
     <div className=" mt-0   p-3 h-full xl:h-full xl:border-l-2">
-     <h1 className="text-lg xl:block hidden px-2">Selasa, 20 Agustus 2022</h1>
+     <h1 className="text-lg xl:block hidden px-2 mb-5">Selasa, 20 Agustus 2022</h1>
      <div className="h-[90%] overflow-visible">
      <div className="px-2 flex items-center justify-between ">
         <h2 className="font-poppins font-bold text-xl ">Pemberitahuan</h2>
@@ -59,6 +59,7 @@ export default function Notifikasi({ setNotif }) {
             <div key={index}>
               <button
                 onClick={() => {
+                  setNotif(false);
                   return navigate(
                     `/guru/halaqoh/absensi/${dayjs(value?.tanggal).format(
                       "YYYY-MM-DD"
@@ -82,6 +83,7 @@ export default function Notifikasi({ setNotif }) {
             <div key={index}>
               <button
                 onClick={() => {
+                  setNotif(false);
                   return navigate(
                     `/guru/laporan-guru-piket/buat-laporan/${value?.id}/${dayjs(value?.tanggal).format(
                       "YYYY-MM-DD"

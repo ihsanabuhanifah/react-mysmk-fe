@@ -74,7 +74,7 @@ export default function Guru() {
           </div>
         </div>
       </header>
-      <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full     ">
+      <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
         <div
           className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 pl-0  lg:pl-2  xl:pl-5 2xl:pl-10 pt-5   ${
             !sidebar
@@ -85,7 +85,7 @@ export default function Guru() {
           <SidebarGuru setSidebar={setSidebar} />
         </div>
         <div
-          className={`content relative  h-full w-full pl-0 xl:pl-5   overflow-hidden ${
+          className={`content relative  h-full w-full pl-0 xl:pl-5   overflow-auto xl:overflow-hidden ${
             showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
           }`}
         >
