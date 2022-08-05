@@ -105,7 +105,7 @@ export default function Pulang() {
           setFieldValue,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment>
+            <section className="mt-5">
               <div className="overflow-auto h-full">
                 <div className=" grid grid-cols-8 gap-5">
                   <div className="col-span-8 lg:col-span-4">
@@ -170,7 +170,7 @@ export default function Pulang() {
                     <div className="col-span-8 lg:col-span-2">
                       <Button
                         type="button"
-                        color="olive"
+                        color="linkedin"
                         fluid
                         onClick={() => {
                           setLaporan(!laporan);
@@ -424,7 +424,7 @@ export default function Pulang() {
                   </Table.Footer>
                 </Table>
               </div>
-            </Segment>
+            </section>
           </Form>
         )}
       </Formik>

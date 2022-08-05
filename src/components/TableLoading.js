@@ -8,8 +8,7 @@ export function TableLoading({
   count,
   messageEmpty,
 }) {
-  console.log(isLoading, "jalan");
-  console.log(data?.length);
+ 
   return (
     <React.Fragment>
       {isLoading ? (

@@ -2,15 +2,7 @@ import React from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import LayoutPage from "../../../module/layoutPage";
-import {
-  Table,
-  Dropdown,
-  Input,
-  Segment,
-  Menu,
-  Icon,
-  Button,
-} from "semantic-ui-react";
+import { Table, Dropdown, Input, Menu, Icon, Button } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import FormPelanggaran from "./FormPelanggaran";
 import useDelete from "../../../hook/useDelete";
@@ -22,10 +14,8 @@ import {
 } from "../../../api/guru/pelanggaran";
 import {
   TableLoading,
-  ModalFilter,
   EditButton,
   DeleteButton,
-  ViewButton,
   ModalAlert,
 } from "../../../components";
 import { handleViewNull, formatDate } from "../../../utils";
@@ -122,7 +112,7 @@ export default function Pelanggaran() {
       console.log(response);
       queryClient.invalidateQueries("list_pelanggaran");
       resetForm();
-      setIsOpen(false)
+      setIsOpen(false);
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -155,7 +145,7 @@ export default function Pelanggaran() {
         setOpen={setShowAlertDelete}
         loading={deleteLoading}
         onConfirm={onConfirmDelete}
-        title={'Apakah yakin akan menghapus pelanggaran terpilih ?'}
+        title={"Apakah yakin akan menghapus pelanggaran terpilih ?"}
       />
       <Formik
         initialValues={initialValue}
@@ -198,9 +188,9 @@ export default function Pelanggaran() {
                 setIsOpen={setIsOpen}
               />
             </Collapse>
-            <Segment>
+            <section className="mt-5">
               <div className="overflow-auto">
-              <div className="">
+                <div className="">
                   <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
                     <div className=" grid-cols-1 lg:col-span-3">
                       <Input
@@ -229,18 +219,14 @@ export default function Pelanggaran() {
                   <Table celled selectable>
                     <Table.Header>
                       <Table.Row>
-                        <Table.HeaderCell >
-                          No
-                        </Table.HeaderCell>
+                        <Table.HeaderCell>No</Table.HeaderCell>
                         <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                         <Table.HeaderCell>Tanggal</Table.HeaderCell>
 
                         <Table.HeaderCell>Nama Pelanggaran</Table.HeaderCell>
                         <Table.HeaderCell>Tipe Pelanggaran</Table.HeaderCell>
                         <Table.HeaderCell>Jenis Pelanggaran</Table.HeaderCell>
-                        <Table.HeaderCell >
-                          Status
-                        </Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                         <Table.HeaderCell content>
                           Tindakan/Hukuman
                         </Table.HeaderCell>
@@ -262,9 +248,7 @@ export default function Pelanggaran() {
                       >
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>
-                            <Table.Cell >
-                              {index + 1}
-                            </Table.Cell>
+                            <Table.Cell>{index + 1}</Table.Cell>
                             <Table.Cell>
                               <span className="capitalize">
                                 {handleViewNull(value?.siswa?.nama_siswa)}
@@ -360,7 +344,6 @@ export default function Pelanggaran() {
                                     });
                                   }}
                                 />
-                                
                                 <DeleteButton
                                   onClick={() => confirmDelete(value?.id)}
                                 />
@@ -404,7 +387,7 @@ export default function Pelanggaran() {
                   </Table>
                 </div>
               </div>
-            </Segment>
+            </section>
           </>
         )}
       </Formik>

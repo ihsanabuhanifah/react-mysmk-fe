@@ -30,24 +30,33 @@ export default function SidebarGuru({ setSidebar }) {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="xl:hidden flex border-b-2 items-center justify-between h-20 w-full px-5 relative ">
+      <div className="xl:hidden flex border-b-2 items-center justify-between h-20  w-full px-5 relative ">
         <div className="h-24 w-24   flex-col mt-12 items-center">
-          <img className="absolute" style={{maxWidth : '60%' , maxHeight : '60%'}} src={LogoMySMK} />
-        
+          <img
+            className="absolute"
+            style={{ maxWidth: "60%", maxHeight: "60%" }}
+            src={LogoMySMK}
+            alt={LogoMySMK}
+          />
         </div>
 
-        <button className="mb-5" onClick={handleSiderbar}>
+        <button className="" onClick={handleSiderbar}>
           <MdClose className="w-10 h-10" />
         </button>
       </div>
-      <nav className="flex flex-col space-y-5 p-5 xl:p-0">
-      <div className="h-12 w-12  hidden xl:flex mb-10">
-          <img className="absolute" style={{maxWidth : '50%' , maxHeight : '50%'}} src={LogoMySMK} />
-        
+      <nav className="flex flex-col space-y-2 p-0  xl:p-0">
+        <div className="h-12 w-12  hidden xl:flex mb-10 p-5">
+          <img
+            className="absolute"
+            style={{ maxWidth: "50%", maxHeight: "50%" }}
+            src={LogoMySMK}
+            alt={LogoMySMK}
+          />
         </div>
         <NavButton
           handleSidebar={handleSiderbar}
           to="dashboard"
+          path="dashboard"
           title={["Dashboard"]}
           logo={
             <MdOutlineDashboard
@@ -60,6 +69,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="jadwal"
+          path="jadwal"
           title={"Jadwal dan Rekap"}
           logo={
             <MdOutlineCalendarToday
@@ -72,11 +82,12 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to={`halaqoh/absensi/${formatTahun(date)}`}
+          path={"halaqoh"}
           title={["Halaqoh"]}
           logo={
             <MdOutlineLibraryBooks
               className={`h-8 w-8 ${
-                url === `halaqoh/absensi/${formatTahun(date)}`
+                url === `halaqoh`
                   ? "text-white-400"
                   : "text-gray-600"
               }`}
@@ -86,6 +97,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
+          path={"sholat"}
           title={["Sholat"]}
           logo={
             <MdOutlineLibraryBooks
@@ -100,6 +112,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="pelanggaran"
+          path="pelanggaran"
           title={"Pelanggaran"}
           logo={
             <MdOutlineLibraryBooks
@@ -112,6 +125,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="prestasi"
+          path="prestasi"
           title={"Prestasi"}
           logo={
             <MdOutlineLibraryBooks
@@ -125,6 +139,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="perizinan-pulang"
+          path="perizinan-pulang"
           title={"Perizinan Pulang"}
           logo={
             <MdOutlineLibraryBooks
@@ -137,6 +152,7 @@ export default function SidebarGuru({ setSidebar }) {
         <NavButton
           handleSidebar={handleSiderbar}
           to="perizinan-kunjungan"
+          path="perizinan-kunjungan"
           title={"Perizinan Kunjungan"}
           logo={
             <MdOutlineLibraryBooks
@@ -148,9 +164,10 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-          <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="laporan-guru-piket"
+          path="laporan-guru-piket"
           title={"Laporan Guru Piket"}
           logo={
             <MdOutlineLibraryBooks
@@ -167,49 +184,70 @@ export default function SidebarGuru({ setSidebar }) {
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
 
-      <div className="fixed bottom-0 ">
-        <button
-          className="mb-5 flex items-center px-5 xl:px-0 text-gray-700"
+      <div className="fixed bottom-0 left-5 p-5">
+        <LogoutButton
           onClick={() => {
             return setOpen(true);
           }}
-        >
-          <MdLogout className="w-10 h-10" />
-          <div className="h-10 w-10 ml-2 mt-2 ">
-            <button
-              className={`ml-5 text-xl font-poppins 
-           text-gray-600 
-         font-bold `}
-            >
-              Logout
-            </button>
-          </div>
-        </button>
+          title={"Logout"}
+          logo={
+            <MdLogout
+              className={`h-8 w-8 ${
+                url === "laporan-guru-piket"
+                  ? "text-white-400"
+                  : "text-gray-600"
+              }`}
+            />
+          }
+        />
       </div>
     </>
   );
 }
 
-function NavButton({ to, title, logo, handleSidebar }) {
+function NavButton({ to, path, title, logo, handleSidebar }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
   const navigate = useNavigate();
 
-
   return (
-    <div className="flex items-center   ">
-      <div className="w-6 h-6">{logo}</div>
-      <button
-        className={`ml-5 text-sm 2xl:text-md font-poppins text-left ${
-          url === to ? "text-white-400 " : "text-gray-600 "
-        } font-bold hover:text-green-400`}
-        onClick={() => {
-          handleSidebar();
-          return navigate(to);
-        }}
+    <button
+      onClick={() => {
+        handleSidebar();
+        return navigate(to);
+      }}
+      className={`flex items-center px-5  h-10 ${
+        url === path
+          ? "bg-[#00b5ad] rounded-lg text-white font-black"
+          : "text-black"
+      }`}
+    >
+      <div className="w-8 h-8 ">{logo}</div>
+      <p
+        className={`ml-5 text-sm xl:text-md 2xl:text-md font-extrabold font-poppins text-left 
+       ${url === path ? "text-white font-black" : "text-black"}
+         `}
       >
         {title}
-      </button>
-    </div>
+      </p>
+    </button>
+  );
+}
+
+function LogoutButton({ to, title, logo, onClick }) {
+  let { pathname } = useLocation();
+  let url = pathname.split("/")[2];
+
+  return (
+    <button onClick={onClick} className="flex items-center  h-10  pl-2 ">
+      <div className="w-8 h-8 ">{logo}</div>
+      <p
+        className={`ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left ${
+          url === to ? "text-white-400 " : "text-gray-600 "
+        } font-bold hover:text-green-400`}
+      >
+        {title}
+      </p>
+    </button>
   );
 }

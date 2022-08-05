@@ -1,14 +1,6 @@
-import {
-  listSiswaOptions,
-  listPelanggaranOptions,
-  listTahunAjaran,
-} from "../../../api/list";
+import { listSiswaOptions, listPelanggaranOptions } from "../../../api/list";
 
-import { useQuery } from "react-query";
-import {
-  kategoriPelanggaranOptions,
-  semesterOptions,
-} from "../../../utils/options";
+import { semesterOptions } from "../../../utils/options";
 import {
   Input,
   Segment,
@@ -28,20 +20,20 @@ import useList from "../../../hook/useList";
 
 export default function FormPelanggaran({
   values,
-  setValues,
+
   errors,
   touched,
   handleChange,
   handleBlur,
   handleSubmit,
   isSubmitting,
-  setFieldTouched,
+
   setFieldValue,
   resetForm,
   mode,
   setIsOpen,
 }) {
- const {dataTa} = useList()
+  const { dataTa } = useList();
 
   return (
     <Segment>
@@ -205,10 +197,7 @@ export default function FormPelanggaran({
               <div className="col-span-3 lg:col-span-1">
                 <Form.Field
                   control={Select}
-                  options={getOptions(
-                    dataTa?.data,
-                    "nama_tahun_ajaran"
-                  )}
+                  options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
                   label={{
                     children: "Tahun Ajaran",
                     htmlFor: `pelanggaran[${index}]ta_id`,
@@ -249,38 +238,38 @@ export default function FormPelanggaran({
               </div>
 
               <div className="col-span-3 lg:col-span-1">
-             <Form.Field
-                control={Input}
-                label="Tipe Pelanggaran"
-                placeholder="Tipe Pelanggaran"
-                name={`pelanggaran[${index}tipe]`}
-                value={value?.tipe}
-                fluid
-                type="text"
-              />
-             </div>
-             <div className="col-span-3 lg:col-span-1">
-             <Form.Field
-                control={Input}
-                label="Ketegori Pelanggaran"
-                placeholder="Kategori Pelanggaran"
-                name={`pelanggaran[${index}kategori]`}
-                value={value?.kategori}
-                fluid
-                type="text"
-              />
-             </div>
-             <div className="col-span-3 lg:col-span-1">
-             <Form.Field
-                control={Input}
-                label="Poin Pelanggaran"
-                placeholder="Poin Pelanggaran"
-                name={`pelanggaran[${index}point]`}
-                value={value?.point}
-                fluid
-                type="text"
-              />
-             </div>
+                <Form.Field
+                  control={Input}
+                  label="Tipe Pelanggaran"
+                  placeholder="Tipe Pelanggaran"
+                  name={`pelanggaran[${index}tipe]`}
+                  value={value?.tipe}
+                  fluid
+                  type="text"
+                />
+              </div>
+              <div className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="Ketegori Pelanggaran"
+                  placeholder="Kategori Pelanggaran"
+                  name={`pelanggaran[${index}kategori]`}
+                  value={value?.kategori}
+                  fluid
+                  type="text"
+                />
+              </div>
+              <div className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="Poin Pelanggaran"
+                  placeholder="Poin Pelanggaran"
+                  name={`pelanggaran[${index}point]`}
+                  value={value?.point}
+                  fluid
+                  type="text"
+                />
+              </div>
             </div>
           ))}
           <Segment basic textAlign="center">

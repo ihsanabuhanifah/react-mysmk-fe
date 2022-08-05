@@ -9,7 +9,7 @@ import { listHalaqoh } from "../../../api/guru/halaqoh";
 import { listAlquranOptions } from "../../../api/list";
 import * as Yup from "yup";
 import {
-  Segment,
+ 
   Button,
   Form,
   Table,
@@ -19,7 +19,12 @@ import {
 } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { izinOptions } from "../../../utils/options";
-import { ReactSelectAsync, ErrorMEssage, FormText } from "../../../components";
+import {
+  ReactSelectAsync,
+  ErrorMEssage,
+  FormText,
+  TableLoading,
+} from "../../../components";
 
 import { toast } from "react-toastify";
 
@@ -112,7 +117,7 @@ export default function AbsensiHalaqoh() {
     setLoading(true);
     try {
       const response = await halaqohManualCreate();
-     
+
       setLoading(false);
       queryClient.invalidateQueries("jadwal");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
@@ -162,7 +167,7 @@ export default function AbsensiHalaqoh() {
 
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
-      <Segment>
+      <div className="space-x-5 mt-5">
         <section className="grid grid-cols-1 lg:grid-cols-4 gap-5">
           <div className=" col-span-1 lg:col-span-2">
             <Form.Field
@@ -203,8 +208,8 @@ export default function AbsensiHalaqoh() {
             />
           </div>
         </section>
-      </Segment>
-      <Segment style={{ overflow: "auto" }} padded>
+      </div>
+      <section className="mt-5" style={{ overflow: "auto" }} padded>
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -235,14 +240,13 @@ export default function AbsensiHalaqoh() {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {values?.absensi_kehadiran?.length === 0 ? (
-                    <Table.Row>
-                      <Table.Cell colSpan={8}>
-                        Tidak ditemukan jadwal{" "}
-                      </Table.Cell>
-                    </Table.Row>
-                  ) : (
-                    values?.absensi_kehadiran?.map((value, index) => (
+                  <TableLoading
+                    count={9}
+                    isLoading={isLoading}
+                    data={values?.absensi_kehadiran}
+                    messageEmpty={"Tidak Ada Jadwal Halaqo"}
+                  >
+                    {values?.absensi_kehadiran?.map((value, index) => (
                       <Table.Row key={index}>
                         <Table.Cell>{index + 1}</Table.Cell>
                         <Table.Cell singleLine>
@@ -457,27 +461,27 @@ export default function AbsensiHalaqoh() {
                           />
                         </Table.Cell>
                       </Table.Row>
-                    ))
-                  )}
+                    ))}
+                  </TableLoading>
                 </Table.Body>
               </Table>
-             <div>
-             {!isFetching && (
-                <Button
-                  content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  type="submit"
-                  fluid
-                  loading={isSubmitting}
-                  size="medium"
-                  color="teal"
-                  disabled={isSubmitting}
-                />
-              )}
-             </div>
+              <div className="mb-10">
+                {!isFetching && (
+                  <Button
+                    content={isSubmitting ? "Menyimpan" : "Simpan"}
+                    type="submit"
+                    fluid
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    disabled={isSubmitting}
+                  />
+                )}
+              </div>
             </form>
           )}
         </Formik>
-      </Segment>
+      </section>
     </LayoutPage>
   );
 }

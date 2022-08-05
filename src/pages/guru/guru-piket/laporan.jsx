@@ -7,14 +7,14 @@ import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 import { getOptionsText } from "../../../utils/format";
-import { DeleteButton } from "../../../components";
+import { DeleteButton, Label } from "../../../components";
 import {
   Select,
   Form,
   Button,
-  Segment,
   Radio,
   TextArea,
+  Message,
 } from "semantic-ui-react";
 import { izinGuruOptions } from "../../../utils/options";
 import {
@@ -23,6 +23,24 @@ import {
 } from "../../../api/guru/laporan";
 
 import useList from "../../../hook/useList";
+
+let absenSchema = Yup.object().shape({
+  nama_kelas: Yup.string().required("wajib diisi"),
+  nama_guru: Yup.string().required("wajib pilih"),
+  alasan: Yup.string().required("wajib diisi"),
+  tugas: Yup.boolean().required("wajib diisi"),
+});
+
+let laporanSchema = Yup.object().shape({
+  // pelanggaran: Yup.array().of(absenSchema),
+  laporan: Yup.object().shape({
+    guru: Yup.object().shape({
+      isSemuaHadir: Yup.boolean().required("wajib disi"),
+      absen: Yup.array().of(absenSchema),
+    }),
+    catatan: Yup.string().required("Catatan Wajib Disi"),
+  }),
+});
 
 export default function LaporanGuruPiket() {
   let { tanggal, id } = useParams();
@@ -62,9 +80,7 @@ export default function LaporanGuruPiket() {
   );
   let { dataKelas, dataGuru } = useList();
 
-  console.log(data);
   const onSubmit = async (values) => {
-    console.log("values", values);
     try {
       const response = await postLaporanGuruPiket(values);
 
@@ -107,10 +123,10 @@ export default function LaporanGuruPiket() {
 
   return (
     <LayoutPage title={`Buat Laporan Piket`}>
-      <Segment>
+      <section className="mt-5">
         <Formik
           initialValues={initialState}
-          // validationSchema={AbsensiSchema}
+          validationSchema={laporanSchema}
           enableReinitialize
           onSubmit={onSubmit}
         >
@@ -125,8 +141,7 @@ export default function LaporanGuruPiket() {
             isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit}>
-              {console.log(values)}
-              <div className="space-y-5 p-0 xl:p-5">
+              <div className="space-y-5 ">
                 <section className="space-y-5 overflow-visible h-full">
                   <p className="font-bold text-lg">
                     {" "}
@@ -137,6 +152,7 @@ export default function LaporanGuruPiket() {
                       readOnly={false}
                       name="laporan.guru.isSemuaHadir"
                       value={values?.laporan?.guru?.isSemuaHadir}
+                      error
                       checked={
                         values?.laporan?.guru?.isSemuaHadir === false
                           ? true
@@ -152,8 +168,6 @@ export default function LaporanGuruPiket() {
                             tugas: null,
                           },
                         ]);
-
-                        console.log(values?.laporan?.guru?.isSemuaHadir);
                       }}
                       label="Ya"
                     ></Radio>
@@ -169,12 +183,15 @@ export default function LaporanGuruPiket() {
                       onChange={() => {
                         setFieldValue("laporan.guru.isSemuaHadir", true);
                         setFieldValue("laporan.guru.absen", []);
-
-                        console.log(values?.laporan?.guru?.isSemuaHadir);
                       }}
                       label="Tidak"
                     ></Radio>
                   </div>
+
+                  {console.log(errors)}
+                  {errors?.laporan?.guru?.isSemuaHadir &&
+                    touched.laporan?.guru?.isSemuaHadir && <p>wajib disi</p>}
+
                   {!values?.laporan?.guru?.isSemuaHadir && (
                     <div className="space-y-2 ">
                       {values?.laporan?.guru?.absen?.map((absen, index) => (
@@ -235,7 +252,7 @@ export default function LaporanGuruPiket() {
                               />
                             </div>
 
-                            <div className="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-2">
+                            <div className="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-3">
                               <Form.Dropdown
                                 selection
                                 search
@@ -263,7 +280,7 @@ export default function LaporanGuruPiket() {
                               />
                             </div>
 
-                            <div className="col-span-12 md:col-span-12 :col-span-12 xl:col-span-3  flex  xl:justify-end">
+                            <div className="col-span-12 md:col-span-12 :col-span-12 xl:col-span-2  ">
                               <Form.Group grouped>
                                 <label>Sudah diberikan Tugas?</label>
                                 <Form.Group inline className=" h-12" as="div">
@@ -321,9 +338,10 @@ export default function LaporanGuruPiket() {
                       ))}
 
                       {values?.laporan?.guru?.absen.length > 0 && (
-                        <section className="mt-5 flex items-center w-full">
+                        <section className=" flex items-center w-full">
                           <Button
                             basic
+                            fluid
                             type="button"
                             onClick={() => {
                               setFieldValue("laporan.guru.absen", [
@@ -360,10 +378,22 @@ export default function LaporanGuruPiket() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values?.laporan?.catatan}
+                      // error={
+                      //   errors.laporan?.catatan && {
+                      //     content: `${errors?.laporan?.catatan}`,
+                      //     pointing: "above",
+                      //     color: "red",
+                      //     basic: true,
+                      //   }
+                      // }
                       fluid
                     />
                   </div>
                 </section>
+
+                {errors.laporan !== undefined && (
+                  <Message color="red">Silahkan Lengkapi Form sebelum Menyimpan Laporan</Message>
+                )}
                 <section>
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}
@@ -371,7 +401,7 @@ export default function LaporanGuruPiket() {
                     fluid
                     loading={isSubmitting}
                     size="medium"
-                    color="green"
+                    color="teal"
                     disabled={isSubmitting}
                   />
                 </section>
@@ -379,7 +409,7 @@ export default function LaporanGuruPiket() {
             </Form>
           )}
         </Formik>
-      </Segment>
+      </section>
     </LayoutPage>
   );
 }

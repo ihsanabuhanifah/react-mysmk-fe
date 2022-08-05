@@ -205,7 +205,7 @@ export default function Sholat() {
                 setIsOpen={setIsOpen}
               />
             </Collapse>
-            <Segment>
+            <section className="mt-5">
               <div className="overflow-auto">
                 <div className="">
                   <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
@@ -359,7 +359,7 @@ export default function Sholat() {
                   </Table>
                 </div>
               </div>
-            </Segment>
+            </section>
           </>
         )}
       </Formik>

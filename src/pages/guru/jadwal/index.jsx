@@ -2,28 +2,19 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { belumAbsen, listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
-import {
-  Table,
-  Dropdown,
-  Button,
-  Form,
-  Select,
-  Segment,
-} from "semantic-ui-react";
+import { Table, Button, Form, Select, Segment } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import { TableLoading } from "../../../components";
-import {
-  absensiManualCreate,
-  halaqohManualCreate,
-  listAbsensi,
-} from "../../../api/guru/absensi";
+import { absensiManualCreate, listAbsensi } from "../../../api/guru/absensi";
 
 import { formatDate, formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
+import useList from "../../../hook/useList";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
+  let { roles } = useList();
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   const parameter = {
@@ -31,6 +22,7 @@ export default function Jadwal() {
       hari,
     }),
   };
+
   let [dariTanggal] = React.useState(formatTahun(date));
   let [sampaiTanggal] = React.useState(formatTahun(date));
   let { data, isLoading } = useQuery(
@@ -125,7 +117,8 @@ export default function Jadwal() {
 
   return (
     <LayoutPage title="jadwal">
-      <div>
+     <div className="space-y-5 mt-5">
+     <div>
         <Form>
           <Form.Field
             control={Select}
@@ -147,9 +140,25 @@ export default function Jadwal() {
           />
         </Form>
       </div>
-      <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
-        <section className="grid grid-cols-6 gap-5">
-          <div className="col-start-6">
+      <section className="" style={{ overflow: "auto", maxWidth: "100%" }} padded>
+        <section className="grid grid-cols-1  xl:grid-cols-6 gap-5">
+          <div className=" col-start-1 xl:col-start-5">
+          {absensi?.absensi?.length === 0 && (
+              <Button
+                content={"Buat Absensi"}
+                type="submit"
+                fluid
+                loading={loading}
+                size="medium"
+                color="linkedin"
+                disabled={loading}
+                onClick={creeteJadwal}
+              />
+            )}
+          </div>
+          <div className="col-start-1 xl:col-start-6">
+           
+
             <Button
               content={"Rekap Absensi"}
               type="button"
@@ -178,7 +187,7 @@ export default function Jadwal() {
           </Table.Header>
           <Table.Body>
             <TableLoading
-              count={8}
+              count={9}
               isLoading={isLoading}
               data={data?.data?.rows}
               messageEmpty={"Tidak Ada Jadwal Pelajaran"}
@@ -202,7 +211,6 @@ export default function Jadwal() {
                       content={"Absensi"}
                       type="button"
                       fluid
-                    
                       size="medium"
                       color="teal"
                       onClick={() => {
@@ -219,23 +227,9 @@ export default function Jadwal() {
             </TableLoading>
           </Table.Body>
         </Table>
-      </Segment>
-      {absensi?.absensi?.length === 0 && (
-        <Segment>
-          <Button
-            content={"Buat Absensi"}
-            type="submit"
-            fluid
-            loading={loading}
-            size="medium"
-            color="teal"
-            disabled={loading}
-            onClick={creeteJadwal}
-          />
-        </Segment>
-      )}
+      </section>
 
-      <Segment>
+      <section>
         <h3 className="text-2xl font-poppins">List Guru Belum Absensi</h3>
         <Table celled selectable>
           <Table.Header>
@@ -267,7 +261,8 @@ export default function Jadwal() {
             </TableLoading>
           </Table.Body>
         </Table>
-      </Segment>
+      </section>
+     </div>
     </LayoutPage>
   );
 }

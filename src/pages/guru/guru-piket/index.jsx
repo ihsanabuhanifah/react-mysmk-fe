@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Segment } from "semantic-ui-react";
+import { Table, Button, Form, Select, section } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../../components";
 
@@ -73,11 +73,12 @@ export default function ListGuruPiketToday() {
     { key: "8", value: "minggu", text: "Minggu" },
   ];
 
-  console.log(identitas)
+
 
   return (
     <LayoutPage title="Jadwal Guru Piket">
-      <div>
+     <div className="mt-5 space-y-5">
+     <div>
         <Form>
           <Form.Field
             control={Select}
@@ -99,7 +100,7 @@ export default function ListGuruPiketToday() {
           />
         </Form>
       </div>
-      <Segment style={{ overflow: "auto", maxWidth: "100%" }} padded>
+      <section style={{ overflow: "auto", maxWidth: "100%" }} padded>
         <Table celled selectable>
           <Table.Header>
             <Table.Row>
@@ -133,9 +134,9 @@ export default function ListGuruPiketToday() {
             </TableLoading>
           </Table.Body>
         </Table>
-      </Segment>
+      </section>
 
-      <Segment>
+      <section>
         <div className="flex items-center justify-between ">
           <div>
             <h3 className="text-2xl font-poppins">
@@ -199,7 +200,7 @@ export default function ListGuruPiketToday() {
                         fluid
                         // disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
-                        color="blue"
+                        color="facebook"
                         onClick={() => {
                           return navigate(
                             `/guru/laporan-guru-piket/lihat-laporan/${
@@ -215,7 +216,7 @@ export default function ListGuruPiketToday() {
                         fluid
                         disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
-                        color="green"
+                        color="teal"
                         onClick={() => {
                           return navigate(
                             `/guru/laporan-guru-piket/buat-laporan/${
@@ -231,7 +232,8 @@ export default function ListGuruPiketToday() {
             </TableLoading>
           </Table.Body>
         </Table>
-      </Segment>
+      </section>
+     </div>
     </LayoutPage>
   );
 }

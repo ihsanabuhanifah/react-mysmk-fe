@@ -21,3 +21,8 @@ export function postLupaPassword(values) {
 export function postResetPassword(id, token, values) {
   return axios.post(`reset-password/${id}/${token}`, values);
 }
+
+export function getRoleMe() {
+  syncToken();
+  return axios.get("/guru/get-role-guru");
+}

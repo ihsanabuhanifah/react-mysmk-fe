@@ -1,8 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { notifikasiAbsensi } from "../api/guru/absensi";
-import { notifikasiHalaqoh } from "../api/guru/halaqoh";
-import { useQuery } from "react-query";
 import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
 import useNotif from "../hook/useNotif";
@@ -12,100 +9,99 @@ export default function Notifikasi({ setNotif }) {
   const [] = React.useState("senin");
   const { notifAbsensi, notifHalaqoh, notifPiket } = useNotif();
 
-  console.log(notifPiket);
-
   const handleNotif = () => {
     setNotif(false);
   };
 
   return (
     <div className=" mt-0   p-3 h-full xl:h-full xl:border-l-2">
-     <h1 className="text-lg xl:block hidden px-2 mb-5">Selasa, 20 Agustus 2022</h1>
-     <div className="h-[90%] overflow-visible">
-     <div className="px-2 flex items-center justify-between ">
-        <h2 className="font-poppins font-bold text-xl ">Pemberitahuan</h2>
-        <button className="mb-5 xl:hidden block" onClick={handleNotif}>
-          <MdClose className="w-10 h-10" />
-        </button>
+      <h1 className="text-lg xl:block hidden px-2 mb-5">
+        Selasa, 20 Agustus 2022
+      </h1>
+      <div className="h-[90%] overflow-visible">
+        <div className="px-2 flex items-center justify-between ">
+          <h2 className="font-poppins font-bold text-xl ">Pemberitahuan</h2>
+          <button className="mb-5 xl:hidden block" onClick={handleNotif}>
+            <MdClose className="w-10 h-10" />
+          </button>
+        </div>
+        <div>
+          <section>
+            {notifAbsensi?.data?.map((value, index) => (
+              <div key={index}>
+                <button
+                  onClick={() => {
+                    setNotif(false);
+                    return navigate(
+                      `/guru/jadwal/absensi/${value?.kelas?.id}/${
+                        value?.mapel?.id
+                      }/${dayjs(value?.tanggal).format("YYYY-MM-DD")}`
+                    );
+                  }}
+                  className=" text-sm xl:text-xs flex items-center italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2  text-white xl:text-red-500 hover:text-red-600"
+                >
+                  <div className="h-12 w-2 bg-green-400  mr-5"></div>
+                  <div>
+                    {" "}
+                    Anda Belum melakukan abensi pada mata pelajaran{" "}
+                    {value?.mapel?.nama_mapel} di kelas{" "}
+                    {value?.kelas?.nama_kelas} di tanggal{" "}
+                    {dayjs(value?.tanggal).format("DD-MM-YYYY")}
+                  </div>
+                </button>
+              </div>
+            ))}
+          </section>
+          <section>
+            {notifHalaqoh?.data?.map((value, index) => (
+              <div key={index}>
+                <button
+                  onClick={() => {
+                    setNotif(false);
+                    return navigate(
+                      `/guru/halaqoh/absensi/${dayjs(value?.tanggal).format(
+                        "YYYY-MM-DD"
+                      )}`
+                    );
+                  }}
+                  className="flex items-center   text-sm xl:text-xs italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
+                >
+                  <div className="h-12 w-2 bg-green-400  mr-5"></div>
+                  <div>
+                    {" "}
+                    Anda Belum melakukan abensi Halaqoh pada tanggal{" "}
+                    {dayjs(value?.tanggal).format("DD-MM-YYYY")}
+                  </div>
+                </button>
+              </div>
+            ))}
+          </section>
+          <section>
+            {notifPiket?.data?.map((value, index) => (
+              <div key={index}>
+                <button
+                  onClick={() => {
+                    setNotif(false);
+                    return navigate(
+                      `/guru/laporan-guru-piket/buat-laporan/${
+                        value?.id
+                      }/${dayjs(value?.tanggal).format("YYYY-MM-DD")}`
+                    );
+                  }}
+                  className="flex items-center   text-sm xl:text-xs italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
+                >
+                  <div className="h-4 w-2 bg-green-400  mr-5"></div>
+                  <div>
+                    {" "}
+                    Anda belum membuat laporan guru piket{" "}
+                    {dayjs(value?.tanggal).format("DD-MM-YYYY")}
+                  </div>
+                </button>
+              </div>
+            ))}
+          </section>
+        </div>
       </div>
-      <div>
-        <section>
-          {notifAbsensi?.data?.map((value, index) => (
-            <div key={index}>
-              <button
-                onClick={() => {
-                  setNotif(false);
-                  return navigate(
-                    `/guru/jadwal/absensi/${value?.kelas?.id}/${
-                      value?.mapel?.id
-                    }/${dayjs(value?.tanggal).format("YYYY-MM-DD")}`
-                  );
-                }}
-                className=" text-sm xl:text-xs flex items-center italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2  text-white xl:text-red-500 hover:text-red-600"
-              >
-                <div className="h-12 w-2 bg-green-400  mr-5"></div>
-                <div>
-                  {" "}
-                  Anda Belum melakukan abensi pada mata pelajaran{" "}
-                  {value?.mapel?.nama_mapel} di kelas {value?.kelas?.nama_kelas}{" "}
-                  di tanggal {dayjs(value?.tanggal).format("DD-MM-YYYY")}
-                </div>
-              </button>
-            </div>
-          ))}
-        </section>
-        <section>
-          {notifHalaqoh?.data?.map((value, index) => (
-            <div key={index}>
-              <button
-                onClick={() => {
-                  setNotif(false);
-                  return navigate(
-                    `/guru/halaqoh/absensi/${dayjs(value?.tanggal).format(
-                      "YYYY-MM-DD"
-                    )}`
-                  );
-                }}
-                className="flex items-center   text-sm xl:text-xs italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
-              >
-                <div className="h-12 w-2 bg-green-400  mr-5"></div>
-                <div>
-                  {" "}
-                  Anda Belum melakukan abensi Halaqoh pada tanggal{" "}
-                  {dayjs(value?.tanggal).format("DD-MM-YYYY")}
-                </div>
-              </button>
-            </div>
-          ))}
-        </section>
-        <section>
-          {notifPiket?.data?.map((value, index) => (
-            <div key={index}>
-              <button
-                onClick={() => {
-                  setNotif(false);
-                  return navigate(
-                    `/guru/laporan-guru-piket/buat-laporan/${value?.id}/${dayjs(value?.tanggal).format(
-                      "YYYY-MM-DD"
-                    )}`
-                  );
-                }}
-                className="flex items-center   text-sm xl:text-xs italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
-              >
-                <div className="h-4 w-2 bg-green-400  mr-5"></div>
-                <div>
-                  {" "}
-                  Anda belum membuat laporan guru piket{" "}
-                  {dayjs(value?.tanggal).format("DD-MM-YYYY")}
-                </div>
-              </button>
-            </div>
-          ))}
-        </section>
-       
-        
-      </div>
-     </div>
     </div>
   );
 }

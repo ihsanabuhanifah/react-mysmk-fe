@@ -100,7 +100,7 @@ export default function LihatLaporanGuruPiket() {
 
   return (
     <LayoutPage title={`Lihat Laporan Piket`}>
-      <Segment>
+      <section className="mt-5">
         <Formik
           initialValues={initialState}
           // validationSchema={AbsensiSchema}
@@ -119,7 +119,7 @@ export default function LihatLaporanGuruPiket() {
           }) => (
             <Form onSubmit={handleSubmit}>
               {console.log(values)}
-              <div className="space-y-5 p-0 xl:p-5">
+              <div className="space-y-5 ">
                 <section className="space-y-5 overflow-visible h-full">
                   <p className="font-bold text-lg">
                     {" "}
@@ -336,7 +336,7 @@ export default function LihatLaporanGuruPiket() {
             </Form>
           )}
         </Formik>
-      </Segment>
+      </section>
     </LayoutPage>
   );
 }

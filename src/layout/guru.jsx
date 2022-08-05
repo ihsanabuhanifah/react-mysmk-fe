@@ -38,7 +38,7 @@ export default function Guru() {
   const [notif, setNotif] = React.useState(false);
   let [showNotif, setShowNotf] = useShowNotif();
 
-  console.log("dd", showNotif);
+  
   return (
     <div className="h-screen antialiased text-gray-700 border ">
       <header className="h-[8%] block  xl:hidden  lg:h-1/12 xl:h-1/12 w-full flex items-center grid grid-cols-10 gap-x-5 border  ">
@@ -47,6 +47,7 @@ export default function Guru() {
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
             src={LogoMySMK}
+            alt={LogoMySMK}
           />
         </div>
 
@@ -76,7 +77,7 @@ export default function Guru() {
       </header>
       <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
         <div
-          className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 pl-0  lg:pl-2  xl:pl-5 2xl:pl-10 pt-5   ${
+          className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 px-2  ${
             !sidebar
               ? "transform -translate-y-full   xl:-translate-y-0"
               : "transform -translate-y-0 transition  duration-500 "
@@ -92,7 +93,7 @@ export default function Guru() {
           <div >
             <button
               onClick={() => {
-                console.log("masuk");
+               
                 return setShowNotf(!showNotif);
               }}
               className={`border rounded-full p-2 hidden xl:block absolute  right-5 top-5 z-50 ${

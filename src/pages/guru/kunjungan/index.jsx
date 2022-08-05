@@ -98,7 +98,7 @@ export default function Kunjungan() {
           setFieldValue,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Segment>
+            <section className="mt-5">
               <div className="overflow-auto h-full">
                 <div className="grid grid-cols-8 gap-5">
                   <div className=" col-span-8 lg:col-span-4">
@@ -300,7 +300,7 @@ export default function Kunjungan() {
                   </Table.Footer>
                 </Table>
               </div>
-            </Segment>
+            </section>
           </Form>
         )}
       </Formik>
