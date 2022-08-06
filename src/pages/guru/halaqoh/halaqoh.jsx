@@ -204,7 +204,7 @@ export default function AbsensiHalaqoh() {
               icon={()=> <Icon name='add'  />}
               loading={loading}
               size="medium"
-              color="teal"
+              color="linkedin"
               disabled={loading}
               onClick={creeteJadwal}
             />

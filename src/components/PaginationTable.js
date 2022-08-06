@@ -7,7 +7,7 @@ export default function PaginationTable({
   totalPages,
 }) {
   return (
-    <div className="xl:flex lg:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto py-2  ">
+    <div className="xl:flex lg:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto  lg:overflow-visible  xl:overflow-visible 2xl:overflow-visible p-5  ">
       <div className="">
         <Select
           onChange={(e, value) => {
