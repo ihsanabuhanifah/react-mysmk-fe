@@ -10,23 +10,27 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 import InputRangeDate from "../../../components/inputDateRange";
-import { Formik } from "formik";
+import { Formik, setNestedObjectValues } from "formik";
 import { getOptionsText } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
 import { ReactSelectAsync, FormLabel } from "../../../components";
-import {
-  listSiswaOptions,
-
-} from "../../../api/list";
+import { listSiswaOptions } from "../../../api/list";
 
 import useList from "../../../hook/useList";
 
-export default function Filter() {
- const {dataGuru, dataKelas, dataMapel, dataTa} = useList()
+export default function FilterRekap({ filter, setFilter }) {
+  const { dataGuru, dataKelas, dataMapel, dataTa } = useList();
+
+  const onSubmit = (values) => {
+    setFilter(values);
+  };
+
+  console.log(filter);
   return (
-    <Formik>
+    <Formik initialValues={filter} enableReinitialize onSubmit={onSubmit}>
       {({
         values,
+        setValues,
         errors,
         touched,
         handleChange,
@@ -35,11 +39,26 @@ export default function Filter() {
         setFieldValue,
         isSubmitting,
       }) => (
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <section className="p-5 bg-gray-50 border shadow-2xl h-screen space-y-5 relative">
             <div className="flex items-center justify-between">
               <button className="text-lg">Filter</button>
-              <button className="text-lg">Reset</button>
+              <button
+                type="button"
+                onClick={() => {
+                  console.log("ok");
+                  setValues((values) => {
+                    setValues({
+                      dariTanggal: null,
+                      sampaiTanggal: null,
+                    });
+                  });
+                  setFilter({});
+                }}
+                className="text-lg"
+              >
+                Reset
+              </button>
             </div>
             <div className="text-left">
               <Form.Field
@@ -50,11 +69,11 @@ export default function Filter() {
                   className: "text-red-500",
                   size: "medium",
                 }}
-                name="email"
                 onChange={(e) => {
-                  //   setTanggalActive(e.target.value);
+                  console.log(e.target.value);
+                  setFieldValue("dariTanggal", e.target.value);
                 }}
-                // value={tanggalActive}
+                value={values?.dariTanggal}
                 // disabled={isSubmitting}
                 type="date"
               />
@@ -68,12 +87,11 @@ export default function Filter() {
                   className: "text-red-500",
                   size: "medium",
                 }}
-                name="email"
                 onChange={(e) => {
-                  //   setTanggalActive(e.target.value);
+                  console.log(e.target.value);
+                  setFieldValue("sampaiTanggal", e.target.value);
                 }}
-                // value={tanggalActive}
-                // disabled={isSubmitting}
+                value={values?.sampaiTanggal}
                 type="date"
               />
             </div>
@@ -84,14 +102,9 @@ export default function Filter() {
                 options={getOptionsText(dataKelas?.data, "nama_kelas")}
                 label={{
                   children: "Kelas",
-                  //   htmlFor: `laporan.guru.absen[${index}]nama_kelas`,
-                  //   name: `laporan.guru.absen[${index}]nama_kelas`,
                 }}
                 onChange={(event, data) => {
-                  //   setFieldValue(
-                  //     `laporan.guru.absen[${index}]nama_kelas`,
-                  //     data?.value
-                  //   );
+                  setFieldValue(`nama_kelas`, data?.value);
                 }}
                 placeholder="Nama Kelas"
                 search
@@ -111,24 +124,17 @@ export default function Filter() {
                 options={getOptionsText(dataGuru?.data, "nama_guru")}
                 label={{
                   children: "Nama Guru",
-                  //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
-                  //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                  //   setFieldValue(
-                  //     `laporan.guru.absen[${index}]nama_guru`,
-                  //     data?.value
-                  //   );
+                    setFieldValue(
+                      `nama_guru`,
+                      data?.value
+                    );
                 }}
                 placeholder="Nama Guru"
                 search
                 clearable
-                searchInput={
-                  {
-                    //   id: `laporan.guru.absen[${index}]nama_guru`,
-                    //   name: `laporan.guru.absen[${index}]nama_guru`,
-                  }
-                }
+               
               />
             </div>
             <div className="text-left">
@@ -138,24 +144,14 @@ export default function Filter() {
                 options={getOptionsText(dataMapel?.data, "nama_mapel")}
                 label={{
                   children: "Mata Pelajaran",
-                  //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
-                  //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                  //   setFieldValue(
-                  //     `laporan.guru.absen[${index}]nama_guru`,
-                  //     data?.value
-                  //   );
+                  setFieldValue(`nama_mapel`, data?.value);
                 }}
                 placeholder="Mata Pelajaran"
                 search
                 clearable
-                searchInput={
-                  {
-                    //   id: `laporan.guru.absen[${index}]nama_guru`,
-                    //   name: `laporan.guru.absen[${index}]nama_guru`,
-                  }
-                }
+                
               />
             </div>
             <div className="text-left">
@@ -169,10 +165,10 @@ export default function Filter() {
                   //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                  //   setFieldValue(
-                  //     `laporan.guru.absen[${index}]nama_guru`,
-                  //     data?.value
-                  //   );
+                    setFieldValue(
+                      `tahun_ajaran`,
+                      data?.value
+                    );
                 }}
                 placeholder="Tahun Pelajaran"
                 search
@@ -194,12 +190,9 @@ export default function Filter() {
                   loadOptions={listSiswaOptions}
                   isClearable
                   onChange={(data) => {
-                    //   console.log(data);
-                    //   setFieldValue(`pelanggaran[${index}]nama_siswa`, data);
-                    //   setFieldValue(
-                    //     `pelanggaran[${index}]student_id`,
-                    //     data.value
-                    //   );
+                    
+                      setFieldValue(`nama_siswa`, data);
+                    
                   }}
                   placeholder="Nama Siswa"
                   additional={{
@@ -220,10 +213,10 @@ export default function Filter() {
                   //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                  //   setFieldValue(
-                  //     `laporan.guru.absen[${index}]nama_guru`,
-                  //     data?.value
-                  //   );
+                    setFieldValue(
+                      `status_kehadiran`,
+                      data?.value
+                    );
                 }}
                 fluid
                 placeholder="Status Kehadiran"
@@ -241,7 +234,7 @@ export default function Filter() {
             <InputRangeDate />
           </div> */}
             <div className="absolute bottom-2 xl:bottom-12 right-2 left-2">
-              <Button content="Filter" fluid color="teal" />
+              <Button type="submit" content="Filter" fluid color="teal" />
             </div>
           </section>
         </Form>

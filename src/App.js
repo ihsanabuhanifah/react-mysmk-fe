@@ -17,7 +17,9 @@ import {
   AbsensiHalaqoh,
   LaporanGuruPiket,
   ListGuruPiketToday,
-  LihatLaporanGuruPiket,RekapAbsensi
+  LihatLaporanGuruPiket,
+  RekapAbsensi,
+  DaftarSiswa,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -26,12 +28,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 
-
-
 function App() {
- 
-
-  
   return (
     <div className="font-poppins">
       <ToastContainer
@@ -60,22 +57,24 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="jadwal" element={<Jadwal />} />
+          <Route path="daftar-siswa" element={<DaftarSiswa />} />
+
+          <Route path="absensi" element={<Jadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="pelanggaran" element={<Pelanggaran />} />
           <Route path="prestasi" element={<Prestasi />} />
           <Route path="halaqoh/absensi/:tanggal" element={<AbsensiHalaqoh />} />
           <Route path="sholat" element={<Sholat />} />
-          <Route path="laporan-guru-piket" element={<ListGuruPiketToday   />} />
-          <Route path="absensi/rekap" element={<RekapAbsensi    />} />
+          <Route path="laporan-guru-piket" element={<ListGuruPiketToday />} />
+          <Route path="absensi/rekap" element={<RekapAbsensi />} />
           <Route
             path="laporan-guru-piket/buat-laporan/:id/:tanggal"
-            element={<LaporanGuruPiket  />}
+            element={<LaporanGuruPiket />}
           />
-           <Route
+          <Route
             path="laporan-guru-piket/lihat-laporan/:id/:tanggal"
-            element={<LihatLaporanGuruPiket/>}
+            element={<LihatLaporanGuruPiket />}
           />
           <Route
             path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal"

@@ -10,6 +10,11 @@ export function listAbsensi(params) {
   console.log(params);
   return axios.get("guru/absensi/list", { params });
 }
+export function rekapAbsensi(params) {
+  syncToken()
+  console.log(params);
+  return axios.get("guru/absensi/rekap", { params });
+}
 
 export async function updateAbsensi(values) {
   syncToken()

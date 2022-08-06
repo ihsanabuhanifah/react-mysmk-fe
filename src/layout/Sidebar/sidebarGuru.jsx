@@ -68,13 +68,13 @@ export default function SidebarGuru({ setSidebar }) {
         />
         <NavButton
           handleSidebar={handleSiderbar}
-          to="jadwal"
-          path="jadwal"
-          title={"Jadwal dan Rekap"}
+          to="absensi"
+          path="absensi"
+          title={"Jadwal dan Absensi"}
           logo={
             <MdOutlineCalendarToday
               className={`h-8 w-8 ${
-                url === "jadwal" ? "text-white-400" : "text-gray-600"
+                url === "absensi" ? "text-white-400" : "text-gray-600"
               }`}
             />
           }
@@ -173,6 +173,21 @@ export default function SidebarGuru({ setSidebar }) {
             <MdOutlineLibraryBooks
               className={`h-8 w-8 ${
                 url === "laporan-guru-piket"
+                  ? "text-white-400"
+                  : "text-gray-600"
+              }`}
+            />
+          }
+        />
+         <NavButton
+          handleSidebar={handleSiderbar}
+          to="daftar-siswa"
+          path="daftar-siswa"
+          title={"Daftar Siswa"}
+          logo={
+            <MdOutlineLibraryBooks
+              className={`h-8 w-8 ${
+                url === "daftar-siswa"
                   ? "text-white-400"
                   : "text-gray-600"
               }`}
