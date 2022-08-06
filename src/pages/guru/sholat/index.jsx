@@ -224,6 +224,7 @@ export default function Sholat() {
                       <Button
                         type="button"
                         color="teal"
+                        icon={()=> <Icon name='add'/>}
                         onClick={() => {
                           setIsOpen(true);
                           setMode("add");

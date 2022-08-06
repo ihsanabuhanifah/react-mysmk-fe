@@ -14,10 +14,11 @@ import {
   Select,
   Form,
   Button,
-  section,
+
   Header,
   TextArea,
   Dropdown,
+  Icon
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
@@ -213,11 +214,12 @@ export default function Absensi() {
                     />
                   </div>
 
-                  <div className=" col-span-2 flex items-center justify-center pt-4">
+                  <div className=" col-span-1 flex items-center justify-center pt-4">
                     <Button
                       content={"Filter"}
                       type="button"
                       fluid
+                      icon={()=> <Icon name='filter'/>}
                       size="medium"
                       color="teal"
                       onClick={() => {
@@ -374,6 +376,7 @@ export default function Absensi() {
                     ""
                   ) : (
                     <Button
+                    icon={()=> <Icon name='save'/>}
                       content={isSubmitting ? "Menyimpan" : "Simpan"}
                       type="submit"
                       fluid

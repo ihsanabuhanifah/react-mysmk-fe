@@ -1,13 +1,11 @@
 import {
   Input,
-  Table,
+
   Select,
   Form,
   Button,
-  Segment,
-  Header,
-  TextArea,
-  Dropdown,
+ 
+  Icon
 } from "semantic-ui-react";
 import InputRangeDate from "../../../components/inputDateRange";
 import { Formik, setNestedObjectValues } from "formik";
@@ -18,42 +16,54 @@ import { listSiswaOptions } from "../../../api/list";
 
 import useList from "../../../hook/useList";
 
-export default function FilterRekap({ filter, setFilter }) {
+export default function FilterRekap({ filter, setFilter, setVisible }) {
   const { dataGuru, dataKelas, dataMapel, dataTa } = useList();
 
-  const onSubmit = (values) => {
+  const onSubmit = (values, {resetForm}) => {
     setFilter(values);
+    setVisible(false);
+    resetForm()
   };
 
-  console.log(filter);
+  // let initialValues = {
+  //   dariTanggal: filter?.dariTanggal,
+  //   sampaiTanggal: filter?.sampaiTanggal,
+  //   nama_mapel: filter?.nama_mapel,
+  //   nama_guru: filter?.nama_guru,
+  //   nama_kelas: filter?.nama_kelas,
+  //   nama_siswa: filter?.nama_siswa,
+  //   status_kehadiran: filter?.status_kehadiran,
+  //   tahun_ajaran: filter?.tahun_ajaran,
+  // };
   return (
     <Formik initialValues={filter} enableReinitialize onSubmit={onSubmit}>
-      {({
-        values,
-        setValues,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setFieldValue,
-        isSubmitting,
-      }) => (
+      {({ values, setValues, resetForm, handleSubmit, setFieldValue }) => (
         <Form onSubmit={handleSubmit}>
           <section className="p-5 bg-gray-50 border shadow-2xl h-screen space-y-5 relative">
             <div className="flex items-center justify-between">
-              <button className="text-lg">Filter</button>
               <button
-                type="button"
+                type="b"
                 onClick={() => {
-                  console.log("ok");
-                  setValues((values) => {
-                    setValues({
-                      dariTanggal: null,
-                      sampaiTanggal: null,
-                    });
+                  setVisible(false);
+                }}
+                className="text-lg"
+              >
+                Tutup
+              </button>
+              <button
+                type="submit"
+                onClick={() => {
+                  resetForm();
+                  setValues({
+                    dariTanggal: '',
+                    sampaiTanggal: '',
+                    nama_mapel: '',
+                    nama_guru: '',
+                    nama_kelas: '',
+                    nama_siswa: '',
+                    status_kehadiran: '',
+                    tahun_ajaran: '',
                   });
-                  setFilter({});
                 }}
                 className="text-lg"
               >
@@ -70,7 +80,6 @@ export default function FilterRekap({ filter, setFilter }) {
                   size: "medium",
                 }}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setFieldValue("dariTanggal", e.target.value);
                 }}
                 value={values?.dariTanggal}
@@ -78,6 +87,8 @@ export default function FilterRekap({ filter, setFilter }) {
                 type="date"
               />
             </div>
+
+            {console.log('ljhjg',values)}
             <div className="text-left">
               <Form.Field
                 control={Input}
@@ -88,7 +99,6 @@ export default function FilterRekap({ filter, setFilter }) {
                   size: "medium",
                 }}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setFieldValue("sampaiTanggal", e.target.value);
                 }}
                 value={values?.sampaiTanggal}
@@ -108,6 +118,7 @@ export default function FilterRekap({ filter, setFilter }) {
                 }}
                 placeholder="Nama Kelas"
                 search
+                value={values?.nama_kelas}
                 clearable
                 searchInput={
                   {
@@ -126,15 +137,12 @@ export default function FilterRekap({ filter, setFilter }) {
                   children: "Nama Guru",
                 }}
                 onChange={(event, data) => {
-                    setFieldValue(
-                      `nama_guru`,
-                      data?.value
-                    );
+                  setFieldValue(`nama_guru`, data?.value);
                 }}
                 placeholder="Nama Guru"
                 search
                 clearable
-               
+                value={values?.nama_guru}
               />
             </div>
             <div className="text-left">
@@ -151,7 +159,7 @@ export default function FilterRekap({ filter, setFilter }) {
                 placeholder="Mata Pelajaran"
                 search
                 clearable
-                
+                value={values?.nama_mapel}
               />
             </div>
             <div className="text-left">
@@ -165,13 +173,11 @@ export default function FilterRekap({ filter, setFilter }) {
                   //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                    setFieldValue(
-                      `tahun_ajaran`,
-                      data?.value
-                    );
+                  setFieldValue(`tahun_ajaran`, data?.value);
                 }}
                 placeholder="Tahun Pelajaran"
                 search
+                value={values?.tahun_ajaran}
                 clearable
                 searchInput={
                   {
@@ -186,13 +192,11 @@ export default function FilterRekap({ filter, setFilter }) {
               <FormLabel label={"Nama Siswa"}>
                 <ReactSelectAsync
                   debounceTimeout={300}
-                  // value={value?.nama_siswa}
+                  value={values?.nama_siswa}
                   loadOptions={listSiswaOptions}
                   isClearable
                   onChange={(data) => {
-                    
-                      setFieldValue(`nama_siswa`, data);
-                    
+                    setFieldValue(`nama_siswa`, data);
                   }}
                   placeholder="Nama Siswa"
                   additional={{
@@ -213,12 +217,10 @@ export default function FilterRekap({ filter, setFilter }) {
                   //   name: `laporan.guru.absen[${index}]nama_guru`,
                 }}
                 onChange={(event, data) => {
-                    setFieldValue(
-                      `status_kehadiran`,
-                      data?.value
-                    );
+                  setFieldValue(`status_kehadiran`, data?.value);
                 }}
                 fluid
+                value={values?.status_kehadiran}
                 placeholder="Status Kehadiran"
                 search
                 clearable
@@ -234,7 +236,7 @@ export default function FilterRekap({ filter, setFilter }) {
             <InputRangeDate />
           </div> */}
             <div className="absolute bottom-2 xl:bottom-12 right-2 left-2">
-              <Button type="submit" content="Filter" fluid color="teal" />
+              <Button   icon={()=> <Icon name='filter'  />} type="submit" content="Terapkan" fluid color="teal" />
             </div>
           </section>
         </Form>

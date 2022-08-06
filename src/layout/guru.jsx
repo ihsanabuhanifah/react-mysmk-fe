@@ -5,7 +5,6 @@ import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
-import SMKMQ from "../image/MADINATULQURAN.png";
 import LogoNotif from "../image/notifikasi.png";
 import { Image, Input } from "semantic-ui-react";
 import SidebarGuru from "./Sidebar/sidebarGuru";

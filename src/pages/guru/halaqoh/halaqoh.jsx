@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { halaqohManualCreate, listAbsensi } from "../../../api/guru/absensi";
+import { halaqohManualCreate } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
-import { listMapel, listKelas } from "../../../api/list";
+
 import { listHalaqoh } from "../../../api/guru/halaqoh";
 import { listAlquranOptions } from "../../../api/list";
 import * as Yup from "yup";
@@ -16,6 +16,7 @@ import {
   Input,
   Dropdown,
   TextArea,
+  Icon
 } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { izinOptions } from "../../../utils/options";
@@ -72,8 +73,7 @@ export default function AbsensiHalaqoh() {
   let [dariTanggal, setDariTanggal] = React.useState(tanggal);
   let [sampaiTanggal, setSampaiTanggal] = React.useState(tanggal);
   let [tanggalActive, setTanggalActive] = React.useState(tanggal);
-  let [kelas, setKelas] = React.useState(kelas_id);
-  let [mapel, setMapel] = React.useState(mapel_id);
+ 
   const [loading, setLoading] = React.useState(false);
 
   let queryClient = useQueryClient();
@@ -188,6 +188,7 @@ export default function AbsensiHalaqoh() {
               content={"Filter"}
               type="button"
               fluid
+              icon={()=> <Icon name='filter'  />}
               size="medium"
               color="teal"
               onClick={() => {
@@ -200,6 +201,7 @@ export default function AbsensiHalaqoh() {
               content={"Buat Absensi Halaqoh"}
               type="submit"
               fluid
+              icon={()=> <Icon name='add'  />}
               loading={loading}
               size="medium"
               color="teal"
@@ -474,6 +476,7 @@ export default function AbsensiHalaqoh() {
                     loading={isSubmitting}
                     size="medium"
                     color="teal"
+                    icon={()=> <Icon name='save'  />}
                     disabled={isSubmitting}
                   />
                 )}

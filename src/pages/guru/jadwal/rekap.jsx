@@ -1,18 +1,5 @@
 import React from "react";
-import {
-  Table,
-  Dropdown,
-  Button,
-  Form,
-  Select,
-  Segment,
-  Input,
-  Sidebar,
-  Menu,
-  Icon,
-  Pagination,
-} from "semantic-ui-react";
-import Filter from "./filter";
+import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
 import { rekapAbsensi } from "../../../api/guru/absensi";
 import { useQuery } from "react-query";
 
@@ -22,16 +9,19 @@ import { formatDate } from "../../../utils";
 import PaginationTable from "../../../components/PaginationTable";
 import FilterRekap from "./filter";
 import { encodeURlFormat } from "../../../utils";
+import usePage from "../../../hook/usePage";
+
+import { downloadRekapAbsensi } from "../../../api/guru/absensi";
+import useDownload from "../../../hook/useDownload";
 export default function RekapAbsensi() {
   let [visible, setVisible] = React.useState(false);
-  let [page, setPage] = React.useState(1);
-  let [pageSize, setPageSize] = React.useState(10);
+  let { page, pageSize, setPage, setPageSize } = usePage();
   const [filter, setFilter] = React.useState({});
   const params = {
     page,
     pageSize,
     ...filter,
-    nama_siswa : encodeURlFormat(filter?.nama_siswa?.label),
+    nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
     nama_kelas: encodeURlFormat(filter?.nama_kelas),
     nama_guru: encodeURlFormat(filter?.nama_guru),
     nama_mapel: encodeURlFormat(filter?.nama_mapel),
@@ -52,7 +42,13 @@ export default function RekapAbsensi() {
     }
   );
 
-  console.log(data);
+  let { isLoadingDownload, handleDownload } = useDownload({
+    filename: "rekap-absensi.xlsx",
+    onDownload: () => {
+      return downloadRekapAbsensi(params);
+    },
+  });
+
   return (
     <LayoutPage
       title={"Rekap Absensi"}
@@ -70,13 +66,16 @@ export default function RekapAbsensi() {
         visible={visible}
         width="wide"
       >
-        <FilterRekap filter={filter} setFilter={setFilter} />
+        <FilterRekap
+          filter={filter}
+          setFilter={setFilter}
+          setVisible={setVisible}
+        />
       </Sidebar>
       <section className="mt-5 pb-10">
         <section className="grid grid-cols-6 gap-5">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
             <Input
-              classN
               fluid
               loading={false}
               icon="search"
@@ -84,15 +83,30 @@ export default function RekapAbsensi() {
               placeholder="Search..."
             />
           </div>
-          <div className="col-span-6 lg:col-span-2 xl:col-span-2">
+          <div className="col-span-6 lg:col-span-1 xl:col-span-1">
             <Button
               content={"Filter"}
               type="button"
               fluid
+              icon={()=> <Icon name='filter'  />}
               size="medium"
               color="teal"
               onClick={() => {
                 setVisible(!visible);
+              }}
+            />
+          </div>
+          <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+            <Button
+              content={"Download"}
+              type="button"
+              fluid
+              icon={()=> <Icon name='download' />}
+              loading={isLoadingDownload}
+              size="medium"
+              color="linkedin"
+              onClick={() => {
+                handleDownload(params);
               }}
             />
           </div>

@@ -1,6 +1,6 @@
 import {
   listSiswaOptions,
-  listTahunAjaran,
+ 
 } from "../../../api/list";
 
 import { useQuery } from "react-query";
@@ -14,6 +14,7 @@ import {
   Header,
   Divider,
   TextArea,
+  Icon
 } from "semantic-ui-react";
 import { DeleteButton } from "../../../components";
 import { ReactSelectAsync, FormLabel } from "../../../components";
@@ -263,6 +264,7 @@ export default function FormPrestasi({
                 content={"Batal"}
                 type="button"
                 fluid
+                icon={()=> <Icon name='cancel'/>}
                 basic
                 onClick={() => {
                   // setValues(initialValue);
@@ -277,6 +279,7 @@ export default function FormPrestasi({
                 content={mode === "update" ? "Perbahrui" : "Simpan"}
                 type="submit"
                 fluid
+                icon={()=> <Icon name='save'/>}
                 basic
                 size="medium"
                 color="teal"

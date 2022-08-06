@@ -1,23 +1,29 @@
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 export function listJadwal(params) {
-  syncToken()
+  syncToken();
   return axios.get("/guru/jadwal/list", { params });
 }
 
 export function listAbsensi(params) {
-  syncToken()
+  syncToken();
   console.log(params);
   return axios.get("guru/absensi/list", { params });
 }
 export function rekapAbsensi(params) {
-  syncToken()
+  syncToken();
   console.log(params);
   return axios.get("guru/absensi/rekap", { params });
 }
 
+export function downloadRekapAbsensi(params) {
+  return axios.get("guru/absensi/rekap/download", {
+    responseType: "arraybuffer",
+    params,
+  });
+}
 export async function updateAbsensi(values) {
-  syncToken()
+  syncToken();
   let absensi_kehadiran = [];
   await Promise.all(
     // eslint-disable-next-line array-callback-return
@@ -30,7 +36,6 @@ export async function updateAbsensi(values) {
       };
       data = absensi;
       absensi_kehadiran.push(absensi);
-     
     })
   );
 
@@ -40,25 +45,25 @@ export async function updateAbsensi(values) {
 }
 
 export function notifikasiAbsensi() {
-  syncToken()
+  syncToken();
   return axios.get("/guru/absensi/notifikasi");
 }
 
 export function absensiManualCreate() {
-  syncToken()
+  syncToken();
   return axios.get("/guru/absensi/manual");
 }
 export function halaqohManualCreate() {
-  syncToken()
+  syncToken();
   return axios.get("/guru/halaqoh/manual");
 }
 
 export function monitor() {
-  syncToken()
+  syncToken();
   return axios.get("/monitor");
 }
 
 export function belumAbsen() {
-  syncToken()
+  syncToken();
   return axios.get("/guru/absensi/guru-belum-absen");
 }

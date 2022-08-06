@@ -6,7 +6,7 @@ import {
   Table,
   Dropdown,
   Input,
-  Segment,
+  
   Menu,
   Icon,
   Button,
@@ -223,6 +223,7 @@ export default function Prestasi() {
                       <Button
                         type="button"
                         color="teal"
+                        icon={()=> <Icon name='add'/>}
                         onClick={() => {
                           setIsOpen(true);
                           setMode("add");

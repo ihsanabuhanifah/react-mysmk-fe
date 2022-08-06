@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { belumAbsen, listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Segment } from "semantic-ui-react";
+import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import { TableLoading } from "../../../components";
 import { absensiManualCreate, listAbsensi } from "../../../api/guru/absensi";
@@ -141,13 +141,14 @@ export default function Jadwal() {
         </Form>
       </div>
       <section className="" style={{ overflow: "auto", maxWidth: "100%" }} padded>
-        <section className="grid grid-cols-1  xl:grid-cols-6 gap-5">
-          <div className=" col-start-1 xl:col-start-5">
+        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
+          <div className=" col-start-1 lg:col-start-4 2xl:col-start-5">
           {absensi?.absensi?.length === 0 && (
               <Button
                 content={"Buat Absensi"}
                 type="submit"
                 fluid
+                icon={()=> <Icon name='add'/>}
                 loading={loading}
                 size="medium"
                 color="linkedin"
@@ -156,13 +157,14 @@ export default function Jadwal() {
               />
             )}
           </div>
-          <div className="col-start-1 xl:col-start-6">
+          <div className="col-start-1  lg:col-start-5 2xl:col-start-6">
            
 
             <Button
               content={"Rekap Absensi"}
               type="button"
               fluid
+              icon={()=> <Icon name='newspaper outline'/>}
               size="medium"
               color="teal"
               onClick={() => {

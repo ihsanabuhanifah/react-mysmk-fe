@@ -7,13 +7,14 @@ export default function PaginationTable({
   totalPages,
 }) {
   return (
-    <div className="flex items-center justify-between   ">
+    <div className="xl:flex lg:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto py-2  ">
       <div className="">
         <Select
           onChange={(e, value) => {
             console.log(value);
             setPageSize(value.value);
           }}
+          compact
           value={pageSize}
           placeholder="Select Page"
           options={[
@@ -26,8 +27,9 @@ export default function PaginationTable({
           ]}
         />
       </div>
-      <div className="col-start-4">
+      <div className="">
         <Pagination
+        compact
           onPageChange={(e, value) => {
             console.log(value);
 
