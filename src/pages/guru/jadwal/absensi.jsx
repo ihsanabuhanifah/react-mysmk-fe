@@ -246,7 +246,7 @@ export default function Absensi() {
                         <div>
                           <Form.Field
                             control={Input}
-                            label={`Jam ke-${value?.jam_ke + index}`}
+                            label={`Jam ke-${value?.jam_ke}`}
                             placeholder="Materi"
                             name={`agenda_kelas[${index}]materi`}
                             onChange={handleChange}
