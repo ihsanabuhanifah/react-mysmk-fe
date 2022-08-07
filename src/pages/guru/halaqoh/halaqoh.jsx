@@ -334,7 +334,7 @@ export default function AbsensiHalaqoh() {
                     count={9}
                     isLoading={isLoading}
                     data={values?.absensi_kehadiran}
-                    messageEmpty={"Tidak Ada Jadwal Halaqo"}
+                    messageEmpty={"Tidak Ada Jadwal Halaqoh"}
                   >
                     {values?.absensi_kehadiran?.map((value, index) => (
                       <Table.Row key={index}>
@@ -575,7 +575,7 @@ export default function AbsensiHalaqoh() {
               </Table>
              </div>
               <div className="mb-10 mt-5 w-full">
-                <Button
+                {values?.absensi_kehadiran.length > 0 && <Button
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
                   type="submit"
                   fluid
@@ -584,7 +584,8 @@ export default function AbsensiHalaqoh() {
                   color="teal"
                   icon={() => <Icon name="save" />}
                   disabled={isSubmitting}
-                />
+                />}
+                
               </div>
             </form>
           )}
