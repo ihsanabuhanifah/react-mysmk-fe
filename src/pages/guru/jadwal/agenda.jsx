@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
-import { rekapAbsensi } from "../../../api/guru/absensi";
+import { rekapAgenda } from "../../../api/guru/absensi";
 import { useQuery } from "react-query";
 
 import { TableLoading } from "../../../components";
@@ -30,9 +30,9 @@ export default function RekapAbsensi() {
   };
   let { data, isLoading } = useQuery(
     //query key
-    ["rekap_absensi_kelas", params],
+    ["rekap_agenda_kelas", params],
     //axios function,triggered when page/pageSize change
-    () => rekapAbsensi(params),
+    () => rekapAgenda(params),
     //configuration
     {
       refetchInterval: 1000 * 60 * 60,
@@ -49,17 +49,9 @@ export default function RekapAbsensi() {
     },
   });
 
-  const handleEvent = (event) => {
-
-    console.log('ee' , event)
-    if (event.key === "x") {
-      console.log("ok", event);
-    }
-  };
-
   return (
     <LayoutPage
-      title={"Rekap Absensi Kelas"}
+      title={"Rekap Agenda Kelas"}
       visible={visible}
       setVisible={setVisible}
     >
@@ -80,8 +72,8 @@ export default function RekapAbsensi() {
           setVisible={setVisible}
         />
       </Sidebar>
-      <section onKeyPress={handleEvent}  className="mt-5 pb-10 ">
-        <section className="grid grid-cols-6 gap-5 ">
+      <section className="mt-5 pb-10">
+        <section className="grid grid-cols-6 gap-5">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
             <Input
               fluid
@@ -104,7 +96,7 @@ export default function RekapAbsensi() {
               }}
             />
           </div>
-          <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+          {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1">
             <Button
               content={"Download"}
               type="button"
@@ -117,7 +109,7 @@ export default function RekapAbsensi() {
                 handleDownload(params);
               }}
             />
-          </div>
+          </div> */}
         </section>
         <Table celled selectable>
           <Table.Header>
@@ -125,12 +117,13 @@ export default function RekapAbsensi() {
               <Table.HeaderCell>No</Table.HeaderCell>
 
               <Table.HeaderCell>Tanggal</Table.HeaderCell>
-              <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
+
               <Table.HeaderCell>Kelas </Table.HeaderCell>
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
               <Table.HeaderCell>Nama Guru</Table.HeaderCell>
-              <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
-              <Table.HeaderCell>Keterangan</Table.HeaderCell>
+              <Table.HeaderCell>Jam_ke</Table.HeaderCell>
+              <Table.HeaderCell>Materi</Table.HeaderCell>
+
               <Table.HeaderCell>Semester</Table.HeaderCell>
               <Table.HeaderCell>Tahun Pelajaran</Table.HeaderCell>
             </Table.Row>
@@ -150,16 +143,15 @@ export default function RekapAbsensi() {
                       {formatDate(value?.tanggal)}
                     </span>
                   </Table.Cell>
-                  <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
+                
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                   <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                   <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                  <Table.Cell>ke-{value?.jam_ke}</Table.Cell>
                   <Table.Cell>
-                    {value?.kehadiran?.nama_status_kehadiran}
+                    {value?.materi}
                   </Table.Cell>
-                  <Table.Cell>
-                    {value?.keterangan === null ? "-" : value.keterangan}
-                  </Table.Cell>
+                  
                   <Table.Cell>Semester {value?.semester}</Table.Cell>
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}

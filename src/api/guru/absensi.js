@@ -15,6 +15,11 @@ export function rekapAbsensi(params) {
   console.log(params);
   return axios.get("guru/absensi/rekap", { params });
 }
+export function rekapAgenda(params) {
+  syncToken();
+  console.log(params);
+  return axios.get("guru/agenda/rekap", { params });
+}
 
 export function downloadRekapAbsensi(params) {
   return axios.get("guru/absensi/rekap/download", {

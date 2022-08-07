@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
 import useNotif from "../hook/useNotif";
+import { formatHariInd } from "../utils/waktu";
 export default function Notifikasi({ setNotif }) {
   let navigate = useNavigate();
   // eslint-disable-next-line no-empty-pattern
   const [] = React.useState("senin");
-  const { notifAbsensi, notifHalaqoh, notifPiket } = useNotif();
-
+  const { notifAbsensi, notifHalaqoh, notifPiket, jumlah } = useNotif();
+console.log('jumlah', jumlah);
   const handleNotif = () => {
     setNotif(false);
   };
@@ -16,7 +17,7 @@ export default function Notifikasi({ setNotif }) {
   return (
     <div className=" mt-0   p-3 h-full xl:h-full xl:border-l-2">
       <h1 className="text-lg xl:block hidden px-2 mb-5">
-        Selasa, 20 Agustus 2022
+        {formatHariInd(new Date())}
       </h1>
       <div className="h-[90%] overflow-visible">
         <div className="px-2 flex items-center justify-between ">
@@ -26,7 +27,8 @@ export default function Notifikasi({ setNotif }) {
           </button>
         </div>
         <div>
-          <section>
+         {jumlah === 0 ? <p className="p-2 text-[#00b5ad]">Tidak Ada Pemberitahuan</p> : <>
+         <section>
             {notifAbsensi?.data?.map((value, index) => (
               <div key={index}>
                 <button
@@ -99,7 +101,7 @@ export default function Notifikasi({ setNotif }) {
                 </button>
               </div>
             ))}
-          </section>
+          </section></>}
         </div>
       </div>
     </div>

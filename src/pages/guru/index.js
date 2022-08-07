@@ -13,6 +13,7 @@ import LaporanGuruPiket from "./guru-piket/laporan";
 import LihatLaporanGuruPiket from "./guru-piket/lihat-laporan";
 import RekapAbsensi from "./jadwal/rekap";
 import DaftarSiswa from "./daftar-siswa";
+import Agenda from "./jadwal/agenda";
 export {
   Absensi,
   Jadwal,
@@ -28,5 +29,6 @@ export {
   ListGuruPiketToday,
   LihatLaporanGuruPiket,
   RekapAbsensi,
-  DaftarSiswa
+  DaftarSiswa,
+  Agenda
 };

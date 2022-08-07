@@ -8,6 +8,7 @@ import ModalAlert from "./ModalAlert";
 import ModalFilter from "./Modal";
 import ModalLogout from "./ModalLogout";
 import LoadingPage from "./LoadingPage";
+import PaginationTable from "./PaginationTable";
 export {
   Input,
   Label,
@@ -25,4 +26,5 @@ export {
   ModalAlert,
   ModalLogout,
   LoadingPage,
+  PaginationTable
 };

@@ -11,6 +11,7 @@ import SidebarGuru from "./Sidebar/sidebarGuru";
 import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
 import { IoIosNotifications } from "react-icons/io";
+import useNotif from "../hook/useNotif";
 export default function Guru() {
   React.useEffect(() => {
     document.title = "Guru";
@@ -36,8 +37,8 @@ export default function Guru() {
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);
   let [showNotif, setShowNotf] = useShowNotif();
+  let { jumlah } = useNotif();
 
-  
   return (
     <div className="h-screen antialiased text-gray-700 border ">
       <header className="h-[8%] block  xl:hidden  lg:h-1/12 xl:h-1/12 w-full flex items-center grid grid-cols-10 gap-x-5 border  ">
@@ -50,17 +51,25 @@ export default function Guru() {
           />
         </div>
 
-        <div className=" col-span-6 xl:col-span-2 flex items-center justify-end space-x-5 pr-5 xl:pr-10  h-full w-full ">
-          <div className="border-2 xl:h-12 xl:w-12 w-10 h-10 rounded-full p-2">
-            <img
-              onClick={() => {
-                setNotif(!notif);
-              }}
-              className="w-5 h-5"
-              src={LogoNotif}
-              alt=""
+        <div className=" col-span-6 xl:col-span-2 flex items-center justify-end space-x-5 pr-5 xl:pr-10  h-full w-full relative ">
+          <button
+            onClick={() => {
+              return setNotif(!notif);
+            }}
+            className={`relative `}
+          >
+            <IoIosNotifications
+              className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
             />
-          </div>
+            {jumlah > 0 && (
+              <div
+                style={{ fontSize: "8px" }}
+                className="w-4 h-4 pt-1   absolute z-10 top-0 right-2 bg-red-400 text-white rounded-full"
+              >
+                {jumlah}
+              </div>
+            )}
+          </button>
           <div className="xl:block hidden xl:h-12 xl:w-12 w-10 h-10 border bg-green-200 rounded-full"></div>
           <div className="block xl:hidden  xl:h-12 xl:w-12 w-10 h-10 ">
             <button
@@ -78,9 +87,9 @@ export default function Guru() {
         <div
           className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 px-2  ${
             !sidebar
-              ? "transform -translate-y-full   xl:-translate-y-0"
-              : "transform -translate-y-0 transition  duration-500 "
-          } h-full z-10 fixed top-0 bottom-0 xl:w-[15%]  xl:relative  `}
+              ? "transform -translate-x-full -z-50   xl:-translate-x-0"
+              : "transform -translate-x-0 z-10  transition  duration-500 "
+          } h-full fixed top-0 bottom-0 xl:w-[15%]  xl:relative  `}
         >
           <SidebarGuru setSidebar={setSidebar} />
         </div>
@@ -89,10 +98,9 @@ export default function Guru() {
             showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
           }`}
         >
-          <div >
+          <div>
             <button
               onClick={() => {
-               
                 return setShowNotf(!showNotif);
               }}
               className={`border rounded-full p-2 hidden xl:block absolute  right-5 top-5 z-50 ${
@@ -100,18 +108,26 @@ export default function Guru() {
               }`}
             >
               <IoIosNotifications
-                className={`h-6 w-6 ${showNotif ? "text-white" : ""}`}
+                className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
               />
+              {jumlah > 0 && (
+                <div
+                  style={{ fontSize: "8px" }}
+                  className="w-4 h-4 pt-1   absolute z-10 top-2 right-2 bg-red-400 text-white rounded-full"
+                >
+                  {jumlah}
+                </div>
+              )}
             </button>
           </div>
-       <div className="h-full w-full">
-       <Outlet data={data} />
-       </div>
+          <div className="h-full w-full">
+            <Outlet data={data} />
+          </div>
         </div>
         <div
           className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 pl-0 xl:pl-2      ${
             !notif
-              ? "transform -translate-y-full   xl:-translate-y-0"
+              ? "transform -translate-y-full    xl:-translate-y-0"
               : "transform -translate-y-0 transition  duration-500 "
           } h-full z-10 fixed top-0 bottom-0 ${
             !showNotif ? "xl:w-[20%]" : "xl:hidden"

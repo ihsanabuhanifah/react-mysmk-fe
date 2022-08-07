@@ -20,6 +20,7 @@ import {
   LihatLaporanGuruPiket,
   RekapAbsensi,
   DaftarSiswa,
+  Agenda
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -68,6 +69,7 @@ function App() {
           <Route path="sholat" element={<Sholat />} />
           <Route path="laporan-guru-piket" element={<ListGuruPiketToday />} />
           <Route path="absensi/rekap" element={<RekapAbsensi />} />
+          <Route path="agenda/rekap" element={<Agenda />} />
           <Route
             path="laporan-guru-piket/buat-laporan/:id/:tanggal"
             element={<LaporanGuruPiket />}

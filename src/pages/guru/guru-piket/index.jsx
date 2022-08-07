@@ -12,6 +12,9 @@ import {
 
 import { formatDate, formatHari, formatTahun } from "../../../utils";
 import useList from "../../../hook/useList";
+import usePage from "../../../hook/usePage";
+import {PaginationTable} from "../../../components";
+import { formatDay } from "../../../utils/waktu";
 
 export default function ListGuruPiketToday() {
   const navigate = useNavigate();
@@ -40,8 +43,7 @@ export default function ListGuruPiketToday() {
 
   const { identitas } = useList();
 
-  let [page, setPage] = React.useState(1);
-  let [pageSize, setPageSize] = React.useState(10);
+let {page, pageSize, setPage, setPageSize} = usePage()
   let [status, setStatus] = React.useState(0);
 
   let params = {
@@ -183,10 +185,10 @@ export default function ListGuruPiketToday() {
                   : "Belum ada laporan piket yang masuk"
               }
             >
-              {listLaporan?.data?.map((value, index) => (
+              {listLaporan?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{formatDate(value?.tanggal)}</Table.Cell>
+                  <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
                   <Table.Cell>{value?.guru?.nama_guru}</Table.Cell>
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
@@ -232,6 +234,13 @@ export default function ListGuruPiketToday() {
             </TableLoading>
           </Table.Body>
         </Table>
+        <PaginationTable
+          page={page}
+          pageSize={pageSize}
+          setPageSize={setPageSize}
+          setPage={setPage}
+          totalPages={listLaporan?.data?.count}
+        />
       </section>
      </div>
     </LayoutPage>

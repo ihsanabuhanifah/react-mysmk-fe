@@ -11,6 +11,7 @@ import { formatDate, formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
 import useList from "../../../hook/useList";
+import { formatDay } from "../../../utils/waktu";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
@@ -118,17 +119,20 @@ export default function Jadwal() {
   return (
     <LayoutPage title="jadwal">
      <div className="space-y-5 mt-5">
-     <div>
+    
+      <section className="" style={{  maxWidth: "100%" }} padded>
+        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
+        <div className="col-span-2">
         <Form>
           <Form.Field
             control={Select}
             options={dayOptions}
-            label={{
-              children: "Hari",
-              htmlFor: "hari",
-              name: "hari",
-            }}
-            me="hari"
+            // label={{
+            //   children: "Hari",
+            //   htmlFor: "hari",
+            //   name: "hari",
+            // }}
+            name="hari"
             id="hari"
             onChange={(event, data) => {
               setHari(data.value);
@@ -140,9 +144,7 @@ export default function Jadwal() {
           />
         </Form>
       </div>
-      <section className="" style={{ overflow: "auto", maxWidth: "100%" }} padded>
-        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
-          <div className=" col-start-1 lg:col-start-4 2xl:col-start-5">
+          <div className=" col-start-1 lg:col-start-3 2xl:col-start-4">
           {absensi?.absensi?.length === 0 && (
               <Button
                 content={"Buat Absensi"}
@@ -157,7 +159,7 @@ export default function Jadwal() {
               />
             )}
           </div>
-          <div className="col-start-1  lg:col-start-5 2xl:col-start-6">
+          <div className="col-start-1  lg:col-start-4 2xl:col-start-5">
            
 
             <Button
@@ -169,6 +171,21 @@ export default function Jadwal() {
               color="teal"
               onClick={() => {
                 return navigate("/guru/absensi/rekap");
+              }}
+            />
+          </div>
+          <div className="col-start-1  lg:col-start-5 2xl:col-start-6">
+           
+
+            <Button
+              content={"Rekap Agenda"}
+              type="button"
+              fluid
+              icon={()=> <Icon name='file alternate outline'/>}
+              size="medium"
+              color="teal"
+              onClick={() => {
+                return navigate("/guru/agenda/rekap");
               }}
             />
           </div>
@@ -254,7 +271,7 @@ export default function Jadwal() {
               {dataBelumAbsen?.data?.map((value, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{formatDate(value?.tanggal)}</Table.Cell>
+                  <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
                   <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                   <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>

@@ -50,5 +50,7 @@ export default function useNotif() {
     notifHalaqoh?.data.length +
     notifPiket?.data.length;
 
+    
+
   return { notifAbsensi, notifHalaqoh, notifPiket, jumlah };
 }

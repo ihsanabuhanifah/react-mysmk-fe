@@ -1,7 +1,9 @@
 import LoginImage from "../../image/login.png";
 export default function Layout({ children }) {
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
+    <main onClick={(e)=> {
+      console.log(e.key, 'ff')
+    } } className="w-screen h-screen flex items-center justify-center bg-gray-200 ">
       <div className="grid grid-cols-8 h-full  lg:h-5/6 lg:w-[70%] bg-white border  ">
         <div
           style={{
@@ -15,6 +17,6 @@ export default function Layout({ children }) {
           <div className="w-[80%]">{children}</div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

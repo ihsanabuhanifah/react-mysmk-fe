@@ -31,7 +31,7 @@ export function formatTahun(timeStamps) {
   return hari;
 }
 
-export function formatDate(timeStamps) {
+export function formatDay(timeStamps) {
   let hari = dayjs(timeStamps).format("dddd");
 
   if (timeStamps === null) {
@@ -68,6 +68,119 @@ export function formatDate(timeStamps) {
   return `${hari} , ${dayjs(timeStamps).format("DD-MM-YYYY")}`;
 }
 
+export function formatHariInd(timeStamps) {
+  let hari = dayjs(timeStamps).format("dddd");
+  let bulan = dayjs(timeStamps).format("MM");
+  let tanggal = dayjs(timeStamps).format("DD");
+  let tahun = dayjs(timeStamps).format("YYYY");
+
+  if (timeStamps === null) {
+    return "-";
+  }
+  if (timeStamps === undefined) {
+    return "-";
+  }
+  if (timeStamps === "") {
+    return "-";
+  }
+  // if (bulan === "January") {
+  //   bulan = "Januari";
+  // }
+  // if (bulan === "February") {
+  //   bulan = "Februari";
+  // }
+  // if (bulan === "March") {
+  //   bulan = "Maret";
+  // }
+  // if (bulan === "April") {
+  //   bulan = "April";
+  // }
+  // if (bulan === "May") {
+  //   bulan = "Mei";
+  // }
+  // if (bulan === "June") {
+  //   bulan = "Juni";
+  // }
+  // if (bulan === "July") {
+  //   bulan = "Juli";
+  // }
+  // if (bulan === "August") {
+  //   bulan = "Agustus";
+  // }
+  // if (bulan === "September") {
+  //   bulan = "September";
+  // }
+  // if (bulan === "October") {
+  //   bulan = "Oktober";
+  // }
+  // if (bulan === "November") {
+  //   bulan = "November";
+  // }
+  // if (bulan === "December") {
+  //   bulan = "Desember";
+  // }
+
+  if (bulan === "01") {
+    bulan = "Januari";
+  }
+  if (bulan === "02") {
+    bulan = "Februari";
+  }
+  if (bulan === "03") {
+    bulan = "Maret";
+  }
+  if (bulan === "04") {
+    bulan = "April";
+  }
+  if (bulan === "05") {
+    bulan = "Mei";
+  }
+  if (bulan === "06") {
+    bulan = "Juni";
+  }
+  if (bulan === "07") {
+    bulan = "Juli";
+  }
+  if (bulan === "08") {
+    bulan = "Agustus";
+  }
+  if (bulan === "09") {
+    bulan = "September";
+  }
+  if (bulan === "10") {
+    bulan = "Oktober";
+  }
+  if (bulan === "11") {
+    bulan = "November";
+  }
+  if (bulan === "12") {
+    bulan = "Desember";
+  }
+
+  if (hari === "Monday") {
+    hari = "Senin";
+  }
+  if (hari === "Tuesday") {
+    hari = "Selasa";
+  }
+  if (hari === "Wednesday") {
+    hari = "Rabu";
+  }
+  if (hari === "Thursday") {
+    hari = "Kamis";
+  }
+  if (hari === "Friday") {
+    hari = "Jumat";
+  }
+  if (hari === "Saturday") {
+    hari = "Sabtu";
+  }
+  if (hari === "Sunday") {
+    hari = "Minggu";
+  }
+  return hari + ", " + tanggal + " " + bulan + " " + tahun;
+}
+
 export function handleViewNull(value) {
   if (value === null) return "-";
   if (value === "") return "-";
@@ -88,4 +201,42 @@ export function selisihHari(tgl1, tgl2) {
   let tglKedua = Date.parse(tanggal2);
   let selisih = (tglKedua - tglPertama) / miliday;
   return selisih;
+}
+
+
+export function formatDate(timeStamps) {
+  let hari = dayjs(timeStamps).format("dddd");
+
+  if (timeStamps === null) {
+    return "-";
+  }
+  if (timeStamps === undefined) {
+    return "-";
+  }
+  if (timeStamps === "") {
+    return "-";
+  }
+
+  if (hari === "Monday") {
+    hari = "Senin";
+  }
+  if (hari === "Tuesday") {
+    hari = "Selasa";
+  }
+  if (hari === "Wednesday") {
+    hari = "Rabu";
+  }
+  if (hari === "Thursday") {
+    hari = "Kamis";
+  }
+  if (hari === "Friday") {
+    hari = "Jumat";
+  }
+  if (hari === "Saturday") {
+    hari = "Sabtu";
+  }
+  if (hari === "Sunday") {
+    hari = "Minggu";
+  }
+  return `${dayjs(timeStamps).format("DD-MM-YYYY")}`;
 }

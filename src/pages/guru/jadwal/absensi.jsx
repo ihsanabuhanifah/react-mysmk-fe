@@ -14,11 +14,11 @@ import {
   Select,
   Form,
   Button,
-
   Header,
   TextArea,
   Dropdown,
-  Icon
+  Icon,
+  Message,
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
@@ -43,9 +43,15 @@ let personalSchema = Yup.object().shape({
   }),
 });
 
+let agendaSchema = Yup.object().shape({
+  materi: Yup.string().nullable().required("wajib diisi"),
+});
+
 let AbsensiSchema = Yup.object().shape({
   absensi_kehadiran: Yup.array().of(personalSchema),
+  agenda_kelas: Yup.array().of(agendaSchema),
 });
+
 export default function Absensi() {
   let { kelas_id, mapel_id, tanggal } = useParams();
 
@@ -133,7 +139,7 @@ export default function Absensi() {
       });
     }
   };
-  console.log("absens", initialState);
+ 
 
   React.useEffect(() => {
     setDariTanggal(tanggal);
@@ -219,7 +225,7 @@ export default function Absensi() {
                       content={"Filter"}
                       type="button"
                       fluid
-                      icon={()=> <Icon name='filter'/>}
+                      icon={() => <Icon name="filter" />}
                       size="medium"
                       color="teal"
                       onClick={() => {
@@ -239,6 +245,8 @@ export default function Absensi() {
                     {values?.agenda_kelas?.map((value, index) => (
                       <React.Fragment key={index}>
                         <div>
+
+                         
                           <Form.Field
                             control={Input}
                             label={`Jam ke-${value?.jam_ke + index}`}
@@ -246,10 +254,16 @@ export default function Absensi() {
                             name={`agenda_kelas[${index}]materi`}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                            value={value?.materi}
+                            value={value?.materi === null ? "" : value?.materi}
                             disabled={isSubmitting}
                             fluid
                             type="text"
+                            error={
+                              errors?.agenda_kelas?.[index]
+                                ?.materi !== undefined &&
+                              errors?.agenda_kelas?.[index]
+                                ?.materi
+                            }
                           />
                         </div>
                       </React.Fragment>
@@ -258,7 +272,11 @@ export default function Absensi() {
                 </section>
               </div>
 
-              <section className="mt-5" style={{ overflow: "auto", maxWidth: "100%" }} padded>
+              <section
+                className="mt-5"
+                style={{ overflow: "auto", maxWidth: "100%" }}
+                padded
+              >
                 <Header as={"h3"}>
                   Absensi - {values?.absensi_kehadiran[0]?.kelas?.nama_kelas} -{" "}
                   {values?.absensi_kehadiran[0]?.mapel?.nama_mapel}{" "}
@@ -370,25 +388,25 @@ export default function Absensi() {
                     </TableLoading>
                   </Table.Body>
                 </Table>
+               {errors.agenda_kelas !== undefined &&  <Message color="red">Lengkapi Semua Form untuk menyimpan</Message>}
                 <div className="mb-10">
-                {!isFetching &&
-                  (values?.absensi_kehadiran.length === 0 ? (
-                    ""
-                  ) : (
-                    <Button
-                    icon={()=> <Icon name='save'/>}
-                      content={isSubmitting ? "Menyimpan" : "Simpan"}
-                      type="submit"
-                      fluid
-                      loading={isSubmitting}
-                      size="medium"
-                      color="teal"
-                      disabled={isSubmitting}
-                    />
-                  ))}
-              </div>
+                  {!isFetching &&
+                    (values?.absensi_kehadiran.length === 0 ? (
+                      ""
+                    ) : (
+                      <Button
+                        icon={() => <Icon name="save" />}
+                        content={isSubmitting ? "Menyimpan" : "Simpan"}
+                        type="submit"
+                        fluid
+                        loading={isSubmitting}
+                        size="medium"
+                        color="teal"
+                        disabled={isSubmitting}
+                      />
+                    ))}
+                </div>
               </section>
-              
             </Form>
           )}
         </Formik>

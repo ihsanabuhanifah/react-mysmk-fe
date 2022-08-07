@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { IoIosNotifications } from "react-icons/io";
 import { formatTahun } from "../../utils";
 import {
   MdClose,
@@ -199,7 +199,7 @@ export default function SidebarGuru({ setSidebar }) {
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
 
-      <div className="fixed bottom-0 left-5 p-5">
+      <div className="fixed bottom-0 left-5 p-5 ">
         <LogoutButton
           onClick={() => {
             return setOpen(true);
@@ -239,7 +239,8 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
     >
       <div className="w-8 h-8 ">{logo}</div>
       <p
-        className={`ml-5 text-sm xl:text-md 2xl:text-md font-extrabold font-poppins text-left 
+    
+        className={`ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}
          `}
       >
@@ -254,10 +255,10 @@ function LogoutButton({ to, title, logo, onClick }) {
   let url = pathname.split("/")[2];
 
   return (
-    <button onClick={onClick} className="flex items-center  h-10  pl-2 ">
+    <button onClick={onClick} className="flex items-center font-extrabold  h-10  pl-2 ">
       <div className="w-8 h-8 ">{logo}</div>
       <p
-        className={`ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left ${
+        className={`font-extrabold ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
       >

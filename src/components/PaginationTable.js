@@ -1,3 +1,4 @@
+import React from "react";
 import { Select, Pagination, Icon } from "semantic-ui-react";
 export default function PaginationTable({
   page,
@@ -6,12 +7,23 @@ export default function PaginationTable({
   setPageSize,
   totalPages,
 }) {
+  let total = 0;
+
+  if (typeof totalPages === "object") {
+    totalPages?.map((item) => {
+      total = total + item.count;
+    });
+  } else {
+    total = totalPages;
+  }
+
+ 
+
   return (
-    <div className="xl:flex lg:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto  lg:overflow-visible  xl:overflow-visible 2xl:overflow-visible p-5  ">
-      <div className="">
+    <div className="xl:flex lg:flex md:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto  lg:overflow-visible  xl:overflow-visible 2xl:overflow-visible py-2  ">
+      <div className="flex items-center space-x-2">
         <Select
           onChange={(e, value) => {
-            console.log(value);
             setPageSize(value.value);
           }}
           compact
@@ -26,10 +38,14 @@ export default function PaginationTable({
             { key: 6, value: 1000, text: 1000 },
           ]}
         />
+
+        <p>
+          Menampilkan {total < pageSize ? total : pageSize} dari {total} data
+        </p>
       </div>
       <div className="">
         <Pagination
-        compact
+          compact
           onPageChange={(e, value) => {
             console.log(value);
 
@@ -47,7 +63,7 @@ export default function PaginationTable({
           }}
           prevItem={{ content: <Icon name="angle left" />, icon: true }}
           nextItem={{ content: <Icon name="angle right" />, icon: true }}
-          totalPages={Math.ceil(totalPages / pageSize)}
+          totalPages={Math.ceil(total / pageSize)}
         />
       </div>
     </div>
