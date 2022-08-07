@@ -1,5 +1,11 @@
 import React from "react";
-import { listKelas, listMapel, listGuru, listTahunAjaran } from "../api/list";
+import {
+  listKelas,
+  listMapel,
+  listGuru,
+  listTahunAjaran,
+  listAlquran,
+} from "../api/list";
 import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
@@ -81,7 +87,26 @@ export default function useList() {
       select: (response) => response.data,
     }
   );
+  let { data: dataAlquran } = useQuery(
+    //query key
+    ["list_alquran"],
+    //axios function,triggered when page/pageSize change
+    () => listAlquran(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      select: (response) => response.data,
+    }
+  );
 
-
-  return { dataKelas, dataGuru, dataMapel, dataTa, identitas, roles };
+  return {
+    dataKelas,
+    dataGuru,
+    dataMapel,
+    dataTa,
+    identitas,
+    roles,
+    dataAlquran
+  };
 }

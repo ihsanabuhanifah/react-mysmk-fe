@@ -56,7 +56,7 @@ export default function Guru() {
             onClick={() => {
               return setNotif(!notif);
             }}
-            className={`relative `}
+            className={`relative  `}
           >
             <IoIosNotifications
               className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
@@ -64,7 +64,7 @@ export default function Guru() {
             {jumlah > 0 && (
               <div
                 style={{ fontSize: "8px" }}
-                className="w-4 h-4 pt-1   absolute z-10 top-0 right-2 bg-red-400 text-white rounded-full"
+                className="w-4 h-4 pt-1   absolute z-10 top-0 right-0 bg-red-400 text-white rounded-full"
               >
                 {jumlah}
               </div>

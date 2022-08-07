@@ -5,21 +5,23 @@ import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
 
-import { listHalaqoh } from "../../../api/guru/halaqoh";
+import { listHalaqoh, updateAbsensiHalaqoh } from "../../../api/guru/halaqoh";
 import { listAlquranOptions } from "../../../api/list";
 import * as Yup from "yup";
 import {
- 
   Button,
   Form,
   Table,
   Input,
   Dropdown,
   TextArea,
-  Icon
+  Icon,
+  Radio,
+  Select,
 } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { izinOptions } from "../../../utils/options";
+import { formatValue, getOptions } from "../../../utils/format";
 import {
   ReactSelectAsync,
   ErrorMEssage,
@@ -28,25 +30,60 @@ import {
 } from "../../../components";
 
 import { toast } from "react-toastify";
+import usePage from "../../../hook/usePage";
+import useList from "../../../hook/useList";
 
 let personalSchema = Yup.object().shape({
-  dari_ayat: Yup.number().typeError("Wajib angka").required("wajib disii"),
-  sampai_ayat: Yup.number().typeError("Wajib angka").required("wajib disii"),
-  total_halaman: Yup.number().typeError("Wajib angka").required("wajib disii"),
-  surat_awal: Yup.object()
-    .shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    })
+  dari_ayat: Yup.string()
     .nullable()
-    .required("wajib dipilih"),
-  surat_akhir: Yup.object()
-    .shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    })
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
+  sampai_ayat: Yup.string()
     .nullable()
-    .required("wajib dipilih"),
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
+  total_halaman: Yup.string()
+    .nullable()
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
+  dari_surat: Yup.string()
+    .nullable()
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
+  sampai_surat: Yup.string()
+    .nullable()
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
   kehadiran: Yup.object().shape({
     id: Yup.string().nullable().required("wajib diisi"),
     alasan: Yup.mixed()
@@ -66,14 +103,15 @@ let AbsensiSchema = Yup.object().shape({
   absensi_kehadiran: Yup.array().of(personalSchema),
 });
 export default function AbsensiHalaqoh() {
-  let { kelas_id, mapel_id, tanggal } = useParams();
-
-  let [page, setPage] = React.useState(1);
-  let [pageSize, setPageSize] = React.useState(10);
+  let { tanggal } = useParams();
+  let { dataAlquran } = useList();
+  let { page, pageSize, setPage, setPageSize } = usePage();
   let [dariTanggal, setDariTanggal] = React.useState(tanggal);
   let [sampaiTanggal, setSampaiTanggal] = React.useState(tanggal);
   let [tanggalActive, setTanggalActive] = React.useState(tanggal);
- 
+
+  let [waktu, setWaktu] = React.useState("pagi");
+
   const [loading, setLoading] = React.useState(false);
 
   let queryClient = useQueryClient();
@@ -88,10 +126,11 @@ export default function AbsensiHalaqoh() {
   let parameter = {
     page,
     pageSize,
+    waktu: waktu,
     dariTanggal: tanggal,
     sampaiTanggal: tanggal,
   };
-  let { isLoading, isError, data, isFetching } = useQuery(
+  let { isLoading, data, isFetching } = useQuery(
     //query key
     ["absensi", parameter],
     //axios function,triggered when page/pageSize change
@@ -149,11 +188,33 @@ export default function AbsensiHalaqoh() {
     }
   };
   const onSubmit = async (values) => {
-    const result = await updateAbsensi(values);
-    queryClient.invalidateQueries("absensi");
-    queryClient.invalidateQueries("notifikasi");
+    try {
+      const response = await updateAbsensiHalaqoh(values);
+      queryClient.invalidateQueries("absensi");
+      queryClient.invalidateQueries("notifikasi");
 
-    return console.log("hasil", result);
+      return toast.success(response?.data?.msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      return toast.error("Ada Kesalahan", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
 
   //   console.log(initialState);
@@ -163,12 +224,10 @@ export default function AbsensiHalaqoh() {
     setSampaiTanggal(tanggal);
   }, [tanggal]);
 
-  console.log("datahalaqoh", initialState);
-
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
-      <div className="space-x-5 mt-5">
-        <section className="grid grid-cols-1 lg:grid-cols-4 gap-5">
+      <div className="space-x-5 mt-5  ov">
+        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
           <div className=" col-span-1 lg:col-span-2">
             <Form.Field
               control={Input}
@@ -188,7 +247,7 @@ export default function AbsensiHalaqoh() {
               content={"Filter"}
               type="button"
               fluid
-              icon={()=> <Icon name='filter'  />}
+              icon={() => <Icon name="filter" />}
               size="medium"
               color="teal"
               onClick={() => {
@@ -198,10 +257,10 @@ export default function AbsensiHalaqoh() {
           </div>
           <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
             <Button
-              content={"Buat Absensi Halaqoh"}
+              content={"Buat Absensi"}
               type="submit"
               fluid
-              icon={()=> <Icon name='add'  />}
+              icon={() => <Icon name="add" />}
               loading={loading}
               size="medium"
               color="linkedin"
@@ -209,9 +268,33 @@ export default function AbsensiHalaqoh() {
               onClick={creeteJadwal}
             />
           </div>
+          <div className="mt-5 space-x-5 lg:space-x-0 xl">
+            <Radio
+              readOnly={false}
+              name="waktu"
+              value={waktu}
+              error
+              checked={waktu === "pagi" ? true : false}
+              onChange={() => {
+                setWaktu("pagi");
+              }}
+              label="Halaqoh Pagi"
+            ></Radio>
+            <Radio
+              readOnly={false}
+              name="waktu"
+              value={waktu}
+              error
+              checked={waktu === "malam" ? true : false}
+              onChange={() => {
+                setWaktu("malam");
+              }}
+              label="Halaqoh Malam"
+            ></Radio>
+          </div>
         </section>
       </div>
-      <section className="mt-5" style={{ overflow: "auto" }} padded>
+      <section className="mt-5 h-full overflow-x-scroll overflow-y-hidden"  padded>
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -229,7 +312,12 @@ export default function AbsensiHalaqoh() {
             isSubmitting,
           }) => (
             <form onSubmit={handleSubmit}>
-              <Table padded striped size="smalll">
+              <h4 className="text-lg font-poopins">
+                Absensi untuk Halaqoh :{" "}
+                <span className="uppercase">{waktu}</span>
+              </h4>
+             <div>
+             <Table padded striped size="smalll">
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell>No</Table.HeaderCell>
@@ -256,48 +344,53 @@ export default function AbsensiHalaqoh() {
                         </Table.Cell>
                         <Table.Cell singleLine width={"sixteen"}>
                           <div className="space-y-5">
-                            <FormText>
-                              <ReactSelectAsync
-                                debounceTimeout={300}
-                                value={value?.surat_awal}
-                                loadOptions={listAlquranOptions}
-                                onChange={(value) => {
-                                  console.log(value);
+                            <div className="text-left">
+                              <Form.Field
+                                control={Select}
+                                disabled={value?.status_kehadiran !== 1}
+                                // value={absen?.nama_guru}
+                                options={getOptions(
+                                  dataAlquran?.data,
+                                  "nama_surat"
+                                )}
+                                onChange={(event, data) => {
+                                  console.log(data);
                                   setFieldValue(
-                                    `absensi_kehadiran[${index}]surat_awal`,
-                                    value
+                                    `absensi_kehadiran[${index}]dari_surat`,
+                                    data.value
                                   );
                                 }}
+                                placeholder="Dari Surat"
+                                search
+                                value={formatValue(value?.dari_surat)}
+                                clearable
                                 error={
                                   errors?.absensi_kehadiran?.[index]
-                                    ?.surat_awal &&
+                                    ?.dari_surat &&
                                   touched?.absensi_kehadiran?.[index]
-                                    ?.surat_awal
+                                    ?.dari_surat
                                 }
-                                placeholder="Pilih Surat"
-                                additional={{
-                                  page: 1,
-                                }}
                               />
-                              {errors?.absensi_kehadiran?.[index]?.surat_awal &&
+                              {errors?.absensi_kehadiran?.[index]?.dari_surat &&
                                 touched?.absensi_kehadiran?.[index]
-                                  ?.surat_awal && (
+                                  ?.dari_surat && (
                                   <ErrorMEssage>
                                     {
                                       errors?.absensi_kehadiran?.[index]
-                                        ?.surat_awal
+                                        ?.dari_surat
                                     }
                                   </ErrorMEssage>
                                 )}
-                            </FormText>
+                            </div>
                             <FormText>
                               <Input
+                               disabled={value?.status_kehadiran !== 1}
                                 id={`absensi_kehadiran[${index}]dari_ayat`}
                                 name={`absensi_kehadiran[${index}]dari_ayat`}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 type="number"
-                                value={value?.dari_ayat}
+                                value={formatValue(value?.dari_ayat)}
                                 placeholder="Dari Ayat"
                                 error={
                                   errors?.absensi_kehadiran?.[index]
@@ -321,49 +414,53 @@ export default function AbsensiHalaqoh() {
 
                         <Table.Cell width={10} singleLine>
                           <div className="space-y-5">
-                            <FormText>
-                              <ReactSelectAsync
-                                debounceTimeout={300}
-                                value={value?.surat_akhir}
-                                loadOptions={listAlquranOptions}
-                                onChange={(value) => {
-                                  console.log(value);
+                            <div className="text-left">
+                              <Form.Field
+                               disabled={value?.status_kehadiran !== 1}
+                                control={Select}
+                                // value={absen?.nama_guru}
+                                options={getOptions(
+                                  dataAlquran?.data,
+                                  "nama_surat"
+                                )}
+                                onChange={(event, data) => {
                                   setFieldValue(
-                                    `absensi_kehadiran[${index}]surat_akhir`,
-                                    value
+                                    `absensi_kehadiran[${index}]sampai_surat`,
+                                    data?.value
                                   );
                                 }}
+                                placeholder="Sampai Surat"
+                                search
+                                value={formatValue(value?.sampai_surat)}
+                                clearable
                                 error={
                                   errors?.absensi_kehadiran?.[index]
-                                    ?.surat_akhir &&
+                                    ?.sampai_surat &&
                                   touched?.absensi_kehadiran?.[index]
-                                    ?.surat_akhir
+                                    ?.sampai_surat
                                 }
-                                placeholder="Pilih Surat"
-                                additional={{
-                                  page: 1,
-                                }}
                               />
                               {errors?.absensi_kehadiran?.[index]
-                                ?.surat_akhir &&
+                                ?.sampai_surat &&
                                 touched?.absensi_kehadiran?.[index]
-                                  ?.surat_akhir && (
+                                  ?.sampai_surat && (
                                   <ErrorMEssage>
                                     {
                                       errors?.absensi_kehadiran?.[index]
-                                        ?.surat_akhir
+                                        ?.sampai_surat
                                     }
                                   </ErrorMEssage>
                                 )}
-                            </FormText>
+                            </div>
                             <FormText>
                               <Input
+                               disabled={value?.status_kehadiran !== 1}
                                 id={`absensi_kehadiran[${index}]sampai_ayat`}
                                 name={`absensi_kehadiran[${index}]sampai_ayat`}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 type="number"
-                                value={value?.sampai_ayat}
+                                value={ formatValue(value?.sampai_ayat)}
                                 placeholder="Sampai Ayat"
                                 error={
                                   errors?.absensi_kehadiran?.[index]
@@ -390,11 +487,13 @@ export default function AbsensiHalaqoh() {
                         <Table.Cell>
                           <FormText>
                             <Input
+                             disabled={value?.status_kehadiran !== 1}
                               id={`absensi_kehadiran[${index}]total_halaman`}
                               name={`absensi_kehadiran[${index}]total_halaman`}
                               onChange={handleChange}
                               onBlur={handleBlur}
-                              value={value?.total_halaman}
+                              placeholder="Total Halaman"
+                              value={ formatValue(value?.total_halaman)}
                               error={
                                 errors?.absensi_kehadiran?.[index]
                                   ?.total_halaman &&
@@ -422,12 +521,16 @@ export default function AbsensiHalaqoh() {
                               selection
                               search
                               options={izinOptions}
-                              id={`absensi_kehadiran[${index}]kehadiran.id`}
-                              name={`absensi_kehadiran[${index}]kehadiran.id`}
+                              id={`absensi_kehadiran[${index}]status_kehadiran`}
+                              name={`absensi_kehadiran[${index}]status_kehadiran`}
                               onChange={(e, data) => {
                                 setFieldValue(
-                                  `absensi_kehadiran[${index}]kehadiran.id`,
+                                  `absensi_kehadiran[${index}]status_kehadiran`,
                                   data.value
+                                );
+                                setFieldValue(
+                                  `absensi_kehadiran[${index}]kehadiran`,
+                                  data
                                 );
                               }}
                               error={
@@ -436,22 +539,25 @@ export default function AbsensiHalaqoh() {
                                 errors?.absensi_kehadiran?.[index]?.kehadiran
                                   ?.alasan
                               }
-                              value={value?.kehadiran?.id}
+                              value={formatValue(value?.status_kehadiran)}
                             />
+
+                            {console.log("ee", errors)}
 
                             {errors?.absensi_kehadiran?.[index]?.kehadiran
                               ?.alasan !== undefined && (
-                              <span className="text-xs font-bold text-red-500 italic">
+                              <ErrorMEssage>
                                 {
                                   errors?.absensi_kehadiran?.[index]?.kehadiran
                                     ?.alasan
                                 }
-                              </span>
+                              </ErrorMEssage>
                             )}
                           </div>
                         </Table.Cell>
                         <Table.Cell>
                           <TextArea
+                           disabled={value?.status_kehadiran !== 1}
                             rows={4}
                             id={`absensi_kehadiran[${index}]keterangan`}
                             name={`absensi_kehadiran[${index}]keterangan`}
@@ -459,7 +565,7 @@ export default function AbsensiHalaqoh() {
                             onBlur={handleBlur}
                             type="text"
                             placeholder="Keterangan"
-                            value={value?.keterangan}
+                            value={formatValue(value?.keterangan)}
                           />
                         </Table.Cell>
                       </Table.Row>
@@ -467,19 +573,18 @@ export default function AbsensiHalaqoh() {
                   </TableLoading>
                 </Table.Body>
               </Table>
-              <div className="mb-10">
-                {!isFetching && (
-                  <Button
-                    content={isSubmitting ? "Menyimpan" : "Simpan"}
-                    type="submit"
-                    fluid
-                    loading={isSubmitting}
-                    size="medium"
-                    color="teal"
-                    icon={()=> <Icon name='save'  />}
-                    disabled={isSubmitting}
-                  />
-                )}
+             </div>
+              <div className="mb-10 mt-5 w-full">
+                <Button
+                  content={isSubmitting ? "Menyimpan" : "Simpan"}
+                  type="submit"
+                  fluid
+                  loading={isSubmitting}
+                  size="medium"
+                  color="teal"
+                  icon={() => <Icon name="save" />}
+                  disabled={isSubmitting}
+                />
               </div>
             </form>
           )}

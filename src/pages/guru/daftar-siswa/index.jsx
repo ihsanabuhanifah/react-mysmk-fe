@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
-import { rekapAbsensi } from "../../../api/guru/absensi";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import { TableLoading, ViewButton } from "../../../components";
@@ -18,6 +18,7 @@ import { listSiswa } from "../../../api/guru/siswa";
 import useDebounce from "../../../hook/useDebounce";
 export default function DaftarSiswa() {
   let [visible, setVisible] = React.useState(false);
+  let navigate = useNavigate()
   let [keyword, setKeyword] = React.useState('');
   let debouncedKeyword = useDebounce(keyword, 500);
   let { page, pageSize, setPage, setPageSize } = usePage();
@@ -176,8 +177,10 @@ export default function DaftarSiswa() {
                   </Table.Cell>
                   <Table.Cell>
                    <div className="flex items-center space-x-2">
-                   <EditButton />
-                    <ViewButton/>
+                   <EditButton  />
+                    <ViewButton onClick={()=> {
+                        return navigate(`/guru/daftar-siswa/detail/${value?.siswa?.id}`)
+                    }}/>
                    </div>
                   </Table.Cell>
                 </Table.Row>

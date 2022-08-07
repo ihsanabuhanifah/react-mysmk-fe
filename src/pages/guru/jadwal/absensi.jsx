@@ -139,7 +139,6 @@ export default function Absensi() {
       });
     }
   };
- 
 
   React.useEffect(() => {
     setDariTanggal(tanggal);
@@ -245,8 +244,6 @@ export default function Absensi() {
                     {values?.agenda_kelas?.map((value, index) => (
                       <React.Fragment key={index}>
                         <div>
-
-                         
                           <Form.Field
                             control={Input}
                             label={`Jam ke-${value?.jam_ke + index}`}
@@ -259,10 +256,9 @@ export default function Absensi() {
                             fluid
                             type="text"
                             error={
-                              errors?.agenda_kelas?.[index]
-                                ?.materi !== undefined &&
-                              errors?.agenda_kelas?.[index]
-                                ?.materi
+                              errors?.agenda_kelas?.[index]?.materi !==
+                                undefined &&
+                              errors?.agenda_kelas?.[index]?.materi
                             }
                           />
                         </div>
@@ -376,7 +372,11 @@ export default function Absensi() {
                                 onBlur={handleBlur}
                                 type="text"
                                 placeholder="Keterangan"
-                                value={value?.keterangan}
+                                value={
+                                  value?.keterangan === null
+                                    ? ""
+                                    : value?.keterangan
+                                }
                               />
                             </Table.Cell>
                             <Table.Cell>Semester {value?.semester}</Table.Cell>
@@ -388,7 +388,11 @@ export default function Absensi() {
                     </TableLoading>
                   </Table.Body>
                 </Table>
-               {errors.agenda_kelas !== undefined &&  <Message color="red">Lengkapi Semua Form untuk menyimpan</Message>}
+                {errors.agenda_kelas !== undefined && (
+                  <Message color="red">
+                    Lengkapi Semua Form untuk menyimpan
+                  </Message>
+                )}
                 <div className="mb-10">
                   {!isFetching &&
                     (values?.absensi_kehadiran.length === 0 ? (

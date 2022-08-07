@@ -1,7 +1,15 @@
+const formatValue = (value) => {
+  if (value === null) {
+    return "";
+  }
+  if (value === undefined) {
+    return "";
+  }
+  return value;
+};
+
 const getOptions = (array, text) => {
   const options = [];
-
-  
 
   array?.map((data, index) => {
     let option = {
@@ -17,8 +25,6 @@ const getOptions = (array, text) => {
 
 const getOptionsText = (array, text) => {
   const options = [];
-
-  
 
   array?.map((data, index) => {
     let option = {
@@ -94,5 +100,6 @@ export {
   statusApproval,
   formatAlasanTidakShoalt,
   formatWaktuSholat,
-  getOptionsText
+  getOptionsText,
+  formatValue
 };

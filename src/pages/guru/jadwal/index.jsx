@@ -118,170 +118,165 @@ export default function Jadwal() {
 
   return (
     <LayoutPage title="jadwal">
-     <div className="space-y-5 mt-5">
-    
-      <section className="" style={{  maxWidth: "100%" }} padded>
-        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
-        <div className="col-span-2">
-        <Form>
-          <Form.Field
-            control={Select}
-            options={dayOptions}
-            // label={{
-            //   children: "Hari",
-            //   htmlFor: "hari",
-            //   name: "hari",
-            // }}
-            name="hari"
-            id="hari"
-            onChange={(event, data) => {
-              setHari(data.value);
-            }}
-            value={hari}
-            placeholder="Pilih Hari"
-            search
-            searchInput={{ id: "hari", name: "hari" }}
-          />
-        </Form>
-      </div>
-          <div className=" col-start-1 lg:col-start-3 2xl:col-start-4">
-          {absensi?.absensi?.length === 0 && (
+      <div className="space-y-5 mt-5">
+        <section className="" style={{ maxWidth: "100%" }} padded>
+          <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
+            <div className="col-span-2">
+              <Form>
+                <Form.Field
+                  control={Select}
+                  options={dayOptions}
+                  // label={{
+                  //   children: "Hari",
+                  //   htmlFor: "hari",
+                  //   name: "hari",
+                  // }}
+                  name="hari"
+                  id="hari"
+                  onChange={(event, data) => {
+                    setHari(data.value);
+                  }}
+                  value={hari}
+                  placeholder="Pilih Hari"
+                  search
+                  searchInput={{ id: "hari", name: "hari" }}
+                />
+              </Form>
+            </div>
+            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+              {absensi?.absensi?.length === 0 && (
+                <Button
+                  content={"Buat Absensi"}
+                  type="submit"
+                  fluid
+                  icon={() => <Icon name="add" />}
+                  loading={loading}
+                  size="medium"
+                  color="linkedin"
+                  disabled={loading}
+                  onClick={creeteJadwal}
+                />
+              )}
+            </div>
+            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
               <Button
-                content={"Buat Absensi"}
-                type="submit"
+                content={"Rekap Absensi"}
+                type="button"
                 fluid
-                icon={()=> <Icon name='add'/>}
-                loading={loading}
+                icon={() => <Icon name="newspaper outline" />}
                 size="medium"
-                color="linkedin"
-                disabled={loading}
-                onClick={creeteJadwal}
+                color="teal"
+                onClick={() => {
+                  return navigate("/guru/absensi/rekap");
+                }}
               />
-            )}
-          </div>
-          <div className="col-start-1  lg:col-start-4 2xl:col-start-5">
-           
-
-            <Button
-              content={"Rekap Absensi"}
-              type="button"
-              fluid
-              icon={()=> <Icon name='newspaper outline'/>}
-              size="medium"
-              color="teal"
-              onClick={() => {
-                return navigate("/guru/absensi/rekap");
-              }}
-            />
-          </div>
-          <div className="col-start-1  lg:col-start-5 2xl:col-start-6">
-           
-
-            <Button
-              content={"Rekap Agenda"}
-              type="button"
-              fluid
-              icon={()=> <Icon name='file alternate outline'/>}
-              size="medium"
-              color="teal"
-              onClick={() => {
-                return navigate("/guru/agenda/rekap");
-              }}
-            />
-          </div>
+            </div>
+            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+              <Button
+                content={"Rekap Agenda"}
+                type="button"
+                fluid
+                icon={() => <Icon name="file alternate outline" />}
+                size="medium"
+                color="teal"
+                onClick={() => {
+                  return navigate("/guru/agenda/rekap");
+                }}
+              />
+            </div>
+          </section>
+          <Table celled selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>No</Table.HeaderCell>
+                <Table.HeaderCell>Hari</Table.HeaderCell>
+                <Table.HeaderCell>Kelas</Table.HeaderCell>
+                <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                <Table.HeaderCell>Jam_ke</Table.HeaderCell>
+                <Table.HeaderCell>Jumlah Jam</Table.HeaderCell>
+                <Table.HeaderCell>Semester</Table.HeaderCell>
+                <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+                <Table.HeaderCell>Aksi</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <TableLoading
+                count={9}
+                isLoading={isLoading}
+                data={data?.data?.rows}
+                messageEmpty={"Tidak Ada Jadwal Pelajaran"}
+              >
+                {data?.data?.rows?.map((value, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>
+                      <span className="capitalize">{value?.hari}</span>
+                    </Table.Cell>
+                    <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                    <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                    <Table.Cell>{value?.jam_ke}</Table.Cell>
+                    <Table.Cell>{value?.jumlah_jam}</Table.Cell>
+                    <Table.Cell>Semester {value?.semester}</Table.Cell>
+                    <Table.Cell>
+                      {value?.tahun_ajaran?.nama_tahun_ajaran}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Button
+                        content={"Absensi"}
+                        type="button"
+                        fluid
+                        size="medium"
+                        color="teal"
+                        onClick={() => {
+                          return navigate(
+                            `/guru/absensi/${value?.kelas?.id}/${
+                              value?.mapel?.id
+                            }/${formatTahun(date)}`
+                          );
+                        }}
+                      />
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </TableLoading>
+            </Table.Body>
+          </Table>
         </section>
-        <Table celled selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>No</Table.HeaderCell>
-              <Table.HeaderCell>Hari</Table.HeaderCell>
-              <Table.HeaderCell>Kelas</Table.HeaderCell>
-              <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell>Jam_ke</Table.HeaderCell>
-              <Table.HeaderCell>Jumlah Jam</Table.HeaderCell>
-              <Table.HeaderCell>Semester</Table.HeaderCell>
-              <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-              <Table.HeaderCell>Aksi</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <TableLoading
-              count={9}
-              isLoading={isLoading}
-              data={data?.data?.rows}
-              messageEmpty={"Tidak Ada Jadwal Pelajaran"}
-            >
-              {data?.data?.rows?.map((value, index) => (
-                <Table.Row key={index}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>
-                    <span className="capitalize">{value?.hari}</span>
-                  </Table.Cell>
-                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                  <Table.Cell>{value?.jam_ke}</Table.Cell>
-                  <Table.Cell>{value?.jumlah_jam}</Table.Cell>
-                  <Table.Cell>Semester {value?.semester}</Table.Cell>
-                  <Table.Cell>
-                    {value?.tahun_ajaran?.nama_tahun_ajaran}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Button
-                      content={"Absensi"}
-                      type="button"
-                      fluid
-                      size="medium"
-                      color="teal"
-                      onClick={() => {
-                        return navigate(
-                          `/guru/jadwal/absensi/${value?.kelas?.id}/${
-                            value?.mapel?.id
-                          }/${formatTahun(date)}`
-                        );
-                      }}
-                    />
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </TableLoading>
-          </Table.Body>
-        </Table>
-      </section>
 
-      <section>
-        <h3 className="text-2xl font-poppins">List Guru Belum Absensi</h3>
-        <Table celled selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>No</Table.HeaderCell>
-              <Table.HeaderCell>Tanggal</Table.HeaderCell>
-              <Table.HeaderCell>Nama Guru</Table.HeaderCell>
-              <Table.HeaderCell>Kelas</Table.HeaderCell>
+        <section>
+          <h3 className="text-2xl font-poppins">List Guru Belum Absensi</h3>
+          <Table celled selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>No</Table.HeaderCell>
+                <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                <Table.HeaderCell>Nama Guru</Table.HeaderCell>
+                <Table.HeaderCell>Kelas</Table.HeaderCell>
 
-              <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            <TableLoading
-              count={8}
-              isLoading={isLoadingBelumAbsen}
-              data={dataBelumAbsen?.data}
-              messageEmpty={"Tidak Ada Guru Belum Absen"}
-            >
-              {dataBelumAbsen?.data?.map((value, index) => (
-                <Table.Row key={index}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
-                  <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
-                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                </Table.Row>
-              ))}
-            </TableLoading>
-          </Table.Body>
-        </Table>
-      </section>
-     </div>
+                <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <TableLoading
+                count={8}
+                isLoading={isLoadingBelumAbsen}
+                data={dataBelumAbsen?.data}
+                messageEmpty={"Tidak Ada Guru Belum Absen"}
+              >
+                {dataBelumAbsen?.data?.map((value, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
+                    <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                    <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                    <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                  </Table.Row>
+                ))}
+              </TableLoading>
+            </Table.Body>
+          </Table>
+        </section>
+      </div>
     </LayoutPage>
   );
 }

@@ -20,7 +20,8 @@ import {
   LihatLaporanGuruPiket,
   RekapAbsensi,
   DaftarSiswa,
-  Agenda
+  Agenda,
+  DetailSiswa
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -59,7 +60,7 @@ function App() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
-
+          <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
           <Route path="absensi" element={<Jadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
@@ -79,9 +80,10 @@ function App() {
             element={<LihatLaporanGuruPiket />}
           />
           <Route
-            path="jadwal/absensi/:kelas_id/:mapel_id/:tanggal"
+            path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
+          
         </Route>
         <Route
           path="/siswa"

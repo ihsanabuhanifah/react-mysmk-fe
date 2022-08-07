@@ -35,7 +35,7 @@ console.log('jumlah', jumlah);
                   onClick={() => {
                     setNotif(false);
                     return navigate(
-                      `/guru/jadwal/absensi/${value?.kelas?.id}/${
+                      `/guru/absensi/${value?.kelas?.id}/${
                         value?.mapel?.id
                       }/${dayjs(value?.tanggal).format("YYYY-MM-DD")}`
                     );

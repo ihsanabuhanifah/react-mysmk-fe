@@ -10,3 +10,12 @@ export function notifikasiHalaqoh() {
   syncToken()
   return axios.get("/guru/halaqoh/notifikasi");
 }
+
+export async function updateAbsensiHalaqoh(values) {
+  syncToken();
+  
+
+ 
+
+  return axios.put("/guru/halaqoh/update", values);
+}
