@@ -13,7 +13,7 @@ export default function Layout({ children }) {
           }}
           className=" col-span-1 lg:col-span-4  h-full w-full bg-green-500 "
         ></div>
-        <div className=" col-span-7 lg:col-span-4 h-full w-full flex items-center justify-center ">
+        <div className=" col-span-7 lg:col-span-4 h-full w-full flex items-center justify-center  ">
           <div className="w-[80%]">{children}</div>
         </div>
       </div>

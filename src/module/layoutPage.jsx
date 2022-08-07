@@ -13,7 +13,7 @@ export default function LayoutPage({ title, children }) {
         </div>
           
       
-        <div id="scrollbar" className="h-[95%] w-full px-5 xl:overflow-hidden mt-2 pr-0   xl:pr-2">{children}</div>
+        <div id="scrollbar" className="h-[95%] w-full px-5  mt-2 pr-0  xl:overflow-auto  xl:pr-2">{children}</div>
       </section>
     </React.Fragment>
   );

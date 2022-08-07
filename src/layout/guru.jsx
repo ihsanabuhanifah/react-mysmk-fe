@@ -113,7 +113,7 @@ export default function Guru() {
               {jumlah > 0 && (
                 <div
                   style={{ fontSize: "8px" }}
-                  className="w-4 h-4 pt-1   absolute z-10 top-2 right-2 bg-red-400 text-white rounded-full"
+                  className="w-4 h-4 pt-1   absolute z-10 top-1 right-2 bg-red-400 text-white rounded-full"
                 >
                   {jumlah}
                 </div>
