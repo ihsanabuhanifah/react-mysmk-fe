@@ -6,7 +6,8 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
-  baseURL: "https://mysmk.herokuapp.com",
+  baseURL: "https://mysmk-be.smkmadinatulquran.sch.id/",
+  // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
   // baseURL: "http://localhost:8081",
   timeout: 1000 * 60 * 3,
