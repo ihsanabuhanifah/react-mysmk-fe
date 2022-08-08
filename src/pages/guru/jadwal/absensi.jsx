@@ -229,7 +229,7 @@ export default function Absensi() {
                       color="teal"
                       onClick={() => {
                         return navigate(
-                          `/guru/jadwal/absensi/${kelas}/${mapel}/${tanggalActive}`
+                          `/guru/absensi/${kelas}/${mapel}/${tanggalActive}`
                         );
                       }}
                     />

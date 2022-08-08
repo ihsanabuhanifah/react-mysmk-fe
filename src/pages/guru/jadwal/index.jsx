@@ -10,12 +10,12 @@ import { absensiManualCreate, listAbsensi } from "../../../api/guru/absensi";
 import { formatDate, formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
-import useList from "../../../hook/useList";
+
 import { formatDay } from "../../../utils/waktu";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
-  let { roles } = useList();
+ 
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   const parameter = {
