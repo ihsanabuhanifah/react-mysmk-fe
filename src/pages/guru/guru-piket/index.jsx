@@ -196,6 +196,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
 
                   <Table.Cell>
                     {status === 1 ? (
+                     <div className={`grid   grid-cols-1  lg:grid-cols-2 xl:grid-cols-2  2xl:grid-cols-2 gap-5`}>
                       <Button
                         content={"Lihat Laporan"}
                         type="button"
@@ -211,6 +212,21 @@ let {page, pageSize, setPage, setPageSize} = usePage()
                           );
                         }}
                       />
+                      <Button
+                      content={"Ubah Laporan"}
+                      type="button"
+                      fluid
+                      disabled={value?.teacher_id !== identitas?.teacher_id}
+                      size="medium"
+                      color="teal"
+                      onClick={() => {
+                        return navigate(
+                          `/guru/laporan-guru-piket/buat-laporan/${
+                            value.id
+                          }/${formatTahun(value?.tanggal)}`
+                        );
+                      }}
+                    /></div>
                     ) : (
                       <Button
                         content={"Buat Laporan"}
@@ -229,6 +245,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
                       />
                     )}
                   </Table.Cell>
+                  
                 </Table.Row>
               ))}
             </TableLoading>
