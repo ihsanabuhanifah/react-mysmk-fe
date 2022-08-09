@@ -1,4 +1,4 @@
-import { formatHari, formatTahun, handleViewNull, formatDate } from "./waktu";
+import { formatHari, formatTahun, handleViewNull, formatDate, formatDay } from "./waktu";
 import { statusApproval, formatValue } from "./format";
 import { encodeURlFormat } from "./query";
 export {
@@ -9,4 +9,5 @@ export {
   statusApproval,
   encodeURlFormat,
   formatValue,
+  formatDay
 };

@@ -21,7 +21,8 @@ import {
   RekapAbsensi,
   DaftarSiswa,
   Agenda,
-  DetailSiswa
+  DetailSiswa,
+  PengampuHalaqoh
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -67,10 +68,11 @@ function App() {
           <Route path="pelanggaran" element={<Pelanggaran />} />
           <Route path="prestasi" element={<Prestasi />} />
           <Route path="halaqoh/absensi/:tanggal" element={<AbsensiHalaqoh />} />
+          <Route path="pengampu/halaqoh/absensi" element={<PengampuHalaqoh />} />
           <Route path="sholat" element={<Sholat />} />
           <Route path="laporan-guru-piket" element={<ListGuruPiketToday />} />
-          <Route path="absensi/rekap" element={<RekapAbsensi />} />
-          <Route path="agenda/rekap" element={<Agenda />} />
+          <Route path="absensi/rekap-kehadiran" element={<RekapAbsensi />} />
+          <Route path="absensi/rekap-agenda" element={<Agenda />} />
           <Route
             path="laporan-guru-piket/buat-laporan/:id/:tanggal"
             element={<LaporanGuruPiket />}

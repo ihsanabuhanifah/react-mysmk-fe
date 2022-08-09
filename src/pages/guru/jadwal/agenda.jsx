@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
-import { formatDate } from "../../../utils";
+import { formatDate, formatDay } from "../../../utils";
 import PaginationTable from "../../../components/PaginationTable";
 import FilterRekap from "./filter";
 import { encodeURlFormat } from "../../../utils";
@@ -96,7 +96,7 @@ export default function RekapAbsensi() {
               }}
             />
           </div>
-          {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+          <div className="col-span-6 lg:col-span-1 xl:col-span-1">
             <Button
               content={"Download"}
               type="button"
@@ -109,7 +109,7 @@ export default function RekapAbsensi() {
                 handleDownload(params);
               }}
             />
-          </div> */}
+          </div>
         </section>
         <Table celled selectable>
           <Table.Header>
@@ -140,7 +140,7 @@ export default function RekapAbsensi() {
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>
                     <span className="capitalize">
-                      {formatDate(value?.tanggal)}
+                      {formatDay(value?.tanggal)}
                     </span>
                   </Table.Cell>
                 

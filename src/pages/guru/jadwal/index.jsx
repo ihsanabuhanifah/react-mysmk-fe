@@ -144,7 +144,7 @@ export default function Jadwal() {
               </Form>
             </div>
             <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
-              {absensi?.absensi?.length === 0 && (
+            
                 <Button
                   content={"Buat Absensi"}
                   type="submit"
@@ -156,7 +156,7 @@ export default function Jadwal() {
                   disabled={loading}
                   onClick={creeteJadwal}
                 />
-              )}
+            
             </div>
             <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
               <Button
@@ -167,7 +167,7 @@ export default function Jadwal() {
                 size="medium"
                 color="teal"
                 onClick={() => {
-                  return navigate("/guru/absensi/rekap");
+                  return navigate("/guru/absensi/rekap-kehadiran");
                 }}
               />
             </div>
@@ -180,7 +180,7 @@ export default function Jadwal() {
                 size="medium"
                 color="teal"
                 onClick={() => {
-                  return navigate("/guru/agenda/rekap");
+                  return navigate("/guru/absensi/rekap-agenda");
                 }}
               />
             </div>

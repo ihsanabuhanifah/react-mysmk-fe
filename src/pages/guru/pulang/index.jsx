@@ -5,11 +5,8 @@ import {
   Dropdown,
   Button,
   Input,
-  Segment,
   Form,
   TextArea,
-  Menu,
-  Icon,
 } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import {
@@ -17,11 +14,11 @@ import {
   responsePulang,
   laporanPulang,
 } from "../../../api/guru/pulangDanKunjungan";
-import { TableLoading, ModalFilter } from "../../../components";
+import { TableLoading } from "../../../components";
 import { handleViewNull, formatDate, statusApproval } from "../../../utils";
 import { Formik } from "formik";
-import { ToastContainer, toast } from "react-toastify";
-import { selisihHari } from "../../../utils/waktu";
+import {  toast } from "react-toastify";
+import { formatDay, selisihHari } from "../../../utils/waktu";
 import * as Yup from "yup";
 import FilterPerizinanPulang from "./filterPulang";
 
@@ -184,14 +181,12 @@ export default function Pulang() {
                 <Table celled padded>
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell >No</Table.HeaderCell>
+                      <Table.HeaderCell>No</Table.HeaderCell>
                       <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                       <Table.HeaderCell>Pulang Dari</Table.HeaderCell>
                       <Table.HeaderCell>Pulang Sampai</Table.HeaderCell>
                       <Table.HeaderCell>Kepentingan</Table.HeaderCell>
-                      <Table.HeaderCell >
-                        Status Approval
-                      </Table.HeaderCell>
+                      <Table.HeaderCell>Status Approval</Table.HeaderCell>
                       <Table.HeaderCell width={16} content singleLine={approve}>
                         Alasan Ditolak
                       </Table.HeaderCell>
@@ -217,19 +212,15 @@ export default function Pulang() {
                     >
                       {values?.map((value, index) => (
                         <Table.Row key={index}>
-                          <Table.Cell >
-                            {index + 1}
-                          </Table.Cell>
+                          <Table.Cell>{index + 1}</Table.Cell>
                           <Table.Cell>
                             <span className="capitalize">
                               {handleViewNull(value?.siswa?.nama_siswa)}
                             </span>
                           </Table.Cell>
+                          <Table.Cell>{formatDay(value?.izin_dari)}</Table.Cell>
                           <Table.Cell>
-                            {formatDate(value?.izin_dari)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {formatDate(value?.izin_sampai)}
+                            {formatDay(value?.izin_sampai)}
                           </Table.Cell>
                           <Table.Cell textAlign="left">
                             {handleViewNull(value?.kepentingan)}
@@ -391,7 +382,6 @@ export default function Pulang() {
                       ))}
                     </TableLoading>
                   </Table.Body>
-                 
                 </Table>
               </div>
             </section>

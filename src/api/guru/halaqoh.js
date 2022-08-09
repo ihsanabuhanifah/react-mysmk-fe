@@ -2,20 +2,23 @@ import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 
 export function listHalaqoh(params) {
-  syncToken()
+  syncToken();
   return axios.get("guru/halaqoh/list", { params });
 }
 
 export function notifikasiHalaqoh() {
-  syncToken()
+  syncToken();
   return axios.get("/guru/halaqoh/notifikasi");
 }
 
 export async function updateAbsensiHalaqoh(values) {
   syncToken();
-  
-
- 
 
   return axios.put("/guru/halaqoh/update", values);
+}
+
+
+export function listAbsenPengampu(params) {
+  syncToken();
+  return axios.get("/guru/halaqoh/pengampu/list", {params});
 }

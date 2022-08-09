@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
 
 import { listHalaqoh, updateAbsensiHalaqoh } from "../../../api/guru/halaqoh";
-import { listAlquranOptions } from "../../../api/list";
+
 import * as Yup from "yup";
 import {
   Button,
@@ -23,7 +23,7 @@ import LayoutPage from "../../../module/layoutPage";
 import { izinOptions } from "../../../utils/options";
 import { formatValue, getOptions } from "../../../utils/format";
 import {
-  ReactSelectAsync,
+  
   ErrorMEssage,
   FormText,
   TableLoading,
@@ -322,10 +322,11 @@ export default function AbsensiHalaqoh() {
                   <Table.Row>
                     <Table.HeaderCell>No</Table.HeaderCell>
                     <Table.HeaderCell singleLine>Nama</Table.HeaderCell>
+                    <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
                     <Table.HeaderCell singleLine> Dari surat</Table.HeaderCell>
                     <Table.HeaderCell singleLine>Sampai Surat</Table.HeaderCell>
                     <Table.HeaderCell>Total Halaman</Table.HeaderCell>
-                    <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
+                   
                     <Table.HeaderCell>Keterangan</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -341,6 +342,46 @@ export default function AbsensiHalaqoh() {
                         <Table.Cell>{index + 1}</Table.Cell>
                         <Table.Cell singleLine>
                           {value?.siswa?.nama_siswa}
+                        </Table.Cell>
+                        <Table.Cell>
+                          <div className="flex flex-col">
+                            <Dropdown
+                              selection
+                              search
+                              options={izinOptions}
+                              id={`absensi_kehadiran[${index}]status_kehadiran`}
+                              name={`absensi_kehadiran[${index}]status_kehadiran`}
+                              onChange={(e, data) => {
+                                setFieldValue(
+                                  `absensi_kehadiran[${index}]status_kehadiran`,
+                                  data.value
+                                );
+                                setFieldValue(
+                                  `absensi_kehadiran[${index}]kehadiran`,
+                                  data
+                                );
+                              }}
+                              error={
+                                errors?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan !== undefined &&
+                                errors?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan
+                              }
+                              value={formatValue(value?.status_kehadiran)}
+                            />
+
+                            {console.log("ee", errors)}
+
+                            {errors?.absensi_kehadiran?.[index]?.kehadiran
+                              ?.alasan !== undefined && (
+                              <ErrorMEssage>
+                                {
+                                  errors?.absensi_kehadiran?.[index]?.kehadiran
+                                    ?.alasan
+                                }
+                              </ErrorMEssage>
+                            )}
+                          </div>
                         </Table.Cell>
                         <Table.Cell singleLine width={"sixteen"}>
                           <div className="space-y-5">
@@ -515,46 +556,7 @@ export default function AbsensiHalaqoh() {
                           </FormText>
                         </Table.Cell>
 
-                        <Table.Cell>
-                          <div className="flex flex-col">
-                            <Dropdown
-                              selection
-                              search
-                              options={izinOptions}
-                              id={`absensi_kehadiran[${index}]status_kehadiran`}
-                              name={`absensi_kehadiran[${index}]status_kehadiran`}
-                              onChange={(e, data) => {
-                                setFieldValue(
-                                  `absensi_kehadiran[${index}]status_kehadiran`,
-                                  data.value
-                                );
-                                setFieldValue(
-                                  `absensi_kehadiran[${index}]kehadiran`,
-                                  data
-                                );
-                              }}
-                              error={
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan !== undefined &&
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan
-                              }
-                              value={formatValue(value?.status_kehadiran)}
-                            />
-
-                            {console.log("ee", errors)}
-
-                            {errors?.absensi_kehadiran?.[index]?.kehadiran
-                              ?.alasan !== undefined && (
-                              <ErrorMEssage>
-                                {
-                                  errors?.absensi_kehadiran?.[index]?.kehadiran
-                                    ?.alasan
-                                }
-                              </ErrorMEssage>
-                            )}
-                          </div>
-                        </Table.Cell>
+                       
                         <Table.Cell>
                           <TextArea
                            disabled={value?.status_kehadiran !== 1}

@@ -13,9 +13,20 @@ import {
 
 import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
+import useList from "../../hook/useList";
+
+export function checkRole(data, nama_role) {
+  let roles = data?.some((item) => {
+    return item.role?.role_name.toLowerCase() === nama_role;
+  });
+  return roles;
+}
 
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
+  let { roles } = useList();
+
+  console.log(roles);
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -87,13 +98,26 @@ export default function SidebarGuru({ setSidebar }) {
           logo={
             <MdOutlineLibraryBooks
               className={`h-8 w-8 ${
-                url === `halaqoh`
-                  ? "text-white-400"
-                  : "text-gray-600"
+                url === `halaqoh` ? "text-white-400" : "text-gray-600"
               }`}
             />
           }
         />
+        {checkRole(roles, "kesantrian") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to={`pengampu/halaqoh/absensi`}
+            path={"pengampu"}
+            title={["Absensi Pengampu"]}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === `pengampu` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
@@ -179,7 +203,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-         <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="daftar-siswa"
           path="daftar-siswa"
@@ -187,9 +211,7 @@ export default function SidebarGuru({ setSidebar }) {
           logo={
             <MdOutlineLibraryBooks
               className={`h-8 w-8 ${
-                url === "daftar-siswa"
-                  ? "text-white-400"
-                  : "text-gray-600"
+                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
               }`}
             />
           }
@@ -239,7 +261,6 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
     >
       <div className="w-8 h-8 ">{logo}</div>
       <p
-    
         className={`ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}
          `}
@@ -255,7 +276,10 @@ function LogoutButton({ to, title, logo, onClick }) {
   let url = pathname.split("/")[2];
 
   return (
-    <button onClick={onClick} className="flex items-center font-extrabold  h-10  pl-2 ">
+    <button
+      onClick={onClick}
+      className="flex items-center font-extrabold  h-10  pl-2 "
+    >
       <div className="w-8 h-8 ">{logo}</div>
       <p
         className={`font-extrabold ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left ${

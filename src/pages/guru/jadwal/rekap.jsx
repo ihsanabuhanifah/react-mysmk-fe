@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
-import { formatDate } from "../../../utils";
+import { formatDay } from "../../../utils";
 import PaginationTable from "../../../components/PaginationTable";
 import FilterRekap from "./filter";
 import { encodeURlFormat } from "../../../utils";
@@ -15,8 +15,9 @@ import { downloadRekapAbsensi } from "../../../api/guru/absensi";
 import useDownload from "../../../hook/useDownload";
 export default function RekapAbsensi() {
   let [visible, setVisible] = React.useState(false);
-  let { page, pageSize, setPage, setPageSize } = usePage();
   const [filter, setFilter] = React.useState({});
+  let { page, pageSize, setPage, setPageSize } = usePage();
+ 
   const params = {
     page,
     pageSize,
@@ -147,7 +148,7 @@ export default function RekapAbsensi() {
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>
                     <span className="capitalize">
-                      {formatDate(value?.tanggal)}
+                      {formatDay(value?.tanggal)}
                     </span>
                   </Table.Cell>
                   <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
