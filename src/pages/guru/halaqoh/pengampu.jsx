@@ -26,7 +26,7 @@ import { formatHari } from "../../../utils";
 
 import { toast } from "react-toastify";
 import FilterRekap from "./filter";
-
+import { encodeURlFormat } from "../../../utils";
 import { formatDay, handleViewNull } from "../../../utils/waktu";
 import {
   listAbsenPengampu,
@@ -96,6 +96,7 @@ export default function PengampuHalaqoh() {
     pageSize,
     waktu,
     ...filter,
+    nama_guru: encodeURlFormat(filter?.nama_guru),
   };
   let { data, isLoading } = useQuery(
     //query key
@@ -284,6 +285,7 @@ export default function PengampuHalaqoh() {
                                 <Dropdown
                                   selection
                                   search
+                                  className="border-red-500"
                                   options={izinOptions}
                                   id={`rows[${index}]status_kehadiran`}
                                   name={`rows[${index}]status_kehadiran`}
@@ -329,6 +331,7 @@ export default function PengampuHalaqoh() {
                             ) : (
                               <>
                                 <TextArea
+                                  className="border-red-500"
                                   id={`rows[${index}]kehadiran`}
                                   name={`rows[${index}]kehadiran`}
                                   value={formatValue(value.keterangan)}

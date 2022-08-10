@@ -24,8 +24,7 @@ export default function Jadwal() {
     }),
   };
 
-  let [dariTanggal] = React.useState(formatTahun(date));
-  let [sampaiTanggal] = React.useState(formatTahun(date));
+ 
   let { data, isLoading } = useQuery(
     //query key
     ["jadwal", parameter],
@@ -64,21 +63,8 @@ export default function Jadwal() {
   ];
 
   const [loading, setLoading] = React.useState(false);
-  let params = {
-    dariTanggal,
-    sampaiTanggal,
-  };
-  let { data: absensi } = useQuery(
-    //query key
-    ["absensi", params],
-    //axios function,triggered when page/pageSize change
-    () => listAbsensi(params),
-    //configuration
-    {
-      keepPreviousData: true,
-      select: (response) => response.data,
-    }
-  );
+  
+ 
 
   const creeteJadwal = async () => {
     setLoading(true);
@@ -86,10 +72,11 @@ export default function Jadwal() {
       const response = await absensiManualCreate();
       // await halaqohManualCreate();
       setLoading(false);
-      queryClient.invalidateQueries("jadwal");
+      
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
-      queryClient.invalidateQueries("absensi");
+      queryClient.invalidateQueries("belum_absensi");
       queryClient.invalidateQueries("notifikasi_absensi_kelas");
+  
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -222,6 +209,7 @@ export default function Jadwal() {
                     </Table.Cell>
                     <Table.Cell>
                       <Button
+                       icon={() => <Icon name="edit" />}
                         content={"Absensi"}
                         type="button"
                         fluid

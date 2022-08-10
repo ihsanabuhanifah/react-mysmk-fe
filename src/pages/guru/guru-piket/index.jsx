@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, section } from "semantic-ui-react";
+import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../../components";
 
@@ -10,7 +10,7 @@ import {
   listLaporanGuruPiket,
 } from "../../../api/guru/laporan";
 
-import { formatDate, formatHari, formatTahun } from "../../../utils";
+import { formatHari, formatTahun } from "../../../utils";
 import useList from "../../../hook/useList";
 import usePage from "../../../hook/usePage";
 import {PaginationTable} from "../../../components";
@@ -201,6 +201,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
                         content={"Lihat Laporan"}
                         type="button"
                         fluid
+                        icon={() => <Icon name="eye" />}
                         // disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
                         color="facebook"
@@ -216,6 +217,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
                       content={"Ubah Laporan"}
                       type="button"
                       fluid
+                      icon={() => <Icon name="edit" />}
                       disabled={value?.teacher_id !== identitas?.teacher_id}
                       size="medium"
                       color="teal"
@@ -232,6 +234,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
                         content={"Buat Laporan"}
                         type="button"
                         fluid
+                        icon={() => <Icon name="edit" />}
                         disabled={value?.teacher_id !== identitas?.teacher_id}
                         size="medium"
                         color="teal"

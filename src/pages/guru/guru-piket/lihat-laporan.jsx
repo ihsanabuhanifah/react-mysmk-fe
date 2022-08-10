@@ -3,14 +3,14 @@ import LayoutPage from "../../../module/layoutPage";
 import { useParams } from "react-router-dom";
 
 import { Formik } from "formik";
-import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
-import { getOptionsText } from "../../../utils/format";
+import { formatValue, getOptionsText } from "../../../utils/format";
 import { DeleteButton } from "../../../components";
-import { Select, Form, Segment, Radio, TextArea } from "semantic-ui-react";
+import { Select, Form, Button, Radio, TextArea, Icon, Message } from "semantic-ui-react";
 import { izinGuruOptions } from "../../../utils/options";
-
+import { formatTahun } from "../../../utils";
 import {
   postLaporanGuruPiket,
   getDetailLaporanGuruPiket,
@@ -19,6 +19,7 @@ import useList from "../../../hook/useList";
 
 export default function LihatLaporanGuruPiket() {
   let { tanggal, id } = useParams();
+  const navigate = useNavigate();
   const [initialState, setInitialState] = React.useState({
     id: id,
     tanggal: tanggal,
@@ -55,9 +56,7 @@ export default function LihatLaporanGuruPiket() {
     }
   );
 
-  console.log(data);
   const onSubmit = async (values) => {
-    console.log("values", values);
     try {
       const response = await postLaporanGuruPiket(values);
 
@@ -101,6 +100,34 @@ export default function LihatLaporanGuruPiket() {
   return (
     <LayoutPage title={`Lihat Laporan Piket`}>
       <section className="mt-5">
+        <div className="flex items-center justify-between mb-5">
+          <Button
+            type="button"
+            icon={() => <Icon name="arrow left" />}
+            size="medium"
+            color="teal"
+            onClick={()=> {
+              return navigate(
+                `/guru/laporan-guru-piket/lihat-laporan/${
+                 parseFloat(id)- 1
+                }/${formatTahun(tanggal)}`
+              );
+            }}
+          />
+          <Button
+            type="button"
+            icon={() => <Icon name="arrow right" />}
+            size="medium"
+            color="teal"
+            onClick={()=> {
+              return navigate(
+                `/guru/laporan-guru-piket/lihat-laporan/${
+                  parseFloat(id)+1
+                }/${formatTahun(tanggal)}`
+              );
+            }}
+          />
+        </div>
         <Formik
           initialValues={initialState}
           // validationSchema={AbsensiSchema}
@@ -118,7 +145,6 @@ export default function LihatLaporanGuruPiket() {
             isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit}>
-              {console.log(values)}
               <div className="space-y-5 ">
                 <section className="space-y-5 overflow-visible h-full">
                   <p className="font-bold text-lg">
@@ -129,7 +155,7 @@ export default function LihatLaporanGuruPiket() {
                     <Radio
                       readOnly={false}
                       name="laporan.guru.isSemuaHadir"
-                      value={values?.laporan?.guru?.isSemuaHadir}
+                      value={formatValue(values?.laporan?.guru?.isSemuaHadir)}
                       checked={
                         values?.laporan?.guru?.isSemuaHadir === false
                           ? true
@@ -153,7 +179,7 @@ export default function LihatLaporanGuruPiket() {
                     <Radio
                       readOnly={false}
                       name="laporan.guru.isSemuaHadir"
-                      value={values?.laporan?.guru?.isSemuaHadir}
+                      value={formatValue(values?.laporan?.guru?.isSemuaHadir)}
                       checked={
                         values?.laporan?.guru?.isSemuaHadir === true
                           ? true
@@ -176,7 +202,7 @@ export default function LihatLaporanGuruPiket() {
                             <div className=" col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-3 ">
                               <Form.Field
                                 control={Select}
-                                value={absen?.nama_kelas}
+                                value={formatValue(absen?.nama_kelas)}
                                 options={getOptionsText(
                                   dataKelas?.data,
                                   "nama_kelas"
@@ -203,7 +229,7 @@ export default function LihatLaporanGuruPiket() {
                             <div className=" col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-3">
                               <Form.Field
                                 control={Select}
-                                value={absen?.nama_guru}
+                                value={formatValue(absen?.nama_guru)}
                                 options={getOptionsText(
                                   dataGuru?.data,
                                   "nama_guru"
@@ -252,7 +278,7 @@ export default function LihatLaporanGuruPiket() {
                                 //   errors?.absensi_kehadiran?.[index]?.kehadiran
                                 //     ?.alasan
                                 // }
-                                value={absen?.alasan}
+                                value={formatValue(absen?.alasan)}
                               />
                             </div>
 
@@ -263,7 +289,7 @@ export default function LihatLaporanGuruPiket() {
                                   <Form.Field
                                     control={Radio}
                                     label="Ya"
-                                    value={absen?.tugas}
+                                    value={formatValue(absen?.tugas)}
                                     checked={
                                       absen.tugas === true ? true : false
                                     }
@@ -277,7 +303,7 @@ export default function LihatLaporanGuruPiket() {
                                   <Form.Field
                                     control={Radio}
                                     label="Tidak"
-                                    value={absen?.tugas}
+                                    value={formatValue(absen?.tugas)}
                                     checked={
                                       absen.tugas === false ? true : false
                                     }
@@ -326,12 +352,15 @@ export default function LihatLaporanGuruPiket() {
                       id={`laporan.catatan`}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      value={values?.laporan?.catatan}
+                      value={formatValue(values?.laporan?.catatan)}
                       fluid
                     />
                   </div>
                 </section>
-                <section></section>
+                <section>
+                
+                  {values?.laporan === null && <Message color="red">Laporan belum dibuat</Message>}
+                </section>
               </div>
             </Form>
           )}

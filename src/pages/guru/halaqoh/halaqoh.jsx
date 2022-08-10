@@ -125,7 +125,7 @@ export default function AbsensiHalaqoh() {
     dariTanggal: tanggal,
     sampaiTanggal: tanggal,
   };
-  let { isLoading, data, isFetching } = useQuery(
+  let { isLoading, data } = useQuery(
     //query key
     ["absensi", parameter],
     //axios function,triggered when page/pageSize change
@@ -145,7 +145,7 @@ export default function AbsensiHalaqoh() {
       },
     }
   );
-  console.log("dddd", data);
+  
 
   const creeteJadwal = async () => {
     setLoading(true);

@@ -15,6 +15,7 @@ import {
   Radio,
   TextArea,
   Message,
+  Icon
 } from "semantic-ui-react";
 import { izinGuruOptions } from "../../../utils/options";
 import {
@@ -342,6 +343,7 @@ export default function LaporanGuruPiket() {
                           <Button
                             basic
                             fluid
+
                             type="button"
                             onClick={() => {
                               setFieldValue("laporan.guru.absen", [
@@ -399,6 +401,7 @@ export default function LaporanGuruPiket() {
                     content={isSubmitting ? "Menyimpan" : "Simpan"}
                     type="submit"
                     fluid
+                    icon={() => <Icon name="save" />}
                     loading={isSubmitting}
                     size="medium"
                     color="teal"
