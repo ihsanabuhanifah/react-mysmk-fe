@@ -34,6 +34,12 @@ const kategoriPelanggaranOptions = [
   { key: "3", value: "berat", text: "Berat" },
 ];
 
+const waktuOptions = [
+  { key: "1", value: "", text: "Semua" },
+  { key: "2", value: "pagi", text: "Pagi" },
+  { key: "3", value: "malam", text: "Malam" },
+];
+
 const waktusholatOptions = [
   { key: "1", value: 1, text: "Subuh" },
   { key: "2", value: 2, text: "Dhuhur" },
@@ -76,5 +82,6 @@ export {
   kategoriPelanggaranOptions,
   waktusholatOptions,
   alasanTidakSholatOptions,
-  izinGuruOptions
+  izinGuruOptions,
+  waktuOptions
 };

@@ -12,23 +12,28 @@ import {
   TextArea,
   Sidebar,
   Menu,
+  Radio,
 } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import { PaginationTable, TableLoading } from "../../../components";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { izinOptions } from "../../../utils/options";
+import { izinOptions, waktuOptions } from "../../../utils/options";
 import { formatValue } from "../../../utils";
 
 import { ErrorMEssage } from "../../../components";
-import { formatHari, formatTahun } from "../../../utils";
+import { formatHari } from "../../../utils";
 
 import { toast } from "react-toastify";
 import FilterRekap from "./filter";
 
-import { formatDay } from "../../../utils/waktu";
-import { listAbsenPengampu } from "../../../api/guru/halaqoh";
+import { formatDay, handleViewNull } from "../../../utils/waktu";
+import {
+  listAbsenPengampu,
+  updateAbsensiPengampu,
+} from "../../../api/guru/halaqoh";
 import usePage from "../../../hook/usePage";
+import useList from "../../../hook/useList";
 
 let personalSchema = Yup.object().shape({
   keterangan: Yup.string()
@@ -39,7 +44,10 @@ let personalSchema = Yup.object().shape({
           return true;
         }
       },
-      then: (id) => Yup.string().nullable().required("wajib disii"),
+      then: (id) =>
+        Yup.string()
+          .nullable()
+          .required("Keterangan wajib disi jika tidak hadir"),
     }),
   kehadiran: Yup.object().shape({
     id: Yup.string().nullable().required("wajib diisi"),
@@ -61,8 +69,10 @@ let AbsensiSchema = Yup.object().shape({
 export default function PengampuHalaqoh() {
   let date = new Date();
 
+  let {identitas} = useList()
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
+  let [waktu, setWaktu] = React.useState("pagi");
 
   let { page, pageSize, setPageSize, setPage } = usePage();
 
@@ -84,6 +94,7 @@ export default function PengampuHalaqoh() {
   let params = {
     page,
     pageSize,
+    waktu,
     ...filter,
   };
   let { data, isLoading } = useQuery(
@@ -98,9 +109,38 @@ export default function PengampuHalaqoh() {
     }
   );
 
-  const onSubmit = () => {
-    console.log("berjalan");
+  const onSubmit = async (values) => {
+    try {
+      const response = await updateAbsensiPengampu(values);
+      queryClient.invalidateQueries("absensi_pengamp");
+      queryClient.invalidateQueries("notifikasi");
+      setAbsen(false);
+
+      return toast.success(response?.data?.msg, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      return toast.error("Ada Kesalahan", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   };
+
+  console.log(identitas)
 
   return (
     <LayoutPage title="Absensi Pengampu Halaqoh">
@@ -143,24 +183,19 @@ export default function PengampuHalaqoh() {
             <Form onSubmit={handleSubmit}>
               <section className="" style={{ maxWidth: "100%" }} padded>
                 <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
-                  <div className="col-span-2">
-                    <Form.Field
-                      control={Select}
-                      options={dayOptions}
-                      // label={{
-                      //   children: "Hari",
-                      //   htmlFor: "hari",
-                      //   name: "hari",
-                      // }}
-                      name="hari"
-                      id="hari"
-                      onChange={(event, data) => {
-                        setHari(data.value);
-                      }}
-                      value={hari}
-                      placeholder="Pilih Hari"
+                  <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+                    <Dropdown
+                      selection
                       search
-                      searchInput={{ id: "hari", name: "hari" }}
+                      fluid
+                      options={waktuOptions}
+                      id="waktu"
+                      name="waktu"
+                      onBlur={handleBlur}
+                      onChange={(e, data) => {
+                        setWaktu(data.value);
+                      }}
+                      value={waktu}
                     />
                   </div>
                   <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
@@ -176,6 +211,7 @@ export default function PengampuHalaqoh() {
                       }}
                     />
                   </div>
+
                   <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
                     {!absen ? (
                       <Button
@@ -223,6 +259,8 @@ export default function PengampuHalaqoh() {
                       <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
                       <Table.HeaderCell>Keterangan</Table.HeaderCell>
                       <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+                      <Table.HeaderCell>Waktu</Table.HeaderCell>
+                      <Table.HeaderCell>Absen Oleh</Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -239,20 +277,24 @@ export default function PengampuHalaqoh() {
 
                           <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                           <Table.Cell>
-                            {!absen ? (
-                              value?.kehadiran?.nama_status_kehadiran
-                            ) : (
+                            {absen  ? (
                               <div className="flex flex-col">
                                 <Dropdown
                                   selection
                                   search
+
                                   options={izinOptions}
                                   id={`rows[${index}]status_kehadiran`}
                                   name={`rows[${index}]status_kehadiran`}
+                                  onBlur={handleBlur}
                                   onChange={(e, data) => {
                                     setFieldValue(
                                       `rows[${index}]status_kehadiran`,
                                       data.value
+                                    );
+                                    setFieldValue(
+                                      `rows[${index}]is_absen`,
+                                      true
                                     );
 
                                     console.log(e.target.value);
@@ -269,8 +311,6 @@ export default function PengampuHalaqoh() {
                                   value={value?.status_kehadiran}
                                 />
 
-                                {console.log("ee", errors)}
-
                                 {errors?.rows?.[index]?.kehadiran?.alasan !==
                                   undefined && (
                                   <ErrorMEssage>
@@ -278,16 +318,18 @@ export default function PengampuHalaqoh() {
                                   </ErrorMEssage>
                                 )}
                               </div>
-                            )}
+                            ) :  value?.kehadiran?.nama_status_kehadiran}
                           </Table.Cell>
                           <Table.Cell>
                             {!absen ? (
-                              value?.keterangan
+                              handleViewNull(value?.keterangan)
                             ) : (
                               <>
                                 <TextArea
                                   id={`rows[${index}]kehadiran`}
                                   name={`rows[${index}]kehadiran`}
+                                  value={formatValue(value.keterangan)}
+                                  onBlur={handleBlur}
                                   onChange={(e) => {
                                     setFieldValue(
                                       `rows[${index}]keterangan`,
@@ -305,6 +347,12 @@ export default function PengampuHalaqoh() {
                           </Table.Cell>
                           <Table.Cell>
                             {value?.tahun_ajaran?.nama_tahun_ajaran}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <span className="capitalize">{value?.waktu}</span>
+                          </Table.Cell>
+                          <Table.Cell>
+                            {handleViewNull(value?.diabsen?.nama_guru)}
                           </Table.Cell>
                         </Table.Row>
                       ))}

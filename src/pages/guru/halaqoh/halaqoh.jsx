@@ -20,14 +20,9 @@ import {
   Select,
 } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
-import { izinOptions } from "../../../utils/options";
+import { izinOptions, waktuOptions } from "../../../utils/options";
 import { formatValue, getOptions } from "../../../utils/format";
-import {
-  
-  ErrorMEssage,
-  FormText,
-  TableLoading,
-} from "../../../components";
+import { ErrorMEssage, FormText, TableLoading } from "../../../components";
 
 import { toast } from "react-toastify";
 import usePage from "../../../hook/usePage";
@@ -241,6 +236,20 @@ export default function AbsensiHalaqoh() {
               type="date"
             />
           </div>
+          <div className="col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+            <Dropdown
+              selection
+              search
+              fluid
+              options={waktuOptions}
+              id="waktu"
+              name="waktu"
+              onChange={(e, data) => {
+                setWaktu(data.value);
+              }}
+              value={waktu}
+            />
+          </div>
 
           <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
             <Button
@@ -268,33 +277,12 @@ export default function AbsensiHalaqoh() {
               onClick={creeteJadwal}
             />
           </div>
-          <div className="mt-5 space-x-5 lg:space-x-0 xl">
-            <Radio
-              readOnly={false}
-              name="waktu"
-              value={waktu}
-              error
-              checked={waktu === "pagi" ? true : false}
-              onChange={() => {
-                setWaktu("pagi");
-              }}
-              label="Halaqoh Pagi"
-            ></Radio>
-            <Radio
-              readOnly={false}
-              name="waktu"
-              value={waktu}
-              error
-              checked={waktu === "malam" ? true : false}
-              onChange={() => {
-                setWaktu("malam");
-              }}
-              label="Halaqoh Malam"
-            ></Radio>
-          </div>
         </section>
       </div>
-      <section className="mt-5 h-full overflow-x-scroll overflow-y-hidden"  padded>
+      <section
+        className="mt-5 h-full overflow-x-scroll overflow-y-hidden"
+        padded
+      >
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -316,278 +304,286 @@ export default function AbsensiHalaqoh() {
                 Absensi untuk Halaqoh :{" "}
                 <span className="uppercase">{waktu}</span>
               </h4>
-             <div>
-             <Table padded striped size="smalll">
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>No</Table.HeaderCell>
-                    <Table.HeaderCell singleLine>Nama</Table.HeaderCell>
-                    <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
-                    <Table.HeaderCell singleLine> Dari surat</Table.HeaderCell>
-                    <Table.HeaderCell singleLine>Sampai Surat</Table.HeaderCell>
-                    <Table.HeaderCell>Total Halaman</Table.HeaderCell>
-                   
-                    <Table.HeaderCell>Keterangan</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <TableLoading
-                    count={9}
-                    isLoading={isLoading}
-                    data={values?.absensi_kehadiran}
-                    messageEmpty={"Tidak Ada Jadwal Halaqoh"}
-                  >
-                    {values?.absensi_kehadiran?.map((value, index) => (
-                      <Table.Row key={index}>
-                        <Table.Cell>{index + 1}</Table.Cell>
-                        <Table.Cell singleLine>
-                          {value?.siswa?.nama_siswa}
-                        </Table.Cell>
-                        <Table.Cell>
-                          <div className="flex flex-col">
-                            <Dropdown
-                              selection
-                              search
-                              options={izinOptions}
-                              id={`absensi_kehadiran[${index}]status_kehadiran`}
-                              name={`absensi_kehadiran[${index}]status_kehadiran`}
-                              onChange={(e, data) => {
-                                setFieldValue(
-                                  `absensi_kehadiran[${index}]status_kehadiran`,
-                                  data.value
-                                );
-                                setFieldValue(
-                                  `absensi_kehadiran[${index}]kehadiran`,
-                                  data
-                                );
-                              }}
-                              error={
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan !== undefined &&
-                                errors?.absensi_kehadiran?.[index]?.kehadiran
-                                  ?.alasan
-                              }
-                              value={formatValue(value?.status_kehadiran)}
-                            />
+              <div>
+                <Table padded striped size="smalll">
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>No</Table.HeaderCell>
+                      <Table.HeaderCell singleLine>Nama</Table.HeaderCell>
+                      <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
+                      <Table.HeaderCell singleLine>
+                        {" "}
+                        Dari surat
+                      </Table.HeaderCell>
+                      <Table.HeaderCell singleLine>
+                        Sampai Surat
+                      </Table.HeaderCell>
+                      <Table.HeaderCell>Total Halaman</Table.HeaderCell>
 
-                            {console.log("ee", errors)}
-
-                            {errors?.absensi_kehadiran?.[index]?.kehadiran
-                              ?.alasan !== undefined && (
-                              <ErrorMEssage>
-                                {
+                      <Table.HeaderCell>Keterangan</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    <TableLoading
+                      count={9}
+                      isLoading={isLoading}
+                      data={values?.absensi_kehadiran}
+                      messageEmpty={"Tidak Ada Jadwal Halaqoh"}
+                    >
+                      {values?.absensi_kehadiran?.map((value, index) => (
+                        <Table.Row key={index}>
+                          <Table.Cell>{index + 1}</Table.Cell>
+                          <Table.Cell singleLine>
+                            {value?.siswa?.nama_siswa}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <div className="flex flex-col">
+                              <Dropdown
+                                selection
+                                search
+                                options={izinOptions}
+                                id={`absensi_kehadiran[${index}]status_kehadiran`}
+                                name={`absensi_kehadiran[${index}]status_kehadiran`}
+                                onChange={(e, data) => {
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]status_kehadiran`,
+                                    data.value
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]kehadiran`,
+                                    data
+                                  );
+                                }}
+                                error={
+                                  errors?.absensi_kehadiran?.[index]?.kehadiran
+                                    ?.alasan !== undefined &&
                                   errors?.absensi_kehadiran?.[index]?.kehadiran
                                     ?.alasan
                                 }
-                              </ErrorMEssage>
-                            )}
-                          </div>
-                        </Table.Cell>
-                        <Table.Cell singleLine width={"sixteen"}>
-                          <div className="space-y-5">
-                            <div className="text-left">
-                              <Form.Field
-                                control={Select}
-                                disabled={value?.status_kehadiran !== 1}
-                                // value={absen?.nama_guru}
-                                options={getOptions(
-                                  dataAlquran?.data,
-                                  "nama_surat"
-                                )}
-                                onChange={(event, data) => {
-                                  console.log(data);
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]dari_surat`,
-                                    data.value
-                                  );
-                                }}
-                                placeholder="Dari Surat"
-                                search
-                                value={formatValue(value?.dari_surat)}
-                                clearable
-                                error={
-                                  errors?.absensi_kehadiran?.[index]
-                                    ?.dari_surat &&
-                                  touched?.absensi_kehadiran?.[index]
-                                    ?.dari_surat
-                                }
+                                value={formatValue(value?.status_kehadiran)}
                               />
-                              {errors?.absensi_kehadiran?.[index]?.dari_surat &&
-                                touched?.absensi_kehadiran?.[index]
-                                  ?.dari_surat && (
-                                  <ErrorMEssage>
-                                    {
-                                      errors?.absensi_kehadiran?.[index]
-                                        ?.dari_surat
-                                    }
-                                  </ErrorMEssage>
-                                )}
-                            </div>
-                            <FormText>
-                              <Input
-                               disabled={value?.status_kehadiran !== 1}
-                                id={`absensi_kehadiran[${index}]dari_ayat`}
-                                name={`absensi_kehadiran[${index}]dari_ayat`}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                type="number"
-                                value={formatValue(value?.dari_ayat)}
-                                placeholder="Dari Ayat"
-                                error={
-                                  errors?.absensi_kehadiran?.[index]
-                                    ?.dari_ayat &&
-                                  touched?.absensi_kehadiran?.[index]?.dari_ayat
-                                }
-                              />
-                              {errors?.absensi_kehadiran?.[index]?.dari_ayat &&
-                                touched?.absensi_kehadiran?.[index]
-                                  ?.dari_ayat && (
-                                  <ErrorMEssage>
-                                    {
-                                      errors?.absensi_kehadiran?.[index]
-                                        ?.dari_ayat
-                                    }
-                                  </ErrorMEssage>
-                                )}
-                            </FormText>
-                          </div>
-                        </Table.Cell>
 
-                        <Table.Cell width={10} singleLine>
-                          <div className="space-y-5">
-                            <div className="text-left">
-                              <Form.Field
-                               disabled={value?.status_kehadiran !== 1}
-                                control={Select}
-                                // value={absen?.nama_guru}
-                                options={getOptions(
-                                  dataAlquran?.data,
-                                  "nama_surat"
-                                )}
-                                onChange={(event, data) => {
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]sampai_surat`,
-                                    data?.value
-                                  );
-                                }}
-                                placeholder="Sampai Surat"
-                                search
-                                value={formatValue(value?.sampai_surat)}
-                                clearable
-                                error={
-                                  errors?.absensi_kehadiran?.[index]
-                                    ?.sampai_surat &&
-                                  touched?.absensi_kehadiran?.[index]
-                                    ?.sampai_surat
-                                }
-                              />
-                              {errors?.absensi_kehadiran?.[index]
-                                ?.sampai_surat &&
-                                touched?.absensi_kehadiran?.[index]
-                                  ?.sampai_surat && (
-                                  <ErrorMEssage>
-                                    {
-                                      errors?.absensi_kehadiran?.[index]
-                                        ?.sampai_surat
-                                    }
-                                  </ErrorMEssage>
-                                )}
-                            </div>
-                            <FormText>
-                              <Input
-                               disabled={value?.status_kehadiran !== 1}
-                                id={`absensi_kehadiran[${index}]sampai_ayat`}
-                                name={`absensi_kehadiran[${index}]sampai_ayat`}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                type="number"
-                                value={ formatValue(value?.sampai_ayat)}
-                                placeholder="Sampai Ayat"
-                                error={
-                                  errors?.absensi_kehadiran?.[index]
-                                    ?.sampai_ayat &&
-                                  touched?.absensi_kehadiran?.[index]
-                                    ?.sampai_ayat
-                                }
-                              />
-                              {errors?.absensi_kehadiran?.[index]
-                                ?.sampai_ayat &&
-                                touched?.absensi_kehadiran?.[index]
-                                  ?.sampai_ayat && (
-                                  <ErrorMEssage>
-                                    {
-                                      errors?.absensi_kehadiran?.[index]
-                                        ?.sampai_ayat
-                                    }
-                                  </ErrorMEssage>
-                                )}
-                            </FormText>
-                          </div>
-                        </Table.Cell>
+                              {console.log("ee", errors)}
 
-                        <Table.Cell>
-                          <FormText>
-                            <Input
-                             disabled={value?.status_kehadiran !== 1}
-                              id={`absensi_kehadiran[${index}]total_halaman`}
-                              name={`absensi_kehadiran[${index}]total_halaman`}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              placeholder="Total Halaman"
-                              value={ formatValue(value?.total_halaman)}
-                              error={
-                                errors?.absensi_kehadiran?.[index]
-                                  ?.total_halaman &&
-                                touched?.absensi_kehadiran?.[index]
-                                  ?.total_halaman
-                              }
-                            />
-                            {errors?.absensi_kehadiran?.[index]
-                              ?.total_halaman &&
-                              touched?.absensi_kehadiran?.[index]
-                                ?.total_halaman && (
+                              {errors?.absensi_kehadiran?.[index]?.kehadiran
+                                ?.alasan !== undefined && (
                                 <ErrorMEssage>
                                   {
                                     errors?.absensi_kehadiran?.[index]
-                                      ?.total_halaman
+                                      ?.kehadiran?.alasan
                                   }
                                 </ErrorMEssage>
                               )}
-                          </FormText>
-                        </Table.Cell>
+                            </div>
+                          </Table.Cell>
+                          <Table.Cell singleLine width={"sixteen"}>
+                            <div className="space-y-5">
+                              <div className="text-left">
+                                <Form.Field
+                                  control={Select}
+                                  disabled={value?.status_kehadiran !== 1}
+                                  // value={absen?.nama_guru}
+                                  options={getOptions(
+                                    dataAlquran?.data,
+                                    "nama_surat"
+                                  )}
+                                  onChange={(event, data) => {
+                                    console.log(data);
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]dari_surat`,
+                                      data.value
+                                    );
+                                  }}
+                                  placeholder="Dari Surat"
+                                  search
+                                  value={formatValue(value?.dari_surat)}
+                                  clearable
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.dari_surat &&
+                                    touched?.absensi_kehadiran?.[index]
+                                      ?.dari_surat
+                                  }
+                                />
+                                {errors?.absensi_kehadiran?.[index]
+                                  ?.dari_surat &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.dari_surat && (
+                                    <ErrorMEssage>
+                                      {
+                                        errors?.absensi_kehadiran?.[index]
+                                          ?.dari_surat
+                                      }
+                                    </ErrorMEssage>
+                                  )}
+                              </div>
+                              <FormText>
+                                <Input
+                                  disabled={value?.status_kehadiran !== 1}
+                                  id={`absensi_kehadiran[${index}]dari_ayat`}
+                                  name={`absensi_kehadiran[${index}]dari_ayat`}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  type="number"
+                                  value={formatValue(value?.dari_ayat)}
+                                  placeholder="Dari Ayat"
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.dari_ayat &&
+                                    touched?.absensi_kehadiran?.[index]
+                                      ?.dari_ayat
+                                  }
+                                />
+                                {errors?.absensi_kehadiran?.[index]
+                                  ?.dari_ayat &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.dari_ayat && (
+                                    <ErrorMEssage>
+                                      {
+                                        errors?.absensi_kehadiran?.[index]
+                                          ?.dari_ayat
+                                      }
+                                    </ErrorMEssage>
+                                  )}
+                              </FormText>
+                            </div>
+                          </Table.Cell>
 
-                       
-                        <Table.Cell>
-                          <TextArea
-                           disabled={value?.status_kehadiran !== 1}
-                            rows={4}
-                            id={`absensi_kehadiran[${index}]keterangan`}
-                            name={`absensi_kehadiran[${index}]keterangan`}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            type="text"
-                            placeholder="Keterangan"
-                            value={formatValue(value?.keterangan)}
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </TableLoading>
-                </Table.Body>
-              </Table>
-             </div>
+                          <Table.Cell width={10} singleLine>
+                            <div className="space-y-5">
+                              <div className="text-left">
+                                <Form.Field
+                                  disabled={value?.status_kehadiran !== 1}
+                                  control={Select}
+                                  // value={absen?.nama_guru}
+                                  options={getOptions(
+                                    dataAlquran?.data,
+                                    "nama_surat"
+                                  )}
+                                  onChange={(event, data) => {
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]sampai_surat`,
+                                      data?.value
+                                    );
+                                  }}
+                                  placeholder="Sampai Surat"
+                                  search
+                                  value={formatValue(value?.sampai_surat)}
+                                  clearable
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.sampai_surat &&
+                                    touched?.absensi_kehadiran?.[index]
+                                      ?.sampai_surat
+                                  }
+                                />
+                                {errors?.absensi_kehadiran?.[index]
+                                  ?.sampai_surat &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.sampai_surat && (
+                                    <ErrorMEssage>
+                                      {
+                                        errors?.absensi_kehadiran?.[index]
+                                          ?.sampai_surat
+                                      }
+                                    </ErrorMEssage>
+                                  )}
+                              </div>
+                              <FormText>
+                                <Input
+                                  disabled={value?.status_kehadiran !== 1}
+                                  id={`absensi_kehadiran[${index}]sampai_ayat`}
+                                  name={`absensi_kehadiran[${index}]sampai_ayat`}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  type="number"
+                                  value={formatValue(value?.sampai_ayat)}
+                                  placeholder="Sampai Ayat"
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.sampai_ayat &&
+                                    touched?.absensi_kehadiran?.[index]
+                                      ?.sampai_ayat
+                                  }
+                                />
+                                {errors?.absensi_kehadiran?.[index]
+                                  ?.sampai_ayat &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.sampai_ayat && (
+                                    <ErrorMEssage>
+                                      {
+                                        errors?.absensi_kehadiran?.[index]
+                                          ?.sampai_ayat
+                                      }
+                                    </ErrorMEssage>
+                                  )}
+                              </FormText>
+                            </div>
+                          </Table.Cell>
+
+                          <Table.Cell>
+                            <FormText>
+                              <Input
+                                disabled={value?.status_kehadiran !== 1}
+                                id={`absensi_kehadiran[${index}]total_halaman`}
+                                name={`absensi_kehadiran[${index}]total_halaman`}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                placeholder="Total Halaman"
+                                value={formatValue(value?.total_halaman)}
+                                error={
+                                  errors?.absensi_kehadiran?.[index]
+                                    ?.total_halaman &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.total_halaman
+                                }
+                              />
+                              {errors?.absensi_kehadiran?.[index]
+                                ?.total_halaman &&
+                                touched?.absensi_kehadiran?.[index]
+                                  ?.total_halaman && (
+                                  <ErrorMEssage>
+                                    {
+                                      errors?.absensi_kehadiran?.[index]
+                                        ?.total_halaman
+                                    }
+                                  </ErrorMEssage>
+                                )}
+                            </FormText>
+                          </Table.Cell>
+
+                          <Table.Cell>
+                            <TextArea
+                              disabled={value?.status_kehadiran !== 1}
+                              rows={4}
+                              id={`absensi_kehadiran[${index}]keterangan`}
+                              name={`absensi_kehadiran[${index}]keterangan`}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              type="text"
+                              placeholder="Keterangan"
+                              value={formatValue(value?.keterangan)}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </TableLoading>
+                  </Table.Body>
+                </Table>
+              </div>
               <div className="mb-10 mt-5 w-full">
-                {values?.absensi_kehadiran.length > 0 && <Button
-                  content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  type="submit"
-                  fluid
-                  loading={isSubmitting}
-                  size="medium"
-                  color="teal"
-                  icon={() => <Icon name="save" />}
-                  disabled={isSubmitting}
-                />}
-                
+                {values?.absensi_kehadiran.length > 0 && (
+                  <Button
+                    content={isSubmitting ? "Menyimpan" : "Simpan"}
+                    type="submit"
+                    fluid
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    icon={() => <Icon name="save" />}
+                    disabled={isSubmitting}
+                  />
+                )}
               </div>
             </form>
           )}

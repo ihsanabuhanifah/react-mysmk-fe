@@ -17,8 +17,17 @@ export async function updateAbsensiHalaqoh(values) {
   return axios.put("/guru/halaqoh/update", values);
 }
 
-
 export function listAbsenPengampu(params) {
   syncToken();
-  return axios.get("/guru/halaqoh/pengampu/list", {params});
+  return axios.get("/guru/halaqoh/pengampu/list", { params });
+}
+
+export async function updateAbsensiPengampu(values) {
+  syncToken();
+
+  let payload = values?.rows?.filter((data) => data.is_absen === true);
+
+
+
+  return axios.put("/guru/halaqoh/pengampu/update", payload);
 }
