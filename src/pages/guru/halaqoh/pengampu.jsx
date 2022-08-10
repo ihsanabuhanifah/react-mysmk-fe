@@ -19,7 +19,7 @@ import { PaginationTable, TableLoading } from "../../../components";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { izinOptions, waktuOptions } from "../../../utils/options";
-import { formatValue } from "../../../utils";
+import { checkRole, formatValue } from "../../../utils";
 
 import { ErrorMEssage } from "../../../components";
 import { formatHari } from "../../../utils";
@@ -67,9 +67,9 @@ let AbsensiSchema = Yup.object().shape({
   rows: Yup.array().of(personalSchema),
 });
 export default function PengampuHalaqoh() {
-  let date = new Date();
+  const { roles } = useList();
 
-  let {identitas} = useList()
+  let { identitas } = useList();
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   let [waktu, setWaktu] = React.useState("pagi");
@@ -140,7 +140,7 @@ export default function PengampuHalaqoh() {
     }
   };
 
-  console.log(identitas)
+  console.log(identitas);
 
   return (
     <LayoutPage title="Absensi Pengampu Halaqoh">
@@ -212,43 +212,45 @@ export default function PengampuHalaqoh() {
                     />
                   </div>
 
-                  <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
-                    {!absen ? (
-                      <Button
-                        content={"Absen"}
-                        type="button"
-                        fluid
-                        icon={() => <Icon name="edit" />}
-                        size="medium"
-                        color="teal"
-                        onClick={() => {
-                          setAbsen(true);
-                        }}
-                      />
-                    ) : (
-                      <div className="grid grid-cols-2 gap-5">
+                  {checkRole(roles, "kesantrian") && (
+                    <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+                      {!absen ? (
                         <Button
-                          content="Simpan"
-                          color="teal"
-                          basic
-                          fluid
-                          type="submit"
-                          loading={isSubmitting}
-                          //   disabled={isSubmitting || !updated}
-                        />
-                        <Button
-                          content="Batal"
-                          color="red"
-                          basic
-                          fluid
+                          content={"Absen"}
                           type="button"
+                          fluid
+                          icon={() => <Icon name="edit" />}
+                          size="medium"
+                          color="teal"
                           onClick={() => {
-                            setAbsen(false);
+                            setAbsen(true);
                           }}
                         />
-                      </div>
-                    )}
-                  </div>
+                      ) : (
+                        <div className="grid grid-cols-2 gap-5">
+                          <Button
+                            content="Simpan"
+                            color="teal"
+                            basic
+                            fluid
+                            type="submit"
+                            loading={isSubmitting}
+                            //   disabled={isSubmitting || !updated}
+                          />
+                          <Button
+                            content="Batal"
+                            color="red"
+                            basic
+                            fluid
+                            type="button"
+                            onClick={() => {
+                              setAbsen(false);
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </section>
                 <Table celled selectable>
                   <Table.Header>
@@ -277,12 +279,11 @@ export default function PengampuHalaqoh() {
 
                           <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                           <Table.Cell>
-                            {absen  ? (
+                            {absen ? (
                               <div className="flex flex-col">
                                 <Dropdown
                                   selection
                                   search
-
                                   options={izinOptions}
                                   id={`rows[${index}]status_kehadiran`}
                                   name={`rows[${index}]status_kehadiran`}
@@ -318,7 +319,9 @@ export default function PengampuHalaqoh() {
                                   </ErrorMEssage>
                                 )}
                               </div>
-                            ) :  value?.kehadiran?.nama_status_kehadiran}
+                            ) : (
+                              value?.kehadiran?.nama_status_kehadiran
+                            )}
                           </Table.Cell>
                           <Table.Cell>
                             {!absen ? (

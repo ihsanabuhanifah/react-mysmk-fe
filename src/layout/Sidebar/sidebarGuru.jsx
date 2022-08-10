@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
-import { IoIosNotifications } from "react-icons/io";
+
 import { formatTahun } from "../../utils";
 import {
   MdClose,
@@ -13,20 +13,13 @@ import {
 
 import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
-import useList from "../../hook/useList";
 
-export function checkRole(data, nama_role) {
-  let roles = data?.some((item) => {
-    return item.role?.role_name.toLowerCase() === nama_role;
-  });
-  return roles;
-}
+
+
 
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
-  let { roles } = useList();
 
-  console.log(roles);
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -103,8 +96,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-        {checkRole(roles, "kesantrian") && (
-          <NavButton
+         <NavButton
             handleSidebar={handleSiderbar}
             to={`pengampu/halaqoh/absensi`}
             path={"pengampu"}
@@ -117,7 +109,6 @@ export default function SidebarGuru({ setSidebar }) {
               />
             }
           />
-        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
