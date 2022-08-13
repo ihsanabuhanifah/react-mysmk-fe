@@ -12,9 +12,11 @@ import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
 import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
+import { requestToken } from "../firebaseInit";
 export default function Guru() {
   React.useEffect(() => {
-    document.title = "Guru";
+    document.title = "MySMK";
+    requestToken();
   });
 
   let { data } = useQuery(

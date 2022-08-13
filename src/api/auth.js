@@ -26,3 +26,11 @@ export function getRoleMe() {
   syncToken();
   return axios.get("/guru/get-role-guru");
 }
+
+export function saveToken(token) {
+  syncToken();
+  console.log(token);
+  return axios.put("/guru/token/save", {
+    token,
+  });
+}
