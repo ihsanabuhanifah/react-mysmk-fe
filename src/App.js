@@ -22,7 +22,7 @@ import {
   DaftarSiswa,
   Agenda,
   DetailSiswa,
-  PengampuHalaqoh
+  PengampuHalaqoh,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -30,6 +30,7 @@ import NotFound from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
+import ProtectLogin from "./routers/ProtectLogin";
 
 function App() {
   return (
@@ -47,9 +48,30 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/lupa-password" element={<LupaPassword />} />
-        <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
+        <Route
+          path="/login"
+          element={
+            <ProtectLogin>
+              <Login />
+            </ProtectLogin>
+          }
+        />
+        <Route
+          path="/lupa-password"
+          element={
+            <ProtectLogin>
+              <LupaPassword />
+            </ProtectLogin>
+          }
+        />
+        <Route
+          path="/reset-password/:id/:token"
+          element={
+            <ProtectLogin>
+              <ResetPassword />
+            </ProtectLogin>
+          }
+        />
 
         <Route
           path="/guru"
@@ -68,7 +90,10 @@ function App() {
           <Route path="pelanggaran" element={<Pelanggaran />} />
           <Route path="prestasi" element={<Prestasi />} />
           <Route path="halaqoh/absensi/:tanggal" element={<AbsensiHalaqoh />} />
-          <Route path="pengampu/halaqoh/absensi" element={<PengampuHalaqoh />} />
+          <Route
+            path="pengampu/halaqoh/absensi"
+            element={<PengampuHalaqoh />}
+          />
           <Route path="sholat" element={<Sholat />} />
           <Route path="laporan-guru-piket" element={<ListGuruPiketToday />} />
           <Route path="absensi/rekap-kehadiran" element={<RekapAbsensi />} />
@@ -85,7 +110,6 @@ function App() {
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
-          
         </Route>
         <Route
           path="/siswa"

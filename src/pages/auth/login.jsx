@@ -40,7 +40,7 @@ export default function Login() {
     try {
       console.log(values);
       const result = await login(values);
-console.log(result)
+      console.log(result);
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
@@ -49,7 +49,6 @@ console.log(result)
         return navigate("/guru/dashboard");
       }
 
-      
       if (result.data.role === "Musyrif") {
         return navigate("/guru/dashboard");
       }
