@@ -54,7 +54,7 @@ function App() {
         <Route
           path="/guru"
           element={
-            <ProtectRoute userRole="Guru">
+            <ProtectRoute userRole="Guru Musyrif">
               <Guru />
             </ProtectRoute>
           }

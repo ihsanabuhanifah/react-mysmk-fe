@@ -7,6 +7,16 @@ const izinOptions = [
   { key: "7", value: 7, text: "Izin Kegiatan " },
   { key: "6", value: 6, text: "Belum Absensi" },
 ];
+const halaqohOptions = [
+  { key: "1", value: 1, text: "Hadir" },
+  { key: "2", value: 8, text: "Tidak Setoran" },
+  { key: "2", value: 2, text: "Sakit" },
+  { key: "3", value: 3, text: "Izin Pulang" },
+  { key: "4", value: 4, text: "Dispensasi" },
+  { key: "5", value: 5, text: "Tanpa Keterangan" },
+  { key: "7", value: 7, text: "Izin Kegiatan " },
+  { key: "6", value: 6, text: "Belum Absensi" },
+];
 const izinGuruOptions = [
   { key: "1", value: "Sakit", text: "Sakit" },
   { key: "2", value: "Izin", text: "Izin" },
@@ -72,6 +82,11 @@ const kategoriOptions = [
   { key: "2", value: "Nasional", text: "Nasional" },
   { key: "3", value: "Internasional", text: "Internasional" },
 ];
+const tipeHalaqohOptions = [
+  { key: "1", value: "Hafalan Baru", text: "Hafalan Baru" },
+  { key: "2", value: "Murojaah", text: "Murojaah" },
+  
+];
 
 export {
   izinOptions,
@@ -83,5 +98,7 @@ export {
   waktusholatOptions,
   alasanTidakSholatOptions,
   izinGuruOptions,
-  waktuOptions
+  waktuOptions,
+  halaqohOptions,
+  tipeHalaqohOptions
 };

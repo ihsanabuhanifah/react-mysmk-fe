@@ -189,6 +189,7 @@ export default function PengampuHalaqoh() {
                       selection
                       search
                       fluid
+                      placeholder="Semua"
                       options={waktuOptions}
                       id="waktu"
                       name="waktu"
@@ -291,10 +292,12 @@ export default function PengampuHalaqoh() {
                                   name={`rows[${index}]status_kehadiran`}
                                   onBlur={handleBlur}
                                   onChange={(e, data) => {
+                                    
                                     setFieldValue(
                                       `rows[${index}]status_kehadiran`,
                                       data.value
                                     );
+                                    
                                     setFieldValue(
                                       `rows[${index}]is_absen`,
                                       true

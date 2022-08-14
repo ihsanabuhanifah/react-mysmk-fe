@@ -27,7 +27,10 @@ export async function updateAbsensiPengampu(values) {
 
   let payload = values?.rows?.filter((data) => data.is_absen === true);
 
-
-
   return axios.put("/guru/halaqoh/pengampu/update", payload);
+}
+
+export function listBelumAbsensi(params) {
+  syncToken();
+  return axios.get("/guru/halaqoh/belum-absensi", { params });
 }

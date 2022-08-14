@@ -10,16 +10,18 @@ import {
   MdOutlineLibraryBooks,
   MdLogout,
 } from "react-icons/md";
+import { checkRole } from "../../utils";
 
 import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
+import useList from "../../hook/useList";
 
 
 
 
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
-
+  const { roles } = useList()
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -70,7 +72,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-        <NavButton
+       {checkRole(roles, "guru") &&  <NavButton
           handleSidebar={handleSiderbar}
           to="absensi"
           path="absensi"
@@ -82,7 +84,7 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
+        />}
         <NavButton
           handleSidebar={handleSiderbar}
           to={`halaqoh/absensi/${formatTahun(date)}`}
@@ -96,7 +98,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-         <NavButton
+        {checkRole(roles , "guru") &&  <NavButton
             handleSidebar={handleSiderbar}
             to={`pengampu/halaqoh/absensi`}
             path={"pengampu"}
@@ -108,7 +110,7 @@ export default function SidebarGuru({ setSidebar }) {
                 }`}
               />
             }
-          />
+          />}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
@@ -124,7 +126,7 @@ export default function SidebarGuru({ setSidebar }) {
         />
         {/* <NavButton to="mata pelajaran" title={"Mata Pelajaran"} logo={<LogoJadwal />} /> */}
         {/* <NavButton to="kelas" title={"Kelas"} logo={<LogoJadwal />} /> */}
-        <NavButton
+       {checkRole(roles , "guru")  &&  <NavButton
           handleSidebar={handleSiderbar}
           to="pelanggaran"
           path="pelanggaran"
@@ -136,8 +138,8 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
-        <NavButton
+        />}
+       {checkRole(roles , "guru") &&  <NavButton
           handleSidebar={handleSiderbar}
           to="prestasi"
           path="prestasi"
@@ -149,9 +151,9 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
+        /> }
         {/* <NavButton to="penilaian" title={"Penilaian"} logo={<LogoJadwal />} /> */}
-        <NavButton
+       {checkRole(roles , "guru") &&  <NavButton
           handleSidebar={handleSiderbar}
           to="perizinan-pulang"
           path="perizinan-pulang"
@@ -163,8 +165,8 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
-        <NavButton
+        />}
+       {checkRole (roles, "guru") &&  <NavButton
           handleSidebar={handleSiderbar}
           to="perizinan-kunjungan"
           path="perizinan-kunjungan"
@@ -178,8 +180,8 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
-        <NavButton
+        />}
+       {checkRole (roles , "guru") &&  <NavButton
           handleSidebar={handleSiderbar}
           to="laporan-guru-piket"
           path="laporan-guru-piket"
@@ -193,7 +195,7 @@ export default function SidebarGuru({ setSidebar }) {
               }`}
             />
           }
-        />
+        />}
         <NavButton
           handleSidebar={handleSiderbar}
           to="daftar-siswa"

@@ -17,9 +17,9 @@ export default function ProtectRoute({ children, userRole }) {
       staleTime: 60 * 1000 * 60 * 12, // 12 jam,
       select: (response) => {
         const role = response?.data?.role;
-
       
-        if (role !== userRole) {
+      
+        if (!userRole.includes(role)) {
           Cookies.remove("mysmk_token");
           return <Navigate to="/login" />;
         }

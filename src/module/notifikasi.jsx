@@ -63,7 +63,7 @@ console.log('jumlah', jumlah);
                     return navigate(
                       `/guru/halaqoh/absensi/${dayjs(value?.tanggal).format(
                         "YYYY-MM-DD"
-                      )}`
+                      )}?halaqoh=${value.waktu}`
                     );
                   }}
                   className="flex items-center   text-sm xl:text-xs italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
@@ -71,7 +71,7 @@ console.log('jumlah', jumlah);
                   <div className="h-12 w-2 bg-green-400  mr-5"></div>
                   <div>
                     {" "}
-                    Anda Belum melakukan abensi Halaqoh pada tanggal{" "}
+                    Anda Belum melakukan abensi Halaqoh {value?.waktu} pada tanggal{" "}
                     {dayjs(value?.tanggal).format("DD-MM-YYYY")}
                   </div>
                 </button>

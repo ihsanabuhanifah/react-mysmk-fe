@@ -1,11 +1,13 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { halaqohManualCreate } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
+import { formatDay } from "../../../utils";
 
-import { listHalaqoh, updateAbsensiHalaqoh } from "../../../api/guru/halaqoh";
+
+import { listBelumAbsensi, listHalaqoh, updateAbsensiHalaqoh } from "../../../api/guru/halaqoh";
 
 import * as Yup from "yup";
 import {
@@ -20,7 +22,12 @@ import {
   Select,
 } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
-import { izinOptions, waktuOptions } from "../../../utils/options";
+import {
+  halaqohOptions,
+  izinOptions,
+  tipeHalaqohOptions,
+  waktuOptions,
+} from "../../../utils/options";
 import { formatValue, getOptions } from "../../../utils/format";
 import { ErrorMEssage, FormText, TableLoading } from "../../../components";
 
@@ -29,6 +36,16 @@ import usePage from "../../../hook/usePage";
 import useList from "../../../hook/useList";
 
 let personalSchema = Yup.object().shape({
+  tipe: Yup.string()
+    .nullable()
+    .when("status_kehadiran", {
+      is: (id) => {
+        if (id === 1) {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib disii"),
+    }),
   dari_ayat: Yup.string()
     .nullable()
     .when("status_kehadiran", {
@@ -101,12 +118,21 @@ export default function AbsensiHalaqoh() {
   let { tanggal } = useParams();
   let { dataAlquran } = useList();
   let { page, pageSize, setPage, setPageSize } = usePage();
-  let [dariTanggal, setDariTanggal] = React.useState(tanggal);
-  let [sampaiTanggal, setSampaiTanggal] = React.useState(tanggal);
+
   let [tanggalActive, setTanggalActive] = React.useState(tanggal);
+  let [halaqoh] = useSearchParams();
+  let waktu_halaqoh = halaqoh.get("halaqoh");
+  console.log(waktu_halaqoh);
+  let [waktu, setWaktu] = React.useState(waktu_halaqoh);
 
-  let [waktu, setWaktu] = React.useState("pagi");
-
+  React.useEffect(() => {
+    if (waktu_halaqoh === null) {
+      setWaktu("pagi");
+    } else {
+      setWaktu(waktu_halaqoh);
+    }
+    setTanggalActive(tanggal);
+  }, [waktu_halaqoh]);
   const [loading, setLoading] = React.useState(false);
 
   let queryClient = useQueryClient();
@@ -145,7 +171,20 @@ export default function AbsensiHalaqoh() {
       },
     }
   );
-  
+
+  let { data: dataBelumAbsen, isLoading: isLoadingBelumAbsen } = useQuery(
+    //query key
+    ["belum_absensi_halaqoh", parameter],
+    //axios function,triggered when page/pageSize change
+    () => listBelumAbsensi(),
+    //configuration
+    {
+      refetchInterval: 1000 * 60 * 60,
+      select: (response) => {
+        return response.data;
+      },
+    }
+  );
 
   const creeteJadwal = async () => {
     setLoading(true);
@@ -214,11 +253,6 @@ export default function AbsensiHalaqoh() {
 
   //   console.log(initialState);
 
-  React.useEffect(() => {
-    setDariTanggal(tanggal);
-    setSampaiTanggal(tanggal);
-  }, [tanggal]);
-
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
       <div className="space-x-5 mt-5  ov">
@@ -241,6 +275,7 @@ export default function AbsensiHalaqoh() {
               selection
               search
               fluid
+              placeholder="Semua"
               options={waktuOptions}
               id="waktu"
               name="waktu"
@@ -279,10 +314,7 @@ export default function AbsensiHalaqoh() {
           </div>
         </section>
       </div>
-      <section
-        className="mt-5 h-full overflow-x-scroll overflow-y-hidden"
-        padded
-      >
+      <section className="mt-5 h-full " padded>
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -311,6 +343,7 @@ export default function AbsensiHalaqoh() {
                       <Table.HeaderCell>No</Table.HeaderCell>
                       <Table.HeaderCell singleLine>Nama</Table.HeaderCell>
                       <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
+                   
                       <Table.HeaderCell singleLine>
                         {" "}
                         Dari surat
@@ -337,11 +370,12 @@ export default function AbsensiHalaqoh() {
                             {value?.siswa?.nama_siswa}
                           </Table.Cell>
                           <Table.Cell>
+                            <div className="space-y-5">
                             <div className="flex flex-col">
                               <Dropdown
                                 selection
                                 search
-                                options={izinOptions}
+                                options={halaqohOptions}
                                 id={`absensi_kehadiran[${index}]status_kehadiran`}
                                 name={`absensi_kehadiran[${index}]status_kehadiran`}
                                 onChange={(e, data) => {
@@ -352,6 +386,34 @@ export default function AbsensiHalaqoh() {
                                   setFieldValue(
                                     `absensi_kehadiran[${index}]kehadiran`,
                                     data
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]tipe`,
+                                    ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]dari_surat`,
+                                   ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]dari_ayat`,
+                                   ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]sampai_surat`,
+                                   ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]sampai_ayat`,
+                                   ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]total_halaman`,
+                                   ""
+                                  );
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]keterangan`,
+                                   ""
                                   );
                                 }}
                                 error={
@@ -375,7 +437,40 @@ export default function AbsensiHalaqoh() {
                                 </ErrorMEssage>
                               )}
                             </div>
+                            <div className="flex flex-col">
+                              <Dropdown
+                                selection
+                                search
+                                placeholder="Tipe Setoran"
+                                options={tipeHalaqohOptions}
+                                id={`absensi_kehadiran[${index}]tipe`}
+                                name={`absensi_kehadiran[${index}]tipe`}
+                                onChange={(e, data) => {
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]tipe`,
+                                    data.value
+                                  );
+                                  
+                                }}
+                                error={
+                                  errors?.absensi_kehadiran?.[index]
+                                    ?.tipe &&
+                                  touched?.absensi_kehadiran?.[index]
+                                    ?.tipe
+                                }
+                                value={formatValue(value?.tipe)}
+                              />
+
+                              {errors?.absensi_kehadiran?.[index]?.tipe &&
+                                touched?.absensi_kehadiran?.[index]?.tipe && (
+                                  <ErrorMEssage>
+                                    {errors?.absensi_kehadiran?.[index]?.tipe}
+                                  </ErrorMEssage>
+                                )}
+                            </div>
+                            </div>
                           </Table.Cell>
+                         
                           <Table.Cell singleLine width={"sixteen"}>
                             <div className="space-y-5">
                               <div className="text-left">
@@ -398,6 +493,7 @@ export default function AbsensiHalaqoh() {
                                   search
                                   value={formatValue(value?.dari_surat)}
                                   clearable
+                                  fluid
                                   error={
                                     errors?.absensi_kehadiran?.[index]
                                       ?.dari_surat &&
@@ -470,6 +566,7 @@ export default function AbsensiHalaqoh() {
                                   search
                                   value={formatValue(value?.sampai_surat)}
                                   clearable
+                                  fluid
                                   error={
                                     errors?.absensi_kehadiran?.[index]
                                       ?.sampai_surat &&
@@ -585,10 +682,46 @@ export default function AbsensiHalaqoh() {
                   />
                 )}
               </div>
+              <section>
+          <h3 className="text-2xl font-poppins">List Musyrif Belum Absensi</h3>
+          <Table celled selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>No</Table.HeaderCell>
+                <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                <Table.HeaderCell>Nama Musyrif</Table.HeaderCell>
+               
+
+                <Table.HeaderCell>Waktu</Table.HeaderCell>
+                <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <TableLoading
+                count={8}
+                isLoading={isLoadingBelumAbsen}
+                data={dataBelumAbsen?.data}
+                messageEmpty={"Tidak Ada Guru Belum Absen"}
+              >
+                {dataBelumAbsen?.halaqoh?.map((value, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
+                    <Table.Cell>{value?.halaqoh?.teacher?.nama_guru}</Table.Cell>
+                    <Table.Cell>{value?.waktu}</Table.Cell>
+                    <Table.Cell>{value?.halaqoh?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
+                  </Table.Row>
+                ))}
+              </TableLoading>
+            </Table.Body>
+          </Table>
+        </section>
             </form>
           )}
         </Formik>
       </section>
+
+      
     </LayoutPage>
   );
 }

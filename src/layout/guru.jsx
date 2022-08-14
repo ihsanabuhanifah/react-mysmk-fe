@@ -16,7 +16,7 @@ import { requestToken } from "../firebaseInit";
 export default function Guru() {
   React.useEffect(() => {
     document.title = "MySMK";
-    requestToken();
+    // requestToken();
   });
 
   let { data } = useQuery(

@@ -40,12 +40,17 @@ export default function Login() {
     try {
       console.log(values);
       const result = await login(values);
-
+console.log(result)
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
 
       if (result.data.role === "Guru") {
+        return navigate("/guru/dashboard");
+      }
+
+      
+      if (result.data.role === "Musyrif") {
         return navigate("/guru/dashboard");
       }
       console.log(result.data.role);
