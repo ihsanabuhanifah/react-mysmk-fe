@@ -6,7 +6,7 @@ export function listJadwal(params) {
 }
 export function createJadwalHandle(payload) {
   syncToken();
-  return axios.get("/guru/jadwal/create", payload);
+  return axios.post("/guru/jadwal/create", payload);
 }
 export function listJadwalAll(params) {
   syncToken();

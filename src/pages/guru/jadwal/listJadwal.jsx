@@ -31,7 +31,7 @@ export default function ListJadwal() {
   );
   return (
     <LayoutPage title={"List Jadwal Aktif"}>
-      <section>
+      <section className="grid grid-cols-6 gap-5 mb-5">
         <Form>
           <Form.Field
             control={Select}
@@ -52,7 +52,7 @@ export default function ListJadwal() {
             searchInput={{ id: "hari", name: "hari" }}
           />
         </Form>
-        <div className="col-span-1 lg:col-span-1 2xl:col-span-1">
+        <div className=" col-start-6">
             
             <Button
               content={"Buat Jadwal"}

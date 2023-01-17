@@ -29,11 +29,11 @@ export function CreateJadwal() {
     ],
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values, { resetForm }) => {
     try {
       const response = await createJadwalHandle(values);
 
-      return toast.success(response?.data?.msg, {
+      toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -42,6 +42,23 @@ export function CreateJadwal() {
         draggable: true,
         progress: undefined,
         theme: "colored",
+      });
+      resetForm();
+      setInitialState({
+        data: [
+          {
+            hari: "",
+            kelas_id: "",
+            teacher_id: "",
+            mapel_id: "",
+            jam_ke: "",
+            jumlah_jam: "",
+            semester: "",
+            ta_id: "",
+            student: "",
+            status: 1,
+          },
+        ],
       });
     } catch (err) {
       if (err?.response?.status === 422) {
@@ -284,8 +301,8 @@ export function CreateJadwal() {
                             search
                             label={{
                               children: "Semester",
-                              htmlFor: `data[${index}semester`,
-                              name: `data[${index}semester`,
+                              htmlFor: `data[${index}]semester`,
+                              name: `data[${index}]semester`,
                             }}
                             placeholder="Pilih"
                             options={[
@@ -296,11 +313,11 @@ export function CreateJadwal() {
                               { key: "5", value: 5, text: 5 },
                               { key: "6", value: 6, text: 6 },
                             ]}
-                            id={`data[${index}semester`}
-                            name={`data[${index}semester`}
+                            id={`data[${index}]semester`}
+                            name={`data[${index}]semester`}
                             onChange={(e, data) => {
                               setFieldValue(
-                                `data[${index}semester`,
+                                `data[${index}]semester`,
                                 data.value
                               );
                             }}
