@@ -93,16 +93,34 @@ export default function Absensi() {
       keepPreviousData: true,
       select: (response) => response.data,
       onSuccess: (data) => {
-        setIniitalState({
-          ...initialState,
-          tanggal: data?.absensi?.[0]?.tanggal,
-          semester: data?.absensi?.[0]?.semester,
-          ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
-          kelas_id: data?.absensi?.[0]?.kelas?.id,
-          mapel_id: data?.absensi?.[0]?.mapel?.id,
-          absensi_kehadiran: data?.absensi,
-          agenda_kelas: data?.agenda,
-        });
+        let session = sessionStorage.getItem(
+          `${kelas_id}_${mapel_id}_${tanggal}`
+        );
+
+        if (session === undefined || session == null) {
+          setIniitalState({
+            ...initialState,
+            tanggal: data?.absensi?.[0]?.tanggal,
+            semester: data?.absensi?.[0]?.semester,
+            ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
+            kelas_id: data?.absensi?.[0]?.kelas?.id,
+            mapel_id: data?.absensi?.[0]?.mapel?.id,
+            absensi_kehadiran: data?.absensi,
+            agenda_kelas: data?.agenda,
+          });
+        } else {
+          session = JSON.parse(session);
+          setIniitalState({
+            ...initialState,
+            tanggal: session.tanggal,
+            semester: session.semester,
+            ta_id: session.tahun_ajaran?.id,
+            kelas_id: session.kelas?.id,
+            mapel_id: session.mapel?.id,
+            absensi_kehadiran: session?.absensi_kehadiran,
+            agenda_kelas: session?.agenda_kelas,
+          });
+        }
       },
     }
   );
@@ -114,6 +132,7 @@ export default function Absensi() {
       queryClient.invalidateQueries("absensi");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
       queryClient.invalidateQueries("notifikasi_absensi_kelas");
+      sessionStorage.removeItem(`${kelas_id}_${mapel_id}_${tanggal}`)
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -124,6 +143,8 @@ export default function Absensi() {
         progress: undefined,
         theme: "colored",
       });
+
+     
     } catch (err) {
       console.log(err);
 
@@ -146,8 +167,15 @@ export default function Absensi() {
     setTanggalActive(tanggal);
   }, [tanggal]);
 
+  let sessionTes = sessionStorage.getItem(
+    `${kelas_id}_${mapel_id}_${tanggal}`
+  );
+
+  console.log('se',sessionTes)
+
   return (
     <LayoutPage title={"Agenda Mengajar"}>
+      {sessionTes !== null ? (<p className="text-red-500 text-lg font-bold">Belum Di Simpen ke Database</p>) : null} 
       <div className="space-x-5 mt-5">
         <Formik
           initialValues={initialState}
@@ -249,7 +277,19 @@ export default function Absensi() {
                             label={`Jam ke-${value?.jam_ke}`}
                             placeholder="Materi"
                             name={`agenda_kelas[${index}]materi`}
-                            onChange={handleChange}
+                            onChange={(e, data) => {
+                              console.log("e", e);
+                              sessionStorageSet(
+                                kelas_id,
+                                mapel_id,
+                                tanggal,
+                                values
+                              );
+                              setFieldValue(
+                                `agenda_kelas[${index}]materi`,
+                                data.value
+                              );
+                            }}
                             onBlur={handleBlur}
                             value={value?.materi === null ? "" : value?.materi}
                             disabled={isSubmitting}
@@ -291,6 +331,7 @@ export default function Absensi() {
                             onChange={(e) => {
                               if (e.target.checked) {
                                 let kehadiran = [];
+                                // eslint-disable-next-line array-callback-return
                                 values?.absensi_kehadiran?.map((value) => {
                                   value.kehadiran.id = 1;
 
@@ -298,6 +339,12 @@ export default function Absensi() {
                                 });
 
                                 setFieldValue("absensi_kehadiran", kehadiran);
+                                sessionStorageSet(
+                                  kelas_id,
+                                  mapel_id,
+                                  tanggal,
+                                  values
+                                );
                               }
                             }}
                             type="checkbox"
@@ -342,6 +389,12 @@ export default function Absensi() {
                                       `absensi_kehadiran[${index}]kehadiran.id`,
                                       data.value
                                     );
+                                    sessionStorageSet(
+                                      kelas_id,
+                                      mapel_id,
+                                      tanggal,
+                                      values
+                                    );
                                   }}
                                   error={
                                     errors?.absensi_kehadiran?.[index]
@@ -368,7 +421,18 @@ export default function Absensi() {
                                 rows={2}
                                 id={`absensi_kehadiran[${index}]keterangan`}
                                 name={`absensi_kehadiran[${index}]keterangan`}
-                                onChange={handleChange}
+                                onChange={(e, data) => {
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]keterangan`,
+                                    data.value
+                                  );
+                                  sessionStorageSet(
+                                    kelas_id,
+                                    mapel_id,
+                                    tanggal,
+                                    values
+                                  );
+                                }}
                                 onBlur={handleBlur}
                                 type="text"
                                 placeholder="Keterangan"
@@ -386,7 +450,7 @@ export default function Absensi() {
                           </Table.Row>
                         ))}
                     </TableLoading>
-                  </Table.Body>
+                  </Table.Body> 
                 </Table>
                 {errors.agenda_kelas !== undefined && (
                   <Message color="red">
@@ -416,5 +480,12 @@ export default function Absensi() {
         </Formik>
       </div>
     </LayoutPage>
+  );
+}
+
+function sessionStorageSet(kelas_id, mapel_id, tanggal, values) {
+  sessionStorage.setItem(
+    `${kelas_id}_${mapel_id}_${tanggal}`,
+    JSON.stringify(values)
   );
 }

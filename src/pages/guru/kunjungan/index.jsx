@@ -5,11 +5,10 @@ import {
   Dropdown,
   Button,
   Input,
-  Segment,
+  
   Form,
   TextArea,
-  Menu,
-  Icon,
+  
 } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import {
@@ -17,14 +16,14 @@ import {
   responseKunjungan,
 } from "../../../api/guru/pulangDanKunjungan";
 import { TableLoading, ModalFilter } from "../../../components";
-import { handleViewNull, formatDate, statusApproval } from "../../../utils";
+import { handleViewNull, showFormattedDate, statusApproval } from "../../../utils";
 import { Formik } from "formik";
 import { toast } from "react-toastify";
 
 import * as Yup from "yup";
 
 import useDebounce from "../../../hook/useDebounce";
-import { approveOptions, pageSizeOptions } from "../../../utils/options";
+import { approveOptions } from "../../../utils/options";
 
 export default function Kunjungan() {
   let queryClient = useQueryClient();
@@ -192,7 +191,7 @@ export default function Kunjungan() {
                               {handleViewNull(value?.siswa?.nama_siswa)}
                             </span>
                           </Table.Cell>
-                          <Table.Cell>{formatDate(value?.tanggal)}</Table.Cell>
+                          <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
 
                           <Table.Cell textAlign="left">
                             {handleViewNull(value?.kepentingan)}

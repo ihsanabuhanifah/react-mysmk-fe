@@ -15,10 +15,15 @@ import {
   laporanPulang,
 } from "../../../api/guru/pulangDanKunjungan";
 import { TableLoading } from "../../../components";
-import { handleViewNull, formatDate, statusApproval } from "../../../utils";
+import {
+  handleViewNull,
+  showFormattedDate,
+  statusApproval,
+  selisihHari,
+} from "../../../utils";
 import { Formik } from "formik";
-import {  toast } from "react-toastify";
-import { formatDay, selisihHari } from "../../../utils/waktu";
+import { toast } from "react-toastify";
+
 import * as Yup from "yup";
 import FilterPerizinanPulang from "./filterPulang";
 
@@ -218,9 +223,11 @@ export default function Pulang() {
                               {handleViewNull(value?.siswa?.nama_siswa)}
                             </span>
                           </Table.Cell>
-                          <Table.Cell>{formatDay(value?.izin_dari)}</Table.Cell>
                           <Table.Cell>
-                            {formatDay(value?.izin_sampai)}
+                            {showFormattedDate(value?.izin_dari)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {showFormattedDate(value?.izin_sampai)}
                           </Table.Cell>
                           <Table.Cell textAlign="left">
                             {handleViewNull(value?.kepentingan)}
@@ -342,7 +349,7 @@ export default function Pulang() {
                                 }}
                               />
                             ) : (
-                              formatDate(value?.tanggal_kembali)
+                              showFormattedDate(value?.tanggal_kembali)
                             )}
                           </Table.Cell>
                           <Table.Cell>

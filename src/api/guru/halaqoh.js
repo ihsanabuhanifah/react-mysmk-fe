@@ -34,3 +34,8 @@ export function listBelumAbsensi(params) {
   syncToken();
   return axios.get("/guru/halaqoh/belum-absensi", { params });
 }
+
+export function listRekapHalaqoh(params) {
+  syncToken();
+  return axios.get("/guru/halaqoh/absensi/rekap", { params });
+}

@@ -5,14 +5,13 @@ import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
-import LogoNotif from "../image/notifikasi.png";
-import { Image, Input } from "semantic-ui-react";
+
 import SidebarGuru from "./Sidebar/sidebarGuru";
 import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
 import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
-import { requestToken } from "../firebaseInit";
+
 export default function Guru() {
   React.useEffect(() => {
     document.title = "MySMK";
@@ -43,7 +42,7 @@ export default function Guru() {
 
   return (
     <div className="h-screen antialiased text-gray-700 border ">
-      <header className="h-[8%] block  xl:hidden  lg:h-1/12 xl:h-1/12 w-full flex items-center grid grid-cols-10 gap-x-5 border  ">
+      <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border  ">
         <div className=" col-span-4 xl:col-span-2 pl-5 lg:pl-2  xl:pl-5 2xl:pl-10  h-full w-full   relative flex items-center">
           <img
             className="absolute"

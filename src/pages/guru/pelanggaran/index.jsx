@@ -18,7 +18,7 @@ import {
   DeleteButton,
   ModalAlert,
 } from "../../../components";
-import { handleViewNull, formatDate } from "../../../utils";
+import { handleViewNull, showFormattedDate } from "../../../utils";
 import { useQueryClient } from "react-query";
 import useDebounce from "../../../hook/useDebounce";
 import { pageSizeOptions } from "../../../utils/options";
@@ -256,7 +256,7 @@ export default function Pelanggaran() {
                               </span>
                             </Table.Cell>
                             <Table.Cell>
-                              {formatDate(value?.tanggal)}
+                              {showFormattedDate(value?.tanggal)}
                             </Table.Cell>
 
                             <Table.Cell textAlign="left">

@@ -7,11 +7,11 @@ import { useQuery, useQueryClient } from "react-query";
 import { TableLoading } from "../../../components";
 import { absensiManualCreate, listAbsensi } from "../../../api/guru/absensi";
 
-import { formatDate, formatHari, formatTahun } from "../../../utils";
+import { showFormattedDate ,formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
 
-import { formatDay } from "../../../utils/waktu";
+import { sho, showFormattedDatewFormattedDate } from "../../../utils/waktu";
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
@@ -51,16 +51,7 @@ export default function Jadwal() {
       },
     }
   );
-  const dayOptions = [
-    { key: "1", value: "semua", text: "Semua" },
-    { key: "2", value: "senin", text: "Senin" },
-    { key: "3", value: "selasa", text: "Selasa" },
-    { key: "4", value: "rabu", text: "Rabu" },
-    { key: "5", value: "kamis", text: "Kamis" },
-    { key: "6", value: "jumat", text: "Jumat" },
-    { key: "7", value: "sabtu", text: "Sabtu" },
-    { key: "8", value: "minggu", text: "Minggu" },
-  ];
+ 
 
   const [loading, setLoading] = React.useState(false);
   
@@ -170,7 +161,25 @@ export default function Jadwal() {
                   return navigate("/guru/absensi/rekap-agenda");
                 }}
               />
+              
             </div>
+            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+            
+            <Button
+              content={"Jadwal"}
+              type="submit"
+              fluid
+              icon={() => <Icon name="add" />}
+              loading={loading}
+              size="medium"
+              color="linkedin"
+              disabled={loading}
+              onClick={() => {
+                return navigate("/guru/absensi/jadwal");
+              }}
+            />
+        
+        </div>
           </section>
           <Table celled selectable>
             <Table.Header>
@@ -254,7 +263,7 @@ export default function Jadwal() {
                 {dataBelumAbsen?.data?.map((value, index) => (
                   <Table.Row key={index}>
                     <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
+                    <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
@@ -268,3 +277,15 @@ export default function Jadwal() {
     </LayoutPage>
   );
 }
+
+
+export const dayOptions = [
+  { key: "1", value: "semua", text: "Semua" },
+  { key: "2", value: "senin", text: "Senin" },
+  { key: "3", value: "selasa", text: "Selasa" },
+  { key: "4", value: "rabu", text: "Rabu" },
+  { key: "5", value: "kamis", text: "Kamis" },
+  { key: "6", value: "jumat", text: "Jumat" },
+  { key: "7", value: "sabtu", text: "Sabtu" },
+  { key: "8", value: "minggu", text: "Minggu" },
+];

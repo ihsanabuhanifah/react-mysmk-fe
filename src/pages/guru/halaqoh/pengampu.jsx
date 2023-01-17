@@ -27,7 +27,7 @@ import { formatHari } from "../../../utils";
 import { toast } from "react-toastify";
 import FilterRekap from "./filter";
 import { encodeURlFormat } from "../../../utils";
-import { formatDay, handleViewNull } from "../../../utils/waktu";
+import {  showFormattedDate, handleViewNull } from "../../../utils/waktu";
 import {
   listAbsenPengampu,
   updateAbsensiPengampu,
@@ -277,7 +277,7 @@ export default function PengampuHalaqoh() {
                       {values?.rows?.map((value, index) => (
                         <Table.Row key={index}>
                           <Table.Cell>{index + 1}</Table.Cell>
-                          <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
+                          <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
 
                           <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                           <Table.Cell>

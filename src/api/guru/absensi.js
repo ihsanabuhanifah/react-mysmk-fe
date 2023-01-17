@@ -4,6 +4,14 @@ export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
 }
+export function createJadwalHandle(payload) {
+  syncToken();
+  return axios.get("/guru/jadwal/create", payload);
+}
+export function listJadwalAll(params) {
+  syncToken();
+  return axios.get("/guru/jadwal/list-all", { params });
+}
 
 export function listAbsensi(params) {
   syncToken();

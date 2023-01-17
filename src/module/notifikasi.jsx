@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
 import useNotif from "../hook/useNotif";
-import { formatHariInd } from "../utils/waktu";
+import { showFormattedDate } from "../utils/waktu";
 export default function Notifikasi({ setNotif }) {
   let navigate = useNavigate();
   // eslint-disable-next-line no-empty-pattern
@@ -15,9 +15,9 @@ console.log('jumlah', jumlah);
   };
 
   return (
-    <div className=" mt-0   p-3 h-full xl:h-full xl:border-l-2">
+    <section className=" mt-0 overflow-auto   p-3 h-full xl:h-full xl:border-l-2">
       <h1 className="text-lg xl:block hidden px-2 mb-5">
-        {formatHariInd(new Date())}
+        {showFormattedDate(new Date())}
       </h1>
       <div className="h-[90%] overflow-visible">
         <div className="px-2 flex items-center justify-between ">
@@ -104,6 +104,6 @@ console.log('jumlah', jumlah);
           </section></>}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

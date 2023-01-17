@@ -14,7 +14,7 @@ import { formatHari, formatTahun } from "../../../utils";
 import useList from "../../../hook/useList";
 import usePage from "../../../hook/usePage";
 import {PaginationTable} from "../../../components";
-import { formatDay } from "../../../utils/waktu";
+import { showFormattedDate } from "../../../utils/waktu";
 
 export default function ListGuruPiketToday() {
   const navigate = useNavigate();
@@ -188,7 +188,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
               {listLaporan?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
+                  <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
                   <Table.Cell>{value?.guru?.nama_guru}</Table.Cell>
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}

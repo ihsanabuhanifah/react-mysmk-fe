@@ -1,15 +1,16 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import qs from "qs";
+
 const headers = {
   Accept: "application/json",
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
-  baseURL: "https://mysmk-be.smkmadinatulquran.sch.id/",
+  // baseURL: "https://mysmk-be.smkmadinatulquran.sch.id/",
   // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
-  // baseURL: "http://localhost:8081",
+  baseURL: "http://localhost:8081",
   timeout: 1000 * 60 * 3,
   paramsSerializer: function (params) {
     return qs.stringify(params, { encode: false, skipNulls: true });

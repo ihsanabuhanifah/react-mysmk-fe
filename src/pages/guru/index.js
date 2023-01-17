@@ -16,6 +16,9 @@ import DaftarSiswa from "./daftar-siswa";
 import Agenda from "./jadwal/agenda";
 import DetailSiswa from "./daftar-siswa/detailSiswa";
 import PengampuHalaqoh from "./halaqoh/pengampu";
+import RekapHalaqoh from "./halaqoh/rekapHalaqoh";
+import ListJadwal from "./jadwal/listJadwal";
+import { CreateJadwal } from "./jadwal/createJadwal";
 export {
   Absensi,
   Jadwal,
@@ -34,5 +37,8 @@ export {
   DaftarSiswa,
   Agenda,
   DetailSiswa,
-  PengampuHalaqoh
+  PengampuHalaqoh,
+  RekapHalaqoh,
+  ListJadwal,
+  CreateJadwal,
 };

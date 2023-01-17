@@ -4,10 +4,13 @@ import { halaqohManualCreate } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
-import { formatDay } from "../../../utils";
+import { sho, showFormattedDate } from "../../../utils";
 
-
-import { listBelumAbsensi, listHalaqoh, updateAbsensiHalaqoh } from "../../../api/guru/halaqoh";
+import {
+  listBelumAbsensi,
+  listHalaqoh,
+  updateAbsensiHalaqoh,
+} from "../../../api/guru/halaqoh";
 
 import * as Yup from "yup";
 import {
@@ -117,7 +120,7 @@ let AbsensiSchema = Yup.object().shape({
 export default function AbsensiHalaqoh() {
   let { tanggal } = useParams();
   let { dataAlquran } = useList();
-  let { page, pageSize, setPage, setPageSize } = usePage();
+  let { page, pageSize } = usePage();
 
   let [tanggalActive, setTanggalActive] = React.useState(tanggal);
   let [halaqoh] = useSearchParams();
@@ -153,7 +156,7 @@ export default function AbsensiHalaqoh() {
   };
   let { isLoading, data } = useQuery(
     //query key
-    ["absensi", parameter],
+    ["absensi_halaqoh", parameter],
     //axios function,triggered when page/pageSize change
     () => listHalaqoh(parameter),
     //configuration
@@ -161,13 +164,28 @@ export default function AbsensiHalaqoh() {
       keepPreviousData: true,
       select: (response) => response.data,
       onSuccess: (data) => {
-        setIniitalState({
-          ...initialState,
-          tanggal: data?.halaqoh?.rows?.[0]?.tanggal,
-          halaqoh_id: data?.halaqoh?.rows?.[0]?.halaqoh.id,
-          waktu: data?.halaqoh?.rows?.[0]?.waktu,
-          absensi_kehadiran: data?.halaqoh?.rows,
-        });
+
+        let session = sessionStorage.getItem(`halaqoh_${tanggal}`)
+
+        if(session === undefined || session === null){
+          setIniitalState({
+            ...initialState,
+            tanggal: data?.halaqoh?.rows?.[0]?.tanggal,
+            halaqoh_id: data?.halaqoh?.rows?.[0]?.halaqoh.id,
+            waktu: data?.halaqoh?.rows?.[0]?.waktu,
+            absensi_kehadiran: data?.halaqoh?.rows,
+          });
+        }else{
+          session = JSON.parse(session);
+          setIniitalState({
+            ...initialState,
+            tanggal: session?.tanggal,
+            halaqoh_id: session?.halaqoh_id,
+            waktu: session?.waktu,
+            absensi_kehadiran: session?.absensi_kehadiran,
+          });
+        }
+      
       },
     }
   );
@@ -192,10 +210,10 @@ export default function AbsensiHalaqoh() {
       const response = await halaqohManualCreate();
 
       setLoading(false);
-      queryClient.invalidateQueries("jadwal");
+
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
-      queryClient.invalidateQueries("absensi");
-      queryClient.invalidateQueries("notifikasi_absensi_kelas");
+      queryClient.invalidateQueries("absensi_halaqoh");
+      queryClient.invalidateQueries("belum_absensi_halaqoh");
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -226,7 +244,7 @@ export default function AbsensiHalaqoh() {
       const response = await updateAbsensiHalaqoh(values);
       queryClient.invalidateQueries("absensi");
       queryClient.invalidateQueries("notifikasi");
-
+      sessionStorage.removeItem(`halaqoh_${tanggal}`)
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -251,10 +269,13 @@ export default function AbsensiHalaqoh() {
     }
   };
 
-  //   console.log(initialState);
+  let sessionTes = sessionStorage.getItem(
+    `halaqoh_${tanggal}`
+  );
 
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
+       {sessionTes !== null ? (<p className="text-red-500 text-lg font-bold">Belum Di Simpen ke Database</p>) : null} 
       <div className="space-x-5 mt-5  ov">
         <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
           <div className=" col-span-1 lg:col-span-2">
@@ -312,6 +333,19 @@ export default function AbsensiHalaqoh() {
               onClick={creeteJadwal}
             />
           </div>
+          <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+            <Button
+              content={"Rekap Halaqoh"}
+              type="button"
+              fluid
+              icon={() => <Icon name="newspaper outline" />}
+              size="medium"
+              color="teal"
+              onClick={() => {
+                return navigate("/guru/halaqoh/absensi/rekap");
+              }}
+            />
+          </div>
         </section>
       </div>
       <section className="mt-5 h-full " padded>
@@ -343,7 +377,7 @@ export default function AbsensiHalaqoh() {
                       <Table.HeaderCell>No</Table.HeaderCell>
                       <Table.HeaderCell singleLine>Nama</Table.HeaderCell>
                       <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
-                   
+
                       <Table.HeaderCell singleLine>
                         {" "}
                         Dari surat
@@ -371,106 +405,106 @@ export default function AbsensiHalaqoh() {
                           </Table.Cell>
                           <Table.Cell>
                             <div className="space-y-5">
-                            <div className="flex flex-col">
-                              <Dropdown
-                                selection
-                                search
-                                options={halaqohOptions}
-                                id={`absensi_kehadiran[${index}]status_kehadiran`}
-                                name={`absensi_kehadiran[${index}]status_kehadiran`}
-                                onChange={(e, data) => {
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]status_kehadiran`,
-                                    data.value
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]kehadiran`,
-                                    data
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]tipe`,
-                                    ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]dari_surat`,
-                                   ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]dari_ayat`,
-                                   ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]sampai_surat`,
-                                   ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]sampai_ayat`,
-                                   ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]total_halaman`,
-                                   ""
-                                  );
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]keterangan`,
-                                   ""
-                                  );
-                                }}
-                                error={
-                                  errors?.absensi_kehadiran?.[index]?.kehadiran
-                                    ?.alasan !== undefined &&
-                                  errors?.absensi_kehadiran?.[index]?.kehadiran
-                                    ?.alasan
-                                }
-                                value={formatValue(value?.status_kehadiran)}
-                              />
+                              <div className="flex flex-col">
+                                <Dropdown
+                                  selection
+                                  search
+                                  options={halaqohOptions}
+                                  id={`absensi_kehadiran[${index}]status_kehadiran`}
+                                  name={`absensi_kehadiran[${index}]status_kehadiran`}
+                                  onChange={(e, data) => {
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]status_kehadiran`,
+                                      data.value
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]kehadiran`,
+                                      data
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]tipe`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]dari_surat`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]dari_ayat`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]sampai_surat`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]sampai_ayat`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]total_halaman`,
+                                      ""
+                                    );
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]keterangan`,
+                                      ""
+                                    );
 
-                              {console.log("ee", errors)}
-
-                              {errors?.absensi_kehadiran?.[index]?.kehadiran
-                                ?.alasan !== undefined && (
-                                <ErrorMEssage>
-                                  {
+                                    sessionStorageSet(tanggal, values);
+                                  }}
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]
+                                      ?.kehadiran?.alasan !== undefined &&
                                     errors?.absensi_kehadiran?.[index]
                                       ?.kehadiran?.alasan
                                   }
-                                </ErrorMEssage>
-                              )}
-                            </div>
-                            <div className="flex flex-col">
-                              <Dropdown
-                                selection
-                                search
-                                placeholder="Tipe Setoran"
-                                options={tipeHalaqohOptions}
-                                id={`absensi_kehadiran[${index}]tipe`}
-                                name={`absensi_kehadiran[${index}]tipe`}
-                                onChange={(e, data) => {
-                                  setFieldValue(
-                                    `absensi_kehadiran[${index}]tipe`,
-                                    data.value
-                                  );
-                                  
-                                }}
-                                error={
-                                  errors?.absensi_kehadiran?.[index]
-                                    ?.tipe &&
-                                  touched?.absensi_kehadiran?.[index]
-                                    ?.tipe
-                                }
-                                value={formatValue(value?.tipe)}
-                              />
+                                  value={formatValue(value?.status_kehadiran)}
+                                />
 
-                              {errors?.absensi_kehadiran?.[index]?.tipe &&
-                                touched?.absensi_kehadiran?.[index]?.tipe && (
+                                {console.log("ee", errors)}
+
+                                {errors?.absensi_kehadiran?.[index]?.kehadiran
+                                  ?.alasan !== undefined && (
                                   <ErrorMEssage>
-                                    {errors?.absensi_kehadiran?.[index]?.tipe}
+                                    {
+                                      errors?.absensi_kehadiran?.[index]
+                                        ?.kehadiran?.alasan
+                                    }
                                   </ErrorMEssage>
                                 )}
-                            </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <Dropdown
+                                  selection
+                                  search
+                                  placeholder="Tipe Setoran"
+                                  options={tipeHalaqohOptions}
+                                  id={`absensi_kehadiran[${index}]tipe`}
+                                  name={`absensi_kehadiran[${index}]tipe`}
+                                  onChange={(e, data) => {
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]tipe`,
+                                      data.value
+                                    );
+                                    sessionStorageSet(tanggal, values);
+                                  }}
+                                  error={
+                                    errors?.absensi_kehadiran?.[index]?.tipe &&
+                                    touched?.absensi_kehadiran?.[index]?.tipe
+                                  }
+                                  value={formatValue(value?.tipe)}
+                                />
+
+                                {errors?.absensi_kehadiran?.[index]?.tipe &&
+                                  touched?.absensi_kehadiran?.[index]?.tipe && (
+                                    <ErrorMEssage>
+                                      {errors?.absensi_kehadiran?.[index]?.tipe}
+                                    </ErrorMEssage>
+                                  )}
+                              </div>
                             </div>
                           </Table.Cell>
-                         
+
                           <Table.Cell singleLine width={"sixteen"}>
                             <div className="space-y-5">
                               <div className="text-left">
@@ -488,6 +522,7 @@ export default function AbsensiHalaqoh() {
                                       `absensi_kehadiran[${index}]dari_surat`,
                                       data.value
                                     );
+                                    sessionStorageSet(tanggal, values);
                                   }}
                                   placeholder="Dari Surat"
                                   search
@@ -518,7 +553,13 @@ export default function AbsensiHalaqoh() {
                                   disabled={value?.status_kehadiran !== 1}
                                   id={`absensi_kehadiran[${index}]dari_ayat`}
                                   name={`absensi_kehadiran[${index}]dari_ayat`}
-                                  onChange={handleChange}
+                                  onChange={(e, data) => {
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]dari_ayat`,
+                                      data.value
+                                    );
+                                    sessionStorageSet(tanggal, values);
+                                  }}
                                   onBlur={handleBlur}
                                   type="number"
                                   value={formatValue(value?.dari_ayat)}
@@ -561,6 +602,7 @@ export default function AbsensiHalaqoh() {
                                       `absensi_kehadiran[${index}]sampai_surat`,
                                       data?.value
                                     );
+                                    sessionStorageSet(tanggal, values)
                                   }}
                                   placeholder="Sampai Surat"
                                   search
@@ -591,7 +633,13 @@ export default function AbsensiHalaqoh() {
                                   disabled={value?.status_kehadiran !== 1}
                                   id={`absensi_kehadiran[${index}]sampai_ayat`}
                                   name={`absensi_kehadiran[${index}]sampai_ayat`}
-                                  onChange={handleChange}
+                                  onChange={(e, data) => {
+                                    setFieldValue(
+                                      `absensi_kehadiran[${index}]sampai_ayat`,
+                                      data.value
+                                    );
+                                    sessionStorageSet(tanggal, values);
+                                  }}
                                   onBlur={handleBlur}
                                   type="number"
                                   value={formatValue(value?.sampai_ayat)}
@@ -624,7 +672,13 @@ export default function AbsensiHalaqoh() {
                                 disabled={value?.status_kehadiran !== 1}
                                 id={`absensi_kehadiran[${index}]total_halaman`}
                                 name={`absensi_kehadiran[${index}]total_halaman`}
-                                onChange={handleChange}
+                                onChange={(e, data) => {
+                                  setFieldValue(
+                                    `absensi_kehadiran[${index}]total_halaman`,
+                                    data.value
+                                  );
+                                  sessionStorageSet(tanggal, values);
+                                }}
                                 onBlur={handleBlur}
                                 placeholder="Total Halaman"
                                 value={formatValue(value?.total_halaman)}
@@ -655,7 +709,13 @@ export default function AbsensiHalaqoh() {
                               rows={4}
                               id={`absensi_kehadiran[${index}]keterangan`}
                               name={`absensi_kehadiran[${index}]keterangan`}
-                              onChange={handleChange}
+                              onChange={(e, data) => {
+                                setFieldValue(
+                                  `absensi_kehadiran[${index}]keterangan`,
+                                  data.value
+                                );
+                                sessionStorageSet(tanggal, values);
+                              }}
                               onBlur={handleBlur}
                               type="text"
                               placeholder="Keterangan"
@@ -682,46 +742,55 @@ export default function AbsensiHalaqoh() {
                   />
                 )}
               </div>
-              <section>
-          <h3 className="text-2xl font-poppins">List Musyrif Belum Absensi</h3>
-          <Table celled selectable>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>No</Table.HeaderCell>
-                <Table.HeaderCell>Tanggal</Table.HeaderCell>
-                <Table.HeaderCell>Nama Musyrif</Table.HeaderCell>
-               
+              <section className="">
+                <h3 className="text-2xl font-poppins">
+                  List Musyrif Belum Absensi
+                </h3>
+                <Table celled selectable>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>No</Table.HeaderCell>
+                      <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                      <Table.HeaderCell>Nama Musyrif</Table.HeaderCell>
 
-                <Table.HeaderCell>Waktu</Table.HeaderCell>
-                <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              <TableLoading
-                count={8}
-                isLoading={isLoadingBelumAbsen}
-                data={dataBelumAbsen?.data}
-                messageEmpty={"Tidak Ada Guru Belum Absen"}
-              >
-                {dataBelumAbsen?.halaqoh?.map((value, index) => (
-                  <Table.Row key={index}>
-                    <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>{formatDay(value?.tanggal)}</Table.Cell>
-                    <Table.Cell>{value?.halaqoh?.teacher?.nama_guru}</Table.Cell>
-                    <Table.Cell>{value?.waktu}</Table.Cell>
-                    <Table.Cell>{value?.halaqoh?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
-                  </Table.Row>
-                ))}
-              </TableLoading>
-            </Table.Body>
-          </Table>
-        </section>
+                      <Table.HeaderCell>Waktu</Table.HeaderCell>
+                      <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    <TableLoading
+                      count={8}
+                      isLoading={isLoadingBelumAbsen}
+                      data={dataBelumAbsen?.data}
+                      messageEmpty={"Tidak Ada Guru Belum Absen"}
+                    >
+                      {dataBelumAbsen?.halaqoh?.map((value, index) => (
+                        <Table.Row key={index}>
+                          <Table.Cell>{index + 1}</Table.Cell>
+                          <Table.Cell>
+                            {showFormattedDate(value?.tanggal)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {value?.halaqoh?.teacher?.nama_guru}
+                          </Table.Cell>
+                          <Table.Cell>{value?.waktu}</Table.Cell>
+                          <Table.Cell>
+                            {value?.halaqoh?.tahun_ajaran?.nama_tahun_ajaran}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </TableLoading>
+                  </Table.Body>
+                </Table>
+              </section>
             </form>
           )}
         </Formik>
       </section>
-
-      
     </LayoutPage>
   );
+}
+
+function sessionStorageSet(tanggal, values) {
+  sessionStorage.setItem(`halaqoh_${tanggal}`, JSON.stringify(values));
 }
