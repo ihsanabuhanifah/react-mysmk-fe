@@ -98,6 +98,19 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
+         <NavButton
+          handleSidebar={handleSiderbar}
+          to={`halaqoh-siswa`}
+          path={"halaqoh-siswa"}
+          title={["Halaqoh Siswa"]}
+          logo={
+            <MdOutlineLibraryBooks
+              className={`h-8 w-8 ${
+                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
         {checkRole(roles , "guru") &&  <NavButton
             handleSidebar={handleSiderbar}
             to={`pengampu/halaqoh/absensi`}

@@ -7,7 +7,11 @@ export function listTahunAjaran() {
   return axios.get("/list/tahun-ajaran");
 }
 
-export async function listTahunAjaranOptions(keyword, loadedOptions, additional) {
+export async function listTahunAjaranOptions(
+  keyword,
+  loadedOptions,
+  additional
+) {
   let result = await axios.get(`/list/tahun-ajaran`, {
     params: {
       page: additional.page,
@@ -33,15 +37,18 @@ export async function listTahunAjaranOptions(keyword, loadedOptions, additional)
   };
 }
 
-export function listtahunajaran(){
-  return axios.get('/list/tahun-ajaran');
+export function listtahunajaran() {
+  return axios.get("/list/tahun-ajaran");
 }
-export function listAlquran(){
-  return axios.get('/list/alquran');
+export function listAlquran() {
+  return axios.get("/list/alquran");
 }
 
 export function listGuru() {
   return axios.get("/list/guru");
+}
+export function listHalaqohGroup() {
+  return axios.get("/list/halaqoh-grup");
 }
 export function listKelas() {
   return axios.get("/list/kelas");
@@ -103,7 +110,11 @@ export async function listSiswaOptions(keyword, loadedOptions, additional) {
   };
 }
 
-export async function listPelanggaranOptions(keyword, loadedOptions, additional) {
+export async function listPelanggaranOptions(
+  keyword,
+  loadedOptions,
+  additional
+) {
   let result = await axios.get(`/list/pelanggaran`, {
     params: {
       page: additional.page,

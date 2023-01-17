@@ -5,6 +5,7 @@ import {
   listGuru,
   listTahunAjaran,
   listAlquran,
+  listHalaqohGroup
 } from "../api/list";
 import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
@@ -39,11 +40,24 @@ export default function useList() {
       select: (response) => response.data?.role,
     }
   );
+  
   let { data: dataKelas } = useQuery(
     //query key
     ["list_kelas"],
     //axios function,triggered when page/pageSize change
     () => listKelas(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      select: (response) => response.data,
+    }
+  );
+  let { data: dataHalaqoh } = useQuery(
+    //query key
+    ["list_halaqoh_grup"],
+    //axios function,triggered when page/pageSize change
+    () => listHalaqohGroup(),
     //configuration
     {
       keepPreviousData: true,
@@ -107,6 +121,7 @@ export default function useList() {
     dataTa,
     identitas,
     roles,
-    dataAlquran
+    dataAlquran,
+    dataHalaqoh
   };
 }

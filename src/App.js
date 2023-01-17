@@ -26,6 +26,8 @@ import {
   RekapHalaqoh,
   ListJadwal,
   CreateJadwal,
+  HalaqohSiswa,
+  AddSiswaHalaqoh
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -88,6 +90,8 @@ function App() {
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
           <Route path="absensi" element={<Jadwal />} />
+          <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
+          <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
           <Route path="absensi/jadwal/tambah" element={<CreateJadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />

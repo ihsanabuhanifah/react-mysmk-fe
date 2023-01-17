@@ -11,6 +11,16 @@ export function notifikasiHalaqoh() {
   return axios.get("/guru/halaqoh/notifikasi");
 }
 
+export function addSiswaHalaqoHandle(payload){
+  syncToken()
+  return axios.post("guru/halaqoh/student/create", payload)
+}
+
+export function listHalaqohGroup(params) {
+  syncToken();
+  return axios.get("guru/halaqoh/student/list", { params });
+}
+
 export async function updateAbsensiHalaqoh(values) {
   syncToken();
 
