@@ -1,13 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Icon, Input } from "semantic-ui-react";
-import { formatDate, handleViewNull } from "../../../utils";
+
+import { Table, Button,  Icon } from "semantic-ui-react";
+import {  handleViewNull } from "../../../utils";
 import { listHalaqohGroup } from "../../../api/guru/halaqoh";
+import AddSiswa from "./tambahSiswa";
 import { useQuery } from "react-query";
 import usePage from "../../../hook/usePage";
 import useDebounce from "../../../hook/useDebounce";
-import { TableLoading, PaginationTable } from "../../../components";
+import {
+  TableLoading,
+  PaginationTable,
+  ModalFilter,
+} from "../../../components";
+import { useState } from "react";
 
 export default function HalaqohSiswa() {
   let { page, pageSize, setPage, setPageSize, keyword, setKeyword } = usePage();
@@ -17,25 +24,29 @@ export default function HalaqohSiswa() {
     pageSize: pageSize,
     keyword: debouncedKeyword,
   };
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   let { data, isLoading } = useQuery(
     //query key
-    ["list_halaqohGroup", parameter],
+    ["list_halaqoh_group", parameter],
     //axios function,triggered when page/pageSize change
     () => listHalaqohGroup(parameter),
     //configuration
     {
-      refetchInterval: 1000 * 60 * 60,
+      // refetchInterval: 1000 * 60 * 60,
       select: (response) => {
         return response.data;
       },
     }
   );
 
-  console.log("data", data?.data?.rows);
+  const [open, setOpen] = useState(false);
+
   return (
     <LayoutPage title={"List Halaqoh Grup"}>
-      <section className="grid grid-cols-6 gap-5">
+      {/* <ModalFilter open={open} setOpen={setOpen}>
+        <AddSiswa />
+      </ModalFilter> */}
+      <section className="grid grid-cols-6 gap-5 mb-5">
         {/* <Input
           onChange={(e) => {
             setKeyword(e.target.value);
@@ -45,7 +56,7 @@ export default function HalaqohSiswa() {
           icon="search"
           placeholder="Nama Guru..."
         /> */}
-        <div>
+        <div className="col-start-6">
           <Button
             content={"Buat Jadwal"}
             type="submit"
@@ -54,6 +65,7 @@ export default function HalaqohSiswa() {
             size="medium"
             color="linkedin"
             onClick={() => {
+              // return setOpen(true);
               return navigate("tambah");
             }}
           />
