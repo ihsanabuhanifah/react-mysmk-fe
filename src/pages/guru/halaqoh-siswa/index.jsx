@@ -2,17 +2,18 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 
-import { Table, Button,  Icon } from "semantic-ui-react";
-import {  handleViewNull } from "../../../utils";
+import { Table, Button, Icon } from "semantic-ui-react";
+import { handleViewNull, checkRole } from "../../../utils";
 import { listHalaqohGroup } from "../../../api/guru/halaqoh";
-import AddSiswa from "./tambahSiswa";
+// import AddSiswa from "./tambahSiswa";
 import { useQuery } from "react-query";
 import usePage from "../../../hook/usePage";
 import useDebounce from "../../../hook/useDebounce";
+import useList from "../../../hook/useList";
 import {
   TableLoading,
   PaginationTable,
-  ModalFilter,
+  // ModalFilter,
 } from "../../../components";
 import { useState } from "react";
 
@@ -24,6 +25,7 @@ export default function HalaqohSiswa() {
     pageSize: pageSize,
     keyword: debouncedKeyword,
   };
+  const { roles } = useList();
   let navigate = useNavigate();
   let { data, isLoading } = useQuery(
     //query key
@@ -38,8 +40,6 @@ export default function HalaqohSiswa() {
       },
     }
   );
-
-  const [open, setOpen] = useState(false);
 
   return (
     <LayoutPage title={"List Halaqoh Grup"}>
@@ -57,18 +57,20 @@ export default function HalaqohSiswa() {
           placeholder="Nama Guru..."
         /> */}
         <div className="col-start-6">
-          <Button
-            content={"Buat Jadwal"}
-            type="submit"
-            fluid
-            icon={() => <Icon name="add" />}
-            size="medium"
-            color="linkedin"
-            onClick={() => {
-              // return setOpen(true);
-              return navigate("tambah");
-            }}
-          />
+          {checkRole(roles, "admin") && (
+            <Button
+              content={"Buat Jadwal"}
+              type="submit"
+              fluid
+              icon={() => <Icon name="add" />}
+              size="medium"
+              color="linkedin"
+              onClick={() => {
+                // return setOpen(true);
+                return navigate("tambah");
+              }}
+            />
+          )}
         </div>
       </section>
       <section className="w-full">

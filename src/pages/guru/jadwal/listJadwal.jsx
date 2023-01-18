@@ -4,18 +4,19 @@ import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { useQuery } from "react-query";
 import { listJadwalAll } from "../../../api/guru/absensi";
-import { formatHari } from "../../../utils";
+import { formatHari, checkRole } from "../../../utils";
 import { dayOptions } from ".";
 import { TableLoading } from "../../../components";
+import useList from "../../../hook/useList";
 export default function ListJadwal() {
   let [hari, setHari] = React.useState(formatHari(new Date()));
-  let navigate = useNavigate()
+  let navigate = useNavigate();
   const parameter = {
     ...(hari !== "semua" && {
       hari,
     }),
   };
-
+  const { roles } = useList();
   let { data, isLoading } = useQuery(
     //query key
     ["jadwal", parameter],
@@ -53,21 +54,19 @@ export default function ListJadwal() {
           />
         </Form>
         <div className=" col-start-6">
-            
+          {checkRole(roles, "admin") && (
             <Button
               content={"Buat Jadwal"}
               type="submit"
               fluid
               icon={() => <Icon name="add" />}
-             
               size="medium"
               color="linkedin"
-              onClick={()=> {
-                return navigate('tambah')
+              onClick={() => {
+                return navigate("tambah");
               }}
-             
             />
-        
+          )}
         </div>
       </section>
       <section className="" style={{ maxWidth: "100%" }} padded>
@@ -87,54 +86,52 @@ export default function ListJadwal() {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-              <TableLoading
-                count={9}
-                isLoading={isLoading}
-                data={data?.data?.rows}
-                messageEmpty={"Tidak Ada Jadwal Pelajaran"}
-              >
-                {data?.data?.rows?.map((value, index) => (
-                  <Table.Row key={index}>
-                    <Table.Cell>{index + 1}</Table.Cell>
-                    <Table.Cell>
-                      <span className="capitalize">{value?.hari}</span>
-                    </Table.Cell>
-                    <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
-                    <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    
-                    <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                    <Table.Cell>{value?.jam_ke}</Table.Cell>
-                    <Table.Cell>{value?.jumlah_jam}</Table.Cell>
-                    <Table.Cell>Semester {value?.semester}</Table.Cell>
-                    <Table.Cell>
-                      {value?.tahun_ajaran?.nama_tahun_ajaran}
-                    </Table.Cell>
-                    <Table.Cell>
+            <TableLoading
+              count={9}
+              isLoading={isLoading}
+              data={data?.data?.rows}
+              messageEmpty={"Tidak Ada Jadwal Pelajaran"}
+            >
+              {data?.data?.rows?.map((value, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>
+                    <span className="capitalize">{value?.hari}</span>
+                  </Table.Cell>
+                  <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+
+                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                  <Table.Cell>{value?.jam_ke}</Table.Cell>
+                  <Table.Cell>{value?.jumlah_jam}</Table.Cell>
+                  <Table.Cell>Semester {value?.semester}</Table.Cell>
+                  <Table.Cell>
+                    {value?.tahun_ajaran?.nama_tahun_ajaran}
+                  </Table.Cell>
+                  <Table.Cell>
                     <div className="flex">
-                    <Button
-                       icon={() => <Icon name="edit" />}
+                      <Button
+                        icon={() => <Icon name="edit" />}
                         content={"Edit"}
                         type="button"
                         fluid
                         size="small"
                         color="teal"
-                       
                       />
-                       <Button
-                       icon={() => <Icon name="delete" />}
+                      <Button
+                        icon={() => <Icon name="delete" />}
                         content={"Hapus"}
                         type="button"
                         fluid
                         size="small"
                         color="red"
-                       
                       />
                     </div>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </TableLoading>
-            </Table.Body>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </TableLoading>
+          </Table.Body>
         </Table>
       </section>
     </LayoutPage>
