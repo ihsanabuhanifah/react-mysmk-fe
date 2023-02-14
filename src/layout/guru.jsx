@@ -121,7 +121,7 @@ export default function Guru() {
               )}
             </button>
           </div>
-          <div className="h-full w-full">
+          <div id="sidebar" className="h-full w-full overflow-auto">
             <Outlet data={data} />
           </div>
         </div>

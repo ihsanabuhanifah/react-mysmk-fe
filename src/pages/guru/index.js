@@ -21,6 +21,11 @@ import ListJadwal from "./jadwal/listJadwal";
 import { CreateJadwal } from "./jadwal/createJadwal";
 import HalaqohSiswa from "./halaqoh-siswa";
 import AddSiswaHalaqoh from "./halaqoh-siswa/tambahSiswa";
+import ListBankSoal from "./bank-soal";
+import FormSoal from "./bank-soal/FormSoal";
+import FormExam from "./exam/FormSoal";
+import ListExam from "./exam";
+
 export {
   Absensi,
   Jadwal,
@@ -43,5 +48,10 @@ export {
   RekapHalaqoh,
   ListJadwal,
   CreateJadwal,
-  HalaqohSiswa, AddSiswaHalaqoh
+  HalaqohSiswa,
+  AddSiswaHalaqoh,
+  ListBankSoal,
+  FormSoal,
+  FormExam,
+  ListExam,
 };

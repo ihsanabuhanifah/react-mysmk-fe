@@ -85,6 +85,48 @@ const kategoriOptions = [
 const tipeHalaqohOptions = [
   { key: "1", value: "Hafalan Baru", text: "Hafalan Baru" },
   { key: "2", value: "Murojaah", text: "Murojaah" },
+];
+const pointOptions = [
+  { key: "1", value: 1, text: 1 },
+  { key: "2", value: 2, text: 2 },
+  { key: "3", value: 3, text: 3 },
+  { key: "4", value: 4, text: 4 },
+  { key: "5", value: 5, text: 5 },
+  { key: "6", value: 6, text: 6 },
+  { key: "7", value: 7, text: 7 },
+  { key: "8", value: 8, text: 8 },
+  { key: "9", value: 9, text: 9 },
+  { key: "10", value: 10, text: 10 },
+];
+const tipeSoalOptions = [
+  { key: "1", value: "PG", text: "Pilihan Ganda" },
+  { key: "2", value: "TF", text: "True False" },
+  { key: "3", value: "IS", text: "Isian Singkat" },
+];
+const pgOptions = [
+  { key: "1", value: "A", text: "A" },
+  { key: "2", value: "B", text: "B" },
+  { key: "3", value: "C", text: "C" },
+  { key: "4", value: "D", text: "D" },
+  { key: "5", value: "E", text: "E" },
+];
+const tfOptions = [
+  { key: "1", value: 1, text: "true" },
+  { key: "2", value: 0, text: "false" },
+];
+
+const jenisOptions = [
+  { key: "1", value: "harian", text: "Ulangan Harian" },
+  { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
+  { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
+  { key: "4", value: "US", text: "Ujian Sekolah" },
+  { key: "5", value: "remidial", text: "Remidial" },
+];
+const statusUjianOptions = [
+  { key: "1", value: "open", text: "Open" },
+  { key: "2", value: "in progress", text: "In Progress" },
+  { key: "3", value: "finish", text: "Finished" },
+  { key: "4", value: "locked", text: "Locked" },
   
 ];
 
@@ -100,5 +142,11 @@ export {
   izinGuruOptions,
   waktuOptions,
   halaqohOptions,
-  tipeHalaqohOptions
+  tipeHalaqohOptions,
+  pointOptions,
+  tipeSoalOptions,
+  pgOptions,
+  tfOptions,
+  jenisOptions,
+  statusUjianOptions
 };

@@ -124,6 +124,32 @@ export default function SidebarGuru({ setSidebar }) {
               />
             }
           />}
+          {checkRole(roles , "guru") &&  <NavButton
+            handleSidebar={handleSiderbar}
+            to={`bank-soal`}
+            path={"bank-soal"}
+            title={["Bank Soal"]}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === `bank-soal` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />}
+           {checkRole(roles , "guru") &&  <NavButton
+            handleSidebar={handleSiderbar}
+            to={`exam`}
+            path={"exam"}
+            title={["Exam"]}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === `exam` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"

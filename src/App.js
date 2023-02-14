@@ -27,7 +27,11 @@ import {
   ListJadwal,
   CreateJadwal,
   HalaqohSiswa,
-  AddSiswaHalaqoh
+  AddSiswaHalaqoh,
+  ListBankSoal,
+  FormSoal,
+  ListExam,
+  FormExam,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -103,6 +107,15 @@ function App() {
             path="pengampu/halaqoh/absensi"
             element={<PengampuHalaqoh />}
           />
+          <Route path="bank-soal" element={<ListBankSoal />} />
+
+          <Route path="bank-soal/tambah" element={<FormSoal />} />
+          <Route path="bank-soal/update/:id" element={<FormSoal />} />
+          <Route path="exam" element={<ListExam />} />
+
+          <Route path="exam/tambah" element={<FormExam />} />
+          <Route path="exam/update/:id" element={<FormExam />} />
+
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route
             path="pengampu/halaqoh/absensi"
@@ -125,6 +138,7 @@ function App() {
             element={<Absensi />}
           />
         </Route>
+
         <Route
           path="/siswa"
           element={
