@@ -2,33 +2,33 @@ import { listSiswaOptions } from "../../../api/list";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+
+import { DndProvider } from "react-dnd";
+import Backend from "react-dnd-html5-backend";
 import {
   jenisOptions,
-  kategoriOptions,
-  pgOptions,
-  pointOptions,
-  semesterOptions,
+ 
   statusUjianOptions,
-  tfOptions,
-  tipeSoalOptions,
+  
 } from "../../../utils/options";
 import {
-  Input,
+
   Segment,
   Form,
   Select,
   Button,
   Header,
   Divider,
-  TextArea,
-  Dropdown,
+ 
   Icon,
+  Table,
+  Checkbox,
 } from "semantic-ui-react";
 import { DeleteButton, AddButton } from "../../../components";
+
 import { toast } from "react-toastify";
-import { ReactSelectAsync, FormLabel } from "../../../components";
 import { getOptions } from "../../../utils/format";
-import dayjs from "dayjs";
+
 import usePage from "../../../hook/usePage";
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
@@ -40,10 +40,29 @@ import {
   listBankSoal,
 } from "../../../api/guru/bank_soal";
 
+import { useNavigate } from "react-router-dom";
+import LayoutPage from "../../../module/layoutPage";
+
+import { TableLoading } from "../../../components";
+import useDelete from "../../../hook/useDelete";
+import {
+  // eslint-disable-next-line no-unused-vars
+  ModalFilter,
+  EditButton,
+
+  // eslint-disable-next-line no-unused-vars
+  ViewButton,
+  ModalAlert,
+} from "../../../components";
+
+import { PaginationTable } from "../../../components";
+import { deleteBankSoal } from "../../../api/guru/bank_soal";
+import { useQueryClient } from "react-query";
+
 export default function FormExam() {
   const { dataMapel, dataKelas } = useList();
   const { id } = useParams();
-  let { isLoading:isLoadingUpdate } = useQuery(
+  let { isLoading: isLoadingUpdate } = useQuery(
     //query key
     ["/bank-soal/update"],
     //axios function,triggered when page/pageSize change
@@ -103,6 +122,8 @@ export default function FormExam() {
   });
 
   const onSubmit = async (values, { resetForm }) => {
+
+    console.log('pay', values)
     try {
       let response;
       if (id === undefined) {
@@ -327,10 +348,72 @@ export default function FormExam() {
                         value={value?.status}
                       />
                     </div>
-                    
                   </section>
-                  <section>
+                  <section className="grid grid-cols-1 gap-5">
+                    <div>
+                      <h1>List Soal</h1>
+                      <Table celled selectable>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell>
+                              <Checkbox />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>No</Table.HeaderCell>
 
+                            <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                            <Table.HeaderCell>Bab</Table.HeaderCell>
+                            <Table.HeaderCell>Tipe</Table.HeaderCell>
+                            <Table.HeaderCell>Point</Table.HeaderCell>
+                            <Table.HeaderCell>View</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          <TableLoading
+                            count={8}
+                            isLoading={isLoading}
+                            data={data?.data}
+                            messageEmpty={"Data Tidak Ditemukan"}
+                          >
+                            {data?.data?.rows?.map((item, index2) => (
+                              <Table.Row key={index2}>
+                                <Table.Cell>
+                                  <Checkbox onChange={()=> {
+                                    let soal = [...value?.soal]
+                                    soal.push(item?.id)
+                                    
+                                    setFieldValue(`payload[${index}]soal`, soal);
+                                  }} />
+                                </Table.Cell>
+                                <Table.Cell>{index2 + 1}</Table.Cell>
+
+                                <Table.Cell>
+                                  {item?.mapel?.nama_mapel}
+                                </Table.Cell>
+                                <Table.Cell>{item?.materi}</Table.Cell>
+                                <Table.Cell>{item?.tipe}</Table.Cell>
+                                <Table.Cell>{item?.point}</Table.Cell>
+
+                                <Table.Cell>
+                                  <ViewButton
+                                    onClick={() => {
+                                      console.log("jalan");
+                                    }}
+                                  />
+                                </Table.Cell>
+                              </Table.Row>
+                            ))}
+                          </TableLoading>
+                        </Table.Body>
+                      </Table>
+                      <PaginationTable
+                        page={page}
+                        pageSize={pageSize}
+                        setPageSize={setPageSize}
+                        setPage={setPage}
+                        totalPages={data?.data?.count}
+                      />
+                    </div>
+                   
                   </section>
                 </div>
               ))}

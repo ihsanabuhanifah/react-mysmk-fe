@@ -1,33 +1,41 @@
 import React from "react";
 import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
-import { TableLoading, ViewButton } from "../../../components";
+import {
+  DeleteButton,
+  ModalAlert,
+  TableLoading,
+  ViewButton,
+} from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
 import { formatDate } from "../../../utils";
 import PaginationTable from "../../../components/PaginationTable";
 import FilterSiswa from "./filter";
-import { encodeURlFormat } from "../../../utils";
+import { encodeURlFormat, checkRole } from "../../../utils";
 import usePage from "../../../hook/usePage";
-import { EditButton } from "../../../components";
-
+import useDelete from "../../../hook/useDelete";
 import { downloadRekapAbsensi } from "../../../api/guru/absensi";
 import useDownload from "../../../hook/useDownload";
-import { listSiswa } from "../../../api/guru/siswa";
+import { deleteSiswaKelasHandle, listSiswa } from "../../../api/guru/siswa";
 import useDebounce from "../../../hook/useDebounce";
+import useList from "../../../hook/useList";
 export default function DaftarSiswa() {
   let [visible, setVisible] = React.useState(false);
-  let navigate = useNavigate()
-  let [keyword, setKeyword] = React.useState('');
+  let navigate = useNavigate();
+  const { roles } = useList();
+  let [keyword, setKeyword] = React.useState("");
   let debouncedKeyword = useDebounce(keyword, 500);
+  const queryClient = useQueryClient();
   let { page, pageSize, setPage, setPageSize } = usePage();
   const [filter, setFilter] = React.useState({});
 
   const params = {
     page,
     pageSize,
-    keyword : debouncedKeyword,
+    keyword: debouncedKeyword,
+    status: 1,
     ...filter,
     nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
     nama_kelas: encodeURlFormat(filter?.nama_kelas),
@@ -38,12 +46,12 @@ export default function DaftarSiswa() {
   };
   let { data, isLoading } = useQuery(
     //query key
-    ["siswa_list", params],
+    ["siswa/list", params],
     //axios function,triggered when page/pageSize change
     () => listSiswa(params),
     //configuration
     {
-      refetchInterval: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
       select: (response) => {
         return response.data;
       },
@@ -58,14 +66,24 @@ export default function DaftarSiswa() {
   });
 
   const handleEvent = (event) => {
-
-    console.log('ee' , event)
+    console.log("ee", event);
     if (event.key === "x") {
       console.log("ok", event);
     }
   };
 
-  console.log(data)
+  let {
+    showAlertDelete,
+    setShowAlertDelete,
+    deleteLoading,
+    confirmDelete,
+    onConfirmDelete,
+  } = useDelete({
+    afterDeleted: () => queryClient.invalidateQueries("siswa/list"),
+    onDelete: (id) => {
+      return deleteSiswaKelasHandle(id);
+    },
+  });
 
   return (
     <LayoutPage
@@ -73,6 +91,13 @@ export default function DaftarSiswa() {
       visible={visible}
       setVisible={setVisible}
     >
+      <ModalAlert
+        open={showAlertDelete}
+        setOpen={setShowAlertDelete}
+        loading={deleteLoading}
+        onConfirm={onConfirmDelete}
+        title={"Apakah yakin akan menghapus siswa terpilih ?"}
+      />
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -90,15 +115,15 @@ export default function DaftarSiswa() {
           setVisible={setVisible}
         />
       </Sidebar>
-      <section onKeyPress={handleEvent}  className="mt-5 pb-10 ">
+      <section onKeyPress={handleEvent} className="mt-5 pb-10 ">
         <section className="grid grid-cols-6 gap-5 ">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
             <Input
               fluid
               loading={false}
               icon="search"
-              onChange={(e)=> {
-                setKeyword(e.target.value)
+              onChange={(e) => {
+                setKeyword(e.target.value);
               }}
               iconPosition="left"
               placeholder="Search..."
@@ -131,20 +156,34 @@ export default function DaftarSiswa() {
               }}
             />
           </div>
+          <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+            {checkRole(roles, "admin") && (
+              <Button
+                content={"Kelas"}
+                type="submit"
+                fluid
+                icon={() => <Icon name="add" />}
+                size="medium"
+                color="linkedin"
+                onClick={() => {
+                  return navigate("tambah-kelas");
+                }}
+              />
+            )}
+          </div>
         </section>
         <Table celled selectable>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>No</Table.HeaderCell>
 
-             
               <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell>NIS</Table.HeaderCell>
               <Table.HeaderCell>NISN</Table.HeaderCell>
               <Table.HeaderCell>Tempat Tanggal Lahir </Table.HeaderCell>
               <Table.HeaderCell>Kelas </Table.HeaderCell>
               <Table.HeaderCell>Diterima Tanggal</Table.HeaderCell>
-             
+
               <Table.HeaderCell>Tahun Pelajaran</Table.HeaderCell>
               <Table.HeaderCell>Aksi</Table.HeaderCell>
             </Table.Row>
@@ -159,29 +198,29 @@ export default function DaftarSiswa() {
               {data?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>{index + 1}</Table.Cell>
-                 
-                  <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
 
-                
+                  <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
 
                   <Table.Cell>{value?.siswa?.nis}</Table.Cell>
                   <Table.Cell>{value?.siswa?.nisn}</Table.Cell>
-                 
-                  <Table.Cell>{value?.siswa?.tempat_lahir}, {formatDate(value?.siswa?.tanggal_lahir)}</Table.Cell>
+
+                  <Table.Cell>
+                    {value?.siswa?.tempat_lahir},{" "}
+                    {formatDate(value?.siswa?.tanggal_lahir)}
+                  </Table.Cell>
                   <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-              
-                  <Table.Cell>{formatDate(value?.siswa?.tanggal_diterima)}</Table.Cell>
-                  
+
+                  <Table.Cell>
+                    {formatDate(value?.siswa?.tanggal_diterima)}
+                  </Table.Cell>
+
                   <Table.Cell>
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
                   </Table.Cell>
                   <Table.Cell>
-                   <div className="flex items-center space-x-2">
-                   <EditButton  />
-                    <ViewButton onClick={()=> {
-                        return navigate(`/guru/daftar-siswa/detail/${value?.siswa?.id}`)
-                    }}/>
-                   </div>
+                    {checkRole(roles, "admin") && (
+                      <DeleteButton onClick={() => confirmDelete(value?.id)} />
+                    )}
                   </Table.Cell>
                 </Table.Row>
               ))}

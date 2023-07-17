@@ -11,6 +11,7 @@ import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
 import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
+import useList from "../hook/useList";
 
 export default function Guru() {
   React.useEffect(() => {
@@ -18,22 +19,7 @@ export default function Guru() {
     // requestToken();
   });
 
-  let { data } = useQuery(
-    //query key
-    ["authme"],
-    //axios function,triggered when page/pageSize change
-    () => authme(),
-    //configuration
-    {
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => {
-        const data = response?.data?.token;
-
-        let decoded = jwt_decode(data);
-        return decoded;
-      },
-    }
-  );
+  const { identitas: data } = useList();
 
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);

@@ -17,7 +17,6 @@ import {
 import useList from "../../../hook/useList";
 import usePage from "../../../hook/usePage";
 import { PaginationTable } from "../../../components";
-import { showFormattedDate } from "../../../utils/waktu";
 import { deleteBankSoal, listBankSoal } from "../../../api/guru/bank_soal";
 import { useQueryClient } from "react-query";
 export default function ListBankSoal() {

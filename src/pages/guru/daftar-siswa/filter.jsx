@@ -7,17 +7,15 @@ import {
  
   Icon
 } from "semantic-ui-react";
-import InputRangeDate from "../../../components/inputDateRange";
-import { Formik, setNestedObjectValues } from "formik";
+import { Formik} from "formik";
 import { getOptionsText } from "../../../utils/format";
-import { izinOptions } from "../../../utils/options";
 import { ReactSelectAsync, FormLabel } from "../../../components";
 import { listSiswaOptions } from "../../../api/list";
 
 import useList from "../../../hook/useList";
 
 export default function FilterSiswa({ filter, setFilter, setVisible }) {
-  const { dataGuru, dataKelas, dataMapel, dataTa } = useList();
+  const { dataKelas, dataMapel, dataTa } = useList();
 
   const onSubmit = (values, {resetForm}) => {
     setFilter(values);

@@ -5,7 +5,7 @@ import {
   listGuru,
   listTahunAjaran,
   listAlquran,
-  listHalaqohGroup
+  listHalaqohGroup,
 } from "../api/list";
 import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
@@ -19,7 +19,8 @@ export default function useList() {
     () => authme(),
     //configuration
     {
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => {
         const data = response?.data?.token;
 
@@ -36,11 +37,12 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data?.role,
     }
   );
-  
+
   let { data: dataKelas } = useQuery(
     //query key
     ["list_kelas"],
@@ -49,7 +51,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -61,7 +64,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -73,7 +77,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -85,7 +90,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -97,7 +103,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -109,7 +116,8 @@ export default function useList() {
     //configuration
     {
       keepPreviousData: true,
-      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
   );
@@ -122,6 +130,6 @@ export default function useList() {
     identitas,
     roles,
     dataAlquran,
-    dataHalaqoh
+    dataHalaqoh,
   };
 }

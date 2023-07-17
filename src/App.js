@@ -32,6 +32,7 @@ import {
   FormSoal,
   ListExam,
   FormExam,
+  CreateSiswa
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -92,6 +93,7 @@ function App() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
+          <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
           <Route path="absensi" element={<Jadwal />} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
