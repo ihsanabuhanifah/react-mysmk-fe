@@ -12,13 +12,14 @@ import useShowNotif from "../hook/useShowNotif";
 import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
+import { syncToken } from "../api/axiosClient";
 
 export default function Guru() {
   React.useEffect(() => {
     document.title = "MySMK";
     // requestToken();
   });
-
+  syncToken();
   const { identitas: data } = useList();
 
   const [sidebar, setSidebar] = React.useState(false);
