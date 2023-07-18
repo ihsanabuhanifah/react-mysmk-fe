@@ -243,7 +243,8 @@ export default function AbsensiHalaqoh() {
     try {
       const response = await updateAbsensiHalaqoh(values);
       queryClient.invalidateQueries("absensi");
-      queryClient.invalidateQueries("notifikasi");
+      
+      queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
       sessionStorage.removeItem(`halaqoh_${tanggal}`)
       return toast.success(response?.data?.msg, {
         position: "top-right",
