@@ -149,12 +149,12 @@ export default function AbsensiHalaqoh() {
 
   let parameter = {
     page,
-    pageSize,
+    pageSize : 20,
     waktu: waktu,
     dariTanggal: tanggal,
     sampaiTanggal: tanggal,
   };
-  let { isLoading, data } = useQuery(
+  let { isLoading } = useQuery(
     //query key
     ["absensi_halaqoh", parameter],
     //axios function,triggered when page/pageSize change

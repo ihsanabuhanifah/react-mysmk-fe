@@ -85,6 +85,7 @@ const kategoriOptions = [
 const tipeHalaqohOptions = [
   { key: "1", value: "Hafalan Baru", text: "Hafalan Baru" },
   { key: "2", value: "Murojaah", text: "Murojaah" },
+  { key: "3", value: "Tidak Setor", text: "Tidak Setor" },
 ];
 const pointOptions = [
   { key: "1", value: 1, text: 1 },
