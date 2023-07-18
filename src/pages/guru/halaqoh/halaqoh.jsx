@@ -462,7 +462,7 @@ export default function AbsensiHalaqoh() {
                                   value={formatValue(value?.status_kehadiran)}
                                 />
 
-                                {console.log("ee", errors)}
+                                
 
                                 {errors?.absensi_kehadiran?.[index]?.kehadiran
                                   ?.alasan !== undefined && (
