@@ -1,5 +1,7 @@
+import { formatHari } from "../../utils";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
+import dayjs from "dayjs";
 export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
@@ -64,11 +66,21 @@ export function notifikasiAbsensi() {
 
 export function absensiManualCreate() {
   syncToken();
-  return axios.get("/guru/absensi/manual");
+  return axios.get("/guru/absensi/manual", {
+    params: {
+      hari: formatHari(new Date()),
+      tanggal: dayjs(new Date()).format("YYYY-MM-DD"),
+    },
+  });
 }
 export function halaqohManualCreate() {
   syncToken();
-  return axios.get("/guru/halaqoh/manual");
+  return axios.get("/guru/halaqoh/manual", {
+    params: {
+      hari: formatHari(new Date()),
+      tanggal: dayjs(new Date()).format("YYYY-MM-DD"),
+    },
+  });
 }
 
 export function monitor() {

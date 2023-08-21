@@ -3,10 +3,10 @@ import LayoutPage from "../../../module/layoutPage";
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
 
-import * as Yup from "yup";
+
 import { toast } from "react-toastify";
 import { DeleteButton } from "../../../components";
-import { useQuery } from "react-query";
+
 import { dayOptions } from ".";
 import { getOptions } from "../../../utils/format";
 import { Form, Select, Button, Icon } from "semantic-ui-react";
