@@ -11,7 +11,7 @@ const axiosClient = axios.create({
   // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
   // baseURL: "http://localhost:8086",
-  baseURL : "https://bemysmk.sainuu.xyz/",
+  baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
   timeout: 1000 * 60 * 3,
   paramsSerializer: function (params) {
     return qs.stringify(params, { encode: false, skipNulls: true });
