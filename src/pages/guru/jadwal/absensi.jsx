@@ -5,7 +5,6 @@ import { listAbsensi } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
 import { Formik } from "formik";
 import { updateAbsensi } from "../../../api/guru/absensi";
-import { listMapel, listKelas } from "../../../api/list";
 import { TableLoading } from "../../../components";
 import { compareValues } from "../../../utils/sort";
 import {
@@ -19,6 +18,7 @@ import {
   Dropdown,
   Icon,
   Message,
+  Checkbox,
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";
@@ -132,7 +132,7 @@ export default function Absensi() {
       queryClient.invalidateQueries("absensi");
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
       queryClient.invalidateQueries("notifikasi_absensi_kelas");
-      sessionStorage.removeItem(`${kelas_id}_${mapel_id}_${tanggal}`)
+      sessionStorage.removeItem(`${kelas_id}_${mapel_id}_${tanggal}`);
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -143,8 +143,6 @@ export default function Absensi() {
         progress: undefined,
         theme: "colored",
       });
-
-     
     } catch (err) {
       console.log(err);
 
@@ -167,15 +165,17 @@ export default function Absensi() {
     setTanggalActive(tanggal);
   }, [tanggal]);
 
-  let sessionTes = sessionStorage.getItem(
-    `${kelas_id}_${mapel_id}_${tanggal}`
-  );
+  let sessionTes = sessionStorage.getItem(`${kelas_id}_${mapel_id}_${tanggal}`);
 
-  console.log('se',sessionTes)
+  console.log("se", sessionTes);
 
   return (
     <LayoutPage title={"Agenda Mengajar"}>
-      {sessionTes !== null ? (<p className="text-red-500 text-lg font-bold">Belum Di Simpen ke Database</p>) : null} 
+      {sessionTes !== null ? (
+        <p className="text-red-500 text-lg font-bold">
+          Belum Di Simpen ke Database
+        </p>
+      ) : null}
       <div className="space-x-5 mt-5">
         <Formik
           initialValues={initialState}
@@ -317,6 +317,36 @@ export default function Absensi() {
                   Absensi - {values?.absensi_kehadiran[0]?.kelas?.nama_kelas} -{" "}
                   {values?.absensi_kehadiran[0]?.mapel?.nama_mapel}{" "}
                 </Header>
+
+                <section className="border shadow-md rounded-lg p-5 flex items-center justify-between">
+                  <span className="font-bold">Hadir Semua</span>
+                  <div>
+                    <input
+                      type="checkbox"
+                     
+                      onChange={(e) => {
+                        console.log("e", e.target.checked);
+                        if (e.target.checked) {
+                          let kehadiran = [];
+                          // eslint-disable-next-line array-callback-return
+                          values?.absensi_kehadiran?.map((value) => {
+                            value.kehadiran.id = 1;
+
+                            kehadiran.push(value);
+                          });
+
+                          setFieldValue("absensi_kehadiran", kehadiran);
+                          sessionStorageSet(
+                            kelas_id,
+                            mapel_id,
+                            tanggal,
+                            values
+                          );
+                        }
+                      }}
+                    />
+                  </div>
+                </section>
                 <Table>
                   <Table.Header>
                     <Table.Row>
@@ -327,28 +357,6 @@ export default function Absensi() {
                         <div className="flex items-center justify-between">
                           {" "}
                           <span className="mr-2">Kehadiran</span>
-                          <input
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                let kehadiran = [];
-                                // eslint-disable-next-line array-callback-return
-                                values?.absensi_kehadiran?.map((value) => {
-                                  value.kehadiran.id = 1;
-
-                                  kehadiran.push(value);
-                                });
-
-                                setFieldValue("absensi_kehadiran", kehadiran);
-                                sessionStorageSet(
-                                  kelas_id,
-                                  mapel_id,
-                                  tanggal,
-                                  values
-                                );
-                              }
-                            }}
-                            type="checkbox"
-                          />
                         </div>
                       </Table.HeaderCell>
                       <Table.HeaderCell>Keterangan</Table.HeaderCell>
@@ -450,7 +458,7 @@ export default function Absensi() {
                           </Table.Row>
                         ))}
                     </TableLoading>
-                  </Table.Body> 
+                  </Table.Body>
                 </Table>
                 {errors.agenda_kelas !== undefined && (
                   <Message color="red">
