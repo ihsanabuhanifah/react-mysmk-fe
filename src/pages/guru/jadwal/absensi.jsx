@@ -265,48 +265,45 @@ export default function Absensi() {
                 </section>
               </div>
 
-              <div>
-                <section style={{ overflow: "auto", maxWidth: "100%" }} padded>
-                  <Header as={"h3"}>Materi</Header>
-                  <div className="space-y-5">
-                    {values?.agenda_kelas?.map((value, index) => (
-                      <React.Fragment key={index}>
-                        <div>
-                          <Form.Field
-                            control={Input}
-                            label={`Jam ke-${value?.jam_ke}`}
-                            placeholder="Materi"
-                            name={`agenda_kelas[${index}]materi`}
-                            onChange={(e, data) => {
-                              console.log("e", e);
-                              sessionStorageSet(
-                                kelas_id,
-                                mapel_id,
-                                tanggal,
-                                values
-                              );
-                              setFieldValue(
-                                `agenda_kelas[${index}]materi`,
-                                data.value
-                              );
-                            }}
-                            onBlur={handleBlur}
-                            value={value?.materi === null ? "" : value?.materi}
-                            disabled={isSubmitting}
-                            fluid
-                            type="text"
-                            error={
-                              errors?.agenda_kelas?.[index]?.materi !==
-                                undefined &&
-                              errors?.agenda_kelas?.[index]?.materi
-                            }
-                          />
-                        </div>
-                      </React.Fragment>
-                    ))}
-                  </div>
-                </section>
-              </div>
+              <section style={{ overflow: "auto", maxWidth: "100%" }} padded>
+                <Header as={"h3"}>Materi</Header>
+                <div className="space-y-5">
+                  {values?.agenda_kelas?.map((value, index) => (
+                    <React.Fragment key={index}>
+                      <div>
+                        <Form.Field
+                          control={TextArea}
+                          label={`Jam ke-${value?.jam_ke}`}
+                          placeholder="Materi"
+                          name={`agenda_kelas[${index}]materi`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
+                            sessionStorageSet(
+                              kelas_id,
+                              mapel_id,
+                              tanggal,
+                              values
+                            );
+                            setFieldValue(
+                              `agenda_kelas[${index}]materi`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.materi === null ? "" : value?.materi}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.agenda_kelas?.[index]?.materi !==
+                              undefined && errors?.agenda_kelas?.[index]?.materi
+                          }
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </section>
 
               <section
                 className="mt-5"
@@ -323,7 +320,6 @@ export default function Absensi() {
                   <div>
                     <input
                       type="checkbox"
-                     
                       onChange={(e) => {
                         console.log("e", e.target.checked);
                         if (e.target.checked) {

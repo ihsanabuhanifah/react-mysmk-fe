@@ -27,7 +27,7 @@ export default function Guru() {
 
   return (
     <div className="h-screen antialiased text-gray-700  ">
-      <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border border-[#01B5AD]  ">
+      <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border   ">
         <div className=" col-span-4 xl:col-span-2 pl-5 lg:pl-2  xl:pl-5 2xl:pl-10  h-full w-full   relative flex items-center">
           <img
             className="absolute"
@@ -37,7 +37,7 @@ export default function Guru() {
           />
         </div>
 
-        <div className=" col-span-6 xl:col-span-2 flex items-center justify-end space-x-5 pr-5 xl:pr-10 bg-red-  h-full w-full relative ">
+        <div className=" col-span-6 xl:col-span-2 flex items-center justify-end space-x-5   h-full w-full relative ">
           <button
             onClick={() => {
               return setNotif(!notif);
@@ -71,7 +71,7 @@ export default function Guru() {
       </header>
       <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
         <div
-          className={` w-full h-full shadow-lg    bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2 border-[#01B5AD] px-2  ${
+          className={` w-full h-full shadow-lg    bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${
             !sidebar
               ? "transform -translate-x-full -z-50   xl:-translate-x-0"
               : "transform -translate-x-0 z-10  transition  duration-500 "
@@ -89,7 +89,7 @@ export default function Guru() {
               onClick={() => {
                 return setShowNotf(!showNotif);
               }}
-              className={` rounded-full p-2 hidden xl:block absolute  right-5 top-5 z-50 ${
+              className={` rounded-full p-2 hidden xl:block absolute  right-5 top-1 z-50 ${
                 showNotif ? "bg-red-400" : ""
               }`}
             >
@@ -106,7 +106,7 @@ export default function Guru() {
               )}
             </button>
           </div>
-          <div id="sidebar" className="h-full w-full overflow-auto ">
+          <div id="sidebar" className="h-full w-full  ">
             <Outlet data={data} />
           </div>
         </div>
