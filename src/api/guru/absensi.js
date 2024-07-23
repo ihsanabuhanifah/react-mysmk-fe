@@ -1,7 +1,9 @@
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { formatHari } from "../../utils";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
@@ -92,3 +94,118 @@ export function belumAbsen() {
   syncToken();
   return axios.get("/guru/absensi/guru-belum-absen");
 }
+
+export function listKehadiranGuru(params) {
+  syncToken();
+  return axios.get("/guru/list/kehadiran", { params });
+}
+
+export const useKehadiran = ({ tanggal }) => {
+  const { isLoading, data, isFetching } = useQuery(
+    ["/guru/list/kehadiran", tanggal],
+    () => listKehadiranGuru({ tanggal }),
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+
+  return { isLoading, data, isFetching };
+};
+
+export const useSubmitDatang = ({ tanggal }) => {
+  let queryClient = useQueryClient();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/submit-datang/kehadiran`, {
+        tanggal,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/list/kehadiran");
+        return toast.success(response?.data?.msg, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      },
+
+      onError: (error) => {
+        alert("ok");
+      },
+    }
+  );
+  return mutate
+};
+
+export const useSubmitPulang = ({ tanggal }) => {
+  let queryClient = useQueryClient();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/submit-pulang/kehadiran`, {
+        tanggal,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/list/kehadiran");
+        return toast.success(response?.data?.msg, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      },
+
+      onError: (error) => {
+        alert("ok");
+      },
+    }
+  );
+  return mutate
+};
+
+
+export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
+  let queryClient = useQueryClient();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/submit-izin/kehadiran`, {
+        tanggal,
+        keterangan,
+        status
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/list/kehadiran");
+        return toast.success(response?.data?.msg, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      },
+
+      onError: (error) => {
+        alert("ok");
+      },
+    }
+  );
+  return mutate
+};

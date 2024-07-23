@@ -18,7 +18,6 @@ import {
   Dropdown,
   Icon,
   Message,
-  Checkbox,
 } from "semantic-ui-react";
 import { getOptions } from "../../../utils/format";
 import { izinOptions } from "../../../utils/options";

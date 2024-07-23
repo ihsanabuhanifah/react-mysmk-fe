@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Notifikasi from "../module/notifikasi";
@@ -25,6 +25,31 @@ export default function Guru() {
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
 
+  const [userLocation, setUserLocation] = useState(null);
+
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          setUserLocation({ latitude, longitude });
+        },
+
+        (error) => {
+          console.error("Error get user location: ", error);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser");
+    }
+  };
+
+  useEffect(() => {
+    getUserLocation();
+  }, []);
+
+  console.log("user", userLocation);
   return (
     <div className="h-screen antialiased text-gray-700  ">
       <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border   ">

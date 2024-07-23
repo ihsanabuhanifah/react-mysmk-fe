@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import axios from "./axiosClient";
 import { syncToken } from "./axiosClient";
 export function register(values) {
@@ -33,4 +34,22 @@ export function saveToken(token) {
   return axios.put("/guru/token/save", {
     token,
   });
+}
+
+
+export const useAuthMe =() => {
+  let { data: dataMe } = useQuery(
+    //query key
+    ["authme", ],
+    //axios function,triggered when page/pageSize change
+    () => authme(),
+    //configuration
+    {
+      staleTime: 60 * 1000 * 60 * 12, // 12 jam,
+      select: (response) => response.data
+     
+    }
+  );
+
+  return {dataMe}
 }

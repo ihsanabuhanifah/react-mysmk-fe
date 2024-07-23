@@ -41,6 +41,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
+import Kehadiran from "./pages/guru/kehadiran";
 
 
 function App() {
@@ -95,6 +96,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="kehadiran-guru" element={<Kehadiran/>} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />

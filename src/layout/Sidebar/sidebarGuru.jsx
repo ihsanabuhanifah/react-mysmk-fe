@@ -16,12 +16,9 @@ import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
 import useList from "../../hook/useList";
 
-
-
-
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
-  const { roles } = useList()
+  const { roles } = useList();
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -72,19 +69,35 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-       {checkRole(roles, "guru") &&  <NavButton
+
+        <NavButton
           handleSidebar={handleSiderbar}
-          to="absensi"
-          path="absensi"
-          title={"Jadwal dan Absensi"}
+          to="kehadiran-guru"
+          path="kehadiran-guru"
+          title={["Kehadiran"]}
           logo={
-            <MdOutlineCalendarToday
+            <MdOutlineDashboard
               className={`h-8 w-8 ${
-                url === "absensi" ? "text-white-400" : "text-gray-600"
+                url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
               }`}
             />
           }
-        />}
+        />
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="absensi"
+            path="absensi"
+            title={"Jadwal dan Absensi"}
+            logo={
+              <MdOutlineCalendarToday
+                className={`h-8 w-8 ${
+                  url === "absensi" ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to={`halaqoh/absensi/${formatTahun(date)}`}
@@ -98,7 +111,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-         <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to={`halaqoh-siswa`}
           path={"halaqoh-siswa"}
@@ -111,7 +124,8 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-        {checkRole(roles , "guru") &&  <NavButton
+        {checkRole(roles, "guru") && (
+          <NavButton
             handleSidebar={handleSiderbar}
             to={`pengampu/halaqoh/absensi`}
             path={"pengampu"}
@@ -123,8 +137,10 @@ export default function SidebarGuru({ setSidebar }) {
                 }`}
               />
             }
-          />}
-          {checkRole(roles , "guru") &&  <NavButton
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
             handleSidebar={handleSiderbar}
             to={`bank-soal`}
             path={"bank-soal"}
@@ -136,8 +152,10 @@ export default function SidebarGuru({ setSidebar }) {
                 }`}
               />
             }
-          />}
-           {checkRole(roles , "guru") &&  <NavButton
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
             handleSidebar={handleSiderbar}
             to={`exam`}
             path={"exam"}
@@ -149,7 +167,8 @@ export default function SidebarGuru({ setSidebar }) {
                 }`}
               />
             }
-          />}
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
@@ -165,76 +184,88 @@ export default function SidebarGuru({ setSidebar }) {
         />
         {/* <NavButton to="mata pelajaran" title={"Mata Pelajaran"} logo={<LogoJadwal />} /> */}
         {/* <NavButton to="kelas" title={"Kelas"} logo={<LogoJadwal />} /> */}
-       {checkRole(roles , "guru")  &&  <NavButton
-          handleSidebar={handleSiderbar}
-          to="pelanggaran"
-          path="pelanggaran"
-          title={"Pelanggaran"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "pelanggaran" ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />}
-       {checkRole(roles , "guru") &&  <NavButton
-          handleSidebar={handleSiderbar}
-          to="prestasi"
-          path="prestasi"
-          title={"Prestasi"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "prestasi" ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        /> }
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="pelanggaran"
+            path="pelanggaran"
+            title={"Pelanggaran"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "pelanggaran" ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="prestasi"
+            path="prestasi"
+            title={"Prestasi"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "prestasi" ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         {/* <NavButton to="penilaian" title={"Penilaian"} logo={<LogoJadwal />} /> */}
-       {checkRole(roles , "guru") &&  <NavButton
-          handleSidebar={handleSiderbar}
-          to="perizinan-pulang"
-          path="perizinan-pulang"
-          title={"Perizinan Pulang"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "perizinan-pulang" ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />}
-       {checkRole (roles, "guru") &&  <NavButton
-          handleSidebar={handleSiderbar}
-          to="perizinan-kunjungan"
-          path="perizinan-kunjungan"
-          title={"Perizinan Kunjungan"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "perizinan-kunjungan"
-                  ? "text-white-400"
-                  : "text-gray-600"
-              }`}
-            />
-          }
-        />}
-       {checkRole (roles , "guru") &&  <NavButton
-          handleSidebar={handleSiderbar}
-          to="laporan-guru-piket"
-          path="laporan-guru-piket"
-          title={"Laporan Guru Piket"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "laporan-guru-piket"
-                  ? "text-white-400"
-                  : "text-gray-600"
-              }`}
-            />
-          }
-        />}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="perizinan-pulang"
+            path="perizinan-pulang"
+            title={"Perizinan Pulang"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "perizinan-pulang"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="perizinan-kunjungan"
+            path="perizinan-kunjungan"
+            title={"Perizinan Kunjungan"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "perizinan-kunjungan"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="laporan-guru-piket"
+            path="laporan-guru-piket"
+            title={"Laporan Guru Piket"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "laporan-guru-piket"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="daftar-siswa"
