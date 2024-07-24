@@ -8,15 +8,20 @@ import {
   useSubmitPulang,
 } from "../../../api/guru/absensi";
 import { TableLoading } from "../../../components";
-import { showFormattedDate } from "../../../utils";
+import { checkRole, showFormattedDate } from "../../../utils";
 import dayjs from "dayjs";
 import { useAuthMe } from "../../../api/auth";
 import { toast } from "react-toastify";
 import ModalIzin from "./Modal";
+import useList from "../../../hook/useList";
+import ModalKepulangan from "./ModalKepulangan";
 export default function Kehadiran() {
   const [userLocation, setUserLocation] = useState(null);
   const { dataMe } = useAuthMe();
-  const [open, setOpen] = useState(false)
+
+  const { roles } = useList();
+  const [open, setOpen] = useState(false);
+  const [openPulang, setOpenPulang] = useState(false);
   const [jarak, setJarak] = useState(100000000);
   let [tanggalActive, setTanggalActive] = useState(
     dayjs().format("YYYY-MM-DD")
@@ -25,23 +30,6 @@ export default function Kehadiran() {
   function toRadians(degrees) {
     return degrees * (Math.PI / 180);
   }
-
-  //   function haversineDistance(lat1, lon1, lat2, lon2) {
-  //     const R = 6371; // Radius of the Earth in kilometers
-  //     const lat1Rad = toRadians(lat1);
-  //     const lat2Rad = toRadians(lat2);
-  //     const deltaLat = toRadians(lat2 - lat1);
-  //     const deltaLon = toRadians(lon1 - lon2);
-
-  //     const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-  //               Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-  //               Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
-  //     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  //     const distance = R * c; // Distance in kilometers
-  //     return distance;
-  // }
-
   function haversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3; // Radius of the Earth in meters
     const lat1Rad = toRadians(lat1);
@@ -62,16 +50,21 @@ export default function Kehadiran() {
   }
   const getUserLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
 
           setUserLocation({ latitude, longitude });
-          console.log('jalan', latitude, longitude)
+          console.log("jalan", latitude, longitude);
         },
 
         (error) => {
           console.error("Error get user location: ", error);
+        },
+        {
+          enableHighAccuracy: true, // Memastikan akurasi tinggi
+          timeout: 5000, // Timeout dalam milidetik
+          maximumAge: 0, // Jangan menggunakan cache lokasi
         }
       );
     } else {
@@ -102,14 +95,16 @@ export default function Kehadiran() {
     tanggal: tanggalActive,
   });
   const datang = useSubmitDatang({ tanggal: tanggalActive });
-  const pulang = useSubmitPulang({ tanggal: tanggalActive });
 
   return (
     <LayoutPage title="Kehadiran Guru">
-        <ModalIzin open={open} setOpen={setOpen} tanggalActive={tanggalActive}/>
-        {
-          JSON.stringify(userLocation)
-        }
+      <ModalIzin open={open} setOpen={setOpen} tanggalActive={tanggalActive} />
+      <ModalKepulangan
+        open={openPulang}
+        setOpen={setOpenPulang}
+        tanggalActive={tanggalActive}
+      />
+      {JSON.stringify(userLocation)}
       <section className="mt-5">
         {jarak > 50 && (
           <div class="ui warning message">
@@ -142,78 +137,102 @@ export default function Kehadiran() {
               />
             </div>
 
-            <div>
-              <Button
-                content={"Absensi Kedatangan"}
-                type="button"
-                fluid
-                icon={() => <Icon name="sign-in" />}
-                size="medium"
-                color="teal"
-                loading={datang.isLoading}
-                disabled={
-                  datang.isLoading ||
-                  jarak > 50 ||
-                  !!data?.data?.filter(
-                    (item) =>
-                      Number(item.teacher.user_id) === Number(dataMe.user.id)
-                  )?.[0]?.status === true
-                }
-                onClick={() => {
-                  datang.mutate();
-                }}
-              />
-            </div>
+            {console.log(
+              "dd",
+              dayjs(
+                data?.data?.filter(
+                  (item) =>
+                    Number(item.teacher.user_id) === Number(dataMe.user.id)
+                )?.[0]?.tanggal
+              ).format("YYYY-MM-DD"),
+              dayjs().format("YYYY-MM-DD")
+            )}
+            {dayjs(
+              data?.data?.filter(
+                (item) =>
+                  Number(item.teacher.user_id) === Number(dataMe.user.id)
+              )?.[0]?.tanggal
+            ).format("YYYY-MM-DD") === dayjs().format("YYYY-MM-DD") && (
+              <>
+                <div>
+                  <Button
+                    content={"Absensi Kedatangan"}
+                    type="button"
+                    fluid
+                    icon={() => <Icon name="sign-in" />}
+                    size="medium"
+                    color="teal"
+                    loading={datang.isLoading}
+                    disabled={
+                      datang.isLoading ||
+                      jarak > 50 ||
+                      !!data?.data?.filter(
+                        (item) =>
+                          Number(item.teacher.user_id) ===
+                          Number(dataMe.user.id)
+                      )?.[0]?.status === true
+                    }
+                    onClick={() => {
+                      datang.mutate();
+                    }}
+                  />
+                </div>
 
-            <div>
-              <Button
-                content={"Absensi Kepulangan"}
-                type="button"
-                fluid
-                icon={() => <Icon name="sign-out" />}
-                size="medium"
-                color="blue"
-                loading={pulang.isLoading}
-                disabled={pulang.isLoading || jarak > 50 ||  !!data?.data?.filter(
-                    (item) =>
-                      Number(item.teacher.user_id) === Number(dataMe.user.id)
-                  )?.[0]?.jam_pulang === true}
-                onClick={() => {
-                  if (
-                    data?.data?.filter(
-                      (item) =>
-                        Number(item.teacher.user_id) === Number(dataMe.user.id)
-                    )?.[0]?.status !== "hadir"
-                  ) {
-                    return toast.warning("Jam Kedatangan Belum Absensi", {
-                      position: "top-right",
-                      autoClose: 1000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                      theme: "colored",
-                    });
-                  }
-                  pulang.mutate();
-                }}
-              />
-            </div>
-            <div>
-              <Button
-                content={"Izin Ketidakhadiran"}
-                type="button"
-                fluid
-                icon={() => <Icon name="edit outline" />}
-                size="medium"
-                color="red"
-                
-                onClick={() => {
-                 setOpen(true)
-                }}
-              />
-            </div>
+                <div>
+                  <Button
+                    content={"Absensi Kepulangan"}
+                    type="button"
+                    fluid
+                    icon={() => <Icon name="sign-out" />}
+                    size="medium"
+                    color="blue"
+                    disabled={
+                      
+                      jarak > 50 ||
+                      !!data?.data?.filter(
+                        (item) =>
+                          Number(item.teacher.user_id) ===
+                          Number(dataMe.user.id)
+                      )?.[0]?.jam_pulang === true
+                    }
+                    onClick={() => {
+                      if (
+                        data?.data?.filter(
+                          (item) =>
+                            Number(item.teacher.user_id) ===
+                            Number(dataMe.user.id)
+                        )?.[0]?.status !== "hadir"
+                      ) {
+                        return toast.warning("Jam Kedatangan Belum Absensi", {
+                          position: "top-right",
+                          autoClose: 1000,
+                          hideProgressBar: false,
+                          closeOnClick: true,
+                          pauseOnHover: true,
+                          draggable: true,
+                          progress: undefined,
+                          theme: "colored",
+                        });
+                      }
+                      return setOpenPulang(true);
+                    }}
+                  />
+                </div>
+                <div>
+                  <Button
+                    content={"Izin Ketidakhadiran"}
+                    type="button"
+                    fluid
+                    icon={() => <Icon name="edit outline" />}
+                    size="medium"
+                    color="red"
+                    onClick={() => {
+                      setOpen(true);
+                    }}
+                  />
+                </div>
+              </>
+            )}
           </section>
         </Form>
         {/* <p className="font-bold text-red-500">{jarak}</p>
@@ -243,6 +262,10 @@ export default function Kehadiran() {
               <Table.HeaderCell>Jam Pulang</Table.HeaderCell>
               <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
+
+              {checkRole(roles, "admin") && (
+                <Table.HeaderCell>Aksi</Table.HeaderCell>
+              )}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -261,6 +284,7 @@ export default function Kehadiran() {
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
                   <Table.Cell>{item.status || "-"}</Table.Cell>
                   <Table.Cell>{item.keterangan || "-"}</Table.Cell>
+                  {checkRole(roles, "admin") && <Table.Cell>{"-"}</Table.Cell>}
                 </Table.Row>
               ))}
             </TableLoading>

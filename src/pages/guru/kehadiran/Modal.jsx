@@ -83,8 +83,8 @@ function ModalIzin({ open, setOpen, tanggalActive }) {
           <Icon name="remove" /> Batal
         </Button>
         <Button
-          loading={mutate.loading}
-          disabled={mutate.loading || !!payload.status === false || !!payload.keterangan ===false}
+          loading={mutate.isLoading}
+          disabled={mutate.isLoading || !!payload.status === false || !!payload.keterangan ===false}
           color="green"
           inverted
           onClick={() => {

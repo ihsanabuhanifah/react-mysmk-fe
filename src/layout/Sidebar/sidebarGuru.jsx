@@ -284,7 +284,6 @@ export default function SidebarGuru({ setSidebar }) {
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
 
-      <div className="fixed bottom-0 left-5 p-5 ">
         <LogoutButton
           onClick={() => {
             return setOpen(true);
@@ -300,7 +299,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-      </div>
+      
     </>
   );
 }

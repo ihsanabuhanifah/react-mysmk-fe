@@ -5,17 +5,16 @@ import LayoutPage from "../../../module/layoutPage";
 import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import { TableLoading } from "../../../components";
-import { absensiManualCreate} from "../../../api/guru/absensi";
+import { absensiManualCreate } from "../../../api/guru/absensi";
 
-import { showFormattedDate ,formatHari, formatTahun } from "../../../utils";
+import { showFormattedDate, formatHari, formatTahun } from "../../../utils";
 
 import { toast } from "react-toastify";
-
 
 export default function Jadwal() {
   const navigate = useNavigate();
   let date = new Date();
- 
+
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
   const parameter = {
@@ -24,7 +23,6 @@ export default function Jadwal() {
     }),
   };
 
- 
   let { data, isLoading } = useQuery(
     //query key
     ["jadwal", parameter],
@@ -51,11 +49,8 @@ export default function Jadwal() {
       },
     }
   );
- 
 
   const [loading, setLoading] = React.useState(false);
-  
- 
 
   const creeteJadwal = async () => {
     setLoading(true);
@@ -63,11 +58,11 @@ export default function Jadwal() {
       const response = await absensiManualCreate();
       // await halaqohManualCreate();
       setLoading(false);
-      
+
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
       queryClient.invalidateQueries("belum_absensi");
       queryClient.invalidateQueries("notifikasi_absensi_kelas");
-  
+
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -98,8 +93,8 @@ export default function Jadwal() {
     <LayoutPage title="jadwal">
       <div className="space-y-5 mt-5">
         <section className="" style={{ maxWidth: "100%" }} padded>
-          <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
-            <div className="col-span-2">
+          <section className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+            <div className="col-span-1">
               <Form>
                 <Form.Field
                   control={Select}
@@ -121,22 +116,20 @@ export default function Jadwal() {
                 />
               </Form>
             </div>
-            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
-            
-                <Button
-                  content={"Buat Absensi"}
-                  type="submit"
-                  fluid
-                  icon={() => <Icon name="add" />}
-                  loading={loading}
-                  size="medium"
-                  color="linkedin"
-                  disabled={loading}
-                  onClick={creeteJadwal}
-                />
-            
+            <div className="">
+              <Button
+                content={"Buat Absensi"}
+                type="submit"
+                fluid
+                icon={() => <Icon name="add" />}
+                loading={loading}
+                size="medium"
+                color="linkedin"
+                disabled={loading}
+                onClick={creeteJadwal}
+              />
             </div>
-            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+            <div className="">
               <Button
                 content={"Rekap Absensi"}
                 type="button"
@@ -149,7 +142,7 @@ export default function Jadwal() {
                 }}
               />
             </div>
-            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
+            <div className="">
               <Button
                 content={"Rekap Agenda"}
                 type="button"
@@ -161,25 +154,22 @@ export default function Jadwal() {
                   return navigate("/guru/absensi/rekap-agenda");
                 }}
               />
-              
             </div>
-            <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
-            
-            <Button
-              content={"Jadwal"}
-              type="submit"
-              fluid
-              icon={() => <Icon name="add" />}
-              loading={loading}
-              size="medium"
-              color="linkedin"
-              disabled={loading}
-              onClick={() => {
-                return navigate("/guru/absensi/jadwal");
-              }}
-            />
-        
-        </div>
+            <div className="">
+              <Button
+                content={"Jadwal"}
+                type="submit"
+                fluid
+                icon={() => <Icon name="add" />}
+                loading={loading}
+                size="medium"
+                color="linkedin"
+                disabled={loading}
+                onClick={() => {
+                  return navigate("/guru/absensi/jadwal");
+                }}
+              />
+            </div>
           </section>
           <Table celled selectable>
             <Table.Header>
@@ -218,7 +208,7 @@ export default function Jadwal() {
                     </Table.Cell>
                     <Table.Cell>
                       <Button
-                       icon={() => <Icon name="edit" />}
+                        icon={() => <Icon name="edit" />}
                         content={"Absensi"}
                         type="button"
                         fluid
@@ -277,7 +267,6 @@ export default function Jadwal() {
     </LayoutPage>
   );
 }
-
 
 export const dayOptions = [
   { key: "1", value: "semua", text: "Semua" },

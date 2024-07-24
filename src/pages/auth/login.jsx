@@ -45,7 +45,7 @@ export default function Login() {
         expires: 7,
       });
 
-      if (result.data.role === "Guru") {
+      if (["Guru", "Admin"].includes(result.data.role) ) {
         return navigate("/guru/dashboard");
       }
 
