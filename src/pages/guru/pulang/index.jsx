@@ -108,7 +108,7 @@ export default function Pulang() {
         }) => (
           <Form onSubmit={handleSubmit}>
             <section className="mt-5">
-              <div className="overflow-auto h-full">
+              <div className=" h-full">
                 <div className=" grid grid-cols-8 gap-5">
                   <div className="col-span-8 lg:col-span-4">
                     <Input
@@ -183,7 +183,10 @@ export default function Pulang() {
                   )}
                 </div>
 
-                <Table celled padded>
+              <section className="mt-5" style={{
+                zoom : '80%'
+              }}>
+              <Table celled padded>
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>No</Table.HeaderCell>
@@ -390,6 +393,7 @@ export default function Pulang() {
                     </TableLoading>
                   </Table.Body>
                 </Table>
+              </section>
               </div>
             </section>
           </Form>

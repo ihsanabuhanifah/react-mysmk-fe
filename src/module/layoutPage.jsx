@@ -10,7 +10,10 @@ export default function LayoutPage({ title, children }) {
           </h1>
         </div>
 
-        <div id="scrollbar" className="h-[95%]  bg-white border-t-2  w-full px-5 lg:px-2 pb-10 overflow-auto  ">
+        <div
+          id="scrollbar"
+          className="h-[95%]  bg-white border-t-2  w-full px-5 lg:px-2 pb-10 overflow-auto  "
+        >
           {children}
         </div>
       </section>

@@ -46,7 +46,7 @@ export default function HalaqohSiswa() {
       {/* <ModalFilter open={open} setOpen={setOpen}>
         <AddSiswa />
       </ModalFilter> */}
-      <section className="grid grid-cols-6 gap-5 mb-5">
+      <section className="grid grid-cols-6 gap-5 mb-5 mt-5">
         {/* <Input
           onChange={(e) => {
             setKeyword(e.target.value);

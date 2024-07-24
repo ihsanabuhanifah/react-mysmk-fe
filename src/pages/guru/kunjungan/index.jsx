@@ -5,10 +5,8 @@ import {
   Dropdown,
   Button,
   Input,
-  
   Form,
   TextArea,
-  
 } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import {
@@ -16,7 +14,11 @@ import {
   responseKunjungan,
 } from "../../../api/guru/pulangDanKunjungan";
 import { TableLoading, ModalFilter } from "../../../components";
-import { handleViewNull, showFormattedDate, statusApproval } from "../../../utils";
+import {
+  handleViewNull,
+  showFormattedDate,
+  statusApproval,
+} from "../../../utils";
 import { Formik } from "formik";
 import { toast } from "react-toastify";
 
@@ -130,7 +132,6 @@ export default function Kunjungan() {
                         />
                       </div>
                       <div className="col-span-4 lg:col-span-1">
-                       
                         <Button
                           content="Simpan"
                           color="teal"
@@ -157,117 +158,121 @@ export default function Kunjungan() {
                   )}
                 </div>
 
-                <Table celled padded>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>No</Table.HeaderCell>
-                      <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                      <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                <section
+                className="mt-5"
+                  style={{
+                    zoom: "80%",
+                  }}
+                >
+                  <Table celled padded>
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>No</Table.HeaderCell>
+                        <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
+                        <Table.HeaderCell>Tanggal</Table.HeaderCell>
 
-                      <Table.HeaderCell>Kepentingan</Table.HeaderCell>
-                      <Table.HeaderCell>
-                        Status Approval
-                      </Table.HeaderCell>
-                      <Table.HeaderCell content singleLine={approve}>
-                        Alasan Ditolak
-                      </Table.HeaderCell>
-                      <Table.HeaderCell>Approve By</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    <TableLoading
-                      count={13}
-                      isLoading={isLoading}
-                      data={data?.data?.rows}
-                      messageEmpty={"Tidak Ada Pengajuan Izin Kunjungan"}
-                    >
-                      {values?.map((value, index) => (
-                        <Table.Row key={index}>
-                          <Table.Cell>
-                            {index + 1}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <span className="capitalize">
-                              {handleViewNull(value?.siswa?.nama_siswa)}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
+                        <Table.HeaderCell>Kepentingan</Table.HeaderCell>
+                        <Table.HeaderCell>Status Approval</Table.HeaderCell>
+                        <Table.HeaderCell content singleLine={approve}>
+                          Alasan Ditolak
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>Approve By</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      <TableLoading
+                        count={13}
+                        isLoading={isLoading}
+                        data={data?.data?.rows}
+                        messageEmpty={"Tidak Ada Pengajuan Izin Kunjungan"}
+                      >
+                        {values?.map((value, index) => (
+                          <Table.Row key={index}>
+                            <Table.Cell>{index + 1}</Table.Cell>
+                            <Table.Cell>
+                              <span className="capitalize">
+                                {handleViewNull(value?.siswa?.nama_siswa)}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell>
+                              {showFormattedDate(value?.tanggal)}
+                            </Table.Cell>
 
-                          <Table.Cell textAlign="left">
-                            {handleViewNull(value?.kepentingan)}
-                          </Table.Cell>
+                            <Table.Cell textAlign="left">
+                              {handleViewNull(value?.kepentingan)}
+                            </Table.Cell>
 
-                          <Table.Cell>
-                            {approve ? (
-                              <Dropdown
-                                placeholder="Status Approval"
-                                fluid
-                                selection
-                                search
-                                onChange={(event, data) => {
-                                  setUpdated(true);
-                                  setFieldValue(
-                                    `[${index}]status_approval`,
-                                    data.value
-                                  );
-                                  setFieldValue(`[${index}]updated`, true);
-                                  if (data.value === "menunggu") {
-                                    return setFieldValue(
-                                      `[${index}]alasan_ditolak`,
-                                      ""
+                            <Table.Cell>
+                              {approve ? (
+                                <Dropdown
+                                  placeholder="Status Approval"
+                                  fluid
+                                  selection
+                                  search
+                                  onChange={(event, data) => {
+                                    setUpdated(true);
+                                    setFieldValue(
+                                      `[${index}]status_approval`,
+                                      data.value
                                     );
-                                  }
-                                }}
-                                name={`[${index}]status_approval`}
-                                value={value.status_approval}
-                                options={approveOptions}
-                              />
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  setApprove(true);
-                                }}
-                                type="button"
-                              >
-                                {" "}
-                                {statusApproval(value?.status_approval)}
-                              </button>
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {approve ? (
-                              <TextArea
-                                selection
-                                style={{
-                                  padding: 10,
-                                }}
-                                search
-                                onChange={(e) => {
-                                  setUpdated(true);
-                                  setFieldValue(`[${index}]updated`, true);
-                                  setFieldValue(
-                                    `[${index}]alasan_ditolak`,
-                                    e.target.value
-                                  );
-                                }}
-                                name={`[${index}]alasan_ditolak`}
-                                value={value.alasan_ditolak}
-                              />
-                            ) : (
-                              handleViewNull(value?.alasan_ditolak)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(
-                              value?.kunjungan_approv_by?.nama_guru
-                            )}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </TableLoading>
-                  </Table.Body>
-                 
-                </Table>
+                                    setFieldValue(`[${index}]updated`, true);
+                                    if (data.value === "menunggu") {
+                                      return setFieldValue(
+                                        `[${index}]alasan_ditolak`,
+                                        ""
+                                      );
+                                    }
+                                  }}
+                                  name={`[${index}]status_approval`}
+                                  value={value.status_approval}
+                                  options={approveOptions}
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setApprove(true);
+                                  }}
+                                  type="button"
+                                >
+                                  {" "}
+                                  {statusApproval(value?.status_approval)}
+                                </button>
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {approve ? (
+                                <TextArea
+                                  selection
+                                  style={{
+                                    padding: 10,
+                                  }}
+                                  search
+                                  onChange={(e) => {
+                                    setUpdated(true);
+                                    setFieldValue(`[${index}]updated`, true);
+                                    setFieldValue(
+                                      `[${index}]alasan_ditolak`,
+                                      e.target.value
+                                    );
+                                  }}
+                                  name={`[${index}]alasan_ditolak`}
+                                  value={value.alasan_ditolak}
+                                />
+                              ) : (
+                                handleViewNull(value?.alasan_ditolak)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {handleViewNull(
+                                value?.kunjungan_approv_by?.nama_guru
+                              )}
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </TableLoading>
+                    </Table.Body>
+                  </Table>
+                </section>
               </div>
             </section>
           </Form>

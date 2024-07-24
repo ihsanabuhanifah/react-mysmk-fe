@@ -6,9 +6,19 @@ import { formatTahun } from "../../utils";
 import {
   MdClose,
   MdOutlineDashboard,
-  MdOutlineCalendarToday,
   MdOutlineLibraryBooks,
   MdLogout,
+  MdLaptopMac,
+  MdPeople,
+  MdOutlineSupervisorAccount,
+  MdCheck,
+  MdFormatAlignCenter,
+  MdKeyboard,
+  MdFingerprint,
+  MdNavigation,
+  MdPhoneForwarded,
+  MdPhoneInTalk,
+  MdCreate,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -33,7 +43,7 @@ export default function SidebarGuru({ setSidebar }) {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="xl:hidden flex border-b-2 items-center justify-between h-20  w-full px-5 relative ">
+      <div className="xl:hidden flex shadow-lg border-b-2 items-center justify-between h-20  w-full px-5 relative overflow-y-auto ">
         <div className="h-24 w-24   flex-col mt-12 items-center">
           <img
             className="absolute"
@@ -47,15 +57,18 @@ export default function SidebarGuru({ setSidebar }) {
           <MdClose className="w-10 h-10" />
         </button>
       </div>
-      <nav className="flex flex-col space-y-2 p-0  xl:p-0">
-        <div className="h-12 w-12  hidden xl:flex mb-10 p-5">
-          <img
-            className="absolute"
-            style={{ maxWidth: "50%", maxHeight: "50%" }}
-            src={LogoMySMK}
-            alt={LogoMySMK}
-          />
-        </div>
+      <div className="h-16 w-12  bg-white hidden xl:flex mb-5 p-5">
+        <img
+          className="absolute"
+          style={{ maxWidth: "50%", maxHeight: "50%" }}
+          src={LogoMySMK}
+          alt={LogoMySMK}
+        />
+      </div>
+      <nav
+        id="scrollbar"
+        className="flex flex-col space-y-2 p-0  xl:p-0 h-[80%] pt-5 overflow-auto pb-12"
+      >
         <NavButton
           handleSidebar={handleSiderbar}
           to="dashboard"
@@ -69,14 +82,39 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="daftar-siswa"
+          path="daftar-siswa"
+          title={"Daftar Kelas"}
+          logo={
+            <MdOutlineSupervisorAccount
+              className={`h-8 w-8 ${
+                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to={`halaqoh-siswa`}
+          path={"halaqoh-siswa"}
+          title={["Daftar Halaqoh"]}
+          logo={
+            <MdPeople
+              className={`h-8 w-8 ${
+                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
         <NavButton
           handleSidebar={handleSiderbar}
           to="kehadiran-guru"
           path="kehadiran-guru"
-          title={["Kehadiran"]}
+          title={["Absensi Guru"]}
           logo={
-            <MdOutlineDashboard
+            <MdFingerprint
               className={`h-8 w-8 ${
                 url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
               }`}
@@ -88,9 +126,9 @@ export default function SidebarGuru({ setSidebar }) {
             handleSidebar={handleSiderbar}
             to="absensi"
             path="absensi"
-            title={"Jadwal dan Absensi"}
+            title={"KBM"}
             logo={
-              <MdOutlineCalendarToday
+              <MdLaptopMac
                 className={`h-8 w-8 ${
                   url === "absensi" ? "text-white-400" : "text-gray-600"
                 }`}
@@ -98,6 +136,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+
         <NavButton
           handleSidebar={handleSiderbar}
           to={`halaqoh/absensi/${formatTahun(date)}`}
@@ -111,19 +150,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to={`halaqoh-siswa`}
-          path={"halaqoh-siswa"}
-          title={["Halaqoh Siswa"]}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />
+
         {checkRole(roles, "guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
@@ -131,7 +158,7 @@ export default function SidebarGuru({ setSidebar }) {
             path={"pengampu"}
             title={["Absensi Pengampu"]}
             logo={
-              <MdOutlineLibraryBooks
+              <MdCheck
                 className={`h-8 w-8 ${
                   url === `pengampu` ? "text-white-400" : "text-gray-600"
                 }`}
@@ -146,7 +173,7 @@ export default function SidebarGuru({ setSidebar }) {
             path={"bank-soal"}
             title={["Bank Soal"]}
             logo={
-              <MdOutlineLibraryBooks
+              <MdFormatAlignCenter
                 className={`h-8 w-8 ${
                   url === `bank-soal` ? "text-white-400" : "text-gray-600"
                 }`}
@@ -161,7 +188,7 @@ export default function SidebarGuru({ setSidebar }) {
             path={"exam"}
             title={["Exam"]}
             logo={
-              <MdOutlineLibraryBooks
+              <MdKeyboard
                 className={`h-8 w-8 ${
                   url === `exam` ? "text-white-400" : "text-gray-600"
                 }`}
@@ -175,7 +202,7 @@ export default function SidebarGuru({ setSidebar }) {
           path={"sholat"}
           title={["Sholat"]}
           logo={
-            <MdOutlineLibraryBooks
+            <MdNavigation
               className={`h-8 w-8 ${
                 url === "sholat" ? "text-white-400" : "text-gray-600"
               }`}
@@ -222,7 +249,7 @@ export default function SidebarGuru({ setSidebar }) {
             path="perizinan-pulang"
             title={"Perizinan Pulang"}
             logo={
-              <MdOutlineLibraryBooks
+              <MdPhoneForwarded
                 className={`h-8 w-8 ${
                   url === "perizinan-pulang"
                     ? "text-white-400"
@@ -239,7 +266,7 @@ export default function SidebarGuru({ setSidebar }) {
             path="perizinan-kunjungan"
             title={"Perizinan Kunjungan"}
             logo={
-              <MdOutlineLibraryBooks
+              <MdPhoneInTalk
                 className={`h-8 w-8 ${
                   url === "perizinan-kunjungan"
                     ? "text-white-400"
@@ -256,7 +283,7 @@ export default function SidebarGuru({ setSidebar }) {
             path="laporan-guru-piket"
             title={"Laporan Guru Piket"}
             logo={
-              <MdOutlineLibraryBooks
+              <MdCreate
                 className={`h-8 w-8 ${
                   url === "laporan-guru-piket"
                     ? "text-white-400"
@@ -266,24 +293,11 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to="daftar-siswa"
-          path="daftar-siswa"
-          title={"Daftar Siswa"}
-          logo={
-            <MdOutlineLibraryBooks
-              className={`h-8 w-8 ${
-                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
-
+      <div className="h-[10%] pl-3 pt-5">
         <LogoutButton
           onClick={() => {
             return setOpen(true);
@@ -299,7 +313,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-      
+      </div>
     </>
   );
 }
@@ -321,9 +335,11 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
           : "text-black"
       }`}
     >
-      <div className="w-8 h-8 ">{logo}</div>
+      <div style={{
+        zomm : '80%'
+      }} className="w-8 h-8 ">{logo}</div>
       <p
-        className={`ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left 
+        className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}
          `}
       >
@@ -344,7 +360,7 @@ function LogoutButton({ to, title, logo, onClick }) {
     >
       <div className="w-8 h-8 ">{logo}</div>
       <p
-        className={`font-extrabold ml-5 text-sm xl:text-md 2xl:text-md font-poppins text-left ${
+        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
       >

@@ -25,12 +25,8 @@ export default function Guru() {
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
 
-  
-  
-
- 
   return (
-    <div className="h-screen antialiased text-gray-700  ">
+    <div className="h-screen antialiased text-gray-700 overflow-hidden  ">
       <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border   ">
         <div className=" col-span-4 xl:col-span-2 pl-5 lg:pl-2  xl:pl-5 2xl:pl-10  h-full w-full   relative flex items-center">
           <img
@@ -75,7 +71,8 @@ export default function Guru() {
       </header>
       <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
         <div
-          className={` w-full h-full shadow-lg    bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${
+        
+          className={` w-full h-full shadow-lg   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${
             !sidebar
               ? "transform -translate-x-full -z-50   xl:-translate-x-0"
               : "transform -translate-x-0 z-10  transition  duration-500 "
