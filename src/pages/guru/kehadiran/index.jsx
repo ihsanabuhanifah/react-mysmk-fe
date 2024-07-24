@@ -17,7 +17,7 @@ export default function Kehadiran() {
   const [userLocation, setUserLocation] = useState(null);
   const { dataMe } = useAuthMe();
   const [open, setOpen] = useState(false)
-  const [jarak, setJarak] = useState(1000);
+  const [jarak, setJarak] = useState(100000000);
   let [tanggalActive, setTanggalActive] = useState(
     dayjs().format("YYYY-MM-DD")
   );
@@ -67,6 +67,7 @@ export default function Kehadiran() {
           const { latitude, longitude } = position.coords;
 
           setUserLocation({ latitude, longitude });
+          console.log('jalan', latitude, longitude)
         },
 
         (error) => {
@@ -106,8 +107,11 @@ export default function Kehadiran() {
   return (
     <LayoutPage title="Kehadiran Guru">
         <ModalIzin open={open} setOpen={setOpen} tanggalActive={tanggalActive}/>
+        {
+          JSON.stringify(userLocation)
+        }
       <section className="mt-5">
-        {jarak > 10 && (
+        {jarak > 50 && (
           <div class="ui warning message">
             <i class="close icon"></i>
             <div class="header">Warning !</div>
@@ -116,16 +120,7 @@ export default function Kehadiran() {
             {Math.ceil(jarak)} meter. <br />{" "}
             <button
               onClick={() => {
-                const a = haversineDistance(
-                //   -6.493519999999999,
-                //   107.0082512,
-                  userLocation.latitude,
-                  userLocation.longitude,
-                  -6.4935542,
-                  107.0082822
-                );
-
-                setJarak(a);
+                getUserLocation();
               }}
               className="border rounded-md bg-green-500 hover:bg-green-100 px-4 py-2 text-white"
             >
@@ -158,7 +153,7 @@ export default function Kehadiran() {
                 loading={datang.isLoading}
                 disabled={
                   datang.isLoading ||
-                  jarak > 10 ||
+                  jarak > 50 ||
                   !!data?.data?.filter(
                     (item) =>
                       Number(item.teacher.user_id) === Number(dataMe.user.id)
@@ -179,7 +174,7 @@ export default function Kehadiran() {
                 size="medium"
                 color="blue"
                 loading={pulang.isLoading}
-                disabled={pulang.isLoading || jarak > 10 ||  !!data?.data?.filter(
+                disabled={pulang.isLoading || jarak > 50 ||  !!data?.data?.filter(
                     (item) =>
                       Number(item.teacher.user_id) === Number(dataMe.user.id)
                   )?.[0]?.jam_pulang === true}
