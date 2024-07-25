@@ -35,6 +35,7 @@ import {
   updateBankSoal,
   detailBankSoal,
 } from "../../../api/guru/bank_soal";
+import LayoutPage from "../../../module/layoutPage";
 
 export default function FormSoal() {
   const { dataMapel } = useList();
@@ -148,7 +149,7 @@ export default function FormSoal() {
     }
   };
   return (
-    <Segment>
+    <LayoutPage title={"Input Soal"}>
       <div className="p-0 lg:p-5  ">
         <Header>
           {id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
@@ -475,6 +476,6 @@ export default function FormSoal() {
           )}
         </Formik>
       </div>
-    </Segment>
+    </LayoutPage>
   );
 }

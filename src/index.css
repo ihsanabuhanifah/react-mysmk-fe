@@ -83,3 +83,9 @@ div::-webkit-scrollbar-thumb {
 div::-webkit-scrollbar-thumb:hover {
   background: #0877ee;
 }
+
+@media only screen and (max-width: 768px) {
+  .ui.table thead {
+    display: none;
+  }
+}

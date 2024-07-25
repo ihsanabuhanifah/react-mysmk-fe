@@ -56,7 +56,7 @@ export default function HalaqohSiswa() {
           icon="search"
           placeholder="Nama Guru..."
         /> */}
-        <div className="col-start-6">
+        <div className=" col-span-3 lg:col-span-1">
           {checkRole(roles, "admin") && (
             <Button
               content={"Buat Jadwal"}
@@ -89,7 +89,7 @@ export default function HalaqohSiswa() {
               count={10}
               isLoading={isLoading}
               data={data?.data?.rows}
-              messageEmpty={"Tidak Ada Catatan Prestasi"}
+              messageEmpty={"Kelompok Halaqoh belum dibuat"}
             >
               {data?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>

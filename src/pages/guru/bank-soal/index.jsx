@@ -115,11 +115,7 @@ export default function ListBankSoal() {
                     <Table.Cell>{value?.point}</Table.Cell>
 
                     <Table.Cell>
-                      <ViewButton
-                        onClick={() => {
-                          console.log("jalan");
-                        }}
-                      />
+                     
                       <EditButton
                         onClick={() => {
                           navigate(`update/${value.id}`, {

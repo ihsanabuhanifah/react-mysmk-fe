@@ -32,7 +32,7 @@ import {
   FormSoal,
   ListExam,
   FormExam,
-  CreateSiswa
+  CreateSiswa,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -43,10 +43,7 @@ import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 
-
 function App() {
-
-  
   return (
     <div className="font-poppins">
       <ToastContainer
@@ -96,7 +93,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="kehadiran-guru" element={<Kehadiran/>} />
+          <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
@@ -149,13 +146,12 @@ function App() {
         <Route
           path="/siswa"
           element={
-            <ProtectRoute userRole="Wali Santri">
+            <ProtectRoute userRole="Santri">
               <Siswa />
             </ProtectRoute>
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="absensi" element={<Jadwal />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

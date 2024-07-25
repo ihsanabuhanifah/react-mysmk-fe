@@ -17,6 +17,8 @@ export default function ProtectRoute({ children, userRole }) {
       staleTime: 60 * 1000 * 60 * 12, // 12 jam,
       select: (response) => {
         const role = response?.data?.role;
+
+        console.log('role', role)
       
       
         if (!userRole.includes(role)) {

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { notifikasiAbsensi } from "../api/guru/absensi";
 import { notifikasiHalaqoh } from "../api/guru/halaqoh";
 import { getNotifikasiGuruPiket } from "../api/guru/laporan";
@@ -12,7 +12,7 @@ export default function useNotif() {
     () => notifikasiAbsensi(),
     //configuration
     {
-      staleTime: 60 * 1000, // 1 menit,
+      staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;
       },
@@ -25,7 +25,7 @@ export default function useNotif() {
     () => notifikasiHalaqoh(),
     //configuration
     {
-      staleTime: 60 * 1000, // 1 menit,
+      staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;
       },
@@ -38,7 +38,7 @@ export default function useNotif() {
     () => getNotifikasiGuruPiket(),
     //configuration
     {
-      staleTime: 60 * 1000, // 1 menit,
+      staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;
       },

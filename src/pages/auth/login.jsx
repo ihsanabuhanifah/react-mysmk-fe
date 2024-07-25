@@ -53,7 +53,7 @@ export default function Login() {
         return navigate("/guru/dashboard");
       }
       console.log(result.data.role);
-      if (result.data.role === "Wali Santri") {
+      if (['siswa', 'santri'].includes(result.data.role.toLowerCase())) {
         return navigate("/siswa/dashboard");
       }
     } catch (err) {
