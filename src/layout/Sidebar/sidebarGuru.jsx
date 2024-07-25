@@ -182,6 +182,8 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+
+        
         {checkRole(roles, "guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
