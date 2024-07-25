@@ -23,6 +23,7 @@ export default function Kehadiran() {
   const [open, setOpen] = useState(false);
   const [openPulang, setOpenPulang] = useState(false);
   const [jarak, setJarak] = useState(100000000);
+  let [id, setId] = useState(0);
   let [tanggalActive, setTanggalActive] = useState(
     dayjs().format("YYYY-MM-DD")
   );
@@ -98,7 +99,13 @@ export default function Kehadiran() {
 
   return (
     <LayoutPage title="Kehadiran Guru">
-      <ModalIzin open={open} setOpen={setOpen} tanggalActive={tanggalActive} />
+      <ModalIzin
+        id={id}
+        open={open}
+        setOpen={setOpen}
+        tanggalActive={tanggalActive}
+        setId={setId}
+      />
       <ModalKepulangan
         open={openPulang}
         setOpen={setOpenPulang}
@@ -187,7 +194,6 @@ export default function Kehadiran() {
                     size="medium"
                     color="blue"
                     disabled={
-                      
                       jarak > 50 ||
                       !!data?.data?.filter(
                         (item) =>
@@ -284,7 +290,22 @@ export default function Kehadiran() {
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
                   <Table.Cell>{item.status || "-"}</Table.Cell>
                   <Table.Cell>{item.keterangan || "-"}</Table.Cell>
-                  {checkRole(roles, "admin") && <Table.Cell>{"-"}</Table.Cell>}
+                  {checkRole(roles, "admin") && (
+                    <Table.Cell>
+                      {" "}
+                      <Button
+                        content={"Absen"}
+                        type="button"
+                        fluid
+                        size="medium"
+                        color="red"
+                        onClick={() => {
+                          setId(item.teacher.id);
+                          setOpen(true);
+                        }}
+                      />
+                    </Table.Cell>
+                  )}
                 </Table.Row>
               ))}
             </TableLoading>

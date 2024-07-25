@@ -37,7 +37,6 @@ function ModalKepulangan({ open, setOpen, tanggalActive }) {
           loading={pulang.isLoading}
           disabled={pulang.isLoading}
           color="green"
-         
           onClick={() => {
             pulang.mutate({
               onSuccess: () => {

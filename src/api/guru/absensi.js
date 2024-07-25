@@ -142,7 +142,7 @@ export const useSubmitDatang = ({ tanggal }) => {
       },
     }
   );
-  return mutate
+  return mutate;
 };
 
 export const useSubmitPulang = ({ tanggal }) => {
@@ -173,9 +173,8 @@ export const useSubmitPulang = ({ tanggal }) => {
       },
     }
   );
-  return mutate
+  return mutate;
 };
-
 
 export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
   let queryClient = useQueryClient();
@@ -184,7 +183,7 @@ export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
       return axios.put(`/guru/submit-izin/kehadiran`, {
         tanggal,
         keterangan,
-        status
+        status,
       });
     },
     {
@@ -207,5 +206,39 @@ export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
       },
     }
   );
-  return mutate
+  return mutate;
+};
+
+export const useSubmitByAdmin = ({ tanggal, status, keterangan, id }) => {
+  let queryClient = useQueryClient();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/submit-by-Admin/kehadiran`, {
+        tanggal,
+        keterangan,
+        status,
+        id,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/list/kehadiran");
+        return toast.success(response?.data?.msg, {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      },
+
+      onError: (error) => {
+        alert("ok");
+      },
+    }
+  );
+  return mutate;
 };
