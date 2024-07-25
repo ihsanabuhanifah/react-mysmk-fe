@@ -102,7 +102,7 @@ const pointOptions = [
 const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
   { key: "2", value: "TF", text: "True False" },
-  { key: "3", value: "IS", text: "Isian Singkat" },
+  { key: "3", value: "ES", text: "Essay/Project" },
 ];
 const pgOptions = [
   { key: "1", value: "A", text: "A" },
@@ -124,10 +124,19 @@ const jenisOptions = [
   { key: "5", value: "remidial", text: "Remidial" },
 ];
 const statusUjianOptions = [
-  { key: "1", value: "open", text: "Open" },
-  { key: "2", value: "in progress", text: "In Progress" },
-  { key: "3", value: "finish", text: "Finished" },
-  { key: "4", value: "locked", text: "Locked" },
+  { key: "1", value: "draft", text: "Draft" },
+  { key: "2", value: "open", text: "Open" },
+  { key: "4", value: "In Progress", text: "In Progress" },
+  { key: "4", value: "finish", text: "Finished" },
+ 
+  
+];
+
+const tipeUjianOptions = [
+  { key: "1", value: "closed", text: "Closed Book" },
+  { key: "2", value: "open", text: "Open Book" },
+
+ 
   
 ];
 
@@ -149,5 +158,6 @@ export {
   pgOptions,
   tfOptions,
   jenisOptions,
-  statusUjianOptions
+  statusUjianOptions,
+  tipeUjianOptions
 };

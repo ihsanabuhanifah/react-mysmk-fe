@@ -27,8 +27,26 @@ export function detailBankSoal(id) {
 
 export function updateBankSoal(id, values) {
   syncToken();
-let payload = values.payload[0]
+  let payload = values.payload[0];
 
-console.log('d', values)
+  
   return axios.put(`guru/bank-soal/update/${id}`, payload);
+}
+
+export function createExam(payload) {
+  console.log("pay", payload);
+  syncToken();
+  return axios.post("/guru/ujian/create", payload);
+}
+
+export function detailExam(id) {
+  syncToken();
+
+  return axios.get(`guru/ujian/detail/${id}`);
+}
+
+export function updateExam(id, payload) {
+  syncToken();
+  
+  return axios.put(`guru/ujian/update/${id}`, payload);
 }

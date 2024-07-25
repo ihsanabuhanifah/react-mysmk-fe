@@ -4,7 +4,7 @@ export default function LayoutPage({ title, children }) {
   return (
     <React.Fragment>
       <section className="  mb-5 h-full   ">
-        <div className=" px-5 py-3 flex items-center ">
+        <div className=" px-5 py-5 flex items-center ">
           <h1 className="text-2xl capitalize mb-10 font-bold font-poppins">
             {title}
           </h1>

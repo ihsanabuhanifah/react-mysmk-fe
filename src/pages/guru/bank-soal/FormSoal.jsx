@@ -24,12 +24,12 @@ import {
 } from "semantic-ui-react";
 import { DeleteButton, AddButton } from "../../../components";
 import { toast } from "react-toastify";
-import { ReactSelectAsync, FormLabel } from "../../../components";
+
 import { getOptions } from "../../../utils/format";
-import dayjs from "dayjs";
+
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
-import * as Yup from "yup";
+
 import {
   createBankSoal,
   updateBankSoal,
@@ -149,12 +149,10 @@ export default function FormSoal() {
     }
   };
   return (
-    <LayoutPage title={"Input Soal"}>
+    <LayoutPage title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}>
       <div className="p-0 lg:p-5  ">
-        <Header>
-          {id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
-        </Header>
-        <Divider></Divider>
+       
+        
         <Formik
           initialValues={initialState}
           enableReinitialize
@@ -308,29 +306,35 @@ export default function FormSoal() {
                         value={value?.tipe}
                       />
                     </div>
-                    <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Jawaban",
-                          htmlFor: `payload[${index}]jawaban`,
-                          name: `payload[${index}]jawaban`,
-                        }}
-                        placeholder="Tipe Soal"
-                        options={value?.tipe === "TF" ? tfOptions : pgOptions}
-                        id={`payload[${index}]jawaban`}
-                        name={`payload[${index}]jawaban`}
-                        onChange={(e, data) => {
-                          setFieldValue(`payload[${index}]jawaban`, data.value);
-                        }}
-                        error={
-                          errors?.payload?.[index]?.jawaban !== undefined &&
-                          errors?.payload?.[index]?.jawaban
-                        }
-                        value={value?.jawaban}
-                      />
-                    </div>
+
+                    {value.tipe !== "ES" && (
+                      <div>
+                        <Form.Dropdown
+                          selection
+                          search
+                          label={{
+                            children: "Jawaban",
+                            htmlFor: `payload[${index}]jawaban`,
+                            name: `payload[${index}]jawaban`,
+                          }}
+                          placeholder="Tipe Soal"
+                          options={value?.tipe === "TF" ? tfOptions : pgOptions}
+                          id={`payload[${index}]jawaban`}
+                          name={`payload[${index}]jawaban`}
+                          onChange={(e, data) => {
+                            setFieldValue(
+                              `payload[${index}]jawaban`,
+                              data.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.jawaban !== undefined &&
+                            errors?.payload?.[index]?.jawaban
+                          }
+                          value={value?.jawaban}
+                        />
+                      </div>
+                    )}
                   </section>
                   <section>
                     <Form.Field
@@ -354,108 +358,125 @@ export default function FormSoal() {
                       }
                     />
 
-                    <div>
-                      <Form.Field
-                        control={Input}
-                        label={`Pilihan A`}
-                        placeholder="A"
-                        name={`payload[${index}]soal.a`}
-                        onChange={(e, data) => {
-                          console.log("e", e);
+                    {value.tipe === "PG" && (
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={`Pilihan A`}
+                          placeholder="A"
+                          name={`payload[${index}]soal.a`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
 
-                          setFieldValue(`payload[${index}]soal.a`, data.value);
-                        }}
-                        onBlur={handleBlur}
-                        value={value?.soal.a === null ? "" : value?.soal.a}
-                        disabled={isSubmitting}
-                        fluid
-                        type="text"
-                        error={
-                          errors?.payload?.[index]?.soal.a !== undefined &&
-                          errors?.payload?.[index]?.soal.a
-                        }
-                      />
-                      <Form.Field
-                        control={Input}
-                        label={`Pilihan B`}
-                        placeholder="B"
-                        name={`payload[${index}]soal.b`}
-                        onChange={(e, data) => {
-                          console.log("e", e);
+                            setFieldValue(
+                              `payload[${index}]soal.a`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.soal.a === null ? "" : value?.soal.a}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.payload?.[index]?.soal.a !== undefined &&
+                            errors?.payload?.[index]?.soal.a
+                          }
+                        />
+                        <Form.Field
+                          control={Input}
+                          label={`Pilihan B`}
+                          placeholder="B"
+                          name={`payload[${index}]soal.b`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
 
-                          setFieldValue(`payload[${index}]soal.b`, data.value);
-                        }}
-                        onBlur={handleBlur}
-                        value={value?.soal.b === null ? "" : value?.soal.b}
-                        disabled={isSubmitting}
-                        fluid
-                        type="text"
-                        error={
-                          errors?.payload?.[index]?.soal.b !== undefined &&
-                          errors?.payload?.[index]?.soal.b
-                        }
-                      />
-                      <Form.Field
-                        control={Input}
-                        label={`Pilihan C`}
-                        placeholder="C"
-                        name={`payload[${index}]soal.c`}
-                        onChange={(e, data) => {
-                          console.log("e", e);
+                            setFieldValue(
+                              `payload[${index}]soal.b`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.soal.b === null ? "" : value?.soal.b}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.payload?.[index]?.soal.b !== undefined &&
+                            errors?.payload?.[index]?.soal.b
+                          }
+                        />
+                        <Form.Field
+                          control={Input}
+                          label={`Pilihan C`}
+                          placeholder="C"
+                          name={`payload[${index}]soal.c`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
 
-                          setFieldValue(`payload[${index}]soal.c`, data.value);
-                        }}
-                        onBlur={handleBlur}
-                        value={value?.soal.c === null ? "" : value?.soal.c}
-                        disabled={isSubmitting}
-                        fluid
-                        type="text"
-                        error={
-                          errors?.payload?.[index]?.soal.c !== undefined &&
-                          errors?.payload?.[index]?.soal.c
-                        }
-                      />
-                      <Form.Field
-                        control={Input}
-                        label={`Pilihan D`}
-                        placeholder="D"
-                        name={`payload[${index}]soal.d`}
-                        onChange={(e, data) => {
-                          console.log("e", e);
+                            setFieldValue(
+                              `payload[${index}]soal.c`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.soal.c === null ? "" : value?.soal.c}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.payload?.[index]?.soal.c !== undefined &&
+                            errors?.payload?.[index]?.soal.c
+                          }
+                        />
+                        <Form.Field
+                          control={Input}
+                          label={`Pilihan D`}
+                          placeholder="D"
+                          name={`payload[${index}]soal.d`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
 
-                          setFieldValue(`payload[${index}]soal.d`, data.value);
-                        }}
-                        onBlur={handleBlur}
-                        value={value?.soal.d === null ? "" : value?.soal.d}
-                        disabled={isSubmitting}
-                        fluid
-                        type="text"
-                        error={
-                          errors?.payload?.[index]?.soal.d !== undefined &&
-                          errors?.payload?.[index]?.soal.d
-                        }
-                      />
-                      <Form.Field
-                        control={Input}
-                        label={`Pilihan E`}
-                        placeholder="E"
-                        name={`payload[${index}]soal.e`}
-                        onChange={(e, data) => {
-                          console.log("e", e);
+                            setFieldValue(
+                              `payload[${index}]soal.d`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.soal.d === null ? "" : value?.soal.d}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.payload?.[index]?.soal.d !== undefined &&
+                            errors?.payload?.[index]?.soal.d
+                          }
+                        />
+                        <Form.Field
+                          control={Input}
+                          label={`Pilihan E`}
+                          placeholder="E"
+                          name={`payload[${index}]soal.e`}
+                          onChange={(e, data) => {
+                            console.log("e", e);
 
-                          setFieldValue(`payload[${index}]soal.e`, data.value);
-                        }}
-                        onBlur={handleBlur}
-                        value={value?.soal.e === null ? "" : value?.soal.e}
-                        disabled={isSubmitting}
-                        fluid
-                        type="text"
-                        error={
-                          errors?.payload?.[index]?.soal.e !== undefined &&
-                          errors?.payload?.[index]?.soal.e
-                        }
-                      />
-                    </div>
+                            setFieldValue(
+                              `payload[${index}]soal.e`,
+                              data.value
+                            );
+                          }}
+                          onBlur={handleBlur}
+                          value={value?.soal.e === null ? "" : value?.soal.e}
+                          disabled={isSubmitting}
+                          fluid
+                          type="text"
+                          error={
+                            errors?.payload?.[index]?.soal.e !== undefined &&
+                            errors?.payload?.[index]?.soal.e
+                          }
+                        />
+                      </div>
+                    )}
                   </section>
                 </div>
               ))}

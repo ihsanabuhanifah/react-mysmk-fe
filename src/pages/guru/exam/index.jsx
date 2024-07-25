@@ -96,6 +96,7 @@ export default function ListExam() {
                 <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
                 <Table.HeaderCell>Kelas</Table.HeaderCell>
                 <Table.HeaderCell>Jenis Ujian</Table.HeaderCell>
+                <Table.HeaderCell>Tipe Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
                 <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
@@ -117,6 +118,7 @@ export default function ListExam() {
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>{value?.jenis_ujian}</Table.Cell>
+                    <Table.Cell>{value?.tipe_ujian}</Table.Cell>
                     <Table.Cell>{value?.status}</Table.Cell>
                     <Table.Cell>
                       {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
@@ -125,12 +127,8 @@ export default function ListExam() {
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
-                      <ViewButton
-                        onClick={() => {
-                          console.log("jalan");
-                        }}
-                      />
-                      <EditButton
+                     
+                    <span className="flex items-center">  <EditButton
                         onClick={() => {
                           navigate(`update/${value.id}`, {
                             replace: true,
@@ -141,7 +139,7 @@ export default function ListExam() {
                         onClick={() => {
                           confirmDelete(value?.id);
                         }}
-                      />
+                      /></span>
                     </Table.Cell>
                   </Table.Row>
                 ))}
