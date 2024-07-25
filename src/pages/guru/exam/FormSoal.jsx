@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
-import { jenisOptions, statusUjianOptions, tipeUjianOptions } from "../../../utils/options";
+import {
+  jenisOptions,
+
+  tipeUjianOptions,
+} from "../../../utils/options";
 import { Form, Select, Button, Icon, Table, Checkbox } from "semantic-ui-react";
 
 import { toast } from "react-toastify";
@@ -50,12 +54,12 @@ export default function FormExam() {
               jenis_ujian: data.jenis_ujian,
               mapel_id: data.mapel_id,
               kelas_id: data.kelas_id,
-              waktu_mulai:  addSevenHours(data.waktu_mulai) ,
+              waktu_mulai: addSevenHours(data.waktu_mulai),
               waktu_selesai: addSevenHours(data.waktu_selesai),
               status: data.status,
               student_access: JSON.parse(data.student_access),
               soal: JSON.parse(data.soal),
-              tipe_ujian :data.tipe_ujian
+              tipe_ujian: data.tipe_ujian,
             },
           ],
         });
@@ -96,7 +100,7 @@ export default function FormExam() {
         status: "draft",
         student_access: [],
         soal: [],
-        tipe_ujian : ""
+        tipe_ujian: "",
       },
     ],
   });
@@ -115,8 +119,8 @@ export default function FormExam() {
               jenis_ujian: "",
               mapel_id: null,
               kelas_id: null,
-              waktu_mulai: null,
-              waktu_selesai: null,
+              waktu_mulai: "",
+              waktu_selesai: "",
               status: "draft",
               student_access: [],
               soal: [],
@@ -317,7 +321,7 @@ export default function FormExam() {
                         value={value?.waktu_selesai}
                       />
                     </div>
-                    <div>
+                    {/* <div>
                       <Form.Dropdown
                         selection
                         search
@@ -339,7 +343,7 @@ export default function FormExam() {
                         }
                         value={value?.status}
                       />
-                    </div>
+                    </div> */}
 
                     <div>
                       <Form.Dropdown
@@ -355,7 +359,10 @@ export default function FormExam() {
                         id={`payload[${index}]tipe_ujian`}
                         name={`payload[${index}]tipe_ujian`}
                         onChange={(e, data) => {
-                          setFieldValue(`payload[${index}]tipe_ujian`, data.value);
+                          setFieldValue(
+                            `payload[${index}]tipe_ujian`,
+                            data.value
+                          );
                         }}
                         error={
                           errors?.payload?.[index]?.tipe_ujian !== undefined &&
@@ -469,16 +476,31 @@ export default function FormExam() {
               ))}
 
               <div className="mt-5">
-                <Button
+                {id  ? (
+                  <Button
+                  content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
+                    type="submit"
+                    fluid
+                    icon={() => <Icon name="save" />}
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    disabled={isSubmitting}
+                  />
+                ) : (
+                  <Button
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  type="submit"
-                  fluid
-                  icon={() => <Icon name="save" />}
-                  loading={isSubmitting}
-                  size="medium"
-                  color="teal"
-                  disabled={isSubmitting}
-                />
+                  
+                    type="submit"
+                    fluid
+                    icon={() => <Icon name="save" />}
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    disabled={isSubmitting}
+                  />
+                )}
+               
               </div>
             </Form>
           )}
@@ -487,7 +509,6 @@ export default function FormExam() {
     </LayoutPage>
   );
 }
-
 
 const addSevenHours = (isoString) => {
   const date = new Date(isoString);

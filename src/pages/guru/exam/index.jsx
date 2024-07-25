@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
@@ -21,8 +21,11 @@ import { PaginationTable } from "../../../components";
 import { useQueryClient } from "react-query";
 import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
+import ModalKonfirmasi from "./ModalKonfirmasi";
 export default function ListExam() {
   const navigate = useNavigate();
+  let [open, setOpen] = useState(false);
+  let [payload, setPayload] = useState({});
 
   let { page, pageSize, setPage, setPageSize } = usePage();
 
@@ -59,8 +62,6 @@ export default function ListExam() {
     },
   });
 
-  
-
   return (
     <LayoutPage title="List Ujian">
       <ModalAlert
@@ -69,6 +70,12 @@ export default function ListExam() {
         loading={deleteLoading}
         onConfirm={onConfirmDelete}
         title={"Apakah yakin akan menghapus soal terpilih ?"}
+      />
+      <ModalKonfirmasi
+        open={open}
+        setOpen={setOpen}
+        payload={payload}
+        setPayload={setPayload}
       />
       <div className="mt-5 space-y-5">
         <section className="grid grid-cols-5 gap-5">
@@ -101,6 +108,7 @@ export default function ListExam() {
                 <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
                 <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
+                <Table.HeaderCell>Publish</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -127,19 +135,36 @@ export default function ListExam() {
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
-                     
-                    <span className="flex items-center">  <EditButton
+                      <span className="flex items-center">
+                        {" "}
+                        <EditButton
+                          onClick={() => {
+                            navigate(`update/${value.id}`, {
+                              replace: true,
+                            });
+                          }}
+                        />
+                        <DeleteButton
+                          onClick={() => {
+                            confirmDelete(value?.id);
+                          }}
+                        />
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Button
+                        disabled={value?.status !== "draft"}
+                        type="button"
+                        color="teal"
+                        icon={() => <Icon name="envelope open" />}
                         onClick={() => {
-                          navigate(`update/${value.id}`, {
-                            replace: true,
+                          setPayload(() => {
+                            return value;
                           });
+
+                          setOpen(true);
                         }}
                       />
-                      <DeleteButton
-                        onClick={() => {
-                          confirmDelete(value?.id);
-                        }}
-                      /></span>
                     </Table.Cell>
                   </Table.Row>
                 ))}
