@@ -51,7 +51,7 @@ export default function Kehadiran() {
   }
   const getUserLocation = () => {
     if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
 
@@ -120,14 +120,7 @@ export default function Kehadiran() {
             ABSENSI bisa dilakukan jika jarak kurang dari 10 meter dari lokasi
             absensi SMK MADINATULQURAN. Saat ini Anda Berada pada jarak{" "}
             {Math.ceil(jarak)} meter. <br />{" "}
-            <button
-              onClick={() => {
-                getUserLocation();
-              }}
-              className="border rounded-md bg-green-500 hover:bg-green-100 px-4 py-2 text-white"
-            >
-              Perbaharui Lokasi
-            </button>
+            
           </div>
         )}
         <Form>

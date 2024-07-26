@@ -156,7 +156,7 @@ export default function ListExam() {
                         disabled={value?.status !== "draft"}
                         type="button"
                         color="teal"
-                        icon={() => <Icon name="envelope open" />}
+                        icon={() => <Icon name="laptop" />}
                         onClick={() => {
                           setPayload(() => {
                             return value;

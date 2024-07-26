@@ -14,7 +14,7 @@ import { useCreatePenilaian } from "../../../api/guru/ujian";
 function ModalKonfirmasi({ open, setOpen, payload, setPayload }) {
   const mutate = useCreatePenilaian();
 
-  console.log("payload", payload);
+ 
   return (
     <Modal
       onClose={() => setOpen(false)}

@@ -93,8 +93,8 @@ export default function ListBankSoal() {
                 <Table.HeaderCell>Bab</Table.HeaderCell>
                 <Table.HeaderCell>Tipe</Table.HeaderCell>
                 <Table.HeaderCell>Point</Table.HeaderCell>
-
-                <Table.HeaderCell>Aksi</Table.HeaderCell>
+ 
+                <Table.HeaderCell >Aksi</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -115,20 +115,22 @@ export default function ListBankSoal() {
                     <Table.Cell>{value?.point}</Table.Cell>
 
                     <Table.Cell>
-                     
-                      <EditButton
-                        onClick={() => {
-                          navigate(`update/${value.id}`, {
-                            replace: true,
-                          });
-                        }}
-                      />
-                      <DeleteButton
-                        onClick={() => {
-                          let payload = [value?.id];
-                          confirmDelete(payload);
-                        }}
-                      />
+                      <span className="flex items-center justify-center">
+                        {" "}
+                        <EditButton
+                          onClick={() => {
+                            navigate(`update/${value.id}`, {
+                              replace: true,
+                            });
+                          }}
+                        />
+                        <DeleteButton
+                          onClick={() => {
+                            let payload = [value?.id];
+                            confirmDelete(payload);
+                          }}
+                        />
+                      </span>
                     </Table.Cell>
                   </Table.Row>
                 ))}

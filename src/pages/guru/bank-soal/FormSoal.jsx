@@ -1,32 +1,17 @@
-import { listSiswaOptions } from "../../../api/list";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import {
-  kategoriOptions,
   pgOptions,
   pointOptions,
-  semesterOptions,
   tfOptions,
   tipeSoalOptions,
 } from "../../../utils/options";
-import {
-  Input,
-  Segment,
-  Form,
-  Select,
-  Button,
-  Header,
-  Divider,
-  TextArea,
-  Dropdown,
-  Icon,
-} from "semantic-ui-react";
-import { DeleteButton, AddButton } from "../../../components";
+import { Input, Form, Select, Button, TextArea, Icon } from "semantic-ui-react";
+import { DeleteButton, AddButton, Label, FormLabel } from "../../../components";
 import { toast } from "react-toastify";
-
+import ReactQuill from "react-quill";
 import { getOptions } from "../../../utils/format";
-
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
 
@@ -36,8 +21,10 @@ import {
   detailBankSoal,
 } from "../../../api/guru/bank_soal";
 import LayoutPage from "../../../module/layoutPage";
+import Editor from "../../../components/Editor";
 
 export default function FormSoal() {
+  const reactQuillRef = useRef(null);
   const { dataMapel } = useList();
   const { id } = useParams();
   let { data, isLoading } = useQuery(
@@ -149,10 +136,10 @@ export default function FormSoal() {
     }
   };
   return (
-    <LayoutPage title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}>
+    <LayoutPage
+      title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
+    >
       <div className="p-0 lg:p-5  ">
-       
-        
         <Formik
           initialValues={initialState}
           enableReinitialize
@@ -171,7 +158,7 @@ export default function FormSoal() {
           }) => (
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
-                <div className="space-y-5 border  p-5 shadow-md " key={index}>
+                <div className="space-y-5  p-5  " key={index}>
                   {id === undefined && (
                     <section className="flex items-center justify-end">
                       <AddButton
@@ -336,8 +323,20 @@ export default function FormSoal() {
                       </div>
                     )}
                   </section>
-                  <section>
-                    <Form.Field
+
+                  <section className="border shadow-md p-5 rounded-md">
+                    <div className="mb-5">
+                      <FormLabel>Uraian Soal</FormLabel>
+                      <Editor
+                        value={
+                          value?.soal.soal === null ? "" : value?.soal.soal
+                        }
+                        handleChange={(content) => {
+                          setFieldValue(`payload[${index}]soal.soal`, content);
+                        }}
+                      />
+                    </div>
+                    {/* <Form.Field
                       control={TextArea}
                       label={`Soal`}
                       placeholder="soal"
@@ -356,125 +355,68 @@ export default function FormSoal() {
                         errors?.payload?.[index]?.soal.soal !== undefined &&
                         errors?.payload?.[index]?.soal.soal
                       }
-                    />
+                    /> */}
 
                     {value.tipe === "PG" && (
-                      <div>
-                        <Form.Field
-                          control={Input}
-                          label={`Pilihan A`}
-                          placeholder="A"
-                          name={`payload[${index}]soal.a`}
-                          onChange={(e, data) => {
-                            console.log("e", e);
-
-                            setFieldValue(
-                              `payload[${index}]soal.a`,
-                              data.value
-                            );
-                          }}
-                          onBlur={handleBlur}
+                      <div className="space-y-5" >
+                       <section>
+                       <FormLabel>Pilihan A</FormLabel>
+                        <Editor
                           value={value?.soal.a === null ? "" : value?.soal.a}
-                          disabled={isSubmitting}
-                          fluid
-                          type="text"
-                          error={
-                            errors?.payload?.[index]?.soal.a !== undefined &&
-                            errors?.payload?.[index]?.soal.a
-                          }
-                        />
-                        <Form.Field
-                          control={Input}
-                          label={`Pilihan B`}
-                          placeholder="B"
-                          name={`payload[${index}]soal.b`}
-                          onChange={(e, data) => {
-                            console.log("e", e);
-
-                            setFieldValue(
-                              `payload[${index}]soal.b`,
-                              data.value
-                            );
+                          
+                          handleChange={(content) => {
+                            setFieldValue(`payload[${index}]soal.a`, content);
                           }}
-                          onBlur={handleBlur}
+                        />
+                       </section>
+                       <section>
+                       <FormLabel>Pilihan B</FormLabel>
+                        <Editor
                           value={value?.soal.b === null ? "" : value?.soal.b}
-                          disabled={isSubmitting}
-                          fluid
-                          type="text"
-                          error={
-                            errors?.payload?.[index]?.soal.b !== undefined &&
-                            errors?.payload?.[index]?.soal.b
-                          }
-                        />
-                        <Form.Field
-                          control={Input}
-                          label={`Pilihan C`}
-                          placeholder="C"
-                          name={`payload[${index}]soal.c`}
-                          onChange={(e, data) => {
-                            console.log("e", e);
-
-                            setFieldValue(
-                              `payload[${index}]soal.c`,
-                              data.value
-                            );
+                          
+                          handleChange={(content) => {
+                            setFieldValue(`payload[${index}]soal.b`, content);
                           }}
-                          onBlur={handleBlur}
+                        />
+                       </section>
+
+                       <section>
+                       <FormLabel>Pilihan C</FormLabel>
+                        <Editor
                           value={value?.soal.c === null ? "" : value?.soal.c}
-                          disabled={isSubmitting}
-                          fluid
-                          type="text"
-                          error={
-                            errors?.payload?.[index]?.soal.c !== undefined &&
-                            errors?.payload?.[index]?.soal.c
-                          }
-                        />
-                        <Form.Field
-                          control={Input}
-                          label={`Pilihan D`}
-                          placeholder="D"
-                          name={`payload[${index}]soal.d`}
-                          onChange={(e, data) => {
-                            console.log("e", e);
-
-                            setFieldValue(
-                              `payload[${index}]soal.d`,
-                              data.value
-                            );
+                          
+                          handleChange={(content) => {
+                            setFieldValue(`payload[${index}]soal.c`, content);
                           }}
-                          onBlur={handleBlur}
+                        />
+                       </section>
+
+                       <section>
+                       <FormLabel>Pilihan D</FormLabel>
+                        <Editor
                           value={value?.soal.d === null ? "" : value?.soal.d}
-                          disabled={isSubmitting}
-                          fluid
-                          type="text"
-                          error={
-                            errors?.payload?.[index]?.soal.d !== undefined &&
-                            errors?.payload?.[index]?.soal.d
-                          }
-                        />
-                        <Form.Field
-                          control={Input}
-                          label={`Pilihan E`}
-                          placeholder="E"
-                          name={`payload[${index}]soal.e`}
-                          onChange={(e, data) => {
-                            console.log("e", e);
-
-                            setFieldValue(
-                              `payload[${index}]soal.e`,
-                              data.value
-                            );
+                          
+                          handleChange={(content) => {
+                            setFieldValue(`payload[${index}]soal.d`, content);
                           }}
-                          onBlur={handleBlur}
-                          value={value?.soal.e === null ? "" : value?.soal.e}
-                          disabled={isSubmitting}
-                          fluid
-                          type="text"
-                          error={
-                            errors?.payload?.[index]?.soal.e !== undefined &&
-                            errors?.payload?.[index]?.soal.e
-                          }
                         />
+                       </section>
+
+                       <section>
+                       <FormLabel>Pilihan E</FormLabel>
+                        <Editor
+                          value={value?.soal.e === null ? "" : value?.soal.e}
+                          
+                          handleChange={(content) => {
+                            setFieldValue(`payload[${index}]soal.e`, content);
+                          }}
+                        />
+                       </section>
+
+
+
+                        
+                      
                       </div>
                     )}
                   </section>

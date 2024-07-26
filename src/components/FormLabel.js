@@ -14,7 +14,7 @@ export function FormLabel({ label, htmlFor, children, error = false }) {
         >
           {label}
         </Label>
-        <div className="w-full ">{children}</div>
+        <div className="w-full font-bold mb-2 ">{children}</div>
         {error && (
           <Label basic size="small" color="red" pointing="above">
             {"Wajib Pilih"}

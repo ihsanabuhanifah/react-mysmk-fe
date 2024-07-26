@@ -5,6 +5,8 @@ import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
+import 'react-quill/dist/quill.snow.css';
+
 import {
   Jadwal,
   Absensi,

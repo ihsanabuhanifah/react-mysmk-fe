@@ -478,6 +478,7 @@ export default function FormExam() {
               <div className="mt-5">
                 {id  ? (
                   <Button
+
                   content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
                     type="submit"
                     fluid
@@ -485,7 +486,7 @@ export default function FormExam() {
                     loading={isSubmitting}
                     size="medium"
                     color="teal"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || data?.data?.rows?.[0]?.status !== 'draft' }
                   />
                 ) : (
                   <Button
