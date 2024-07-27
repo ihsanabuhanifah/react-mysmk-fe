@@ -22,13 +22,15 @@ import { useQueryClient } from "react-query";
 import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
+import ModalPenilaian from "./ModalPenilaian";
+
 export default function ListExam() {
   const navigate = useNavigate();
   let [open, setOpen] = useState(false);
+  let [openPenilaian, setOpenPenilaian] = useState(false);
+  let [paramsPenilaian, setParamPenilaian] = useState({});
   let [payload, setPayload] = useState({});
-
   let { page, pageSize, setPage, setPageSize } = usePage();
-
   let params = {
     page,
     pageSize,
@@ -71,12 +73,22 @@ export default function ListExam() {
         onConfirm={onConfirmDelete}
         title={"Apakah yakin akan menghapus soal terpilih ?"}
       />
-      <ModalKonfirmasi
-        open={open}
-        setOpen={setOpen}
-        payload={payload}
-        setPayload={setPayload}
-      />
+      {open && (
+        <ModalKonfirmasi
+          open={open}
+          setOpen={setOpen}
+          payload={payload}
+          setPayload={setPayload}
+        />
+      )}
+
+      {openPenilaian && (
+        <ModalPenilaian
+          open={openPenilaian}
+          setOpen={setOpenPenilaian}
+          payload={paramsPenilaian}
+        />
+      )}
       <div className="mt-5 space-y-5">
         <section className="grid grid-cols-5 gap-5">
           <div className="col-span-4 lg:col-span-1">
@@ -152,19 +164,35 @@ export default function ListExam() {
                       </span>
                     </Table.Cell>
                     <Table.Cell>
-                      <Button
-                        disabled={value?.status !== "draft"}
-                        type="button"
-                        color="teal"
-                        icon={() => <Icon name="laptop" />}
-                        onClick={() => {
-                          setPayload(() => {
-                            return value;
-                          });
+                      {value?.status !== "draft" ? (
+                        <Button
+                          type="button"
+                          color="facebook"
+                          icon={() => <Icon name="laptop" />}
+                          onClick={() => {
+                            setParamPenilaian({
+                              ujian_id: value?.id,
+                              mapel: value?.mapel?.nama_mapel,
+                            });
 
-                          setOpen(true);
-                        }}
-                      />
+                            setOpenPenilaian(true);
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={value?.status !== "draft"}
+                          type="button"
+                          color="teal"
+                          icon={() => <Icon name="external alternate" />}
+                          onClick={() => {
+                            setPayload(() => {
+                              return value;
+                            });
+
+                            setOpen(true);
+                          }}
+                        />
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}

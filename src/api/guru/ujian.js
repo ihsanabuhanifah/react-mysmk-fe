@@ -1,6 +1,6 @@
 //guru
 
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
@@ -36,6 +36,7 @@ export const useCreatePenilaian = () => {
         waktu_mulai: payload.waktu_mulai,
         waktu_selesai: payload.waktu_selesai,
         kelas_id: payload.kelas_id,
+        durasi : payload.durasi
       });
     },
     {
@@ -59,4 +60,23 @@ export const useCreatePenilaian = () => {
     }
   );
   return mutate;
+};
+
+export function listPenilaianMateri(params) {
+  syncToken();
+  return axios.get("/guru/nilai/list/teacher", { params });
+}
+
+export const usePenilaian = (payload) => {
+  const { isLoading, data, isFetching } = useQuery(
+    ["/guru/nilai/list/teacher", payload],
+    () => listPenilaianMateri(payload),
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+
+  return { isLoading, data, isFetching };
 };

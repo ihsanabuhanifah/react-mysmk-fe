@@ -200,7 +200,7 @@ export default function FormSoal() {
                       />
                     </section>
                   )}
-                  <section className=" grid grid-cols-3 gap-5">
+                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
                     <div>
                       <Form.Field
                         control={Select}

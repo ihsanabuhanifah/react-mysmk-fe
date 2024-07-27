@@ -3,8 +3,8 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
 import {
+  durasiOptions,
   jenisOptions,
-
   tipeUjianOptions,
 } from "../../../utils/options";
 import { Form, Select, Button, Icon, Table, Checkbox } from "semantic-ui-react";
@@ -24,12 +24,15 @@ import {
 
 import LayoutPage from "../../../module/layoutPage";
 
-import { Input, TableLoading } from "../../../components";
+import { Input, TableLoading, ViewButton } from "../../../components";
 
 import { PaginationTable } from "../../../components";
 import { detailUjian, updateUjian } from "../../../api/guru/ujian";
+import ModalView from "./ModalView";
 
 export default function FormExam() {
+  let [open, setOpen] = useState(false);
+  let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas } = useList();
   const { id } = useParams();
   let { isLoading: isLoadingUpdate } = useQuery(
@@ -60,6 +63,7 @@ export default function FormExam() {
               student_access: JSON.parse(data.student_access),
               soal: JSON.parse(data.soal),
               tipe_ujian: data.tipe_ujian,
+              durasi: data.durasi,
             },
           ],
         });
@@ -101,6 +105,7 @@ export default function FormExam() {
         student_access: [],
         soal: [],
         tipe_ujian: "",
+        durasi: null,
       },
     ],
   });
@@ -171,6 +176,7 @@ export default function FormExam() {
     <LayoutPage
       title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
     >
+      {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
       <div className="p-0 lg:p-5  ">
         <Formik
           initialValues={initialState}
@@ -321,29 +327,6 @@ export default function FormExam() {
                         value={value?.waktu_selesai}
                       />
                     </div>
-                    {/* <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Status",
-                          htmlFor: `payload[${index}]status`,
-                          name: `payload[${index}]status`,
-                        }}
-                        placeholder="Pilih"
-                        options={statusUjianOptions}
-                        id={`payload[${index}]status`}
-                        name={`payload[${index}]status`}
-                        onChange={(e, data) => {
-                          setFieldValue(`payload[${index}]status`, data.value);
-                        }}
-                        error={
-                          errors?.payload?.[index]?.status !== undefined &&
-                          errors?.payload?.[index]?.status
-                        }
-                        value={value?.status}
-                      />
-                    </div> */}
 
                     <div>
                       <Form.Dropdown
@@ -369,6 +352,29 @@ export default function FormExam() {
                           errors?.payload?.[index]?.tipe_ujian
                         }
                         value={value?.tipe_ujian}
+                      />
+                    </div>
+                    <div>
+                      <Form.Dropdown
+                        selection
+                        search
+                        label={{
+                          children: "Durasi",
+                          htmlFor: `payload[${index}]durasi`,
+                          name: `payload[${index}]durasi`,
+                        }}
+                        placeholder="Jenis Ujian"
+                        options={durasiOptions}
+                        id={`payload[${index}]durasi`}
+                        name={`payload[${index}]durasi`}
+                        onChange={(e, data) => {
+                          setFieldValue(`payload[${index}]durasi`, data.value);
+                        }}
+                        error={
+                          errors?.payload?.[index]?.durasi !== undefined &&
+                          errors?.payload?.[index]?.durasi
+                        }
+                        value={value?.durasi}
                       />
                     </div>
                   </section>
@@ -454,8 +460,18 @@ export default function FormExam() {
                                 <Table.Cell>{item?.point}</Table.Cell>
 
                                 <Table.Cell>
-                                  <span className="truncate">
-                                    e{/* {JSON.parse(item.soal)?.soal} */}
+                                  <span className="flex items-center justify-center">
+                                    {" "}
+                                    <ViewButton
+                                      type="button"
+                                      color="teal"
+                                      size="md"
+                                      icon={() => <Icon name="laptop" />}
+                                      onClick={() => {
+                                        setPreview(item);
+                                        setOpen(true);
+                                      }}
+                                    />
                                   </span>
                                 </Table.Cell>
                               </Table.Row>
@@ -476,22 +492,20 @@ export default function FormExam() {
               ))}
 
               <div className="mt-5">
-                {id  ? (
+                {id ? (
                   <Button
-
-                  content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
+                    content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
                     type="submit"
                     fluid
                     icon={() => <Icon name="save" />}
                     loading={isSubmitting}
                     size="medium"
                     color="teal"
-                    disabled={isSubmitting || data?.data?.rows?.[0]?.status !== 'draft' }
+                    disabled={isSubmitting}
                   />
                 ) : (
                   <Button
-                  content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  
+                    content={isSubmitting ? "Menyimpan" : "Simpan"}
                     type="submit"
                     fluid
                     icon={() => <Icon name="save" />}
@@ -501,7 +515,6 @@ export default function FormExam() {
                     disabled={isSubmitting}
                   />
                 )}
-               
               </div>
             </Form>
           )}
