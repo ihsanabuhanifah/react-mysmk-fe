@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { BackButton } from "../components/buttonAksi/editButton";
 
 export default function LayoutPage({ title, children }) {
+  const navigate = useNavigate();
   return (
     <React.Fragment>
       <section className="  mb-5 h-full   ">
@@ -12,8 +15,11 @@ export default function LayoutPage({ title, children }) {
 
         <div
           id="scrollbar"
-          className="h-[95%]  bg-white border-t-2  w-full px-5 lg:px-2 pb-10 overflow-auto  "
+          className="h-[95%]  bg-white border-t-2  w-full px-2 lg:px-5 pb-10 pt-5 overflow-auto  "
         >
+
+          {/* <BackButton onClick={() => navigate(-1)}/> */}
+          
           {children}
         </div>
       </section>

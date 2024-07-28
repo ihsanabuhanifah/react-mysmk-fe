@@ -82,7 +82,7 @@ export default function RekapHalaqoh() {
           setVisible={setVisible}
         />
       </Sidebar>
-      <section onKeyPress={handleEvent}  className="mt-5 pb-10 ">
+      <section onKeyPress={handleEvent}  className="pb-10 ">
         <section className="grid grid-cols-6 gap-5 ">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
             <Input

@@ -79,7 +79,7 @@ let {page, pageSize, setPage, setPageSize} = usePage()
 
   return (
     <LayoutPage title="Jadwal Guru Piket">
-     <div className="mt-5 space-y-5">
+     <div className="space-y-5">
      <div>
         <Form>
           <Form.Field

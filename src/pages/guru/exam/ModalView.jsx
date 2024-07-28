@@ -39,21 +39,22 @@ function ModalView({ open, setOpen, preview }) {
                 <Header size="medium">Jawaban ({preview.jawaban})</Header>
                 <div>
                   {" "}
-                  <EditButton
-                    onClick={() => {
-                      navigate(`/guru/bank-soal/update/${preview.id}`, {
-                        replace: true,
-                      });
-                    }}
-                  />
+                
                 </div>
               </section>
             </>
           )}
           <section className="border rounded-lg p-5">
-            <Header size="medium">Uraian Soal</Header>
+           <section className="flex items-center justify-between"> <Header size="medium">Uraian Soal</Header>
+            <EditButton
+                    onClick={() => {
+                      navigate(`/guru/bank-soal/update/${preview.id}`, {
+                        replace: true,
+                      });
+                    }}
+                  /></section>
             <Divider horizontal>=</Divider>
-            <div>{htmr(soal.soal)}</div>
+            <div>{htmr(`<div>${soal.soal}</div>`)}</div>
           </section>
 
           {preview.tipe === "PG" && (
@@ -62,27 +63,27 @@ function ModalView({ open, setOpen, preview }) {
               <section className="border rounded-lg p-5 mt-5">
                 <Header size="medium">Pilihan A</Header>
                 <Divider horizontal>=</Divider>
-                <div>{htmr(soal.a)}</div>
+                <div>{htmr(`<div>${soal.a}</div>`)}</div>
               </section>
               <section className="border rounded-lg p-5 mt-5">
                 <Header size="medium">Pilihan B</Header>
                 <Divider horizontal>=</Divider>
-                <div>{htmr(soal.b)}</div>
+                <div>{htmr(`<div>${soal.b}</div>`)}</div>
               </section>
               <section className="border rounded-lg p-5 mt-5">
                 <Header size="medium">Pilihan C</Header>
                 <Divider horizontal>=</Divider>
-                <div>{htmr(soal.c)}</div>
+                <div>{htmr(`<div>${soal.c}</div>`)}</div>
               </section>
               <section className="border rounded-lg p-5 mt-5">
                 <Header size="medium">Pilihan D</Header>
                 <Divider horizontal>=</Divider>
-                <div>{htmr(soal.d)}</div>
+                <div>{htmr(`<div>${soal.d}</div>`)}</div>
               </section>
               <section className="border rounded-lg p-5 mt-5">
                 <Header size="medium">Pilihan E</Header>
                 <Divider horizontal>=</Divider>
-                <div>{htmr(soal.e)}</div>
+                <div>{htmr(`<div>${soal.e}</div>`)}</div>
               </section>
             </>
           )}

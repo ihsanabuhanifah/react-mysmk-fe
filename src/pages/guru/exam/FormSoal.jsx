@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 
@@ -7,7 +7,7 @@ import {
   jenisOptions,
   tipeUjianOptions,
 } from "../../../utils/options";
-import { Form, Select, Button, Icon, Table, Checkbox } from "semantic-ui-react";
+import { Form, Select, Button, Icon, Input } from "semantic-ui-react";
 
 import { toast } from "react-toastify";
 import { getOptions } from "../../../utils/format";
@@ -24,20 +24,19 @@ import {
 
 import LayoutPage from "../../../module/layoutPage";
 
-import { Input, TableLoading, ViewButton } from "../../../components";
-
-import { PaginationTable } from "../../../components";
-import { detailUjian, updateUjian } from "../../../api/guru/ujian";
+import { detailUjian } from "../../../api/guru/ujian";
 import ModalView from "./ModalView";
+import TableSoal from "./TableSoal";
+import useDebounce from "../../../hook/useDebounce";
 
 export default function FormExam() {
   let [open, setOpen] = useState(false);
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas } = useList();
   const { id } = useParams();
-  let { isLoading: isLoadingUpdate } = useQuery(
+  let { isLoading: isLoadingUpdate, data: dataExam } = useQuery(
     //query key
-    ["/bank-soal/update"],
+    ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
     () => detailUjian(id),
     //configuration
@@ -72,13 +71,28 @@ export default function FormExam() {
   );
   let { page, pageSize, setPage, setPageSize } = usePage();
   let [mapel_id, setMapel_id] = useState("");
+  let [materi, setMateri] = useState("");
+  let debouncedName = useDebounce(materi, 600);
+
+  useEffect(() => {
+    if (!!dataExam?.mapel_id === true) {
+      setMapel_id(dataExam.mapel_id);
+    } else {
+      setMapel_id("");
+    }
+  }, [dataExam?.mapel_id]);
+
+  console.log("dataExam", dataExam);
   let params = {
     page,
     pageSize,
     mapel_id,
+    materi: debouncedName,
+    isExam: true,
 
     is_all: 1,
   };
+
   let { data, isLoading } = useQuery(
     //query key
     ["/bank-soal/list", params],
@@ -87,6 +101,7 @@ export default function FormExam() {
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
+      enabled: id ? !!dataExam?.mapel_id === true : true,
       select: (response) => {
         return response.data;
       },
@@ -111,12 +126,19 @@ export default function FormExam() {
   });
 
   const onSubmit = async (values, { resetForm }) => {
-    console.log("pay", values);
+    const soal = values.payload?.[0].soal.map((item) => item.id);
 
     try {
       let response;
       if (id === undefined) {
-        response = await createExam(values);
+        response = await createExam({
+          payload: [
+            {
+              ...values.payload[0],
+              soal: soal,
+            },
+          ],
+        });
         resetForm();
         setInitialState({
           payload: [
@@ -133,7 +155,14 @@ export default function FormExam() {
           ],
         });
       } else {
-        response = await updateExam(id, values);
+        response = await updateExam(id, {
+          payload: [
+            {
+              ...values.payload[0],
+              soal: soal,
+            },
+          ],
+        });
       }
 
       toast.success(response?.data?.msg, {
@@ -172,12 +201,18 @@ export default function FormExam() {
       });
     }
   };
+
   return (
     <LayoutPage
       title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
-      <div className="p-0 lg:p-5  ">
+      <div
+        style={{
+          zoom: "80%",
+        }}
+        className="p-0 lg:p-2  "
+      >
         <Formik
           initialValues={initialState}
           enableReinitialize
@@ -195,302 +230,245 @@ export default function FormExam() {
             isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit}>
-              {values?.payload?.map((value, index) => (
-                <div className="space-y-5 border  p-5 shadow-md " key={index}>
-                  <section className=" grid grid-cols-3 gap-5">
-                    <div>
-                      <Form.Field
-                        control={Select}
-                        value={value?.kelas_id}
-                        options={getOptions(dataKelas?.data, "nama_kelas")}
-                        label={{
-                          children: "Kelas",
-                          htmlFor: `payload[${index}]kelas_id`,
-                          name: `payload[${index}]kelas_id`,
-                        }}
-                        onChange={(event, data) => {
-                          setFieldValue(
-                            `payload[${index}]kelas_id`,
-                            data?.value
-                          );
-                        }}
-                        placeholder="Pilih Kelas"
-                        search
-                        searchInput={{
-                          id: `payload[${index}]kelas_id`,
-                          name: `payload[${index}]kelas_id`,
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Form.Field
-                        control={Select}
-                        value={value?.mapel_id}
-                        options={getOptions(dataMapel?.data, "nama_mapel")}
-                        label={{
-                          children: "Mata Pelajaran",
-                          htmlFor: `payload[${index}]mapel_id`,
-                          name: `payload[${index}]mapel_id`,
-                        }}
-                        onChange={(event, data) => {
-                          setFieldValue(
-                            `payload[${index}]mapel_id`,
-                            data?.value
-                          );
+              <section >
+                {values?.payload?.map((value, index) => (
+                  <div
+                    className="space-y-5 col-span-3  p-5   overflow-auto "
+                    key={index}
+                  >
+                    <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                      <div>
+                        <Form.Field
+                          control={Select}
+                          value={value?.kelas_id}
+                          options={getOptions(dataKelas?.data, "nama_kelas")}
+                          label={{
+                            children: "Kelas",
+                            htmlFor: `payload[${index}]kelas_id`,
+                            name: `payload[${index}]kelas_id`,
+                          }}
+                          onChange={(event, data) => {
+                            setFieldValue(
+                              `payload[${index}]kelas_id`,
+                              data?.value
+                            );
+                          }}
+                          placeholder="Pilih Kelas"
+                          search
+                          searchInput={{
+                            id: `payload[${index}]kelas_id`,
+                            name: `payload[${index}]kelas_id`,
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Form.Field
+                          disabled={values.payload[0].soal.length > 0}
+                          control={Select}
+                          value={value?.mapel_id}
+                          options={getOptions(dataMapel?.data, "nama_mapel")}
+                          label={{
+                            children: "Mata Pelajaran",
+                            htmlFor: `payload[${index}]mapel_id`,
+                            name: `payload[${index}]mapel_id`,
+                          }}
+                          onChange={(event, data) => {
+                            setFieldValue(
+                              `payload[${index}]mapel_id`,
+                              data?.value
+                            );
 
-                          setMapel_id(data?.value);
-                        }}
-                        placeholder="Pilih Mata Pelajaran"
-                        search
-                        searchInput={{
-                          id: `payload[${index}]mapel_id`,
-                          name: `payload[${index}]mapel_id`,
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Jenis Ujian",
-                          htmlFor: `payload[${index}]jenis_ujian`,
-                          name: `payload[${index}]jenis_ujian`,
-                        }}
-                        placeholder="Jenis Ujian"
-                        options={jenisOptions}
-                        id={`payload[${index}]jenis_ujian`}
-                        name={`payload[${index}]jenis_ujian`}
-                        onChange={(e, data) => {
-                          setFieldValue(
-                            `payload[${index}]jenis_ujian`,
-                            data.value
-                          );
-                        }}
-                        error={
-                          errors?.payload?.[index]?.jenis_ujian !== undefined &&
-                          errors?.payload?.[index]?.jenis_ujian
-                        }
-                        value={value?.jenis_ujian}
-                      />
-                    </div>
+                            setMapel_id(data?.value);
+                          }}
+                          placeholder="Pilih Mata Pelajaran"
+                          search
+                          searchInput={{
+                            id: `payload[${index}]mapel_id`,
+                            name: `payload[${index}]mapel_id`,
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Form.Dropdown
+                          selection
+                          search
+                          label={{
+                            children: "Jenis Ujian",
+                            htmlFor: `payload[${index}]jenis_ujian`,
+                            name: `payload[${index}]jenis_ujian`,
+                          }}
+                          placeholder="Jenis Ujian"
+                          options={jenisOptions}
+                          id={`payload[${index}]jenis_ujian`}
+                          name={`payload[${index}]jenis_ujian`}
+                          onChange={(e, data) => {
+                            setFieldValue(
+                              `payload[${index}]jenis_ujian`,
+                              data.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.jenis_ujian !==
+                              undefined && errors?.payload?.[index]?.jenis_ujian
+                          }
+                          value={value?.jenis_ujian}
+                        />
+                      </div>
 
-                    <div>
-                      <Form.Field
-                        control={Input}
-                        label={{
-                          children: "Waktu Mulai",
-                          htmlFor: `payload[${index}]waktu_mulai`,
-                          name: `payload[${index}]waktu_mulai`,
-                        }}
-                        placeholder="Jenis Ujian"
-                        options={jenisOptions}
-                        id={`payload[${index}]waktu_mulai`}
-                        name={`payload[${index}]waktu_mulai`}
-                        onChange={(e) => {
-                          setFieldValue(
-                            `payload[${index}]waktu_mulai`,
-                            e.target.value
-                          );
-                        }}
-                        error={
-                          errors?.payload?.[index]?.waktu_mulai !== undefined &&
-                          errors?.payload?.[index]?.waktu_mulai
-                        }
-                        type="datetime-local"
-                        value={value?.waktu_mulai}
-                      />
-                    </div>
-                    <div>
-                      <Form.Field
-                        control={Input}
-                        label={{
-                          children: "Waktu Selesai",
-                          htmlFor: `payload[${index}]waktu_selesai`,
-                          name: `payload[${index}]waktu_selesai`,
-                        }}
-                        placeholder="Jenis Ujian"
-                        options={jenisOptions}
-                        id={`payload[${index}]waktu_selesai`}
-                        name={`payload[${index}]waktu_selesai`}
-                        onChange={(e) => {
-                          setFieldValue(
-                            `payload[${index}]waktu_selesai`,
-                            e.target.value
-                          );
-                        }}
-                        error={
-                          errors?.payload?.[index]?.waktu_selesai !==
-                            undefined && errors?.payload?.[index]?.waktu_selesai
-                        }
-                        type="datetime-local"
-                        value={value?.waktu_selesai}
-                      />
-                    </div>
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={{
+                            children: "Waktu Mulai",
+                            htmlFor: `payload[${index}]waktu_mulai`,
+                            name: `payload[${index}]waktu_mulai`,
+                          }}
+                          placeholder="Jenis Ujian"
+                          options={jenisOptions}
+                          id={`payload[${index}]waktu_mulai`}
+                          name={`payload[${index}]waktu_mulai`}
+                          onChange={(e) => {
+                            setFieldValue(
+                              `payload[${index}]waktu_mulai`,
+                              e.target.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.waktu_mulai !==
+                              undefined && errors?.payload?.[index]?.waktu_mulai
+                          }
+                          type="datetime-local"
+                          value={value?.waktu_mulai}
+                        />
+                      </div>
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={{
+                            children: "Waktu Selesai",
+                            htmlFor: `payload[${index}]waktu_selesai`,
+                            name: `payload[${index}]waktu_selesai`,
+                          }}
+                          placeholder="Jenis Ujian"
+                          options={jenisOptions}
+                          id={`payload[${index}]waktu_selesai`}
+                          name={`payload[${index}]waktu_selesai`}
+                          onChange={(e) => {
+                            setFieldValue(
+                              `payload[${index}]waktu_selesai`,
+                              e.target.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.waktu_selesai !==
+                              undefined &&
+                            errors?.payload?.[index]?.waktu_selesai
+                          }
+                          type="datetime-local"
+                          value={value?.waktu_selesai}
+                        />
+                      </div>
 
-                    <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Tipe Ujian",
-                          htmlFor: `payload[${index}]tipe_ujian`,
-                          name: `payload[${index}]tipe_ujian`,
-                        }}
-                        placeholder="Pilih"
-                        options={tipeUjianOptions}
-                        id={`payload[${index}]tipe_ujian`}
-                        name={`payload[${index}]tipe_ujian`}
-                        onChange={(e, data) => {
-                          setFieldValue(
-                            `payload[${index}]tipe_ujian`,
-                            data.value
-                          );
-                        }}
-                        error={
-                          errors?.payload?.[index]?.tipe_ujian !== undefined &&
-                          errors?.payload?.[index]?.tipe_ujian
-                        }
-                        value={value?.tipe_ujian}
-                      />
-                    </div>
-                    <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Durasi",
-                          htmlFor: `payload[${index}]durasi`,
-                          name: `payload[${index}]durasi`,
-                        }}
-                        placeholder="Jenis Ujian"
-                        options={durasiOptions}
-                        id={`payload[${index}]durasi`}
-                        name={`payload[${index}]durasi`}
-                        onChange={(e, data) => {
-                          setFieldValue(`payload[${index}]durasi`, data.value);
-                        }}
-                        error={
-                          errors?.payload?.[index]?.durasi !== undefined &&
-                          errors?.payload?.[index]?.durasi
-                        }
-                        value={value?.durasi}
-                      />
-                    </div>
-                  </section>
-                  <section className="grid grid-cols-1 gap-5">
-                    <div>
-                      <h1>Daftar Soal</h1>
-                      <Table celled selectable>
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.HeaderCell></Table.HeaderCell>
-                            <Table.HeaderCell>No</Table.HeaderCell>
-                            <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-                            <Table.HeaderCell>Guru Pembuat</Table.HeaderCell>
-                            <Table.HeaderCell>Materi</Table.HeaderCell>
-                            <Table.HeaderCell>Tipe Soal</Table.HeaderCell>
-                            <Table.HeaderCell>Point</Table.HeaderCell>
-                            <Table.HeaderCell>View</Table.HeaderCell>
-                          </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                          <TableLoading
-                            count={8}
-                            isLoading={isLoading}
-                            data={data?.data?.rows}
-                            messageEmpty={"Daftar Soal Tidak Ditemukan"}
-                          >
-                            {data?.data?.rows?.map((item, index2) => (
-                              <Table.Row key={index2}>
-                                <Table.Cell>
-                                  <Checkbox
-                                    checked={value.soal.some(
-                                      (item2) => item2.id === item.id
-                                    )}
-                                    onChange={(e) => {
-                                      console.log(
-                                        "e",
-                                        value.soal.some(
-                                          (item2) => item2.id === item.id
-                                        )
-                                      );
+                      <div>
+                        <Form.Dropdown
+                          selection
+                          search
+                          label={{
+                            children: "Tipe Ujian",
+                            htmlFor: `payload[${index}]tipe_ujian`,
+                            name: `payload[${index}]tipe_ujian`,
+                          }}
+                          placeholder="Pilih"
+                          options={tipeUjianOptions}
+                          id={`payload[${index}]tipe_ujian`}
+                          name={`payload[${index}]tipe_ujian`}
+                          onChange={(e, data) => {
+                            setFieldValue(
+                              `payload[${index}]tipe_ujian`,
+                              data.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.tipe_ujian !==
+                              undefined && errors?.payload?.[index]?.tipe_ujian
+                          }
+                          value={value?.tipe_ujian}
+                        />
+                      </div>
+                      <div>
+                        <Form.Dropdown
+                          selection
+                          search
+                          label={{
+                            children: "Durasi",
+                            htmlFor: `payload[${index}]durasi`,
+                            name: `payload[${index}]durasi`,
+                          }}
+                          placeholder="Jenis Ujian"
+                          options={durasiOptions}
+                          id={`payload[${index}]durasi`}
+                          name={`payload[${index}]durasi`}
+                          onChange={(e, data) => {
+                            setFieldValue(
+                              `payload[${index}]durasi`,
+                              data.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.durasi !== undefined &&
+                            errors?.payload?.[index]?.durasi
+                          }
+                          value={value?.durasi}
+                        />
+                      </div>
+                    </section>
+                    <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
+                      <div>
+                      
 
-                                      if (
-                                        value.soal.some(
-                                          (item2) => item2.id === item.id
-                                        )
-                                      ) {
-                                        let filtered = value.soal.filter(
-                                          (item3) => item3.id !== item.id
-                                        );
+                        <TableSoal
+                        materi={materi}
+                        setMateri={setMateri}
+                          data={data}
+                          value={value}
+                          setFieldValue={setFieldValue}
+                          isLoading={isLoading}
+                          index={index}
+                          setPreview={setPreview}
+                          setOpen={setOpen}
+                          page={page}
+                          setPageSize={setPageSize}
+                          pageSize={pageSize}
+                          setPage={setPage}
+                          title={"Daftar Soal Tersedia"}
+                        />
+                      </div>
 
-                                        return setFieldValue(
-                                          `payload[${index}]soal`,
-                                          filtered
-                                        );
-                                      }
+                      <div> <TableSoal
+                      data={{
+                        data: {
+                          rows: values.payload[0].soal,
+                        },
+                      }}
+                      value={value}
+                      setFieldValue={setFieldValue}
+                      isLoading={isLoading}
+                      index={index}
+                      setPreview={setPreview}
+                      setOpen={setOpen}
+                      page={page}
+                      setPageSize={setPageSize}
+                      pageSize={pageSize}
+                      setPage={setPage}
+                      isSoal
+                      title={"Daftar Soal Dipilih"}
+                    /></div>
+                     
+                    </section>
+                  </div>
+                ))}
 
-                                      let soal = [...value?.soal];
-                                      soal.push({
-                                        id: item.id,
-                                        jawaban: item.jawaban,
-                                        materi: item.materi,
-                                        point: item.point,
-                                        soal: item.soal,
-                                        tipe: item.tipe,
-                                      });
-
-                                      setFieldValue(
-                                        `payload[${index}]soal`,
-                                        soal
-                                      );
-                                    }}
-                                  />
-                                </Table.Cell>
-                                <Table.Cell>{index2 + 1}</Table.Cell>
-                                <Table.Cell>
-                                  {item?.mapel?.nama_mapel}
-                                </Table.Cell>
-                                <Table.Cell>
-                                  {item?.teacher?.nama_guru}
-                                </Table.Cell>
-                                <Table.Cell>{item?.materi}</Table.Cell>
-                                <Table.Cell>{item?.tipe}</Table.Cell>
-                                <Table.Cell>{item?.point}</Table.Cell>
-
-                                <Table.Cell>
-                                  <span className="flex items-center justify-center">
-                                    {" "}
-                                    <ViewButton
-                                      type="button"
-                                      color="teal"
-                                      size="md"
-                                      icon={() => <Icon name="laptop" />}
-                                      onClick={() => {
-                                        setPreview(item);
-                                        setOpen(true);
-                                      }}
-                                    />
-                                  </span>
-                                </Table.Cell>
-                              </Table.Row>
-                            ))}
-                          </TableLoading>
-                        </Table.Body>
-                      </Table>
-                      <PaginationTable
-                        page={page}
-                        pageSize={pageSize}
-                        setPageSize={setPageSize}
-                        setPage={setPage}
-                        totalPages={data?.data?.count}
-                      />
-                    </div>
-                  </section>
-                </div>
-              ))}
-
+              </section>
               <div className="mt-5">
                 {id ? (
                   <Button

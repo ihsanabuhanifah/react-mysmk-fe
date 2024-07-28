@@ -73,14 +73,17 @@ export default function FormSoal() {
   const onSubmit = async (values, { resetForm }) => {
     try {
       let response;
+
+      // return console.log('va', values)
       if (id === undefined) {
         response = await createBankSoal(values);
         resetForm();
         setInitialState({
           payload: [
             {
+              ...values.payload[0],
               materi: "",
-              mapel_id: null,
+
               soal: {
                 soal: "",
                 a: null,
@@ -90,7 +93,7 @@ export default function FormSoal() {
                 e: null,
               },
               jawaban: "",
-              tipe: "PG",
+
               point: 10,
             },
           ],
@@ -139,7 +142,7 @@ export default function FormSoal() {
     <LayoutPage
       title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
-      <div className="p-0 lg:p-5  ">
+      <div className="p-0  ">
         <Formik
           initialValues={initialState}
           enableReinitialize
@@ -158,7 +161,7 @@ export default function FormSoal() {
           }) => (
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
-                <div className="space-y-5  p-5  " key={index}>
+                <div className="space-y-5 " key={index}>
                   {id === undefined && (
                     <section className="flex items-center justify-end">
                       <AddButton
@@ -358,65 +361,55 @@ export default function FormSoal() {
                     /> */}
 
                     {value.tipe === "PG" && (
-                      <div className="space-y-5" >
-                       <section>
-                       <FormLabel>Pilihan A</FormLabel>
-                        <Editor
-                          value={value?.soal.a === null ? "" : value?.soal.a}
-                          
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.a`, content);
-                          }}
-                        />
-                       </section>
-                       <section>
-                       <FormLabel>Pilihan B</FormLabel>
-                        <Editor
-                          value={value?.soal.b === null ? "" : value?.soal.b}
-                          
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.b`, content);
-                          }}
-                        />
-                       </section>
+                      <div className="space-y-5">
+                        <section>
+                          <FormLabel>Pilihan A</FormLabel>
+                          <Editor
+                            value={value?.soal.a === null ? "" : value?.soal.a}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.a`, content);
+                            }}
+                          />
+                        </section>
+                        <section>
+                          <FormLabel>Pilihan B</FormLabel>
+                          <Editor
+                            value={value?.soal.b === null ? "" : value?.soal.b}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.b`, content);
+                            }}
+                          />
+                        </section>
 
-                       <section>
-                       <FormLabel>Pilihan C</FormLabel>
-                        <Editor
-                          value={value?.soal.c === null ? "" : value?.soal.c}
-                          
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.c`, content);
-                          }}
-                        />
-                       </section>
+                        <section>
+                          <FormLabel>Pilihan C</FormLabel>
+                          <Editor
+                            value={value?.soal.c === null ? "" : value?.soal.c}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.c`, content);
+                            }}
+                          />
+                        </section>
 
-                       <section>
-                       <FormLabel>Pilihan D</FormLabel>
-                        <Editor
-                          value={value?.soal.d === null ? "" : value?.soal.d}
-                          
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.d`, content);
-                          }}
-                        />
-                       </section>
+                        <section>
+                          <FormLabel>Pilihan D</FormLabel>
+                          <Editor
+                            value={value?.soal.d === null ? "" : value?.soal.d}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.d`, content);
+                            }}
+                          />
+                        </section>
 
-                       <section>
-                       <FormLabel>Pilihan E</FormLabel>
-                        <Editor
-                          value={value?.soal.e === null ? "" : value?.soal.e}
-                          
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.e`, content);
-                          }}
-                        />
-                       </section>
-
-
-
-                        
-                      
+                        <section>
+                          <FormLabel>Pilihan E</FormLabel>
+                          <Editor
+                            value={value?.soal.e === null ? "" : value?.soal.e}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.e`, content);
+                            }}
+                          />
+                        </section>
                       </div>
                     )}
                   </section>

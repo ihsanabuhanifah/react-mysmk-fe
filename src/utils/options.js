@@ -98,6 +98,10 @@ const pointOptions = [
   { key: "8", value: 8, text: 8 },
   { key: "9", value: 9, text: 9 },
   { key: "10", value: 10, text: 10 },
+  { key: "25", value: 25, text: 25 },
+  { key: "50", value: 50, text: 50 },
+  { key: "75", value: 75, text: 75 },
+  { key: "100", value: 100, text: 100 },
 ];
 const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
@@ -112,8 +116,8 @@ const pgOptions = [
   { key: "5", value: "E", text: "E" },
 ];
 const tfOptions = [
-  { key: "1", value: 1, text: "true" },
-  { key: "2", value: 0, text: "false" },
+  { key: "1", value: "true", text: "true" },
+  { key: "2", value: "false", text: "false" },
 ];
 
 const jenisOptions = [
@@ -121,7 +125,7 @@ const jenisOptions = [
   { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
   { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
   { key: "4", value: "US", text: "Ujian Sekolah" },
-  { key: "5", value: "remidial", text: "Remidial" },
+  
 ];
 
 const durasiOptions = [

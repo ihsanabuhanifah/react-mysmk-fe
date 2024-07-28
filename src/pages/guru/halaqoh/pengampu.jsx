@@ -180,7 +180,7 @@ export default function PengampuHalaqoh() {
           setFieldTouched,
           setFieldValue,
         }) => (
-          <div className="space-y-5 mt-5">
+          <div className="space-y-5">
             <Form onSubmit={handleSubmit}>
               <section className="" style={{ maxWidth: "100%" }} padded>
                 <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">

@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
+
+
+.quill-editor {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+
+
+
+
+.quill-editor .ql-editor {
+  font-family: 'Noto Sans Arabic', sans-serif;
+  /* .ql-formula {
+    color: ;
+  } */
+  
+ 
+}
+
+
+.table-wrapper {
+    max-height: 90vh; /* Set the max height to 80% of the viewport height */
+    overflow-y: auto;
+    position: relative;
+   
+  }
+  
+  .table-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for WebKit browsers */
+  }
+  
+  .table-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .table-wrapper table {
+    border-collapse: separate;
+    width: 100%;
+  }
+  
+  .table-wrapper th {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+
+
+  @media (max-width: 768px) {
+    .table-wrapper thread th  {
+      display: none; /* Hide the table in mobile view */
+    }
+  }

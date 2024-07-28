@@ -1,10 +1,12 @@
 import { useCallback, useRef, useState } from "react";
 import ReactQuill from "react-quill";
-
-import "react-quill/dist/quill.snow.css";
+import "./component.css";
 import { uploadFile } from "../api/guru/upload";
 import Resizer from "react-image-file-resizer";
 import { Dimmer, Loader } from "semantic-ui-react";
+import "katex/dist/katex.min.css";
+import katex from "katex";
+window.katex = katex;
 
 // import uploadToCloudinary from "./upload";
 // import uploadToCloudinary from "./upload";
@@ -14,7 +16,6 @@ export default function Editor({ value, handleChange, ...props }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const imageHandler = useCallback(() => {
-    console.log("jalan");
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
@@ -58,27 +59,29 @@ export default function Editor({ value, handleChange, ...props }) {
             left: 0,
             right: 0,
             bottom: 0,
-            
+
             zIndex: 50,
           }}
           className="fixed flex items-center justify-center "
         >
           <div>
-            <Dimmer style={
-              {
+            <Dimmer
+              style={{
                 backgroundColor: "rgba(255, 255,255, 0.5)", // semi-transparent white
                 backdropFilter: "blur(0.5px)", // applies blur effect
-              }
-            } active inverted>
+              }}
+              active
+              inverted
+            >
               <Loader size="large">Upload File Image </Loader>
             </Dimmer>
-            
           </div>
         </div>
       )}
       <ReactQuill
         ref={reactQuillRef}
         theme="snow"
+        className="quill-editor"
         placeholder="Start writing..."
         modules={{
           toolbar: {
@@ -92,12 +95,15 @@ export default function Editor({ value, handleChange, ...props }) {
                 { indent: "-1" },
                 { indent: "+1" },
               ],
-              ["link", "image", "video"],
+              ["link", "image", "video", "formula"],
               ["code-block"],
-              ["clean"],
             ],
             handlers: {
               image: imageHandler,
+            },
+            clipboard: {
+              // toggle to add extra line breaks when pasting HTML:
+              matchVisual: false,
             },
           },
           clipboard: {
@@ -119,7 +125,12 @@ export default function Editor({ value, handleChange, ...props }) {
           "link",
           "image",
           "video",
+          "formula",
+          "color",
+          "background",
+          "align",
           "code-block",
+          "script",""
         ]}
         value={value}
         {...props}

@@ -91,8 +91,8 @@ export default function Jadwal() {
 
   return (
     <LayoutPage title="jadwal">
-      <div className="space-y-5 mt-5">
-        <section className="" style={{ maxWidth: "100%" }} padded>
+      <div className="space-y-5">
+        <section  style={{ maxWidth: "100%" }} padded>
           <section className="grid grid-cols-1 lg:grid-cols-5 gap-5">
             <div className="col-span-1">
               <Form>
@@ -116,7 +116,7 @@ export default function Jadwal() {
                 />
               </Form>
             </div>
-            <div className="">
+            <div >
               <Button
                 content={"Buat Absensi"}
                 type="submit"
@@ -129,7 +129,7 @@ export default function Jadwal() {
                 onClick={creeteJadwal}
               />
             </div>
-            <div className="">
+            <div >
               <Button
                 content={"Rekap Absensi"}
                 type="button"
@@ -142,7 +142,7 @@ export default function Jadwal() {
                 }}
               />
             </div>
-            <div className="">
+            <div >
               <Button
                 content={"Rekap Agenda"}
                 type="button"
@@ -155,7 +155,7 @@ export default function Jadwal() {
                 }}
               />
             </div>
-            <div className="">
+            <div >
               <Button
                 content={"Jadwal"}
                 type="submit"

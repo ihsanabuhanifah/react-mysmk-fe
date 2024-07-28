@@ -6,6 +6,8 @@ import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import 'react-quill/dist/quill.snow.css';
+import 'katex/dist/katex.min.css';
+
 
 import {
   Jadwal,
@@ -44,6 +46,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
+import PenilaianPage from "./pages/guru/exam/PenilaianPage";
 
 function App() {
   return (
@@ -120,6 +123,7 @@ function App() {
           <Route path="exam" element={<ListExam />} />
 
           <Route path="exam/tambah" element={<FormExam />} />
+          <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
 
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />

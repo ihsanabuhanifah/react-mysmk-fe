@@ -277,7 +277,7 @@ export default function AbsensiHalaqoh() {
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
        {sessionTes !== null ? (<p className="text-red-500 text-lg font-bold">Belum Di Simpen ke Database</p>) : null} 
-      <div className="space-x-5 mt-5  ">
+      <div className="space-x-5 ">
         <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
           <div className=" col-span-1 lg:col-span-2">
             <Form.Field

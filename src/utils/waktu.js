@@ -247,10 +247,27 @@ export function showFormattedDate (date){
     weekday: "long",
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+
+  }
+
+
+  if(date === null) {
+    return "-"
   }
   return new Date(date).toLocaleDateString("id-ID", options)
 }
 
+
+export function formatWaktu(date){
+  if(date === null) {
+    return "-"
+  }
+
+  return dayjs(date).format("DD-MM-YY HH:mm:ss")
+}
 
 

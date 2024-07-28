@@ -175,7 +175,7 @@ export default function Absensi() {
           Belum Di Simpen ke Database
         </p>
       ) : null}
-      <div className="space-x-5 mt-5">
+      <div className="space-x-5">
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -194,7 +194,7 @@ export default function Absensi() {
           }) => (
             <Form onSubmit={handleSubmit}>
               <div className="  mb-5 overflow-x-visible w-full ">
-                <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5">
+                <section className="grid sm:grid-cols-1 lg:grid-cols-7 gap-5 ">
                   <div className="col-span-2 ">
                     <Form.Field
                       control={Input}
@@ -248,7 +248,7 @@ export default function Absensi() {
 
                   <div className=" col-span-1 flex items-center justify-center pt-4">
                     <Button
-                      content={"Filter"}
+                      content={"Remidial"}
                       type="button"
                       fluid
                       icon={() => <Icon name="filter" />}

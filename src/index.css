@@ -88,7 +88,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 @media only screen and (max-width: 768px) {
-  .ui.table thead {
+  .ui.table thead th {
     display: none;
   }
 }

@@ -75,7 +75,7 @@ nama_siswa : "",
   };
   return (
     <LayoutPage title={"Tambah Siswa"}>
-      <div className="mt-5">
+      <div>
         <Formik
           initialValues={initialState}
           //   validationSchema={laporanSchema}

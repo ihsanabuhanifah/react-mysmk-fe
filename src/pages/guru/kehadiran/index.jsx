@@ -111,8 +111,8 @@ export default function Kehadiran() {
         setOpen={setOpenPulang}
         tanggalActive={tanggalActive}
       />
-      {JSON.stringify(userLocation)}
-      <section className="mt-5">
+      
+      <section>
         {jarak > 50 && (
           <div class="ui warning message">
             <i class="close icon"></i>
@@ -123,6 +123,7 @@ export default function Kehadiran() {
             
           </div>
         )}
+        {JSON.stringify(userLocation)}
         <Form>
           <section className="grid sm:grid-cols-1 lg:grid-cols-4 gap-5">
             <div className="col-span-1 ">
