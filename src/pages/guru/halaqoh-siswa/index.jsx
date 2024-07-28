@@ -57,7 +57,7 @@ export default function HalaqohSiswa() {
           placeholder="Nama Guru..."
         /> */}
         <div className=" col-span-3 lg:col-span-1">
-          {checkRole(roles, "admin") && (
+          {checkRole(roles, "Admin") && (
             <Button
               content={"Buat Jadwal"}
               type="submit"

@@ -73,6 +73,7 @@ function PenilaianPage() {
                 <Table.Row key={index}>
                   <Table.Cell>
                     <Checkbox
+                    disabled={item.status === 'open' || item.status === 'progress'}
                       checked={isChecked(item.id)}
                       onChange={(e) => {
                         handleCheck(e, item.id);

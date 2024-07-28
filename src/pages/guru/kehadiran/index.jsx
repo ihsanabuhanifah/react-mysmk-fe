@@ -263,7 +263,7 @@ export default function Kehadiran() {
               <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
 
-              {checkRole(roles, "admin") && (
+              {checkRole(roles, "Admin") && (
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
               )}
             </Table.Row>
@@ -284,7 +284,7 @@ export default function Kehadiran() {
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
                   <Table.Cell>{item.status || "-"}</Table.Cell>
                   <Table.Cell>{item.keterangan || "-"}</Table.Cell>
-                  {checkRole(roles, "admin") && (
+                  {checkRole(roles, "Admin") && (
                     <Table.Cell>
                       {" "}
                       <Button

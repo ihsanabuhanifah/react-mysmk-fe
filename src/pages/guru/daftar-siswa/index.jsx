@@ -157,7 +157,7 @@ export default function DaftarSiswa() {
             />
           </div>
           <div className="col-span-6 lg:col-span-1 xl:col-span-1">
-            {checkRole(roles, "admin") && (
+            {checkRole(roles, "Admin") && (
               <Button
                 content={"Kelas"}
                 type="submit"
@@ -218,7 +218,7 @@ export default function DaftarSiswa() {
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
                   </Table.Cell>
                   <Table.Cell>
-                    {checkRole(roles, "admin") && (
+                    {checkRole(roles, "Admin") && (
                       <DeleteButton onClick={() => confirmDelete(value?.id)} />
                     )}
                   </Table.Cell>

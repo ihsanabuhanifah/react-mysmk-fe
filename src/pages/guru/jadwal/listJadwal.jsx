@@ -54,7 +54,7 @@ export default function ListJadwal() {
           />
         </Form>
         <div className=" col-start-6">
-          {checkRole(roles, "admin") && (
+          {checkRole(roles, "Admin") && (
             <Button
               content={"Buat Jadwal"}
               type="submit"

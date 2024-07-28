@@ -214,7 +214,7 @@ export default function PengampuHalaqoh() {
                     />
                   </div>
 
-                  {checkRole(roles, "kesantrian") && (
+                  {checkRole(roles, "Kesantrian") && (
                     <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
                       {!absen ? (
                         <Button

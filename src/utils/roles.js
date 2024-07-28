@@ -1,6 +1,6 @@
 export function checkRole(data, nama_role) {
-    let roles = data?.some((item) => {
-      return item.role?.role_name.toLowerCase() === nama_role;
-    });
+
+  console.log('data role', data)
+    let roles = data.allRole.includes(nama_role)
     return roles;
   }

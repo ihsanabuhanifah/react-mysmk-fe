@@ -1,13 +1,13 @@
-const Checkbox = ({ onChange, checked }) => {
-    return (
-      <input
-        onChange={onChange}
-        checked={checked}
-        type="checkbox"
-        name="example"
-      />
-    );
-  };
+const Checkbox = ({ onChange, checked, ...props }) => {
+  return (
+    <input
+      {...props}
+      onChange={onChange}
+      checked={checked}
+      type="checkbox"
+      name="example"
+    />
+  );
+};
 
-
-  export default Checkbox
+export default Checkbox;
