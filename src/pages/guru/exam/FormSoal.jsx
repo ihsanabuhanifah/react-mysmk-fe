@@ -47,16 +47,7 @@ let personalSchema = Yup.object().shape({
   durasi: Yup.string().nullable().required("wajib disii"),
   soal: Yup.array().min(1, "Minimal pilih satu soal"),
 
-  jawaban: Yup.string()
-    .nullable()
-    .when("tipe", {
-      is: (id) => {
-        if (id !== "ES") {
-          return true;
-        }
-      },
-      then: (id) => Yup.string().nullable().required("wajib pilih"),
-    }),
+ 
 });
 let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),

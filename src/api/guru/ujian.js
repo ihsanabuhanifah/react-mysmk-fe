@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
+import useToast from "../../hook/useToast";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
 }
@@ -28,7 +29,7 @@ export function updateUjian(id, values) {
 
 export const useCreatePenilaian = () => {
   let queryClient = useQueryClient();
-
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
       return axios.post(`/guru/nilai/create`, {
@@ -36,26 +37,17 @@ export const useCreatePenilaian = () => {
         waktu_mulai: payload.waktu_mulai,
         waktu_selesai: payload.waktu_selesai,
         kelas_id: payload.kelas_id,
-        durasi : payload.durasi
+        durasi: payload.durasi,
       });
     },
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/ujian/list");
-        return toast.success(response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        successToast(response);
       },
 
       onError: (error) => {
-        alert("ok");
+        warningToast(error);
       },
     }
   );
@@ -79,4 +71,27 @@ export const usePenilaian = (payload) => {
   );
 
   return { isLoading, data, isFetching };
+};
+
+export const useRemidial = () => {
+  let queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/nilai/remidial/teacher`, {
+        payload,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
 };

@@ -1,12 +1,7 @@
-
 import LayoutPage from "../../../module/layoutPage";
 import { useEffect, useState } from "react";
 import { Form, Tab, Table, Input, Icon, Button } from "semantic-ui-react";
-import {
-  useKehadiran,
-  useSubmitDatang,
- 
-} from "../../../api/guru/absensi";
+import { useKehadiran, useSubmitDatang } from "../../../api/guru/absensi";
 import { TableLoading } from "../../../components";
 import { checkRole, showFormattedDate } from "../../../utils";
 import dayjs from "dayjs";
@@ -16,10 +11,12 @@ import ModalIzin from "./Modal";
 import useList from "../../../hook/useList";
 import ModalKepulangan from "./ModalKepulangan";
 import { LabelStatus } from "../../../components/Label";
+import Checkbox from "../../../components/Checkbox";
+import useCheckbox from "../../../hook/useCheckbox";
 export default function Kehadiran() {
   const [userLocation, setUserLocation] = useState(null);
   const { dataMe } = useAuthMe();
-
+  const { handleCheck, isChecked, payload, setPayload } = useCheckbox();
   const { roles } = useList();
   const [open, setOpen] = useState(false);
   const [openPulang, setOpenPulang] = useState(false);
@@ -100,8 +97,10 @@ export default function Kehadiran() {
 
   return (
     <LayoutPage title="Kehadiran Guru">
+     
       <ModalIzin
-        id={id}
+        values={payload}
+        setValues={setPayload}
         open={open}
         setOpen={setOpen}
         tanggalActive={tanggalActive}
@@ -112,7 +111,7 @@ export default function Kehadiran() {
         setOpen={setOpenPulang}
         tanggalActive={tanggalActive}
       />
-      
+
       <section>
         {jarak > 50 && (
           <div class="ui warning message">
@@ -121,10 +120,9 @@ export default function Kehadiran() {
             ABSENSI bisa dilakukan jika jarak kurang dari 10 meter dari lokasi
             absensi SMK MADINATULQURAN. Saat ini Anda Berada pada jarak{" "}
             {Math.ceil(jarak)} meter. <br />{" "}
-            
           </div>
         )}
-        {JSON.stringify(userLocation)}
+        
         <Form>
           <section className="grid sm:grid-cols-1 lg:grid-cols-4 gap-5">
             <div className="col-span-1 ">
@@ -219,19 +217,21 @@ export default function Kehadiran() {
                     }}
                   />
                 </div>
-                <div>
-                  <Button
-                    content={"Izin Ketidakhadiran"}
-                    type="button"
-                    fluid
-                    icon={() => <Icon name="edit outline" />}
-                    size="medium"
-                    color="red"
-                    onClick={() => {
-                      setOpen(true);
-                    }}
-                  />
-                </div>
+                {checkRole(roles, "Admin") && (
+                  <div>
+                    <Button
+                      content={"Izin Ketidakhadiran"}
+                      type="button"
+                      fluid
+                      icon={() => <Icon name="edit outline" />}
+                      size="medium"
+                      color="red"
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    />
+                  </div>
+                )}
               </>
             )}
           </section>
@@ -255,6 +255,9 @@ export default function Kehadiran() {
         <Table>
           <Table.Header>
             <Table.Row>
+              {checkRole(roles, "Admin") && (
+                <Table.HeaderCell></Table.HeaderCell>
+              )}
               <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Tanggal</Table.HeaderCell>
 
@@ -264,9 +267,9 @@ export default function Kehadiran() {
               <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
 
-              {checkRole(roles, "Admin") && (
+              {/* {checkRole(roles, "Admin") && (
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
-              )}
+              )} */}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -278,14 +281,31 @@ export default function Kehadiran() {
             >
               {data?.data?.map((item, index) => (
                 <Table.Row key={index}>
+                  {checkRole(roles, "Admin") && (
+                    <Table.Cell>
+                      <Checkbox
+                        disabled={
+                          item.status === "open" || item.status === "progress"
+                        }
+                        checked={isChecked(item.id)}
+                        onChange={(e) => {
+                          handleCheck(e, item.id);
+                        }}
+                      />
+                    </Table.Cell>
+                  )}
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>{showFormattedDate(item.tanggal)}</Table.Cell>
                   <Table.Cell>{item.teacher.nama_guru}</Table.Cell>
                   <Table.Cell>{item.jam_datang || "-"}</Table.Cell>
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
-                  <Table.Cell><LabelStatus status={item.status}/></Table.Cell>
-                  <Table.Cell><span className="text-xs">{item.keterangan || "-"}</span></Table.Cell>
-                  {checkRole(roles, "Admin") && (
+                  <Table.Cell>
+                    <LabelStatus status={item.status} />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span className="text-xs">{item.keterangan || "-"}</span>
+                  </Table.Cell>
+                  {/* {checkRole(roles, "Admin") && (
                     <Table.Cell>
                       {" "}
                       <Button
@@ -300,7 +320,7 @@ export default function Kehadiran() {
                         }}
                       />
                     </Table.Cell>
-                  )}
+                  )} */}
                 </Table.Row>
               ))}
             </TableLoading>

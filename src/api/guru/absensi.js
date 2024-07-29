@@ -4,6 +4,7 @@ import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import useToast from "../../hook/useToast";
 export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
@@ -115,7 +116,8 @@ export const useKehadiran = ({ tanggal }) => {
 };
 
 export const useSubmitDatang = ({ tanggal }) => {
-  let queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/submit-datang/kehadiran`, {
@@ -125,20 +127,12 @@ export const useSubmitDatang = ({ tanggal }) => {
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/list/kehadiran");
-        return toast.success(response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+
+        successToast(response);
       },
 
       onError: (error) => {
-        alert("ok");
+        warningToast(error);
       },
     }
   );
@@ -146,7 +140,9 @@ export const useSubmitDatang = ({ tanggal }) => {
 };
 
 export const useSubmitPulang = ({ tanggal }) => {
-  let queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/submit-pulang/kehadiran`, {
@@ -156,20 +152,12 @@ export const useSubmitPulang = ({ tanggal }) => {
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/list/kehadiran");
-        return toast.success(response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+
+        successToast(response);
       },
 
       onError: (error) => {
-        alert("ok");
+        warningToast(error);
       },
     }
   );
@@ -177,7 +165,8 @@ export const useSubmitPulang = ({ tanggal }) => {
 };
 
 export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
-  let queryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/submit-izin/kehadiran`, {
@@ -189,54 +178,39 @@ export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/list/kehadiran");
-        return toast.success(response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+
+        successToast(response);
       },
 
       onError: (error) => {
-        alert("ok");
+        warningToast(error);
       },
     }
   );
   return mutate;
 };
 
-export const useSubmitByAdmin = ({ tanggal, status, keterangan, id }) => {
-  let queryClient = useQueryClient();
+export const useSubmitByAdmin = ({ tanggal, status, keterangan, values }) => {
+  const queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/submit-by-Admin/kehadiran`, {
         tanggal,
         keterangan,
         status,
-        id,
+        values,
       });
     },
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/list/kehadiran");
-        return toast.success(response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+
+        successToast(response);
       },
 
       onError: (error) => {
-        alert("ok");
+        warningToast(error);
       },
     }
   );

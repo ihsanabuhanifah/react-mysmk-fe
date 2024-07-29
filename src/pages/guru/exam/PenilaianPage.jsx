@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Icon, Label, Table } from "semantic-ui-react";
-import { usePenilaian } from "../../../api/guru/ujian";
+import { usePenilaian, useRemidial } from "../../../api/guru/ujian";
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
 import { useParams } from "react-router-dom";
@@ -19,24 +19,32 @@ function PenilaianPage() {
     ujian_id: id,
   });
 
-  const { handleCheck, isChecked, payload } = useCheckbox();
+  const mutate = useRemidial();
+  const { handleCheck, isChecked, payload, setPayload } = useCheckbox();
 
-  console.log('pau', payload)
+  console.log("pau", payload);
 
   return (
     <LayoutPage title={"Penilaian"}>
       <section className="grid grid-cols-4 gap-5 mb-5">
         <Button
-          content={"Filter"}
+          content={"Remidial"}
           type="button"
           fluid
+          loading={mutate.isLoading}
+          disabled={mutate.isLoading || payload.length === 0}
           icon={() => <Icon name="filter" />}
           size="medium"
           color="teal"
+          onClick={() => {
+            mutate.mutate(payload, {
+              onSuccess: () => {
+                setPayload([]);
+              },
+            });
+          }}
         />
       </section>
-
-      
 
       <TableWrapper>
         <Table>
@@ -51,10 +59,8 @@ function PenilaianPage() {
               <Table.HeaderCell>Jam Mulai</Table.HeaderCell>
               <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Nilai 1</Table.HeaderCell>
-              <Table.HeaderCell>Nilai 2</Table.HeaderCell>
-              <Table.HeaderCell>Nilai 3</Table.HeaderCell>
-              <Table.HeaderCell>Nilai 4</Table.HeaderCell>
+              <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
+            
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
               <Table.HeaderCell>Nilai Essay</Table.HeaderCell>
@@ -73,7 +79,9 @@ function PenilaianPage() {
                 <Table.Row key={index}>
                   <Table.Cell>
                     <Checkbox
-                    disabled={item.status === 'open' || item.status === 'progress'}
+                      disabled={
+                        item.status === "open" || item.status === "progress"
+                      }
                       checked={isChecked(item.id)}
                       onChange={(e) => {
                         handleCheck(e, item.id);
@@ -89,10 +97,8 @@ function PenilaianPage() {
                   <Table.Cell>
                     <LabelStatus status={item.status} />
                   </Table.Cell>
-                  <Table.Cell>{item.exam1 || "-"}</Table.Cell>
-                  <Table.Cell>{item.exam2 || "-"}</Table.Cell>
-                  <Table.Cell>{item.exam3 || "-"}</Table.Cell>
-                  <Table.Cell>{item.exam4 || "-"}</Table.Cell>
+                  <Table.Cell>{item.exam || "-"}</Table.Cell>
+                  
                   <Table.Cell>{item.exam_result || "-"}</Table.Cell>
                   <Table.Cell>
                     <span className="text-xs"> {item.keterangan || "-"}</span>

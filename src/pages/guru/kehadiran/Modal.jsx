@@ -3,7 +3,6 @@ import {
   ModalContent,
   ModalActions,
   Button,
-  
   Icon,
   Modal,
   Form,
@@ -13,7 +12,7 @@ import {
 } from "semantic-ui-react";
 import { useSubmitByAdmin, useSubmitIzin } from "../../../api/guru/absensi";
 
-function ModalIzin({ open, setOpen, tanggalActive, id, setId }) {
+function ModalIzin({ open, setOpen, tanggalActive, id, values, setValues }) {
   const [payload, setPayload] = useState({
     status: "",
     keterangan: "",
@@ -22,7 +21,7 @@ function ModalIzin({ open, setOpen, tanggalActive, id, setId }) {
   const mutate = useSubmitIzin({ ...payload, tanggal: tanggalActive });
   const mutateByAdmin = useSubmitByAdmin({
     ...payload,
-    id,
+    values,
     tanggal: tanggalActive,
   });
 
@@ -101,12 +100,13 @@ function ModalIzin({ open, setOpen, tanggalActive, id, setId }) {
           }
           color="green"
           inverted
-          onClick={() => {
+          onClick={async () => {
             if (id !== 0) {
-              mutateByAdmin.mutate({
+              await mutateByAdmin.mutate({},{
                 onSuccess: () => {
                   setOpen(false);
-                  setId(0);
+
+                  setValues([]);
 
                   setPayload({
                     status: "",

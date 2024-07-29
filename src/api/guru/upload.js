@@ -4,24 +4,17 @@ import { useMutation, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
+import useToast from "../../hook/useToast";
 
 export const useUploadFile = () => {
+  const { successToast, warningToast } = useToast();
   const mutate = useMutation((file) => {}, {
     onSuccess: (response) => {
-      return toast.success(response?.data?.msg, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      successToast(response);
     },
 
     onError: (error) => {
-      alert("ok");
+      warningToast(error);
     },
   });
   return mutate;

@@ -21,7 +21,8 @@ const useCheckbox = () => {
   return {
     handleCheck,
     isChecked,
-    payload
+    payload,
+    setPayload
     
   };
 };

@@ -110,6 +110,8 @@ export default function FormSoal() {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
       select: (response) => {
+
+        console.log('res', response)
         return response.data.soal;
       },
       onSuccess: (data) => {
