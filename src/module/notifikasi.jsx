@@ -9,13 +9,13 @@ export default function Notifikasi({ setNotif }) {
   // eslint-disable-next-line no-empty-pattern
   const [] = React.useState("senin");
   const { notifAbsensi, notifHalaqoh, notifPiket, jumlah } = useNotif();
-console.log('jumlah', jumlah);
+  
   const handleNotif = () => {
     setNotif(false);
   };
 
   return (
-    <section className=" mt-0 overflow-auto   p-3 h-full xl:h-full xl:border-l-2">
+    <section className="mt-0 overflow-auto p-3 h-full xl:h-full xl:border-l-2">
       <h1 className="text-lg xl:block hidden px-2 mb-5">
         {showFormattedDate(new Date())}
       </h1>

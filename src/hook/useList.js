@@ -11,7 +11,9 @@ import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
+
 import Cookies from "js-cookie";
+
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"))
   let { data: identitas } = useQuery(

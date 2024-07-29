@@ -1,5 +1,6 @@
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
+
 export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
