@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
+
 import LayoutPage from "../../../module/layoutPage";
 import { useEffect, useState } from "react";
 import { Form, Tab, Table, Input, Icon, Button } from "semantic-ui-react";
 import {
   useKehadiran,
   useSubmitDatang,
-  useSubmitPulang,
+ 
 } from "../../../api/guru/absensi";
 import { TableLoading } from "../../../components";
 import { checkRole, showFormattedDate } from "../../../utils";
@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import ModalIzin from "./Modal";
 import useList from "../../../hook/useList";
 import ModalKepulangan from "./ModalKepulangan";
+import { LabelStatus } from "../../../components/Label";
 export default function Kehadiran() {
   const [userLocation, setUserLocation] = useState(null);
   const { dataMe } = useAuthMe();
@@ -282,8 +283,8 @@ export default function Kehadiran() {
                   <Table.Cell>{item.teacher.nama_guru}</Table.Cell>
                   <Table.Cell>{item.jam_datang || "-"}</Table.Cell>
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
-                  <Table.Cell>{item.status || "-"}</Table.Cell>
-                  <Table.Cell>{item.keterangan || "-"}</Table.Cell>
+                  <Table.Cell><LabelStatus status={item.status}/></Table.Cell>
+                  <Table.Cell><span className="text-xs">{item.keterangan || "-"}</span></Table.Cell>
                   {checkRole(roles, "Admin") && (
                     <Table.Cell>
                       {" "}

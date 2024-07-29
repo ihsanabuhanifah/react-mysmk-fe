@@ -25,6 +25,40 @@ export const LabelStatus = ({ status }) => {
        
     );
   }
+
+
+
+  if (status === "hadir") {
+    return (
+
+      <Label size="tiny" content="Hadir" color="green" as={"a"} />
+     
+    );
+  }
+  if (status === "sakit") {
+    return (
+      <Label size="tiny" content="Sakit" color="blue" as={"a"} />
+      
+    );
+  }
+  if (status === "izin") {
+    return (
+      <Label size="tiny" content="Izin" color="olive" as={"a"} />
+    );
+  }
+  if (status === "libur") {
+    return (
+      <Label size="tiny" content="Libur" color="yellow" as={"a"} />
+       
+    );
+  }
+  if (status === "tugas") {
+    return (
+      <Label size="tiny" content="Tugas Sekolah" color="yellow" as={"a"} />
+       
+    );
+  }
+
   if (status === "PTS") {
     return (
       <Label size="tiny" content="PTS" color="olive" as={"a"} />
