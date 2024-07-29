@@ -130,6 +130,7 @@ export default function FormSoal() {
         mapel_id: null,
         soal: {
           soal: "",
+          tipe: "",
           a: null,
           b: null,
           c: null,
@@ -159,6 +160,7 @@ export default function FormSoal() {
 
               soal: {
                 soal: "",
+                tipe: values.payload[0].soal.tipe,
                 a: null,
                 b: null,
                 c: null,
@@ -366,7 +368,10 @@ export default function FormSoal() {
                         name={`payload[${index}]tipe`}
                         onChange={(e, data) => {
                           setFieldValue(`payload[${index}]tipe`, data.value);
-                          setFieldValue(`payload[${index}]soal.tipe`, data.value);
+                          setFieldValue(
+                            `payload[${index}]soal.tipe`,
+                            data.value
+                          );
                         }}
                         error={
                           errors?.payload?.[index]?.tipe !== undefined &&
@@ -448,10 +453,10 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan A</FormLabel>
                           <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.a !== undefined &&
-                            errors?.payload?.[index]?.soal?.a
-                          }
+                            error={
+                              errors?.payload?.[index]?.soal?.a !== undefined &&
+                              errors?.payload?.[index]?.soal?.a
+                            }
                             value={value?.soal.a === null ? "" : value?.soal.a}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.a`, content);
