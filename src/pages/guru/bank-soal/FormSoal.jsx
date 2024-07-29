@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import {
@@ -7,13 +7,13 @@ import {
   tfOptions,
   tipeSoalOptions,
 } from "../../../utils/options";
-import { Input, Form, Select, Button, TextArea, Icon } from "semantic-ui-react";
-import { DeleteButton, AddButton, Label, FormLabel } from "../../../components";
+import { Input, Form, Select, Button, Icon } from "semantic-ui-react";
+import { DeleteButton, AddButton, FormLabel } from "../../../components";
 import { toast } from "react-toastify";
-import ReactQuill from "react-quill";
 import { getOptions } from "../../../utils/format";
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
+import * as Yup from "yup";
 
 import {
   createBankSoal,
@@ -23,8 +23,81 @@ import {
 import LayoutPage from "../../../module/layoutPage";
 import Editor from "../../../components/Editor";
 
+let personalSchema = Yup.object().shape({
+  materi: Yup.string().nullable().required("wajib disii"),
+  mapel_id: Yup.string().nullable().required("wajib pilih"),
+  point: Yup.string().nullable().required("wajib pilih"),
+  tipe: Yup.string().nullable(),
+  soal: Yup.object().shape({
+    soal: Yup.string().nullable().required("wajib isi"),
+    tipe: Yup.string().nullable(),
+    a: Yup.string()
+      .nullable()
+      .when("tipe", {
+        is: (id) => {
+          if (id === "PG") {
+            return true;
+          }
+        },
+        then: (id) => Yup.string().nullable().required("wajib isi"),
+      }),
+    b: Yup.string()
+      .nullable()
+      .when("tipe", {
+        is: (id) => {
+          if (id === "PG") {
+            return true;
+          }
+        },
+        then: (id) => Yup.string().nullable().required("wajib isi"),
+      }),
+    c: Yup.string()
+      .nullable()
+      .when("tipe", {
+        is: (id) => {
+          if (id === "PG") {
+            return true;
+          }
+        },
+        then: (id) => Yup.string().nullable().required("wajib isi"),
+      }),
+    d: Yup.string()
+      .nullable()
+      .when("tipe", {
+        is: (id) => {
+          if (id === "PG") {
+            return true;
+          }
+        },
+        then: (id) => Yup.string().nullable().required("wajib isi"),
+      }),
+    e: Yup.string()
+      .nullable()
+      .when("tipe", {
+        is: (id) => {
+          if (id === "PG") {
+            return true;
+          }
+        },
+        then: (id) => Yup.string().nullable().required("wajib isi"),
+      }),
+  }),
+  jawaban: Yup.string()
+    .nullable()
+    .when("tipe", {
+      is: (id) => {
+        if (id !== "ES") {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib pilih"),
+    }),
+});
+let AbsensiSchema = Yup.object().shape({
+  payload: Yup.array().of(personalSchema),
+});
+
 export default function FormSoal() {
-  const reactQuillRef = useRef(null);
   const { dataMapel } = useList();
   const { id } = useParams();
   let { data, isLoading } = useQuery(
@@ -64,7 +137,7 @@ export default function FormSoal() {
           e: null,
         },
         jawaban: "",
-        tipe: "PG",
+        tipe: "",
         point: 10,
       },
     ],
@@ -146,7 +219,7 @@ export default function FormSoal() {
         <Formik
           initialValues={initialState}
           enableReinitialize
-          // validationSchema={AbsensiSchema}
+          validationSchema={AbsensiSchema}
           onSubmit={onSubmit}
         >
           {({
@@ -162,6 +235,7 @@ export default function FormSoal() {
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
                 <div className="space-y-5 " key={index}>
+                  {console.log("err", errors)}
                   {id === undefined && (
                     <section className="flex items-center justify-end">
                       <AddButton
@@ -220,12 +294,16 @@ export default function FormSoal() {
                             data?.value
                           );
                         }}
-                        placeholder="Pilih Mata Pelajaran"
+                        placeholder="Pilih"
                         search
                         searchInput={{
                           id: `payload[${index}]mapel_id`,
                           name: `payload[${index}]mapel_id`,
                         }}
+                        error={
+                          errors?.payload?.[index]?.mapel_id !== undefined &&
+                          errors?.payload?.[index]?.mapel_id
+                        }
                       />
                     </div>
                     <div>
@@ -288,6 +366,7 @@ export default function FormSoal() {
                         name={`payload[${index}]tipe`}
                         onChange={(e, data) => {
                           setFieldValue(`payload[${index}]tipe`, data.value);
+                          setFieldValue(`payload[${index}]soal.tipe`, data.value);
                         }}
                         error={
                           errors?.payload?.[index]?.tipe !== undefined &&
@@ -307,7 +386,7 @@ export default function FormSoal() {
                             htmlFor: `payload[${index}]jawaban`,
                             name: `payload[${index}]jawaban`,
                           }}
-                          placeholder="Tipe Soal"
+                          placeholder="Pilih"
                           options={value?.tipe === "TF" ? tfOptions : pgOptions}
                           id={`payload[${index}]jawaban`}
                           name={`payload[${index}]jawaban`}
@@ -331,6 +410,10 @@ export default function FormSoal() {
                     <div className="mb-5">
                       <FormLabel>Uraian Soal</FormLabel>
                       <Editor
+                        error={
+                          errors?.payload?.[index]?.soal?.soal !== undefined &&
+                          errors?.payload?.[index]?.soal?.soal
+                        }
                         value={
                           value?.soal.soal === null ? "" : value?.soal.soal
                         }
@@ -365,6 +448,10 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan A</FormLabel>
                           <Editor
+                          error={
+                            errors?.payload?.[index]?.soal?.a !== undefined &&
+                            errors?.payload?.[index]?.soal?.a
+                          }
                             value={value?.soal.a === null ? "" : value?.soal.a}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.a`, content);
@@ -374,6 +461,10 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan B</FormLabel>
                           <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.b !== undefined &&
+                              errors?.payload?.[index]?.soal?.b
+                            }
                             value={value?.soal.b === null ? "" : value?.soal.b}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.b`, content);
@@ -384,6 +475,10 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan C</FormLabel>
                           <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.c !== undefined &&
+                              errors?.payload?.[index]?.soal?.c
+                            }
                             value={value?.soal.c === null ? "" : value?.soal.c}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.c`, content);
@@ -394,6 +489,11 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan D</FormLabel>
                           <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.d !== undefined &&
+                              errors?.payload?.[index]?.soal?.d
+                            }
+                            va
                             value={value?.soal.d === null ? "" : value?.soal.d}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.d`, content);
@@ -404,6 +504,11 @@ export default function FormSoal() {
                         <section>
                           <FormLabel>Pilihan E</FormLabel>
                           <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.e !== undefined &&
+                              errors?.payload?.[index]?.soal?.e
+                            }
+                            va
                             value={value?.soal.e === null ? "" : value?.soal.e}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.e`, content);

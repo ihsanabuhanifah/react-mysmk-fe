@@ -3,15 +3,16 @@ import ReactQuill from "react-quill";
 import "./component.css";
 import { uploadFile } from "../api/guru/upload";
 import Resizer from "react-image-file-resizer";
-import { Dimmer, Loader } from "semantic-ui-react";
+import { Dimmer, Loader, Message, MessageHeader } from "semantic-ui-react";
 import "katex/dist/katex.min.css";
 import katex from "katex";
+import clsx from "clsx";
 window.katex = katex;
 
 // import uploadToCloudinary from "./upload";
 // import uploadToCloudinary from "./upload";
 
-export default function Editor({ value, handleChange, ...props }) {
+export default function Editor({ value, handleChange, error, ...props }) {
   const reactQuillRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -81,7 +82,9 @@ export default function Editor({ value, handleChange, ...props }) {
       <ReactQuill
         ref={reactQuillRef}
         theme="snow"
-        className="quill-editor"
+        className={clsx(`quill-editor`, {
+          ' border  border-[#E0B4B4]': error
+        })}
         placeholder="Start writing..."
         modules={{
           toolbar: {
@@ -130,7 +133,8 @@ export default function Editor({ value, handleChange, ...props }) {
           "background",
           "align",
           "code-block",
-          "script",""
+          "script",
+          "",
         ]}
         value={value}
         {...props}
@@ -138,6 +142,12 @@ export default function Editor({ value, handleChange, ...props }) {
           handleChange(content);
         }}
       />
+
+      {error && (
+        <Message negative>
+          <MessageHeader>Wajib isi</MessageHeader>
+        </Message>
+      )}
     </>
   );
 }
