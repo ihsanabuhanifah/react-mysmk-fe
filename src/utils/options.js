@@ -121,10 +121,11 @@ const tfOptions = [
 ];
 
 const jenisOptions = [
-  { key: "1", value: "harian", text: "Ulangan Harian" },
-  { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
-  { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
-  { key: "4", value: "US", text: "Ujian Sekolah" },
+  { key: "1", value: "tugas", text: "Tugas" },
+  { key: "2", value: "harian", text: "Ulangan Harian" },
+  { key: "3", value: "PTS", text: "Penilaian Tengah Semester" },
+  { key: "4", value: "PAS", text: "Penilain Akhir Semester" },
+  { key: "5", value: "US", text: "Ujian Sekolah" },
   
 ];
 

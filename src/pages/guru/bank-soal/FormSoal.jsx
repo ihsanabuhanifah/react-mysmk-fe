@@ -102,16 +102,17 @@ export default function FormSoal() {
   const { id } = useParams();
   let { data, isLoading } = useQuery(
     //query key
-    ["/bank-soal/update"],
+    ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
     () => detailBankSoal(id),
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
+      staleTime : 60 * 1000 * 10,
       select: (response) => {
 
-        console.log('res', response)
+       
         return response.data.soal;
       },
       onSuccess: (data) => {

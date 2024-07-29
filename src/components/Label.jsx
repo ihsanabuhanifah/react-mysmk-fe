@@ -1,27 +1,35 @@
 import { Label } from "semantic-ui-react";
+import { durasiOptions } from "../utils/options";
 
 export const LabelStatus = ({ status }) => {
   if (status === "open") {
     return (
 
-      <Label size="tiny" content="Terbuka" color="purple" as={"a"} />
+      <Label size="tiny" content="Belum Dikerjakan" color="purple" as={"a"} />
      
     );
   }
   if (status === "progress") {
     return (
-      <Label size="tiny" content="Pengerjaan" color="blue" as={"a"} />
+      <Label size="tiny" content="Sedang Dikerjakan" color="blue" as={"a"} />
       
     );
   }
   if (status === "finish") {
     return (
-      <Label size="tiny" content="Selesai" color="green" as={"a"} />
+      <Label size="tiny" content="Selesai Dikerjakan" color="green" as={"a"} />
     );
   }
   if (status === "harian") {
     return (
       <Label size="tiny" content="Harian" color="yellow" as={"a"} />
+       
+    );
+  }
+
+  if (status === "tugas") {
+    return (
+      <Label size="tiny" content="Tugas" color="pink" as={"a"} />
        
     );
   }
@@ -110,13 +118,13 @@ export const LabelStatus = ({ status }) => {
 export const LabelTipeUjian = ({ status }) => {
   if (status === "open") {
     return (
-      <Label size="tiny" content="Open" color="purple" as={"a"} />
+      <Label size="tiny" content="Open Book" color="green" as={"a"} />
        
     );
   }
   if (status === "closed") {
     return (
-      <Label  size="tiny"  content="Closed" color="green" as={"a"} />
+      <Label  size="tiny"  content="Closed Book" color="red" as={"a"} />
     );
   }
 
@@ -131,3 +139,18 @@ export const LabelTipeUjian = ({ status }) => {
 
   
 };
+
+
+export const LabelDurasi = ({status}) => {
+const result = durasiOptions.filter((item)=> {
+  return item.value === Number(status)
+})
+
+
+console.log('re', result, status)
+
+return (
+  <Label size="tiny" content={result?.[0]?.text || "-"} color="brown" as={"a"} />
+   
+);
+}

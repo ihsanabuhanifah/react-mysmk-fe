@@ -5,9 +5,8 @@ import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import 'react-quill/dist/quill.snow.css';
-import 'katex/dist/katex.min.css';
-
+import "react-quill/dist/quill.snow.css";
+import "katex/dist/katex.min.css";
 
 import {
   Jadwal,
@@ -52,7 +51,7 @@ import DashboardSiswa from "./pages/siswa/dashboard/dashboardsiswa";
 import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
-
+import UjianSiswa from "./pages/siswa/ujian";
 
 function App() {
   return (
@@ -164,6 +163,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardSiswa />} />
+          <Route path="ujian" element={<UjianSiswa />} />
           <Route path="profile" element={<Profile />}>
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="security" element={<SecuritySiswa />} />
