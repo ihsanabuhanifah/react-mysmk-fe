@@ -42,6 +42,11 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
+import DashboardGuru from "./pages/guru/dashboard/dashboardguru";
+import DashboardSiswa from "./pages/siswa/dashboard/dashboardsiswa";
+import Profile from "./pages/siswa/profile";
+import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
+import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 
 function App() {
   return (
@@ -92,7 +97,7 @@ function App() {
             </ProtectRoute>
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<DashboardGuru />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
@@ -151,7 +156,11 @@ function App() {
             </ProtectRoute>
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<DashboardSiswa />} />
+          <Route path="profile" element={<Profile />}>
+            <Route path="edit" element={<ProfileEdit />} />
+            <Route path="security" element={<SecuritySiswa />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
