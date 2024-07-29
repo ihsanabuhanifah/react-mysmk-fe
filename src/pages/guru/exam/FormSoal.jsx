@@ -7,7 +7,15 @@ import {
   jenisOptions,
   tipeUjianOptions,
 } from "../../../utils/options";
-import { Form, Select, Button, Icon, Input } from "semantic-ui-react";
+import {
+  Form,
+  Select,
+  Button,
+  Icon,
+  Input,
+  Message,
+  MessageHeader,
+} from "semantic-ui-react";
 
 import { toast } from "react-toastify";
 import { getOptions } from "../../../utils/format";
@@ -28,6 +36,31 @@ import { detailUjian } from "../../../api/guru/ujian";
 import ModalView from "./ModalView";
 import TableSoal from "./TableSoal";
 import useDebounce from "../../../hook/useDebounce";
+
+let personalSchema = Yup.object().shape({
+  jenis_ujian: Yup.string().nullable().required("wajib disii"),
+  mapel_id: Yup.string().nullable().required("wajib disii"),
+  kelas_id: Yup.string().nullable().required("wajib disii"),
+  waktu_mulai: Yup.string().nullable().required("wajib disii"),
+  waktu_selesai: Yup.string().nullable().required("wajib disii"),
+  tipe_ujian: Yup.string().nullable().required("wajib disii"),
+  durasi: Yup.string().nullable().required("wajib disii"),
+  soal: Yup.array().min(1, "Minimal pilih satu soal"),
+
+  jawaban: Yup.string()
+    .nullable()
+    .when("tipe", {
+      is: (id) => {
+        if (id !== "ES") {
+          return true;
+        }
+      },
+      then: (id) => Yup.string().nullable().required("wajib pilih"),
+    }),
+});
+let AbsensiSchema = Yup.object().shape({
+  payload: Yup.array().of(personalSchema),
+});
 
 export default function FormExam() {
   let [open, setOpen] = useState(false);
@@ -216,7 +249,7 @@ export default function FormExam() {
         <Formik
           initialValues={initialState}
           enableReinitialize
-          // validationSchema={AbsensiSchema}
+          validationSchema={AbsensiSchema}
           onSubmit={onSubmit}
         >
           {({
@@ -230,7 +263,8 @@ export default function FormExam() {
             isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit}>
-              <section >
+              {console.log("err", errors)}
+              <section>
                 {values?.payload?.map((value, index) => (
                   <div
                     className="space-y-5 col-span-3  p-5   overflow-auto "
@@ -253,6 +287,10 @@ export default function FormExam() {
                               data?.value
                             );
                           }}
+                          error={
+                            errors?.payload?.[index]?.kelas_id !== undefined &&
+                            errors?.payload?.[index]?.kelas_id
+                          }
                           placeholder="Pilih Kelas"
                           search
                           searchInput={{
@@ -280,6 +318,10 @@ export default function FormExam() {
 
                             setMapel_id(data?.value);
                           }}
+                          error={
+                            errors?.payload?.[index]?.mapel_id !== undefined &&
+                            errors?.payload?.[index]?.mapel_id
+                          }
                           placeholder="Pilih Mata Pelajaran"
                           search
                           searchInput={{
@@ -424,11 +466,9 @@ export default function FormExam() {
                     </section>
                     <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
                       <div>
-                      
-
                         <TableSoal
-                        materi={materi}
-                        setMateri={setMateri}
+                          materi={materi}
+                          setMateri={setMateri}
                           data={data}
                           value={value}
                           setFieldValue={setFieldValue}
@@ -444,31 +484,40 @@ export default function FormExam() {
                         />
                       </div>
 
-                      <div> <TableSoal
-                      data={{
-                        data: {
-                          rows: values.payload[0].soal,
-                        },
-                      }}
-                      value={value}
-                      setFieldValue={setFieldValue}
-                      isLoading={isLoading}
-                      index={index}
-                      setPreview={setPreview}
-                      setOpen={setOpen}
-                      page={page}
-                      setPageSize={setPageSize}
-                      pageSize={pageSize}
-                      setPage={setPage}
-                      isSoal
-                      title={"Daftar Soal Dipilih"}
-                    /></div>
-                     
+                      <div>
+                        {" "}
+                        <TableSoal
+                          data={{
+                            data: {
+                              rows: values.payload[0].soal,
+                            },
+                          }}
+                          value={value}
+                          setFieldValue={setFieldValue}
+                          isLoading={isLoading}
+                          index={index}
+                          setPreview={setPreview}
+                          setOpen={setOpen}
+                          page={page}
+                          setPageSize={setPageSize}
+                          pageSize={pageSize}
+                          setPage={setPage}
+                          isSoal
+                          title={"Daftar Soal Dipilih"}
+                        />
+                      </div>
+
+                      {!!errors?.payload?.[index]?.soal === true && (
+                <div className="col-span-2" ><Message negative>
+                <MessageHeader>{errors?.payload?.[index]?.soal}</MessageHeader>
+              </Message></div>
+              )}
                     </section>
                   </div>
                 ))}
-
               </section>
+
+             
               <div className="mt-5">
                 {id ? (
                   <Button
