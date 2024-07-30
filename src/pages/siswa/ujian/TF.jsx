@@ -22,9 +22,9 @@ export default function TF({ soals, item, setPayload, payload }) {
   }, []);
   return (
     <div className="space-y-5">
-      <div className="border-b-2 pb-2">{htmr(`<div>${soals.soal}</div>`)}</div>
+      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
 
-      {jawaban}
+      
 
       <div className="relative pl-12">
         <button
@@ -43,9 +43,9 @@ export default function TF({ soals, item, setPayload, payload }) {
             });
           }}
           className={clsx(
-            "absolute  left-0  px-1 py-0    border-2 rounded-full text-gray-400",
+            "absolute  left-0  px-2 py-1    border-2 rounded-full ",
             {
-              "bg-blue-200": jawaban === "true",
+              "bg-green-500 text-white": jawaban === "true",
             }
           )}
         >
@@ -71,9 +71,9 @@ export default function TF({ soals, item, setPayload, payload }) {
             });
           }}
           className={clsx(
-            "absolute  left-0  px-1 py-0    border-2 rounded-full text-gray-400",
+            "absolute  left-0  px-2 py-1    border-2 rounded-full ",
             {
-              "bg-blue-200": jawaban === "false",
+              "bg-green-500 text-white": jawaban === "false",
             }
           )}
         >

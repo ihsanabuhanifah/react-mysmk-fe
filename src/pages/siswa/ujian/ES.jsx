@@ -23,7 +23,7 @@ export default function ES({ soals, item, setPayload, payload }) {
   }, []);
   return (
     <div className="space-y-5">
-      <div className="border-b-2 pb-2">{htmr(`<div>${soals.soal}</div>`)}</div>
+      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
 
       <div className="relative">
         <h5>Jawaban :</h5>

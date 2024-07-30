@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useProgressExam, useSubmitExam, useTakeExam } from "../../../api/siswa/exam";
+import {
+  useProgressExam,
+  useSubmitExam,
+  useTakeExam,
+} from "../../../api/siswa/exam";
 
 import Pg from "./Pg";
 import TF from "./TF";
 import ES from "./ES";
 import clsx from "clsx";
 import { Button, Icon, Dimmer, Loader } from "semantic-ui-react";
+import ModalKonfirmasi from "../../../components/ModalKonfrimasi";
 
 export default function ExamPage({ examActive, setExamActive }) {
+  React.useEffect(() => {
+    document.title = "MySMK - Exam";
+    // requestToken();
+  });
   let [soal, setSoal] = useState([]);
+  let [cutDown, setCutDown] = useState(10);
+  let [open, setOpen] = useState(false);
+  let [mouse, setMouse] = useState(false);
+
   let [activeSoal, setActiveSoal] = useState(0);
   let [payload, setPayload] = useState({
     id: examActive,
@@ -16,7 +29,7 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   let { data, mutate, isLoading: isFetching } = useTakeExam();
 
-  let [waktu, setWaktu] = useState(data?.data?.waktu_tersisa * 60)
+  let [waktu, setWaktu] = useState(0);
 
   useEffect(() => {
     mutate(examActive, {
@@ -26,31 +39,35 @@ export default function ExamPage({ examActive, setExamActive }) {
     });
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWaktu((w) => {
+        if (!!data?.data?.waktu_tersisa === true) {
 
-  useEffect(()=> {
-   const interval = setInterval(() => {
-
-     setWaktu(()=> {
-      return (waktu - 1)
-     })
-      
+          if(w < 0){
+            return 0
+          }
+          return w - 1;
+        }
+      });
     }, 1000);
 
     return () => {
-      return clearInterval(interval)
-    }
-   
-  },[])
+      return clearInterval(interval);
+    };
+  }, [data?.data?.waktu_tersisa]);
 
   const progess = useProgressExam();
   const submit = useSubmitExam();
 
- 
   useEffect(() => {
+    if (!!data?.data?.waktu_tersisa === true) {
+      setWaktu(data?.data?.waktu_tersisa * 60);
+    }
     if (!!data?.data === true) {
       let res = JSON.parse(data.data.soal);
       setSoal(res);
-  
+
       let dataSoal;
       if (JSON.parse(data.data.jawaban).length === 0) {
         dataSoal = res.map((item) => ({
@@ -66,8 +83,6 @@ export default function ExamPage({ examActive, setExamActive }) {
         }));
       }
 
-      console.log("data", dataSoal);
-
       setPayload((state) => {
         return {
           ...state,
@@ -77,13 +92,24 @@ export default function ExamPage({ examActive, setExamActive }) {
     }
   }, [data, isFetching]);
 
-  console.log("soal", soal);
+  useEffect(() => {
+    const interveral = setInterval(() => {
+      
+      setCutDown((c) => c - 1);
+    }, 1000);
+
+    return clearInterval(interveral);
+  }, [mouse]);
 
   if (isFetching) {
     return (
       <div
         onMouseLeave={() => {
+          setMouse(true);
           // window.location.reload()
+        }}
+        onMouseEnter={() => {
+          setMouse(false);
         }}
         className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
       >
@@ -101,67 +127,95 @@ export default function ExamPage({ examActive, setExamActive }) {
       }}
       className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
     >
-
+      <ModalKonfirmasi
+        open={open}
+        setOpen={setOpen}
+        loading={submit.isLoading}
+        onConfirm={() => {
+          submit.mutate(payload, {
+            onSuccess: () => {
+              window.location.reload();
+            },
+          });
+        }}
+        title={"Apakah yakin akan mengakhiri ujian ?"}
+      />
 
       <div className="grid grid-cols-8 h-screen w-screen gap-5 p-5 ">
         <div
           id="scrollbar"
           className="col-span-6 h-screnn w-full overflow-auto px-10 pt-5 pb-32 border shadow-lg rounded-md"
         >
-          <p className="text-red-500 italic font-bold mb-10">
-            Jangan mengeluarkan area mouse dari layar{" "}
-          </p>
-          <div>{waktu}</div>
+          <div className="flex items-center justify-between">
+            <p className="text-red-500 italic font-bold">
+              Jangan mengeluarkan area mouse dari layar{" "}
+            </p>
+
+            {cutDown}
+            <span className="font-semibold text-lg">
+              {convertSeconds(waktu)}
+            </span>
+          </div>
 
           {soal?.map((item, index) => {
             let soals = JSON.parse(item.soal);
 
             return (
               <React.Fragment key={index}>
-                {index === activeSoal && item.tipe === "PG" && (
-                  <>
-                    <Pg
-                      item={item}
-                      soals={soals}
-                      payload={payload}
-                      setPayload={setPayload}
-                    />
-                  </>
+                {index === activeSoal && (
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3>
+                      Soal No. <span>{index + 1}</span>
+                    </h3>
+                  </div>
                 )}
+                <div>
+                  {index === activeSoal && item.tipe === "PG" && (
+                    <>
+                      <Pg
+                        item={item}
+                        soals={soals}
+                        payload={payload}
+                        setPayload={setPayload}
+                      />
+                    </>
+                  )}
 
-                {index === activeSoal && item.tipe === "TF" && (
-                  <>
-                    <TF
-                      item={item}
-                      soals={soals}
-                      payload={payload}
-                      setPayload={setPayload}
-                    />
-                  </>
-                )}
-                {index === activeSoal && item.tipe === "ES" && (
-                  <>
-                    <ES
-                      item={item}
-                      soals={soals}
-                      payload={payload}
-                      setPayload={setPayload}
-                    />
-                  </>
-                )}
+                  {index === activeSoal && item.tipe === "TF" && (
+                    <>
+                      <TF
+                        item={item}
+                        soals={soals}
+                        payload={payload}
+                        setPayload={setPayload}
+                      />
+                    </>
+                  )}
+                  {index === activeSoal && item.tipe === "ES" && (
+                    <>
+                      <ES
+                        item={item}
+                        soals={soals}
+                        payload={payload}
+                        setPayload={setPayload}
+                      />
+                    </>
+                  )}
+                </div>
               </React.Fragment>
             );
           })}
         </div>
 
-        <div className="col-span-2 h-screen w-full shadow-lg rounded-md relative   ">
-          <div className="border border-b-2 py-5 flex items-center justify-center">
+        <div className="col-span-2 h-screen w-full shadow-lg border rounded-md relative    ">
+          <div className=" py-5 flex items-center justify-center">
             <h5>Nomor Soal</h5>
           </div>
-          <div className="  p-5 border shadow-lg h-full">
+          <div className=" px-5 shadow-lg h-full">
             {" "}
             {soal.map((item, index) => (
               <button
+                disabled={waktu < 0}
                 onClick={() => {
                   setActiveSoal(index);
                 }}
@@ -171,6 +225,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                   {
                     "bg-green-400 text-white":
                       !!payload?.data?.[index]?.jawaban === true,
+                    "opacity-10": waktu < 0,
                   }
                 )}
               >
@@ -198,11 +253,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                 loading={submit.isLoading}
                 disabled={submit.isLoading}
                 onClick={() => {
-                  submit.mutate(payload, {
-                    onSuccess: () => {
-                      window.location.reload();
-                    },
-                  });
+                  setOpen(true);
                 }}
                 icon={() => <Icon name="save" />}
                 size="medium"
@@ -215,26 +266,21 @@ export default function ExamPage({ examActive, setExamActive }) {
     </div>
   );
 }
+function convertSeconds(seconds) {
+  const days = Math.floor(seconds / (24 * 3600));
+  seconds %= 24 * 3600;
+  const hours = Math.floor(seconds / 3600);
+  seconds %= 3600;
+  const minutes = Math.floor(seconds / 60);
+  seconds %= 60;
 
+  if (days < 1) {
+    if (hours < 1) {
+      return ` ${minutes} menit, ${seconds} detik`;
+    } else {
+      return `${hours} jam, ${minutes} menit, ${seconds} detik`;
+    }
+  }
 
-
-// function updateTimer(totalDetik) {
-//   // Konversi detik ke hari, jam, menit, dan detik
-//   let hari = Math.floor(totalDetik / (24 * 3600));
-//   let sisaDetik = totalDetik % (24 * 3600);
-//   let jam = Math.floor(sisaDetik / 3600);
-//   sisaDetik %= 3600;
-//   let menit = Math.floor(sisaDetik / 60);
-//   let detik = sisaDetik % 60;
-
-//   // Update tampilan
-//   document.getElementById("timer").textContent = `${hari} hari, ${jam} jam, ${menit} menit, dan ${detik} detik`;
-
-//   // Kurangi detik
-//   return {
-//     hari : hari,
-//     jam : jam,
-//     menit : menit ,
-//     detik : detik
-//   }
-// }
+  return `${days} hari, ${hours} jam, ${minutes} menit, ${seconds} detik`;
+}
