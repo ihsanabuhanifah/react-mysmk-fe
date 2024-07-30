@@ -22,7 +22,9 @@ export default function Profile() {
 					<ButtonLink title="Password & Security" logo={<IoShieldOutline size={22} className={`${pathname === "/siswa/profile/security" ? 'text-[#18a558]' : 'text-gray-400'}`} />} to="/siswa/profile/security" />
 				</div>
 
-				<div className="flex-1 h-full bg-white"></div>
+				<div className="flex-1 h-full">
+					<Outlet />
+				</div>
 			</div>
 		</LayoutSiswa>
 	)

@@ -110,7 +110,7 @@ export default function Siswa() {
 							<SidebarSiswa setSidebar={setSidebar} />
 						</div>
 
-						<div className="mt-5 mb-4 ml-2 group inline-block">
+						<div className="mt-5 mb-4 ml-2">
 							<LogoutButton
 								onClick={() => {
 									return setOpen(true)
@@ -164,7 +164,7 @@ function LogoutButton({ to, title, logo, onClick }) {
 	let url = pathname.split('/')[2]
 
 	return (
-		<button onClick={onClick} className="flex items-center font-extrabold">
+		<button onClick={onClick} className="flex group flex-grow-0 items-center font-extrabold">
 			<div>{logo}</div>
 			<p className={`font-extrabold ml-2 text-xs text-gray-900  font-poppins text-left ${url === to ? 'text-white-400 ' : 'text-gray-600 '} font-bold group-hover:text-[#18a558]`}>{title}</p>
 		</button>
