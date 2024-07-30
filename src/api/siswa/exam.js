@@ -18,7 +18,7 @@ export function takeExam(id) {
 export const useExam = (id) => {
   let [params, setParams] = useState({ page: 1, pageSize: 10 });
   const { isLoading, data, isFetching } = useQuery(
-    ["/santi/exam/list", params],
+    ["/santri/exam/list", params],
     () => getExam(params),
     {
       keepPreviousData: true,
@@ -31,17 +31,67 @@ export const useExam = (id) => {
   return { isLoading, data, isFetching, params, setParams };
 };
 
-export const useTakeExam = (id) => {
-  const { isLoading, data, isFetching } = useQuery(
-    ["/santi/exam/detail"],
-    () => takeExam(id),
+export const useTakeExam = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (id) => {
+      return axios.put(`/santri/exam/take/${id}`);
+    },
     {
-      keepPreviousData: true,
-      select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
-      enabled: !!id === true,
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        console.log("err", error.response);
+        warningToast(error);
+      },
     }
   );
+  return mutate;
+};
 
-  return { isLoading, data, isFetching };
+export const useProgressExam = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/santri/exam/progress`, {
+        id: payload.id,
+        data: payload.data,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        console.log("err", error.response);
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
+
+export const useSubmitExam = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/santri/exam/submit`, {
+        id: payload.id,
+        data: payload.data,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
 };

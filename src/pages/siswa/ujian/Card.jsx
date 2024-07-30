@@ -7,9 +7,7 @@ import {
 import { formatWaktu } from "../../../utils/waktu";
 import { Button, Icon } from "semantic-ui-react";
 
-export default function Card({ item, handleExam,  }) {
-
-  
+export default function Card({ item, handleExam }) {
   return (
     <div className="border rounded-md text-xs ">
       <img
@@ -69,11 +67,18 @@ export default function Card({ item, handleExam,  }) {
 
         <div className="mt-5">
           <Button
-            content={"Kerjakan"}
+            content={
+              item.status === "open"
+                ? "Kerjakan"
+                : item.status === "progress"
+                ? "Lanjutkan"
+                : "Sudah Selesai"
+            }
             type="button"
             fluid
+            disabled={item.status === "finish"}
             onClick={handleExam}
-            // icon={() => <Icon name="edit" />}
+            icon={() => <Icon name="edit" />}
             size="tiny"
             color="green"
           />
