@@ -16,6 +16,8 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   let { data, mutate, isLoading: isFetching } = useTakeExam();
 
+  let [waktu, setWaktu] = useState(data?.data?.waktu_tersisa * 60)
+
   useEffect(() => {
     mutate(examActive, {
       onError: () => {
@@ -23,6 +25,22 @@ export default function ExamPage({ examActive, setExamActive }) {
       },
     });
   }, []);
+
+
+  useEffect(()=> {
+   const interval = setInterval(() => {
+
+     setWaktu(()=> {
+      return (waktu - 1)
+     })
+      
+    }, 1000);
+
+    return () => {
+      return clearInterval(interval)
+    }
+   
+  },[])
 
   const progess = useProgressExam();
   const submit = useSubmitExam();
@@ -32,11 +50,8 @@ export default function ExamPage({ examActive, setExamActive }) {
     if (!!data?.data === true) {
       let res = JSON.parse(data.data.soal);
       setSoal(res);
-
-     
-
+  
       let dataSoal;
-
       if (JSON.parse(data.data.jawaban).length === 0) {
         dataSoal = res.map((item) => ({
           id: item.id,
@@ -86,6 +101,8 @@ export default function ExamPage({ examActive, setExamActive }) {
       }}
       className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
     >
+
+
       <div className="grid grid-cols-8 h-screen w-screen gap-5 p-5 ">
         <div
           id="scrollbar"
@@ -94,6 +111,7 @@ export default function ExamPage({ examActive, setExamActive }) {
           <p className="text-red-500 italic font-bold mb-10">
             Jangan mengeluarkan area mouse dari layar{" "}
           </p>
+          <div>{waktu}</div>
 
           {soal?.map((item, index) => {
             let soals = JSON.parse(item.soal);
@@ -197,3 +215,26 @@ export default function ExamPage({ examActive, setExamActive }) {
     </div>
   );
 }
+
+
+
+// function updateTimer(totalDetik) {
+//   // Konversi detik ke hari, jam, menit, dan detik
+//   let hari = Math.floor(totalDetik / (24 * 3600));
+//   let sisaDetik = totalDetik % (24 * 3600);
+//   let jam = Math.floor(sisaDetik / 3600);
+//   sisaDetik %= 3600;
+//   let menit = Math.floor(sisaDetik / 60);
+//   let detik = sisaDetik % 60;
+
+//   // Update tampilan
+//   document.getElementById("timer").textContent = `${hari} hari, ${jam} jam, ${menit} menit, dan ${detik} detik`;
+
+//   // Kurangi detik
+//   return {
+//     hari : hari,
+//     jam : jam,
+//     menit : menit ,
+//     detik : detik
+//   }
+// }
