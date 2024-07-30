@@ -71,28 +71,25 @@ export default function Guru() {
       </header>
       <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
         <div
-        
-          className={` w-full h-full shadow-lg   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${
-            !sidebar
+
+          className={` w-full h-full shadow-lg   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${!sidebar
               ? "transform -translate-x-full -z-50   xl:-translate-x-0"
               : "transform -translate-x-0 z-10  transition  duration-500 "
-          } h-full fixed top-0 bottom-0 xl:w-[15%]  xl:relative  `}
+            } h-full fixed top-0 bottom-0 xl:w-[15%]  xl:relative  `}
         >
           <SidebarGuru setSidebar={setSidebar} />
         </div>
         <div
-          className={`content relative  h-full w-full   overflow-auto xl:overflow-hidden ${
-            showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
-          }`}
+          className={`content relative  h-full w-full   overflow-auto xl:overflow-hidden ${showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
+            }`}
         >
           <div className=" bg-blue-400">
             <button
               onClick={() => {
                 return setShowNotf(!showNotif);
               }}
-              className={` rounded-full p-2 hidden xl:block absolute  right-5 top-1 z-50 ${
-                showNotif ? "bg-red-400" : ""
-              }`}
+              className={` rounded-full p-2 hidden xl:block absolute  right-5 top-1 z-50 ${showNotif ? "bg-red-400" : ""
+                }`}
             >
               <IoIosNotifications
                 className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
@@ -112,13 +109,11 @@ export default function Guru() {
           </div>
         </div>
         <div
-          className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white    pl-0 xl:pl-2      ${
-            !notif
+          className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white    pl-0 xl:pl-2      ${!notif
               ? "transform -translate-y-full    xl:-translate-y-0"
               : "transform -translate-y-0 transition  duration-500 "
-          } h-full z-10 fixed top-0 bottom-0 ${
-            !showNotif ? "xl:w-[20%]" : "xl:hidden"
-          } xl:relative  `}
+            } h-full z-10 fixed top-0 bottom-0 ${!showNotif ? "xl:w-[20%]" : "xl:hidden"
+            } xl:relative  `}
         >
           <Notifikasi setNotif={setNotif} />
         </div>

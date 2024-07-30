@@ -20,6 +20,8 @@ import {
   MdPhoneInTalk,
   MdCreate,
   MdLaptopChromebook,
+  MdBuild,
+  MdApartment,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -289,6 +291,23 @@ export default function SidebarGuru({ setSidebar }) {
               <MdCreate
                 className={`h-8 w-8 ${
                   url === "laporan-guru-piket"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="fitur-siswa-pkl"
+            path="fitur-siswa-pkl"
+            title={"Fitur Siswa PKL"}
+            logo={
+              <MdApartment
+                className={`h-8 w-8 ${
+                  url === "fitur-siswa-pkl"
                     ? "text-white-400"
                     : "text-gray-600"
                 }`}

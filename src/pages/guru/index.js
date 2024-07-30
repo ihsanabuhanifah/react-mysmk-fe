@@ -13,6 +13,7 @@ import LaporanGuruPiket from "./guru-piket/laporan";
 import LihatLaporanGuruPiket from "./guru-piket/lihat-laporan";
 import RekapAbsensi from "./jadwal/rekap";
 import DaftarSiswa from "./daftar-siswa";
+// import CreatePkl from "./fitur-siswa-pkl";
 import Agenda from "./jadwal/agenda";
 import DetailSiswa from "./daftar-siswa/detailSiswa";
 import PengampuHalaqoh from "./halaqoh/pengampu";
@@ -26,6 +27,7 @@ import FormSoal from "./bank-soal/FormSoal";
 import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
+// import { CreatePkl } from "./fitur-siswa-pkl/create-siswa";
 
 export {
   Absensi,
@@ -55,5 +57,6 @@ export {
   FormSoal,
   FormExam,
   ListExam,
-  CreateSiswa
+  CreateSiswa,
+  
 };
