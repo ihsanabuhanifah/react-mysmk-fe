@@ -1,32 +1,13 @@
 import React from "react";
-
 import { useLocation, useNavigate } from "react-router-dom";
-
-import { formatTahun } from "../../utils";
-import {
-  MdClose,
-  MdOutlineDashboard,
-  MdOutlineLibraryBooks,
-  MdLogout,
-  MdLaptopMac,
-  MdPeople,
-  MdOutlineSupervisorAccount,
-  MdCheck,
-  MdFormatAlignCenter,
-  MdKeyboard,
-  MdFingerprint,
-  MdNavigation,
-  MdPhoneForwarded,
-  MdPhoneInTalk,
-  MdCreate,
-  MdLaptopChromebook,
-} from "react-icons/md";
-
+import { useSelector } from "react-redux";
+import { MdClose, MdLaptopMac } from "react-icons/md";
+import { IoPerson, IoStatsChart } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
-import { ModalLogout } from "../../components";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
+  const santriProfile = useSelector((state) => state.data.profile);
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -35,14 +16,11 @@ export default function SidebarSiswa({ setSidebar }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
 
-  const [open, setOpen] = React.useState(false);
-
   return (
     <>
-      <ModalLogout open={open} setOpen={setOpen} />
-
+      {/* tablet */}
       <div className="xl:hidden flex shadow-lg border-b-2 items-center justify-between h-20  w-full px-5 relative overflow-y-auto ">
-        <div className="h-24 w-24   flex-col mt-12 items-center">
+        <div className="h-24 w-24  flex-col mt-12 items-center">
           <img
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
@@ -55,14 +33,19 @@ export default function SidebarSiswa({ setSidebar }) {
           <MdClose className="w-10 h-10" />
         </button>
       </div>
-      <div className="h-16 w-12  bg-white hidden xl:flex mb-5 p-5">
-        <img
-          className="absolute"
-          style={{ maxWidth: "50%", maxHeight: "50%" }}
-          src={LogoMySMK}
-          alt={LogoMySMK}
-        />
+
+      {/* laptop */}
+      <div className="flex mb-3 items-center bg-[#18a558] mr-2 gap-x-2 rounded-lg p-2">
+        <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+
+        <div>
+          <p className="m-0 text-sm text-white/80 leading-none">Hello</p>
+          <p className="mt-1 text-md text-white font-black leading-none">
+            {santriProfile?.nama_siswa?.split(" ")[0]}
+          </p>
+        </div>
       </div>
+
       <nav
         id="scrollbar"
         className="flex flex-col space-y-2 p-0  xl:p-0 h-[80%] pt-5 overflow-auto pb-12"
@@ -73,87 +56,40 @@ export default function SidebarSiswa({ setSidebar }) {
           path="dashboard"
           title={["Dashboard"]}
           logo={
-            <MdOutlineDashboard
-              className={`h-8 w-8 ${
-                url === "dashboard" ? "text-white-400" : "text-gray-600"
+            <IoStatsChart
+              className={`h-6 w-6 ${
+                url === "dashboard" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
         />
         <NavButton
           handleSidebar={handleSiderbar}
-          to="daftar-siswa"
-          path="daftar-siswa"
-          title={"Daftar Kelas"}
+          to="profile"
+          path="profile"
+          title={"Profile"}
           logo={
-            <MdOutlineSupervisorAccount
-              className={`h-8 w-8 ${
-                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
+            <IoPerson
+              className={`h-6 w-6 ${
+                url === "profile" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
         />
-        <NavButton
+		  <NavButton
           handleSidebar={handleSiderbar}
-          to={`halaqoh-siswa`}
-          path={"halaqoh-siswa"}
-          title={["Daftar Halaqoh"]}
+          to="ujian"
+          path="ujian"
+          title={"Exam"}
           logo={
-            <MdPeople
-              className={`h-8 w-8 ${
-                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
+            <MdLaptopMac
+              className={`h-6 w-6 ${
+                url === "ujian" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
         />
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to="kehadiran-guru"
-          path="kehadiran-guru"
-          title={["Absensi Guru"]}
-          logo={
-            <MdFingerprint
-              className={`h-8 w-8 ${
-                url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />
-
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to={`halaqoh/absensi/${formatTahun(date)}`}
-          path={"halaqoh"}
-          title={["Absensi Halaqoh"]}
-          logo={
-            <MdLaptopChromebook
-              className={`h-8 w-8 ${
-                url === `halaqoh` ? "text-white-400" : "text-gray-600"
-              }`}
-            />
-          }
-        />
-
-        {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
-      <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
-      <div className="h-[10%] pl-3 pt-5">
-        <LogoutButton
-          onClick={() => {
-            return setOpen(true);
-          }}
-          title={"Logout"}
-          logo={
-            <MdLogout
-              className={`h-8 w-8 ${
-                url === "laporan-guru-piket"
-                  ? "text-white-400"
-                  : "text-gray-600"
-              }`}
-            />
-          }
-        />
-      </div>
     </>
   );
 }
@@ -169,48 +105,25 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
         handleSidebar();
         return navigate(to);
       }}
-      className={`flex items-center px-5  h-10 ${
-        url === path
-          ? "bg-[#00b5ad] rounded-lg text-white font-black"
-          : "text-black"
-      }`}
+      className={`flex justify-between group pl-2 items-center h-10`}
     >
-      <div
-        style={{
-          zomm: "80%",
-        }}
-        className="w-8 h-8 "
-      >
-        {logo}
-      </div>
-      <p
-        className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
-       ${url === path ? "text-white font-black" : "text-black"}
+      <div className="flex items-center">
+        <div>{logo}</div>
+        <p
+          className={`ml-3 text-xs whitespace-nowrap font-poppins text-left 
+       ${
+         url === path
+           ? "text-[#18a558] font-black text-[0.85rem]"
+           : "text-gray-400"
+       } group-hover:text-gray-600 group-hover:font-black
          `}
-      >
-        {title}
-      </p>
-    </button>
-  );
-}
-
-function LogoutButton({ to, title, logo, onClick }) {
-  let { pathname } = useLocation();
-  let url = pathname.split("/")[2];
-
-  return (
-    <button
-      onClick={onClick}
-      className="flex items-center font-extrabold  h-10  pl-2 "
-    >
-      <div className="w-8 h-8 ">{logo}</div>
-      <p
-        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
-          url === to ? "text-white-400 " : "text-gray-600 "
-        } font-bold hover:text-green-400`}
-      >
-        {title}
-      </p>
+        >
+          {title}
+        </p>
+      </div>
+      {url === path && (
+        <div className="h-full w-1 bg-[#18a558] rounded-l-md"></div>
+      )}
     </button>
   );
 }

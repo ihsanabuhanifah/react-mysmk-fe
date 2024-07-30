@@ -16,9 +16,10 @@ const useToast = () => {
 
   const warningToast = (err) => {
     if (err?.response?.status === 422) {
+      
       return toast.warn(err?.response?.data?.msg, {
         position: "top-right",
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,

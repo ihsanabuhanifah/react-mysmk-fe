@@ -5,9 +5,8 @@ import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import 'react-quill/dist/quill.snow.css';
-import 'katex/dist/katex.min.css';
-
+import "react-quill/dist/quill.snow.css";
+import "katex/dist/katex.min.css";
 
 import {
   Jadwal,
@@ -47,6 +46,12 @@ import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import PenilaianPage from "./pages/guru/exam/PenilaianPage";
+import DashboardGuru from "./pages/guru/dashboard/dashboardguru";
+import DashboardSiswa from "./pages/siswa/dashboard/dashboardsiswa";
+import Profile from "./pages/siswa/profile";
+import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
+import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
+import UjianSiswa from "./pages/siswa/ujian";
 
 function App() {
   return (
@@ -97,7 +102,7 @@ function App() {
             </ProtectRoute>
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<DashboardGuru />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
@@ -157,7 +162,12 @@ function App() {
             </ProtectRoute>
           }
         >
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard" element={<DashboardSiswa />} />
+          <Route path="ujian" element={<UjianSiswa />} />
+          <Route path="profile" element={<Profile />}>
+            <Route path="edit" element={<ProfileEdit />} />
+            <Route path="security" element={<SecuritySiswa />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

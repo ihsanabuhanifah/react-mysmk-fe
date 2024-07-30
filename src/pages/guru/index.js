@@ -1,6 +1,6 @@
 import Absensi from "./jadwal/absensi";
 import Jadwal from "./jadwal";
-import Dashboard from "./dashboard/dashboard";
+import Dashboard from "./dashboard/dashboardguru";
 import Halaqoh from "./halaqoh/halaqoh";
 import Kunjungan from "./kunjungan";
 import Pulang from "./pulang";
