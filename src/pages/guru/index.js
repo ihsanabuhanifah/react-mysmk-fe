@@ -26,6 +26,7 @@ import FormSoal from "./bank-soal/FormSoal";
 import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
+import { EditSiswa } from "./daftar-siswa/edit-siswa";
 
 export {
   Absensi,
@@ -55,5 +56,6 @@ export {
   FormSoal,
   FormExam,
   ListExam,
-  CreateSiswa
+  CreateSiswa,
+  EditSiswa,
 };

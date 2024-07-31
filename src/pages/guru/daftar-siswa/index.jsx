@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 
 import {
   DeleteButton,
+  EditButton,
   ModalAlert,
   TableLoading,
   ViewButton,
@@ -218,9 +220,30 @@ export default function DaftarSiswa() {
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
                   </Table.Cell>
                   <Table.Cell>
-                    {checkRole(roles, "Admin") && (
+                    {/* <>
                       <DeleteButton onClick={() => confirmDelete(value?.id)} />
-                    )}
+                      <EditButton
+                        onClick={() => navigate(`/update-siswa/${value?.id}`)}
+                      />
+                    </> */}
+                    <>
+                      {/* <EditButton
+                        onClick={() => navigate(`update-siswa/${value?.id}/`)}
+                      /> */}
+                      <EditButton
+                        onClick={() =>
+                          navigate(
+                            `update-siswa/${encodeURIComponent(
+                              value?.siswa?.nama_siswa
+                            )}`
+                          )
+                        }
+                      />
+                      <DeleteButton
+                        onClick={() => confirmDelete(value?.id)}
+                        className="button-spacing"
+                      />
+                    </>
                   </Table.Cell>
                 </Table.Row>
               ))}
