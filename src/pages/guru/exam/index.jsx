@@ -66,6 +66,7 @@ export default function ListExam() {
 
   return (
     <LayoutPage title="List Ujian">
+      {console.log('pay', payload)}
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}

@@ -21,7 +21,8 @@ export default function ExamPage({ examActive, setExamActive }) {
   let [cutDown, setCutDown] = useState(10);
   let [open, setOpen] = useState(false);
   let [mouse, setMouse] = useState(false);
-
+  const progess = useProgressExam();
+  const submit = useSubmitExam();
   let [activeSoal, setActiveSoal] = useState(0);
   let [payload, setPayload] = useState({
     id: examActive,
@@ -34,18 +35,28 @@ export default function ExamPage({ examActive, setExamActive }) {
   useEffect(() => {
     mutate(examActive, {
       onError: () => {
+        console.log("mas");
         setExamActive(null);
       },
     });
   }, []);
 
   useEffect(() => {
+    let interval;
+    if (mouse) {
+      interval = setInterval(() => {
+        setCutDown((c) => c - 1);
+      }, 1000);
+    }
+    return clearInterval(interval);
+  }, [mouse]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setWaktu((w) => {
         if (!!data?.data?.waktu_tersisa === true) {
-
-          if(w < 0){
-            return 0
+          if (w < 0) {
+            return 0;
           }
           return w - 1;
         }
@@ -57,14 +68,11 @@ export default function ExamPage({ examActive, setExamActive }) {
     };
   }, [data?.data?.waktu_tersisa]);
 
-  const progess = useProgressExam();
-  const submit = useSubmitExam();
-
   useEffect(() => {
     if (!!data?.data?.waktu_tersisa === true) {
       setWaktu(data?.data?.waktu_tersisa * 60);
     }
-    if (!!data?.data === true) {
+    if (!!data?.data?.soal === true) {
       let res = JSON.parse(data.data.soal);
       setSoal(res);
 
@@ -92,27 +100,9 @@ export default function ExamPage({ examActive, setExamActive }) {
     }
   }, [data, isFetching]);
 
-  useEffect(() => {
-    const interveral = setInterval(() => {
-      
-      setCutDown((c) => c - 1);
-    }, 1000);
-
-    return clearInterval(interveral);
-  }, [mouse]);
-
-  if (isFetching) {
+  if (isFetching || data?.data?.soal === undefined) {
     return (
-      <div
-        onMouseLeave={() => {
-          setMouse(true);
-          // window.location.reload()
-        }}
-        onMouseEnter={() => {
-          setMouse(false);
-        }}
-        className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
-      >
+      <div className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden">
         <Dimmer active inverted>
           <Loader size="large">Mengambil Data Soal</Loader>
         </Dimmer>
@@ -122,8 +112,14 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   return (
     <div
+      contentEditable
       onMouseLeave={() => {
+        setMouse(true);
+
         // window.location.reload()
+      }}
+      onMouseEnter={() => {
+        setMouse(false);
       }}
       className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
     >
@@ -140,7 +136,7 @@ export default function ExamPage({ examActive, setExamActive }) {
         }}
         title={"Apakah yakin akan mengakhiri ujian ?"}
       />
-
+      {mouse ? "keluar" : "dalam"}
       <div className="grid grid-cols-8 h-screen w-screen gap-5 p-5 ">
         <div
           id="scrollbar"

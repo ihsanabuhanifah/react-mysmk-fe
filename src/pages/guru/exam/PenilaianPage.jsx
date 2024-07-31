@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Button, Icon, Label, Table } from "semantic-ui-react";
-import { usePenilaian, useRemidial } from "../../../api/guru/ujian";
+import {
+  usePenilaian,
+  useRefreshCount,
+  useRemidial,
+} from "../../../api/guru/ujian";
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
 import { useParams } from "react-router-dom";
@@ -20,6 +24,7 @@ function PenilaianPage() {
   });
 
   const mutate = useRemidial();
+  const refresh = useRefreshCount();
   const { handleCheck, isChecked, payload, setPayload } = useCheckbox();
 
   console.log("pau", payload);
@@ -44,6 +49,24 @@ function PenilaianPage() {
             });
           }}
         />
+
+        <Button
+          content={"Izinkan Ujian Kembali"}
+          type="button"
+          fluid
+          loading={refresh.isLoading}
+          disabled={refresh.isLoading || payload.length === 0}
+          icon={() => <Icon name="filter" />}
+          size="medium"
+          color="teal"
+          onClick={() => {
+            refresh.mutate(payload, {
+              onSuccess: () => {
+                setPayload([]);
+              },
+            });
+          }}
+        />
       </section>
 
       <TableWrapper>
@@ -60,7 +83,7 @@ function PenilaianPage() {
               <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
               <Table.HeaderCell>Status</Table.HeaderCell>
               <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
-            
+
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
               <Table.HeaderCell>Nilai Essay</Table.HeaderCell>
@@ -80,7 +103,9 @@ function PenilaianPage() {
                   <Table.Cell>
                     <Checkbox
                       disabled={
-                        item.status === "open" || item.status === "progress"
+                        item.status === "open" ||
+                        item.status === "finish" ||
+                        (item.status === "progress" && item.refresh_count > 0)
                       }
                       checked={isChecked(item.id)}
                       onChange={(e) => {
@@ -98,7 +123,7 @@ function PenilaianPage() {
                     <LabelStatus status={item.status} />
                   </Table.Cell>
                   <Table.Cell>{item.exam || "-"}</Table.Cell>
-                  
+
                   <Table.Cell>{item.exam_result || "-"}</Table.Cell>
                   <Table.Cell>
                     <span className="text-xs"> {item.keterangan || "-"}</span>

@@ -1,4 +1,4 @@
-import clsx from "clsx";
+
 import htmr from "htmr";
 import { useEffect, useState } from "react";
 import Editor from "../../../components/Editor";
@@ -14,7 +14,7 @@ export default function ES({ soals, item, setPayload, payload }) {
       };
 
       
-      setJawaban( detail.soal[0].jawaban);
+      setJawaban(detail.soal[0].jawaban);
       return {
         ...s,
         data: s.data,

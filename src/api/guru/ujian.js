@@ -32,11 +32,15 @@ export const useCreatePenilaian = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
+
+
+     
       return axios.post(`/guru/nilai/create`, {
         id: payload.id,
         waktu_mulai: payload.waktu_mulai,
         waktu_selesai: payload.waktu_selesai,
         kelas_id: payload.kelas_id,
+        mapel_id: payload.mapel_id,
         durasi: payload.durasi,
       });
     },
@@ -79,6 +83,30 @@ export const useRemidial = () => {
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/nilai/remidial/teacher`, {
+        payload,
+      });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
+
+
+export const useRefreshCount = () => {
+  let queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/nilai/refresh/teacher`, {
         payload,
       });
     },
