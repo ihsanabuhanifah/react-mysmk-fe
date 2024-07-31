@@ -147,6 +147,7 @@ export const useSubmitDatang = ({ tanggal }) => {
 
 export const useSubmitPulang = ({ tanggal }) => {
   let queryClient = useQueryClient();
+  
   const mutate = useMutation(
     (payload) => {
       return axios.put(`/guru/submit-pulang/kehadiran`, {
