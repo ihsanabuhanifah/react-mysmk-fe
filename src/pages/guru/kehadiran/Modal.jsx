@@ -3,7 +3,6 @@ import {
   ModalContent,
   ModalActions,
   Button,
-  Header,
   Icon,
   Modal,
   Form,
@@ -11,15 +10,20 @@ import {
   Input,
   TextArea,
 } from "semantic-ui-react";
-import { useSubmitIzin } from "../../../api/guru/absensi";
+import { useSubmitByAdmin, useSubmitIzin } from "../../../api/guru/absensi";
 
-function ModalIzin({ open, setOpen, tanggalActive }) {
+function ModalIzin({ open, setOpen, tanggalActive, id, values, setValues }) {
   const [payload, setPayload] = useState({
     status: "",
     keterangan: "",
   });
 
   const mutate = useSubmitIzin({ ...payload, tanggal: tanggalActive });
+  const mutateByAdmin = useSubmitByAdmin({
+    ...payload,
+    values,
+    tanggal: tanggalActive,
+  });
 
   return (
     <Modal
@@ -29,7 +33,7 @@ function ModalIzin({ open, setOpen, tanggalActive }) {
       size="small"
     >
       <ModalContent>
-        {JSON.stringify(payload)}
+        {JSON.stringify(id)}
         <Form>
           <Form.Field
             control={Select}
@@ -46,6 +50,10 @@ function ModalIzin({ open, setOpen, tanggalActive }) {
               {
                 value: "tugas",
                 label: "Tugas Sekolah",
+              },
+              {
+                value: "libur",
+                label: "Libur",
               },
             ]}
             onChange={(event, data) => {
@@ -83,20 +91,40 @@ function ModalIzin({ open, setOpen, tanggalActive }) {
           <Icon name="remove" /> Batal
         </Button>
         <Button
-          loading={mutate.isLoading}
-          disabled={mutate.isLoading || !!payload.status === false || !!payload.keterangan ===false}
+          loading={mutate.isLoading || mutateByAdmin.isLoading}
+          disabled={
+            mutate.isLoading ||
+            mutateByAdmin.isLoading ||
+            !!payload.status === false ||
+            (!!payload.keterangan === false && payload.status !== "libur")
+          }
           color="green"
           inverted
-          onClick={() => {
-            mutate.mutate({
-              onSuccess: () => {
-                setOpen(false);
-                setPayload({
-                  status: "",
-                  keterangan: "",
-                });
-              },
-            });
+          onClick={async () => {
+            if (id !== 0) {
+              await mutateByAdmin.mutate({},{
+                onSuccess: () => {
+                  setOpen(false);
+
+                  setValues([]);
+
+                  setPayload({
+                    status: "",
+                    keterangan: "",
+                  });
+                },
+              });
+            } else {
+              mutate.mutate({
+                onSuccess: () => {
+                  setOpen(false);
+                  setPayload({
+                    status: "",
+                    keterangan: "",
+                  });
+                },
+              });
+            }
           }}
         >
           <Icon name="checkmark" /> Simpan

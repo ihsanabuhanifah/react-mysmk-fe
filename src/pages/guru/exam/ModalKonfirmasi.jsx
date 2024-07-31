@@ -8,11 +8,13 @@ import {
   ModalHeader,
   ModalDescription,
 } from "semantic-ui-react";
-import { useSubmitPulang } from "../../../api/guru/absensi";
 
-function ModalKepulangan({ open, setOpen, tanggalActive }) {
-  const pulang = useSubmitPulang({ tanggal: tanggalActive });
+import { useCreatePenilaian } from "../../../api/guru/ujian";
 
+function ModalKonfirmasi({ open, setOpen, payload, setPayload }) {
+  const mutate = useCreatePenilaian();
+
+ 
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -20,11 +22,13 @@ function ModalKepulangan({ open, setOpen, tanggalActive }) {
       open={open}
       size="small"
     >
-      <ModalHeader>Konfirmasi Kepulangan</ModalHeader>
+      <ModalHeader>Konfirmasi Publish Ujian?</ModalHeader>
 
       <ModalContent>
         <ModalDescription>
-          Apa yakin absensi pulang pada jam ini?
+          Apa yakin akan mempublish ujian ini?
+
+          
         </ModalDescription>
       </ModalContent>
 
@@ -33,12 +37,11 @@ function ModalKepulangan({ open, setOpen, tanggalActive }) {
           <Icon name="remove" /> Batal
         </Button>
         <Button
-          // loading={pulang.loading}
-          loading={pulang.isLoading}
-          disabled={pulang.isLoading}
+          loading={mutate.isLoading}
+          disabled={mutate.isLoading}
           color="green"
           onClick={() => {
-            pulang.mutate({
+            mutate.mutate( payload, {
               onSuccess: () => {
                 setOpen(false);
               },
@@ -52,4 +55,4 @@ function ModalKepulangan({ open, setOpen, tanggalActive }) {
   );
 }
 
-export default ModalKepulangan;
+export default ModalKonfirmasi;

@@ -107,7 +107,7 @@ export default function Pulang() {
           setFieldValue,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <section className="mt-5">
+            <section >
               <div className=" h-full">
                 <div className=" grid grid-cols-8 gap-5">
                   <div className="col-span-8 lg:col-span-4">

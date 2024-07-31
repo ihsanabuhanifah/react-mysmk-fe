@@ -1,12 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import { useEffect, useState } from "react";
 import { Form, Tab, Table, Input, Icon, Button } from "semantic-ui-react";
-import {
-  useKehadiran,
-  useSubmitDatang,
-  useSubmitPulang,
-} from "../../../api/guru/absensi";
+import { useKehadiran, useSubmitDatang } from "../../../api/guru/absensi";
 import { TableLoading } from "../../../components";
 import { checkRole, showFormattedDate } from "../../../utils";
 import dayjs from "dayjs";
@@ -15,14 +10,18 @@ import { toast } from "react-toastify";
 import ModalIzin from "./Modal";
 import useList from "../../../hook/useList";
 import ModalKepulangan from "./ModalKepulangan";
+import { LabelStatus } from "../../../components/Label";
+import Checkbox from "../../../components/Checkbox";
+import useCheckbox from "../../../hook/useCheckbox";
 export default function Kehadiran() {
   const [userLocation, setUserLocation] = useState(null);
   const { dataMe } = useAuthMe();
-
+  const { handleCheck, isChecked, payload, setPayload } = useCheckbox();
   const { roles } = useList();
   const [open, setOpen] = useState(false);
   const [openPulang, setOpenPulang] = useState(false);
   const [jarak, setJarak] = useState(100000000);
+  let [id, setId] = useState(0);
   let [tanggalActive, setTanggalActive] = useState(
     dayjs().format("YYYY-MM-DD")
   );
@@ -50,7 +49,7 @@ export default function Kehadiran() {
   }
   const getUserLocation = () => {
     if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
 
@@ -98,14 +97,22 @@ export default function Kehadiran() {
 
   return (
     <LayoutPage title="Kehadiran Guru">
-      <ModalIzin open={open} setOpen={setOpen} tanggalActive={tanggalActive} />
+     
+      <ModalIzin
+        values={payload}
+        setValues={setPayload}
+        open={open}
+        setOpen={setOpen}
+        tanggalActive={tanggalActive}
+        setId={setId}
+      />
       <ModalKepulangan
         open={openPulang}
         setOpen={setOpenPulang}
         tanggalActive={tanggalActive}
       />
-      {JSON.stringify(userLocation)}
-      <section className="mt-5">
+
+      <section>
         {jarak > 50 && (
           <div class="ui warning message">
             <i class="close icon"></i>
@@ -113,16 +120,9 @@ export default function Kehadiran() {
             ABSENSI bisa dilakukan jika jarak kurang dari 10 meter dari lokasi
             absensi SMK MADINATULQURAN. Saat ini Anda Berada pada jarak{" "}
             {Math.ceil(jarak)} meter. <br />{" "}
-            <button
-              onClick={() => {
-                getUserLocation();
-              }}
-              className="border rounded-md bg-green-500 hover:bg-green-100 px-4 py-2 text-white"
-            >
-              Perbaharui Lokasi
-            </button>
           </div>
         )}
+        
         <Form>
           <section className="grid sm:grid-cols-1 lg:grid-cols-4 gap-5">
             <div className="col-span-1 ">
@@ -187,7 +187,6 @@ export default function Kehadiran() {
                     size="medium"
                     color="blue"
                     disabled={
-                      
                       jarak > 50 ||
                       !!data?.data?.filter(
                         (item) =>
@@ -218,19 +217,21 @@ export default function Kehadiran() {
                     }}
                   />
                 </div>
-                <div>
-                  <Button
-                    content={"Izin Ketidakhadiran"}
-                    type="button"
-                    fluid
-                    icon={() => <Icon name="edit outline" />}
-                    size="medium"
-                    color="red"
-                    onClick={() => {
-                      setOpen(true);
-                    }}
-                  />
-                </div>
+                {checkRole(roles, "Admin") && (
+                  <div>
+                    <Button
+                      content={"Izin Ketidakhadiran"}
+                      type="button"
+                      fluid
+                      icon={() => <Icon name="edit outline" />}
+                      size="medium"
+                      color="red"
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    />
+                  </div>
+                )}
               </>
             )}
           </section>
@@ -254,6 +255,9 @@ export default function Kehadiran() {
         <Table>
           <Table.Header>
             <Table.Row>
+              {checkRole(roles, "Admin") && (
+                <Table.HeaderCell></Table.HeaderCell>
+              )}
               <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Tanggal</Table.HeaderCell>
 
@@ -263,9 +267,9 @@ export default function Kehadiran() {
               <Table.HeaderCell>Status Kehadiran</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>
 
-              {checkRole(roles, "admin") && (
+              {/* {checkRole(roles, "Admin") && (
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
-              )}
+              )} */}
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -277,14 +281,46 @@ export default function Kehadiran() {
             >
               {data?.data?.map((item, index) => (
                 <Table.Row key={index}>
+                  {checkRole(roles, "Admin") && (
+                    <Table.Cell>
+                      <Checkbox
+                        disabled={
+                          item.status === "open" || item.status === "progress"
+                        }
+                        checked={isChecked(item.id)}
+                        onChange={(e) => {
+                          handleCheck(e, item.id);
+                        }}
+                      />
+                    </Table.Cell>
+                  )}
                   <Table.Cell>{index + 1}</Table.Cell>
                   <Table.Cell>{showFormattedDate(item.tanggal)}</Table.Cell>
                   <Table.Cell>{item.teacher.nama_guru}</Table.Cell>
                   <Table.Cell>{item.jam_datang || "-"}</Table.Cell>
                   <Table.Cell>{item.jam_pulang || "-"}</Table.Cell>
-                  <Table.Cell>{item.status || "-"}</Table.Cell>
-                  <Table.Cell>{item.keterangan || "-"}</Table.Cell>
-                  {checkRole(roles, "admin") && <Table.Cell>{"-"}</Table.Cell>}
+                  <Table.Cell>
+                    <LabelStatus status={item.status} />
+                  </Table.Cell>
+                  <Table.Cell>
+                    <span className="text-xs">{item.keterangan || "-"}</span>
+                  </Table.Cell>
+                  {/* {checkRole(roles, "Admin") && (
+                    <Table.Cell>
+                      {" "}
+                      <Button
+                        content={"Absen"}
+                        type="button"
+                        fluid
+                        size="medium"
+                        color="red"
+                        onClick={() => {
+                          setId(item.teacher.id);
+                          setOpen(true);
+                        }}
+                      />
+                    </Table.Cell>
+                  )} */}
                 </Table.Row>
               ))}
             </TableLoading>

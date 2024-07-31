@@ -42,3 +42,22 @@
     display: none;
   }
 }
+
+
+.table-wrapper {
+  max-height: 500px; /* Adjust the height as needed */
+  overflow-y: auto;
+  position: relative;
+}
+
+.table-wrapper table {
+  border-collapse: separate;
+  width: 100%;
+}
+
+.table-wrapper th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}

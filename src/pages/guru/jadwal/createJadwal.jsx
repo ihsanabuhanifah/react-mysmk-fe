@@ -89,7 +89,7 @@ export function CreateJadwal() {
   let { dataKelas, dataGuru, dataMapel, dataTa } = useList();
   return (
     <LayoutPage title={"Tambah Jadwal"}>
-      <section className="mt-5">
+      <section>
         <Formik
           initialValues={initialState}
           //   validationSchema={laporanSchema}

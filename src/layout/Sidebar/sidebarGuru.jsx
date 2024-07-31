@@ -40,6 +40,8 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
+  console.log('ro;e', roles)
+
   return (
     <>
       <ModalLogout open={open} setOpen={setOpen} />
@@ -122,7 +124,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="absensi"
@@ -152,7 +154,7 @@ export default function SidebarGuru({ setSidebar }) {
           }
         />
 
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`pengampu/halaqoh/absensi`}
@@ -167,7 +169,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`bank-soal`}
@@ -182,7 +184,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`exam`}
@@ -212,7 +214,7 @@ export default function SidebarGuru({ setSidebar }) {
         />
         {/* <NavButton to="mata pelajaran" title={"Mata Pelajaran"} logo={<LogoJadwal />} /> */}
         {/* <NavButton to="kelas" title={"Kelas"} logo={<LogoJadwal />} /> */}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="pelanggaran"
@@ -227,7 +229,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="prestasi"
@@ -243,7 +245,7 @@ export default function SidebarGuru({ setSidebar }) {
           />
         )}
         {/* <NavButton to="penilaian" title={"Penilaian"} logo={<LogoJadwal />} /> */}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="perizinan-pulang"
@@ -260,7 +262,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="perizinan-kunjungan"
@@ -277,7 +279,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="laporan-guru-piket"

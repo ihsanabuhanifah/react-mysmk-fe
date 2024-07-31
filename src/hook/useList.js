@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   listKelas,
   listMapel,
@@ -12,7 +12,10 @@ import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 
+import Cookies from "js-cookie";
+
 export default function useList() {
+  let roles = jwt_decode(Cookies.get("mysmk_token"))
   let { data: identitas } = useQuery(
     //query key
     ["authme"],
@@ -30,19 +33,7 @@ export default function useList() {
       },
     }
   );
-  let { data: roles } = useQuery(
-    //query key
-    ["get_role_me"],
-    //axios function,triggered when page/pageSize change
-    () => getRoleMe(),
-    //configuration
-    {
-      keepPreviousData: true,
-      staleTime: 1000 * 60 * 60 * 12,
-      refetchOnWindowFocus: false,
-      select: (response) => response.data?.role,
-    }
-  );
+
 
   let { data: dataKelas } = useQuery(
     //query key

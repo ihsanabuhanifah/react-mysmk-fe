@@ -19,6 +19,7 @@ import usePage from "../../../hook/usePage";
 import { PaginationTable } from "../../../components";
 import { deleteBankSoal, listBankSoal } from "../../../api/guru/bank_soal";
 import { useQueryClient } from "react-query";
+import { LabelStatus } from "../../../components/Label";
 export default function ListBankSoal() {
   const navigate = useNavigate();
 
@@ -66,7 +67,7 @@ export default function ListBankSoal() {
         onConfirm={onConfirmDelete}
         title={"Apakah yakin akan menghapus soal terpilih ?"}
       />
-      <div className="mt-5 space-y-5">
+      <div className=" space-y-5">
         <section className="grid grid-cols-5 gap-5">
           <div className="col-span-4 lg:col-span-1">
             <Button
@@ -93,8 +94,8 @@ export default function ListBankSoal() {
                 <Table.HeaderCell>Bab</Table.HeaderCell>
                 <Table.HeaderCell>Tipe</Table.HeaderCell>
                 <Table.HeaderCell>Point</Table.HeaderCell>
-
-                <Table.HeaderCell>Aksi</Table.HeaderCell>
+ 
+                <Table.HeaderCell >Aksi</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -111,24 +112,26 @@ export default function ListBankSoal() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.materi}</Table.Cell>
-                    <Table.Cell>{value?.tipe}</Table.Cell>
+                    <Table.Cell><LabelStatus status={value?.tipe}/></Table.Cell>
                     <Table.Cell>{value?.point}</Table.Cell>
 
                     <Table.Cell>
-                     
-                      <EditButton
-                        onClick={() => {
-                          navigate(`update/${value.id}`, {
-                            replace: true,
-                          });
-                        }}
-                      />
-                      <DeleteButton
-                        onClick={() => {
-                          let payload = [value?.id];
-                          confirmDelete(payload);
-                        }}
-                      />
+                      <span className="flex items-center justify-center">
+                        {" "}
+                        <EditButton
+                          onClick={() => {
+                            navigate(`update/${value.id}`, {
+                              replace: true,
+                            });
+                          }}
+                        />
+                        <DeleteButton
+                          onClick={() => {
+                            let payload = [value?.id];
+                            confirmDelete(payload);
+                          }}
+                        />
+                      </span>
                     </Table.Cell>
                   </Table.Row>
                 ))}

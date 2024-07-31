@@ -3,8 +3,13 @@ import { notifikasiAbsensi } from "../api/guru/absensi";
 import { notifikasiHalaqoh } from "../api/guru/halaqoh";
 import { getNotifikasiGuruPiket } from "../api/guru/laporan";
 import { useQuery } from "react-query";
+import useList from "./useList";
 
 export default function useNotif() {
+
+  let {roles} = useList()
+
+  console.log('role', roles)
   let { data: notifAbsensi } = useQuery(
     //query key
     ["notifikasi_absensi_kelas"],
@@ -12,6 +17,7 @@ export default function useNotif() {
     () => notifikasiAbsensi(),
     //configuration
     {
+      enabled : roles?.role?.toLowerCase() === 'guru',
       staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;
@@ -25,6 +31,7 @@ export default function useNotif() {
     () => notifikasiHalaqoh(),
     //configuration
     {
+      enabled : roles?.role?.toLowerCase() === 'guru',
       staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;
@@ -38,6 +45,7 @@ export default function useNotif() {
     () => getNotifikasiGuruPiket(),
     //configuration
     {
+      enabled : roles?.role?.toLowerCase() === 'guru',
       staleTime: 60 * 1000 * 5, // 1 menit,
       select: (response) => {
         return response.data;

@@ -46,7 +46,7 @@ export default function HalaqohSiswa() {
       {/* <ModalFilter open={open} setOpen={setOpen}>
         <AddSiswa />
       </ModalFilter> */}
-      <section className="grid grid-cols-6 gap-5 mb-5 mt-5">
+      <section className="grid grid-cols-6 gap-5 mb-5">
         {/* <Input
           onChange={(e) => {
             setKeyword(e.target.value);
@@ -57,7 +57,7 @@ export default function HalaqohSiswa() {
           placeholder="Nama Guru..."
         /> */}
         <div className=" col-span-3 lg:col-span-1">
-          {checkRole(roles, "admin") && (
+          {checkRole(roles, "Admin") && (
             <Button
               content={"Buat Jadwal"}
               type="submit"

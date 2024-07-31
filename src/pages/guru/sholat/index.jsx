@@ -205,7 +205,7 @@ export default function Sholat() {
                 setIsOpen={setIsOpen}
               />
             </Collapse>
-            <section className="mt-5">
+            <section>
               <div className="overflow-auto">
                 <div className="">
                   <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">

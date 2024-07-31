@@ -98,11 +98,15 @@ const pointOptions = [
   { key: "8", value: 8, text: 8 },
   { key: "9", value: 9, text: 9 },
   { key: "10", value: 10, text: 10 },
+  { key: "25", value: 25, text: 25 },
+  { key: "50", value: 50, text: 50 },
+  { key: "75", value: 75, text: 75 },
+  { key: "100", value: 100, text: 100 },
 ];
 const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
   { key: "2", value: "TF", text: "True False" },
-  { key: "3", value: "IS", text: "Isian Singkat" },
+  { key: "3", value: "ES", text: "Essay/Project" },
 ];
 const pgOptions = [
   { key: "1", value: "A", text: "A" },
@@ -112,26 +116,48 @@ const pgOptions = [
   { key: "5", value: "E", text: "E" },
 ];
 const tfOptions = [
-  { key: "1", value: 1, text: "true" },
-  { key: "2", value: 0, text: "false" },
+  { key: "1", value: "true", text: "true" },
+  { key: "2", value: "false", text: "false" },
 ];
 
 const jenisOptions = [
-  { key: "1", value: "harian", text: "Ulangan Harian" },
-  { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
-  { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
-  { key: "4", value: "US", text: "Ujian Sekolah" },
-  { key: "5", value: "remidial", text: "Remidial" },
-];
-const statusUjianOptions = [
-  { key: "1", value: "open", text: "Open" },
-  { key: "2", value: "in progress", text: "In Progress" },
-  { key: "3", value: "finish", text: "Finished" },
-  { key: "4", value: "locked", text: "Locked" },
+  { key: "1", value: "tugas", text: "Tugas" },
+  { key: "2", value: "harian", text: "Ulangan Harian" },
+  { key: "3", value: "PTS", text: "Penilaian Tengah Semester" },
+  { key: "4", value: "PAS", text: "Penilain Akhir Semester" },
+  { key: "5", value: "US", text: "Ujian Sekolah" },
   
 ];
 
+const durasiOptions = [
+  { key: "1", value: 60, text: "60 Menit" },
+  { key: "2", value: 90, text: "90 Menit" },
+  { key: "3", value: 120, text: "120 Menit" },
+  { key: "4", value: 180, text: "180 Menit" },
+  { key: "5", value: 360, text: "6 Jam" },
+  { key: "6", value: 720, text: "12 Jam" },
+  { key: "7", value: 1440, text: "1 Hari" },
+  { key: "8", value: 2880, text: "2 Hari" },
+  { key: "9", value: 4320, text: "3 Hari" },
+  { key: "10", value: 5760, text: "4 Hari" },
+  { key: "11", value: 7200, text: "5 Hari" },
+  { key: "12", value: 8640, text: "6 Hari" },
+  { key: "13", value: 10080, text: "7 Hari" },
+];
+const statusUjianOptions = [
+  { key: "1", value: "draft", text: "Draft" },
+  { key: "2", value: "open", text: "Open" },
+  { key: "4", value: "In Progress", text: "In Progress" },
+  { key: "4", value: "finish", text: "Finished" },
+];
+
+const tipeUjianOptions = [
+  { key: "1", value: "closed", text: "Closed Book" },
+  { key: "2", value: "open", text: "Open Book" },
+];
+
 export {
+  durasiOptions,
   izinOptions,
   kategoriOptions,
   approveOptions,
@@ -149,5 +175,6 @@ export {
   pgOptions,
   tfOptions,
   jenisOptions,
-  statusUjianOptions
+  statusUjianOptions,
+  tipeUjianOptions,
 };

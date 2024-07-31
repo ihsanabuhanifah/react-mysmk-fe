@@ -5,6 +5,9 @@ import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
+import "react-quill/dist/quill.snow.css";
+import "katex/dist/katex.min.css";
+
 import {
   Jadwal,
   Absensi,
@@ -42,11 +45,13 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
+import PenilaianPage from "./pages/guru/exam/PenilaianPage";
 import DashboardGuru from "./pages/guru/dashboard/dashboardguru";
 import DashboardSiswa from "./pages/siswa/dashboard/dashboardsiswa";
 import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
+import UjianSiswa from "./pages/siswa/ujian";
 
 function App() {
   return (
@@ -123,6 +128,7 @@ function App() {
           <Route path="exam" element={<ListExam />} />
 
           <Route path="exam/tambah" element={<FormExam />} />
+          <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
 
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
@@ -157,6 +163,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardSiswa />} />
+          <Route path="ujian" element={<UjianSiswa />} />
           <Route path="profile" element={<Profile />}>
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="security" element={<SecuritySiswa />} />

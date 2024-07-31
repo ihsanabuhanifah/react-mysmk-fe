@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
@@ -21,11 +21,16 @@ import { PaginationTable } from "../../../components";
 import { useQueryClient } from "react-query";
 import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
+import ModalKonfirmasi from "./ModalKonfirmasi";
+import ModalPenilaian from "./PenilaianPage";
+import { LabelStatus, LabelTipeUjian } from "../../../components/Label";
+
 export default function ListExam() {
   const navigate = useNavigate();
+  let [open, setOpen] = useState(false);
 
+  let [payload, setPayload] = useState({});
   let { page, pageSize, setPage, setPageSize } = usePage();
-
   let params = {
     page,
     pageSize,
@@ -59,8 +64,6 @@ export default function ListExam() {
     },
   });
 
-  
-
   return (
     <LayoutPage title="List Ujian">
       <ModalAlert
@@ -70,7 +73,16 @@ export default function ListExam() {
         onConfirm={onConfirmDelete}
         title={"Apakah yakin akan menghapus soal terpilih ?"}
       />
-      <div className="mt-5 space-y-5">
+      {open && (
+        <ModalKonfirmasi
+          open={open}
+          setOpen={setOpen}
+          payload={payload}
+          setPayload={setPayload}
+        />
+      )}
+
+      <div className=" space-y-5">
         <section className="grid grid-cols-5 gap-5">
           <div className="col-span-4 lg:col-span-1">
             <Button
@@ -96,17 +108,20 @@ export default function ListExam() {
                 <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
                 <Table.HeaderCell>Kelas</Table.HeaderCell>
                 <Table.HeaderCell>Jenis Ujian</Table.HeaderCell>
+                <Table.HeaderCell>Tipe Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
+                <Table.HeaderCell>Durasi</Table.HeaderCell>
                 <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
                 <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
+                <Table.HeaderCell>Publish</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               <TableLoading
-                count={8}
+                count={12}
                 isLoading={isLoading}
-                data={data?.data}
+                data={data?.data?.rows}
                 messageEmpty={"Data Tidak Ditemukan"}
               >
                 {data?.data?.rows?.map((value, index) => (
@@ -116,8 +131,10 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{value?.jenis_ujian}</Table.Cell>
-                    <Table.Cell>{value?.status}</Table.Cell>
+                    <Table.Cell>{<LabelStatus status={value?.jenis_ujian}/>}</Table.Cell>
+                    <Table.Cell><LabelTipeUjian status={value?.tipe_ujian}/></Table.Cell>
+                    <Table.Cell><LabelTipeUjian status={value?.status}/></Table.Cell>
+                    <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
                       {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
@@ -125,23 +142,52 @@ export default function ListExam() {
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
-                      <ViewButton
-                        onClick={() => {
-                          console.log("jalan");
-                        }}
-                      />
-                      <EditButton
-                        onClick={() => {
-                          navigate(`update/${value.id}`, {
-                            replace: true,
-                          });
-                        }}
-                      />
-                      <DeleteButton
-                        onClick={() => {
-                          confirmDelete(value?.id);
-                        }}
-                      />
+                      <span className="flex items-center">
+                        {" "}
+                        <EditButton
+                          onClick={() => {
+                            navigate(`update/${value.id}`, {
+                              replace: true,
+                            });
+                          }}
+                        />
+                        <DeleteButton
+                          onClick={() => {
+                            confirmDelete(value?.id);
+                          }}
+                        />
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {value?.status !== "draft" ? (
+                        <Button
+                          type="button"
+                          color="facebook"
+                          icon={() => <Icon name="laptop" />}
+                          onClick={() => {
+                            navigate(
+                              `penilaian/${value.id}/${value?.mapel?.nama_mapel}`,
+                              {
+                                replace: true,
+                              }
+                            );
+                          }}
+                        />
+                      ) : (
+                        <Button
+                          disabled={value?.status !== "draft"}
+                          type="button"
+                          color="teal"
+                          icon={() => <Icon name="external alternate" />}
+                          onClick={() => {
+                            setPayload(() => {
+                              return value;
+                            });
+
+                            setOpen(true);
+                          }}
+                        />
+                      )}
                     </Table.Cell>
                   </Table.Row>
                 ))}

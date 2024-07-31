@@ -1,9 +1,12 @@
 /* ./src/index.css */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,500&display=swap");
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 body {
   padding: 0;
@@ -85,7 +88,7 @@ div::-webkit-scrollbar-thumb:hover {
 }
 
 @media only screen and (max-width: 768px) {
-  .ui.table thead {
+  .ui.table thead th {
     display: none;
   }
 }

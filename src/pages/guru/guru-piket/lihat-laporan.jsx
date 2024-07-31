@@ -99,7 +99,7 @@ export default function LihatLaporanGuruPiket() {
 
   return (
     <LayoutPage title={`Lihat Laporan Piket`}>
-      <section className="mt-5">
+      <section >
         <div className="flex items-center justify-between mb-5">
           <Button
             type="button"
