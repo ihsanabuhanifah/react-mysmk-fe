@@ -232,11 +232,7 @@ export default function DaftarSiswa() {
                       /> */}
                       <EditButton
                         onClick={() =>
-                          navigate(
-                            `update-siswa/${encodeURIComponent(
-                              value?.siswa?.nama_siswa
-                            )}`
-                          )
+                          navigate(`update-siswa/${value?.siswa?.id}`)
                         }
                       />
                       <DeleteButton

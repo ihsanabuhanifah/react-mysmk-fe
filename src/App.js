@@ -54,6 +54,7 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
+import { ProfileSiswa } from "./pages/guru/daftar-siswa/siswa/profile";
 
 function App() {
   return (
@@ -109,7 +110,8 @@ function App() {
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
-          <Route path="daftar-siswa/update-siswa/:nama" element={<EditSiswa />} />
+          <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
+          {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />

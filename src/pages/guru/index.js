@@ -27,7 +27,7 @@ import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
 import { EditSiswa } from "./daftar-siswa/edit-siswa";
-
+// import { ProfileSiswa } from "./daftar-siswa/siswa/profile";
 export {
   Absensi,
   Jadwal,
@@ -58,4 +58,5 @@ export {
   ListExam,
   CreateSiswa,
   EditSiswa,
+  // ProfileSiswa
 };
