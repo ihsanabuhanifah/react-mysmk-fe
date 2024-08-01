@@ -52,6 +52,8 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
+import LandingPage from "./pages/ppdb";
+import LoginPpdb from "./pages/ppdb/login";
 
 function App() {
   return (
@@ -69,6 +71,9 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
+
+        {/* Routes Auth */}
+
         <Route
           path="/login"
           element={
@@ -93,6 +98,8 @@ function App() {
             </ProtectLogin>
           }
         />
+
+        {/* Routes Guru */}
 
         <Route
           path="/guru"
@@ -154,6 +161,8 @@ function App() {
           />
         </Route>
 
+        {/* Routes Siswa */}
+
         <Route
           path="/siswa"
           element={
@@ -170,6 +179,11 @@ function App() {
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
+
+        {/* Routes PPDB */}
+
+        <Route path="/ppdb" element={<LandingPage />} />
+        <Route path="login" element={<LoginPpdb />} />
       </Routes>
     </div>
   );
@@ -182,6 +196,8 @@ const Home = () => {
     <div>
       <p>Home</p>
       <Link to="/login">login</Link>
+      <br></br>
+      <Link to="/ppdb">ppdb</Link>
     </div>
   );
 };
