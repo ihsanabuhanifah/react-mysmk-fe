@@ -87,8 +87,10 @@ export async function listAlquranOptions(keyword, loadedOptions, additional) {
 export async function listSiswaOptions(keyword, loadedOptions, additional) {
   let result = await axios.get(`/list/siswa`, {
     params: {
-      page: additional.page,
-      pageSize: 10,
+      // page: additional.page,
+      // tahun_ajaran:'2022/2023',
+      angkatan:8,
+      // pageSize: 50,
       keyword,
     },
   });

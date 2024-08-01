@@ -33,6 +33,8 @@ import {
   ListExam,
   FormExam,
   CreateSiswa,
+  FiturPkl,
+  CreatePkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -141,6 +143,8 @@ function App() {
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
+          <Route path="fitur-siswa-pkl" element={<FiturPkl />} />
+          <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
         </Route>
 
         <Route
