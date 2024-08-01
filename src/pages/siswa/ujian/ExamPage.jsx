@@ -70,7 +70,7 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   useEffect(() => {
     if (!!data?.data?.waktu_tersisa === true) {
-      setWaktu(data?.data?.waktu_tersisa * 60);
+      setWaktu(data?.data?.waktu_tersisa);
     }
     if (!!data?.data?.soal === true) {
       let res = JSON.parse(data.data.soal);
@@ -82,12 +82,14 @@ export default function ExamPage({ examActive, setExamActive }) {
           id: item.id,
           tipe: item.tipe,
           jawaban: "",
+          file: "",
         }));
       } else {
         dataSoal = JSON.parse(data.data.jawaban).map((item) => ({
           id: item.id,
           tipe: item.tipe,
           jawaban: item.jawaban,
+          file: item.file,
         }));
       }
 
@@ -110,12 +112,15 @@ export default function ExamPage({ examActive, setExamActive }) {
     );
   }
 
+  console.log("pauload", payload);
+
   return (
     <div
-      contentEditable
       onMouseLeave={() => {
-        setMouse(true);
-
+        // setMouse(true);
+        // if (data?.data?.tipe_ujian === "closed") {
+        //   alert("anda");
+        // }
         // window.location.reload()
       }}
       onMouseEnter={() => {
@@ -143,9 +148,11 @@ export default function ExamPage({ examActive, setExamActive }) {
           className="col-span-6 h-screnn w-full overflow-auto px-10 pt-5 pb-32 border shadow-lg rounded-md"
         >
           <div className="flex items-center justify-between">
-            <p className="text-red-500 italic font-bold">
-              Jangan mengeluarkan area mouse dari layar{" "}
-            </p>
+            {data?.data?.tipe_ujian === "closed" && (
+              <p className="text-red-500 font-bold">
+                Jangan mengeluarkan mouse dari area ujian
+              </p>
+            )}
 
             {cutDown}
             <span className="font-semibold text-lg">
@@ -166,7 +173,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                   </div>
                 )}
                 <div>
-                  {index === activeSoal && item.tipe === "PG" && (
+                  {index === activeSoal && item.tipe === "PG" ? (
                     <>
                       <Pg
                         item={item}
@@ -175,9 +182,9 @@ export default function ExamPage({ examActive, setExamActive }) {
                         setPayload={setPayload}
                       />
                     </>
-                  )}
+                  ) : <></>}
 
-                  {index === activeSoal && item.tipe === "TF" && (
+                  {index === activeSoal && item.tipe === "TF" ? (
                     <>
                       <TF
                         item={item}
@@ -186,17 +193,18 @@ export default function ExamPage({ examActive, setExamActive }) {
                         setPayload={setPayload}
                       />
                     </>
-                  )}
-                  {index === activeSoal && item.tipe === "ES" && (
+                  ) : <></>}
+                  {index === activeSoal && item.tipe === "ES" ? (
                     <>
                       <ES
+                      tipe={data?.data?.tipe_ujian}
                         item={item}
                         soals={soals}
                         payload={payload}
                         setPayload={setPayload}
                       />
                     </>
-                  )}
+                  ): <></>}
                 </div>
               </React.Fragment>
             );

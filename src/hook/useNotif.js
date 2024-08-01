@@ -9,7 +9,7 @@ export default function useNotif() {
 
   let {roles} = useList()
 
-  console.log('role', roles)
+  
   let { data: notifAbsensi } = useQuery(
     //query key
     ["notifikasi_absensi_kelas"],

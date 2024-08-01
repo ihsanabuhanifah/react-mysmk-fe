@@ -18,7 +18,6 @@ baseURL: "http://localhost:8085/",
   },
   headers,
 });
-
 axiosClient.interceptors.response.use(
   (response) => {
     return response;

@@ -32,9 +32,6 @@ export const useCreatePenilaian = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
-
-
-     
       return axios.post(`/guru/nilai/create`, {
         id: payload.id,
         waktu_mulai: payload.waktu_mulai,
@@ -77,6 +74,30 @@ export const usePenilaian = (payload) => {
   return { isLoading, data, isFetching };
 };
 
+//soal
+export function listSoal(id) {
+  syncToken();
+  return axios.get(`/guru/nilai/soal/teacher/${id}`);
+}
+
+export const useSoal = (id) => {
+  const { isLoading, data, isFetching } = useQuery(
+    ["/guru/nilai/list/teacher", id],
+    () => listSoal(id),
+    {
+      keepPreviousData: true,
+      enabled: !!id === true,
+
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+
+  return { isLoading, data, isFetching };
+};
+
+//soal
+
 export const useRemidial = () => {
   let queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
@@ -100,7 +121,6 @@ export const useRemidial = () => {
   return mutate;
 };
 
-
 export const useRefreshCount = () => {
   let queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
@@ -109,6 +129,29 @@ export const useRefreshCount = () => {
       return axios.put(`/guru/nilai/refresh/teacher`, {
         payload,
       });
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
+
+export const useUpdateLastExam = () => {
+  let queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/nilai/update-last-exam`, 
+        payload,
+      );
     },
     {
       onSuccess: (response) => {
