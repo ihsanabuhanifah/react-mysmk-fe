@@ -1,3 +1,5 @@
+import { useMutation } from "react-query";
+import useToast from "../../hook/useToast";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 
@@ -6,7 +8,23 @@ export function getProfile() {
   return axios.get('/santri/profile');
 }
 
-export function updateProfile(values) {
+export function useUpdateProfile() {
   syncToken()
-  return axios.put('/santri/profile/update', values)
+  const { successToast, warningToast } = useToast();
+
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put('/santri/profile/update', payload)
+    },
+    {
+      onSuccess: () => {
+        successToast('Berhasil Memperbaharui Profile!');
+      },
+      onError: () => {
+        warningToast('Gagal!')
+      }
+    }
+  )
+
+  return mutate
 } 

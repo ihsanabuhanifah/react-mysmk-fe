@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { Formik } from 'formik'
 import { Button, Form, Input } from 'semantic-ui-react'
 import { format, parseISO } from 'date-fns'
-import { updateProfile } from '../../../api/siswa/profile'
+import { useUpdateProfile } from '../../../api/siswa/profile'
 
 const profileSchema = Yup.object().shape({
 	nama_siswa: Yup.string().nullable().required('Wajib Diisi'),
@@ -32,21 +32,17 @@ export default function ProfileEdit() {
 		tanggal_lahir: santriProfile.tanggal_lahir,
 	}
 
+	const { mutate } = useUpdateProfile();
+
 	const onSubmit = async (values, { setErrors }) => {
 		values.tanggal_lahir = format(parseISO(values.tanggal_lahir), 'yyyy-MM-dd')
 		console.log(values)
-		try {
-			await updateProfile(values)
-			
-		} catch (err) {
-      setErrors(err.response.data);
-      return alert("Periksa koneksi internet anda");
-		}
+		mutate(values)
 	}
 
 	return (
 		<div className="mt-4  pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
-			<h1 className="text-2xl ml-5 capitalize mb-8 font-black font-poppins">Edit Profile</h1>
+			<h1 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">Edit Profile</h1>
 
 			<div className="flex flex-col w-full items-center ml-5">
 				<div className="w-[85px] border relative h-[85px] rounded-full bg-red-200 mb-4">

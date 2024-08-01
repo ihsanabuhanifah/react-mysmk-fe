@@ -10,7 +10,7 @@ export default function UjianSiswa() {
   const { data } = useExam(examActive);
 
   return (
-    <LayoutSiswa title="Dashboard">
+    <LayoutSiswa title="Exam">
       {JSON.stringify(examActive)}
       <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5">
         {examActive ? (

@@ -52,6 +52,8 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
+import HasilBelajar from "./pages/siswa/hasil-belajar/hasilBelajar";
+import HasilBelajarDetail from "./pages/siswa/hasil-belajar/hasilBelajarDetail";
 
 function App() {
   return (
@@ -168,6 +170,8 @@ function App() {
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="security" element={<SecuritySiswa />} />
           </Route>
+          <Route path="hasil-belajar" element={<HasilBelajar />} />
+            <Route path="hasil-belajar/:id_mapel" element={<HasilBelajarDetail />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
