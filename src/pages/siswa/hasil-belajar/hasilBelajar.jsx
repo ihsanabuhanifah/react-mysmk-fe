@@ -7,9 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function HasilBelajar() {
   const navigate = useNavigate()
-	const { data, isLoading } = useGetHasilBelajar()
-
-	console.log(data)
+	const { data, isFetching } = useGetHasilBelajar()
 
 	return (
 		<LayoutSiswa title="Hasil Belajar">
@@ -23,13 +21,13 @@ export default function HasilBelajar() {
 						<Table.HeaderCell>Aksi</Table.HeaderCell>
 					</Table.Header>
 					<Table.Body>
-						<TableLoading count={10} isLoading={isLoading} data={data?.data} messageEmpty="Data tidak ditemukan">
+						<TableLoading count={10} isLoading={isFetching} data={data?.data} messageEmpty="Data tidak ditemukan">
 							{data?.data.map((value, i) => (
 								<Table.Row key={i}>
 									<Table.Cell>{i + 1}</Table.Cell>
-									<Table.Cell>{value.nama_mapel}</Table.Cell>
-									<Table.Cell>{value.hasil_belajar[0].nilai}</Table.Cell>
-									<Table.Cell>{value.hasil_belajar[0].deskripsi}</Table.Cell>
+									<Table.Cell>{value?.nama_mapel}</Table.Cell>
+									<Table.Cell>{value?.hasil_belajar[0]?.nilai}</Table.Cell>
+									<Table.Cell>{value?.hasil_belajar[0]?.deskripsi}</Table.Cell>
 									<Table.Cell>
 										<Button onClick={() => navigate(`/siswa/hasil-belajar/${value.id}`)} content="Detail" type="button"  size="medium" color="green" />
 									</Table.Cell>

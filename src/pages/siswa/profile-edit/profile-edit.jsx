@@ -6,6 +6,8 @@ import { Formik } from 'formik'
 import { Button, Form, Input } from 'semantic-ui-react'
 import { format, parseISO } from 'date-fns'
 import { useUpdateProfile } from '../../../api/siswa/profile'
+import lodash from 'lodash'
+import { LoadingPage } from '../../../components'
 
 const profileSchema = Yup.object().shape({
 	nama_siswa: Yup.string().nullable().required('Wajib Diisi'),
@@ -32,12 +34,18 @@ export default function ProfileEdit() {
 		tanggal_lahir: santriProfile.tanggal_lahir,
 	}
 
-	const { mutate } = useUpdateProfile();
+
+	const { mutate, isLoading } = useUpdateProfile();
 
 	const onSubmit = async (values, { setErrors }) => {
 		values.tanggal_lahir = format(parseISO(values.tanggal_lahir), 'yyyy-MM-dd')
 		console.log(values)
 		mutate(values)
+
+	}
+
+	if(isLoading) {
+		return <LoadingPage />
 	}
 
 	return (
@@ -51,8 +59,14 @@ export default function ProfileEdit() {
 				</div>
 
 				<Formik initialValues={initialState} validationSchema={profileSchema} enableReinitialize onSubmit={onSubmit}>
-					{({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting }) => (
-						<Form onSubmit={handleSubmit} className="w-full">
+					{({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting }) => {
+						
+						console.log(values)
+						console.log(santriProfile)
+						console.log('sub', isSubmitting)
+
+						return (
+							<Form onSubmit={handleSubmit} className="w-full">
 							<Form.Field
 								control={Input}
 								label="Nama Lengkap"
@@ -203,9 +217,10 @@ export default function ProfileEdit() {
 								}
 								type="text"
 							/>
-							<Button content={isSubmitting ? 'Proses' : 'Simpan'} type="submit" fluid size="medium" color="green" loading={isSubmitting} disabled={isSubmitting} />
+							<Button content={isSubmitting ? 'Proses' : 'Simpan'} type="submit" fluid size="medium" color="green" loading={isSubmitting} disabled={isSubmitting || lodash.isEqual(initialState, values)} />
 						</Form>
-					)}
+						)
+					}}
 				</Formik>
 			</div>
 		</div>
