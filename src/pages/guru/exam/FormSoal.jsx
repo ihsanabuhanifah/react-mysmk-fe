@@ -46,8 +46,6 @@ let personalSchema = Yup.object().shape({
   tipe_ujian: Yup.string().nullable().required("wajib disii"),
   durasi: Yup.string().nullable().required("wajib disii"),
   soal: Yup.array().min(1, "Minimal pilih satu soal"),
-
- 
 });
 let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
@@ -58,7 +56,7 @@ export default function FormExam() {
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas } = useList();
   const { id } = useParams();
-  let { isLoading: isLoadingUpdate, data: dataExam } = useQuery(
+  let { data: dataExam } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -499,16 +497,19 @@ export default function FormExam() {
                       </div>
 
                       {!!errors?.payload?.[index]?.soal === true && (
-                <div className="col-span-2" ><Message negative>
-                <MessageHeader>{errors?.payload?.[index]?.soal}</MessageHeader>
-              </Message></div>
-              )}
+                        <div className="col-span-2">
+                          <Message negative>
+                            <MessageHeader>
+                              {errors?.payload?.[index]?.soal}
+                            </MessageHeader>
+                          </Message>
+                        </div>
+                      )}
                     </section>
                   </div>
                 ))}
               </section>
 
-             
               <div className="mt-5">
                 {id ? (
                   <Button

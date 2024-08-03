@@ -26,7 +26,7 @@ function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
       open={open}
       size="large"
     >
-      <ModalHeader>Preview Soal </ModalHeader>
+      <ModalHeader>Jawaban Siswa </ModalHeader>
 
       <ModalContent>
         {soal &&

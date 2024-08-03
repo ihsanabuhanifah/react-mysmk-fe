@@ -166,3 +166,27 @@ export const useUpdateLastExam = () => {
   );
   return mutate;
 };
+
+
+export const useExamResult = () => {
+  let queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.put(`/guru/nilai/exam-result`, 
+        payload,
+      );
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
