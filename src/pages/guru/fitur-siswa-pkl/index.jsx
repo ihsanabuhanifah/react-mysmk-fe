@@ -5,7 +5,6 @@ import useDelete from '../../../hook/useDelete';
 import { useQuery, useQueryClient } from 'react-query';
 import { Formik } from 'formik';
 import * as Yup from "yup";
-import { createSholat, deleteAbsensiSholat, listSholat, updateAbensiSholat } from '../../../api/guru/shiolat';
 import useDebounce from '../../../hook/useDebounce';
 import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
 import dayjs from 'dayjs';
@@ -13,25 +12,25 @@ import { useNavigate } from 'react-router-dom';
 import usePage from "../../../hook/usePage";
 import { deleteSiswaPkl, listSiswaPkl } from '../../../api/guru/fitur-pkl';
 
-let fiturPklSchema = Yup.object().shape({
-    student_id: Yup.string().required("wajib diisi"),
-    nama_siswa: Yup.string().required("wajib diisi"),
-    alamat: Yup.string().required("wajib diisi"),
-    provinsi: Yup.string().required("wajib diisi"),
-    kota: Yup.string().required("wajib diisi"),
-    kecamatan: Yup.string().required("wajib diisi"),
-    desa: Yup.string().required("wajib diisi"),
-    rt: Yup.string().required("wajib diisi"),
-    rw: Yup.string().required("wajib diisi"),
-    kodepos: Yup.number().required("wajib diisi"),
-    // nama_perusahaan: Yup.string().required("wajib diisi"),
-    // daerah_perusahaan: Yup.string().required("wajib diisi"),
-    no_hp: Yup.number().required("wajib diisi"),
-});
+// let fiturPklSchema = Yup.object().shape({
+//     student_id: Yup.string().required("wajib diisi"),
+//     nama_siswa: Yup.string().required("wajib diisi"),
+//     alamat: Yup.string().required("wajib diisi"),
+//     provinsi: Yup.string().required("wajib diisi"),
+//     kota: Yup.string().required("wajib diisi"),
+//     kecamatan: Yup.string().required("wajib diisi"),
+//     desa: Yup.string().required("wajib diisi"),
+//     rt: Yup.string().required("wajib diisi"),
+//     rw: Yup.string().required("wajib diisi"),
+//     kodepos: Yup.number().required("wajib diisi"),
+//     // nama_perusahaan: Yup.string().required("wajib diisi"),
+//     // daerah_perusahaan: Yup.string().required("wajib diisi"),
+//     no_hp: Yup.number().required("wajib diisi"),
+// });
 
-let fiturPklArraySchema = Yup.object().shape({
-    fiturPkl: Yup.array().of(fiturPklSchema),
-});
+// let fiturPklArraySchema = Yup.object().shape({
+//     fiturPkl: Yup.array().of(fiturPklSchema),
+// });
 
 export default function FiturPkl() {
 
@@ -41,21 +40,10 @@ export default function FiturPkl() {
     let { page, pageSize, setPage, setPageSize } = usePage();
     let [nama, setNama] = React.useState("");
     let debouncedName = useDebounce(nama, 600);
-    // let queryClient = useQueryClient();
+    let queryClient = useQueryClient();
     let [mode, setMode] = React.useState("add");
     let [isOpen, setIsOpen] = React.useState(false);
-    // let {
-    //     showAlertDelete,
-    //     setShowAlertDelete,
-    //     deleteLoading,
-    //     confirmDelete,
-    //     onConfirmDelete,
-    // } = useDelete({
-    //     afterDeleted: () => queryClient.invalidateQueries("list-siswa-pkl"),
-    //     onDelete: (id) => {
-    //         return deleteAbsensiSholat(id);
-    //     },
-    // });
+   
 
     const initialValue = {
         createpkl: [
@@ -69,107 +57,40 @@ export default function FiturPkl() {
         ],
     };
 
-    // let parameter = {
-    //     page: page,
-    //     pageSize: pageSize,
-    //     nama_siswa: debouncedName,
-    // };
-
-    // let { data, isLoading, isFetching } = useQuery(
-    //     //query key
-    //     ["list-siswa-pkl", parameter],
-    //     //axios function,triggered when page/pageSize change
-    //     () => listSholat(parameter),
-    //     //configuration
-    //     {
-    //         refetchInterval: 1000 * 60 * 60,
-    //         select: (response) => {
-    //             return response.data;
-    //         },
-    //     }
-    // );
     let params = {
         page,
         pageSize,
-    
-        is_all: 1,
-      };
-      let { data, isLoading } = useQuery(
+
+        // is_all: 1,
+    };
+    let { data, isLoading } = useQuery(
         //query key
-        ["/ujian/list", params],
+        ["/tempat-pkl/list", params],
         //axios function,triggered when page/pageSize change
         () => listSiswaPkl(params),
         //configuration
         {
-          // refetchInterval: 1000 * 60 * 60,
-          select: (response) => {
-            return response.data;
-          },
+            // refetchInterval: 1000 * 60 * 60,
+            select: (response) => {
+                return response.data;
+            },
         }
-      );
-      let queryClient = useQueryClient();
-      let {
+    );
+
+    let {
         showAlertDelete,
         setShowAlertDelete,
         deleteLoading,
         confirmDelete,
         onConfirmDelete,
-      } = useDelete({
-        afterDeleted: () => queryClient.invalidateQueries("/ujian/list"),
+    } = useDelete({
+        afterDeleted: () => queryClient.invalidateQueries("/tempat-pkl/list"),
         onDelete: (id) => {
-          return deleteSiswaPkl(id);
+            return deleteSiswaPkl(id);
         },
-      });
+    });
 
-    const onSubmit = async (values, { resetForm }) => {
-        try {
-            let response;
-            if (mode === "update") {
-                response = await updateAbensiSholat(values);
-            } else {
-                response = await createSholat(values);
-            }
-            console.log(response);
-            queryClient.invalidateQueries("list-siswa-pkl");
-            resetForm();
-            setIsOpen(false);
-            return toast.success(response?.data?.msg, {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-        } catch (err) {
-            console.log(err.response.status);
 
-            if (err.response.status === 422) {
-                return toast.warning(err.response.data.msg, {
-                    position: "top-right",
-                    autoClose: 1000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                });
-            }
-            return toast.error("Ada Kesalahan", {
-                position: "top-right",
-                autoClose: 1000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
-        }
-    };
 
     return (
         <LayoutPage title={'Fitur Pkl'}>
@@ -201,11 +122,9 @@ export default function FiturPkl() {
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>No</Table.HeaderCell>
-
                                 <Table.HeaderCell>Nama Perusahaan</Table.HeaderCell>
-                                <Table.HeaderCell>Daerah perusahaan</Table.HeaderCell>
                                 <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                                <Table.HeaderCell>Alamat</Table.HeaderCell>
+                                {/* <Table.HeaderCell>Alamat</Table.HeaderCell>
                                 <Table.HeaderCell>Provinsi</Table.HeaderCell>
                                 <Table.HeaderCell>Kota</Table.HeaderCell>
                                 <Table.HeaderCell>Kecamatan</Table.HeaderCell>
@@ -214,6 +133,8 @@ export default function FiturPkl() {
                                 <Table.HeaderCell>Rw</Table.HeaderCell>
                                 <Table.HeaderCell>Kodepos</Table.HeaderCell>
                                 <Table.HeaderCell>Nomer Telepon</Table.HeaderCell>
+                                <Table.HeaderCell>Penangung Jawab Perusahaan</Table.HeaderCell>
+                                <Table.HeaderCell>Penangung Jawab Sekolah</Table.HeaderCell> */}
                                 <Table.HeaderCell>Aksi</Table.HeaderCell>
 
                                 {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell>
@@ -238,22 +159,28 @@ export default function FiturPkl() {
                                     <Table.Row key={index}>
                                         <Table.Cell>{index + 1}</Table.Cell>
 
-                                        {/* <Table.Cell>{value?.student?.nama_siswa}</Table.Cell>
-                                        <Table.Cell>{value?.nama_mapel}</Table.Cell>
-                                        <Table.Cell>{value?.nama_kelas}</Table.Cell>
-                                        <Table.Cell>{value?.no_hp}</Table.Cell> */}
+                    
 
+                                        <Table.Cell>{value?.nama_perusahaan}</Table.Cell>
+                                        <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
+                                        {/* <Table.Cell>{value?.alamat}</Table.Cell>
+                                        <Table.Cell>{value?.provinsi}</Table.Cell>
+                                        <Table.Cell>{value?.kota}</Table.Cell>
+                                        <Table.Cell>{value?.kecamatan}</Table.Cell>
+                                        <Table.Cell>{value?.desa}</Table.Cell>
+                                        <Table.Cell>{value?.rt}</Table.Cell>
+                                        <Table.Cell>{value?.rw}</Table.Cell>
+                                        <Table.Cell>{value?.kode_pos}</Table.Cell>
+                                        <Table.Cell>{value?.no_hp}</Table.Cell>
                                         <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
-                                        <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                                        <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                                        <Table.Cell>{value?.jenis_ujian}</Table.Cell>
-                                        <Table.Cell>{value?.status}</Table.Cell>
-                                        <Table.Cell>
+                                        <Table.Cell>{value?.penanggung_jawab_perusahaan}</Table.Cell> */}
+                                        
+                                        {/* <Table.Cell>
                                             {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
-                                        </Table.Cell>
+                                        </Table.Cell> */}
 
                                         <Table.Cell>
 

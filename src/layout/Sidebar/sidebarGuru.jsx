@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -28,13 +28,20 @@ import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
 import useList from "../../hook/useList";
+import { AccordionNavButton } from "../../components/accordion";
+// import { AccordionNavButton } from "../../components/accordion";
 
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
   const { roles } = useList();
 
+  const [accordionOpen, setAccordionOpen] = useState();
+
   const handleSiderbar = () => {
     setSidebar(false);
+  };
+  const toggleAccordion = (name) => {
+    setAccordionOpen(accordionOpen === name ? null : name);
   };
 
   let { pathname } = useLocation();
@@ -79,9 +86,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={["Dashboard"]}
           logo={
             <MdOutlineDashboard
-              className={`h-8 w-8 ${
-                url === "dashboard" ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === "dashboard" ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -92,9 +98,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={"Daftar Kelas"}
           logo={
             <MdOutlineSupervisorAccount
-              className={`h-8 w-8 ${
-                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -105,9 +110,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={["Daftar Halaqoh"]}
           logo={
             <MdPeople
-              className={`h-8 w-8 ${
-                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -118,9 +122,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={["Absensi Guru"]}
           logo={
             <MdFingerprint
-              className={`h-8 w-8 ${
-                url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -132,9 +135,8 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Absensi KBM"}
             logo={
               <MdLaptopMac
-                className={`h-8 w-8 ${
-                  url === "absensi" ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "absensi" ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -147,9 +149,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={["Absensi Halaqoh"]}
           logo={
             <MdLaptopChromebook
-              className={`h-8 w-8 ${
-                url === `halaqoh` ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === `halaqoh` ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -162,9 +163,8 @@ export default function SidebarGuru({ setSidebar }) {
             title={["Absensi Pengampu"]}
             logo={
               <MdCheck
-                className={`h-8 w-8 ${
-                  url === `pengampu` ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === `pengampu` ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -177,15 +177,14 @@ export default function SidebarGuru({ setSidebar }) {
             title={["Bank Soal"]}
             logo={
               <MdFormatAlignCenter
-                className={`h-8 w-8 ${
-                  url === `bank-soal` ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === `bank-soal` ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
         )}
 
-        
+
         {checkRole(roles, "guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
@@ -194,9 +193,8 @@ export default function SidebarGuru({ setSidebar }) {
             title={["Exam"]}
             logo={
               <MdKeyboard
-                className={`h-8 w-8 ${
-                  url === `exam` ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === `exam` ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -208,9 +206,8 @@ export default function SidebarGuru({ setSidebar }) {
           title={["Sholat"]}
           logo={
             <MdNavigation
-              className={`h-8 w-8 ${
-                url === "sholat" ? "text-white-400" : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === "sholat" ? "text-white-400" : "text-gray-600"
+                }`}
             />
           }
         />
@@ -224,9 +221,8 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Pelanggaran"}
             logo={
               <MdOutlineLibraryBooks
-                className={`h-8 w-8 ${
-                  url === "pelanggaran" ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "pelanggaran" ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -239,9 +235,8 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Prestasi"}
             logo={
               <MdOutlineLibraryBooks
-                className={`h-8 w-8 ${
-                  url === "prestasi" ? "text-white-400" : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "prestasi" ? "text-white-400" : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -255,11 +250,10 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Perizinan Pulang"}
             logo={
               <MdPhoneForwarded
-                className={`h-8 w-8 ${
-                  url === "perizinan-pulang"
-                    ? "text-white-400"
-                    : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "perizinan-pulang"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -272,11 +266,10 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Perizinan Kunjungan"}
             logo={
               <MdPhoneInTalk
-                className={`h-8 w-8 ${
-                  url === "perizinan-kunjungan"
-                    ? "text-white-400"
-                    : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "perizinan-kunjungan"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
               />
             }
           />
@@ -289,16 +282,15 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Laporan Guru Piket"}
             logo={
               <MdCreate
-                className={`h-8 w-8 ${
-                  url === "laporan-guru-piket"
-                    ? "text-white-400"
-                    : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "laporan-guru-piket"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
               />
             }
           />
         )}
-        {checkRole(roles, "guru") && (
+        {/* {checkRole(roles, "guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="fitur-siswa-pkl"
@@ -306,14 +298,34 @@ export default function SidebarGuru({ setSidebar }) {
             title={"Fitur Siswa PKL"}
             logo={
               <MdApartment
-                className={`h-8 w-8 ${
-                  url === "fitur-siswa-pkl"
-                    ? "text-white-400"
-                    : "text-gray-600"
-                }`}
+                className={`h-8 w-8 ${url === "fitur-siswa-pkl"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
               />
             }
           />
+        )} */}
+        
+        {checkRole(roles, "guru") && (
+          // <AccordionNavButton  title="prestasi" logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
+          //   ? "text-white-400"
+          //   : "text-gray-600"
+          //   }`} />} isOpen={accordionOpen === 'prestasi'} onToggle={() => toggleAccordion('prestasi')}>
+          //   {checkRole(roles, "guru") && (
+          //     <>
+          //       <NavButton handleSidebar={handleSiderbar} to="bank-soal" path="bank-soal" title="Bank Soal" url={url} />
+          //       <NavButton handleSidebar={handleSiderbar} to="exam" path="exam" title="Exam" url={url} />
+          //     </>
+          //   )}
+          // </AccordionNavButton>
+          <AccordionNavButton title="fitur-siswa-pkl" path={"fitur-siswa-pkl"} to={"fitur-siswa-pkl"} logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
+            ? "text-white-400"
+            : "text-gray-600"
+            }`}/>}>
+            <NavButton handleSidebar={handleSiderbar} to="halaqoh-siswa" path="halaqoh-siswa" title="Daftar Halaqoh" logo={<MdOutlineSupervisorAccount />} />
+            <NavButton handleSidebar={handleSiderbar} to="halaqoh/absensi" path="halaqoh" title="Absensi Halaqoh" logo={<MdFingerprint />} />
+          </AccordionNavButton>
         )}
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
@@ -327,11 +339,10 @@ export default function SidebarGuru({ setSidebar }) {
           title={"Logout"}
           logo={
             <MdLogout
-              className={`h-8 w-8 ${
-                url === "laporan-guru-piket"
-                  ? "text-white-400"
-                  : "text-gray-600"
-              }`}
+              className={`h-8 w-8 ${url === "laporan-guru-piket"
+                ? "text-white-400"
+                : "text-gray-600"
+                }`}
             />
           }
         />
@@ -351,14 +362,13 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
         handleSidebar();
         return navigate(to);
       }}
-      className={`flex items-center px-5  h-10 ${
-        url === path
-          ? "bg-[#00b5ad] rounded-lg text-white font-black"
-          : "text-black"
-      }`}
+      className={`flex items-center px-5  h-10 ${url === path
+        ? "bg-[#00b5ad] rounded-lg text-white font-black"
+        : "text-black"
+        }`}
     >
       <div style={{
-        zomm : '80%'
+        zomm: '80%'
       }} className="w-8 h-8 ">{logo}</div>
       <p
         className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
@@ -370,6 +380,107 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
     </button>
   );
 }
+// function AccordionNavButton({ to, path, title, logo, handleSidebar }) {
+//   let { pathname } = useLocation();
+//   let url = pathname.split("/")[2];
+//   const navigate = useNavigate();
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   const toggleAccordion = () => {
+//     setIsOpen(!isOpen);
+//   };
+
+//   return (
+//     <div>
+//       <button
+//         onClick={toggleAccordion}
+//         className={`flex items-center px-5 h-10 w-full ${isOpen ? "bg-[#00b5ad] text-white font-black" : "text-black"}`}
+//       >
+//         <div className="w-8 h-8">{logo}</div>
+//         <p className={`ml-5 text-xs whitespace-nowrap font-poppins text-left ${isOpen ? "text-white font-black" : "text-black"}`}>
+//           {title}
+//         </p>
+//       </button>
+//       {isOpen && (
+//         <div className="pl-10 space-y-2">
+//           <NavButton handleSidebar={handleSidebar} to="bank-soal" path="bank-soal" title="Bank Soal" url={url} />
+//           <NavButton handleSidebar={handleSidebar} to="exam" path="exam" title="Exam" url={url} />
+//         </div>
+//       )}
+//     </div>
+//     // <button
+//     //   onClick={toggleAccordion}
+//     //   className={`flex items-center px-5  h-10 ${url === path
+//     //     ? "bg-[#00b5ad] rounded-lg text-white font-black"
+//     //     : "text-black"
+//     //     }`}
+//     // >
+//     //   <div style={{
+//     //     zomm: '80%'
+//     //   }} className="w-8 h-8 ">{logo}</div>
+//     //   <p
+//     //     className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
+//     //    ${url === path ? "text-white font-black" : "text-black"}
+//     //      `}
+//     //   >
+//     //     {title}
+//     //   </p>
+//     // </button>
+//   );
+// }
+
+
+// function AccordionNavButton({ to, path, title, logo, children }) {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const { pathname } = useLocation();
+//   const url = pathname.split("/")[2];
+//   const navigate = useNavigate();
+
+//   const toggleAccordion = () => {
+//     if (!isOpen) {
+//       navigate(to);
+//     }
+//     setIsOpen(!isOpen);
+//   };
+
+//   return (
+//     <div>
+//       <button
+//         onClick={toggleAccordion}
+//         className={`flex items-center px-5 h-10 w-full ${url === path || isOpen ? "bg-[#00b5ad] text-white font-black" : "text-black"}`}
+//       >
+//         <div className="w-8 h-8">{logo}</div>
+//         <p className={`ml-5 text-xs whitespace-nowrap font-poppins text-left ${url === path || isOpen ? "text-white font-black" : "text-black"}`}>
+//           {title}
+//         </p>
+//       </button>
+//       {isOpen && (
+//         <div className="pl-10 space-y-2">
+//           {/* <NavButton handleSidebar={handleSidebar} to="bank-soal" path="bank-soal" title="Bank Soal" url={url} />
+//           <NavButton handleSidebar={handleSidebar} to="exam" path="exam" title="Exam" url={url} /> */}
+
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+
+// function AccordionNavButton({ title, logo, children, isOpen, onToggle }) {
+//   return (
+//     <div>
+//       <button onClick={onToggle} className="flex items-center px-5 h-10 text-black w-full">
+//         <div className="w-8 h-8">{logo}</div>
+//         <p className="ml-5 text-xs whitespace-nowrap font-poppins text-left text-black">{title}</p>
+//       </button>
+//       {isOpen && (
+//         <div className="pl-10 space-y-2">
+//           {children}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 
 function LogoutButton({ to, title, logo, onClick }) {
   let { pathname } = useLocation();
@@ -382,9 +493,8 @@ function LogoutButton({ to, title, logo, onClick }) {
     >
       <div className="w-8 h-8 ">{logo}</div>
       <p
-        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
-          url === to ? "text-white-400 " : "text-gray-600 "
-        } font-bold hover:text-green-400`}
+        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${url === to ? "text-white-400 " : "text-gray-600 "
+          } font-bold hover:text-green-400`}
       >
         {title}
       </p>

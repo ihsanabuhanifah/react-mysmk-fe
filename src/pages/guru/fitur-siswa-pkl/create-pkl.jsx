@@ -7,10 +7,11 @@ import { DeleteButton } from '../../../components';
 import { useQueryClient } from 'react-query';
 import { createSiswaHandle } from '../../../api/guru/siswa';
 import { toast } from 'react-toastify';
-import { listSiswaOptions } from '../../../api/list';
+import { listSiswaPklOptions } from '../../../api/list';
 
 import { ReactSelectAsync, FormLabel } from "../../../components";
 import { getOptions } from '../../../utils/format';
+// import LocationSearch from '../../../components/geocode';
 
 export const CreatePkl = () => {
   const queryClient = useQueryClient();
@@ -189,7 +190,7 @@ export const CreatePkl = () => {
                                     label: value.student_name,
                                   }
                               }
-                              loadOptions={listSiswaOptions}
+                              loadOptions={listSiswaPklOptions}
                               isClearable
                               onChange={(data) => {
                                 setFieldValue(
@@ -208,17 +209,7 @@ export const CreatePkl = () => {
                             />
                           </FormLabel>
                         </section>
-                        <section className="col-span-3 lg:col-span-1">
-                          <Form.Field
-                            control={Input}
-                            label="Daerah Perusahaan Santri"
-                            placeholder="Tipe Pelanggaran"
-                            name={`pelanggaran[${index}tipe]`}
-                            value={value?.tipe}
-                            fluid
-                            type="text"
-                          />
-                        </section>
+                        
                         <section className="col-span-3 lg:col-span-1">
                           <Form.Field
                             control={Input}
@@ -241,17 +232,7 @@ export const CreatePkl = () => {
                             type="text"
                           />
                         </section>
-                        <section className="col-span-3 lg:col-span-1">
-                          <Form.Field
-                            control={Input}
-                            label="Nomer Telepon Santri"
-                            placeholder="Tipe Pelanggaran"
-                            name={`pelanggaran[${index}tipe]`}
-                            value={value?.tipe}
-                            fluid
-                            type="text"
-                          />
-                        </section>
+                        
                         <section className="col-span-3 lg:col-span-1">
                           <Form.Field
                             control={Input}
@@ -440,6 +421,7 @@ export const CreatePkl = () => {
                           />
                         </section> */}
                         
+                        {/* <LocationSearch /> */}
                       </div>
                       
                     </>
