@@ -10,14 +10,10 @@ import {
 import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
 import { useParams } from "react-router-dom";
-import {
-  LabelKeterangan,
-  LabelStatus,
-  LabelTipeUjian,
-} from "../../../components/Label";
-import { showFormattedDate } from "../../../utils";
+import { LabelKeterangan, LabelStatus } from "../../../components/Label";
+
 import { formatWaktu } from "../../../utils/waktu";
-import DataTable from "react-data-table-component";
+
 import useCheckbox from "../../../hook/useCheckbox";
 import Checkbox from "../../../components/Checkbox";
 
@@ -36,7 +32,7 @@ function PenilaianPage() {
   const [jawaban, setJawaban] = useState([]);
   const [item, setItem] = useState({});
 
-  const { isLoading: isLoadingSoal, data: dataSoal } = useSoal(id);
+  const { data: dataSoal } = useSoal(id);
 
   const mutate = useRemidial();
   const refresh = useRefreshCount();
@@ -63,7 +59,7 @@ function PenilaianPage() {
       });
 
       const filteredArray = val.filter((item) => Object.keys(item).length > 0);
-     
+
       mutateExam.mutate(filteredArray);
     },
   });
@@ -232,11 +228,9 @@ function PenilaianPage() {
                         </Table.Cell>
                         <Table.Cell>
                           <Button
-                         
-                          color="linkedin"
-                          type="button"
+                            color="linkedin"
+                            type="button"
                             onClick={() => {
-                              
                               setOpen(true);
 
                               console.log("item", item);
@@ -248,29 +242,28 @@ function PenilaianPage() {
                                 return JSON.parse(item.jawaban);
                               });
                             }}
-                         >  <Icon name="eye" /> Lihat</Button>
-                           
+                          >
+                            {" "}
+                            <Icon name="eye" /> Lihat
+                          </Button>
                         </Table.Cell>
                       </Table.Row>
                     ))}
                   </TableLoading>
                 </Table.Body>
               </Table>
+              <section className="mt-5">
+                <Button
+                  color="teal"
+                  fluid
+                  loading={mutateExam.isLoading}
+                  disabled={mutateExam.isLoading || isLoading}
+                  type="submit"
+                >
+                  <Icon name="check" /> Perbaharui Nilai
+                </Button>
+              </section>
             </TableWrapper>
-
-            <section className="mt-5">
-              <Button
-                color="teal"
-                
-                fluid
-
-                loading={mutateExam.isLoading}
-                disabled={mutateExam.isLoading}
-                type="submit"
-              >
-                <Icon name="check" /> Perbaharui Nilai
-              </Button>
-            </section>
           </Form>
         </FormikProvider>
       </section>

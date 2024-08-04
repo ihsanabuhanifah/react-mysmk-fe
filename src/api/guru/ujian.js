@@ -39,6 +39,8 @@ export const useCreatePenilaian = () => {
         kelas_id: payload.kelas_id,
         mapel_id: payload.mapel_id,
         durasi: payload.durasi,
+        jenis_ujian : payload.jenis_ujian,
+        ta_id : payload?.ta_id
       });
     },
     {

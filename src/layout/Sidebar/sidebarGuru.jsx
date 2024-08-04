@@ -199,6 +199,21 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+         {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to={`hasil-belajar`}
+            path={"hasil-belajar"}
+            title={["Hasil Belajar"]}
+            logo={
+              <MdKeyboard
+                className={`h-8 w-8 ${
+                  url === `hasil-belajar` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"

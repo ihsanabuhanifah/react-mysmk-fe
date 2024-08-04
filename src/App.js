@@ -53,6 +53,7 @@ import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
+import HasilBelajar from "./pages/guru/hasil-belajar";
 
 function App() {
   return (
@@ -127,6 +128,7 @@ function App() {
           <Route path="bank-soal/tambah" element={<FormSoal />} />
           <Route path="bank-soal/update/:id" element={<FormSoal />} />
           <Route path="exam" element={<ListExam />} />
+          <Route path="hasil-belajar" element={<HasilBelajar />} />
 
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />

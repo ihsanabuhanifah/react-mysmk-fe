@@ -17,7 +17,7 @@ function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
   const [payload, setPayload] = useState(jawaban);
   const mutate = useUpdateLastExam();
 
-  console.log("item", item);
+  console.log("jawaban", !!jawaban, jawaban);
 
   return (
     <Modal
@@ -69,46 +69,16 @@ function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
           })}
       </ModalContent>
 
-      {/* <ModalContent>
-        <ModalDescription>
-          {["PG", "TF"].includes(preview.tipe) && (
-            <>
-              {" "}
-              <section className="border flex items-center justify-between rounded-lg p-5 mb-5">
-                <Header size="medium">Jawaban ({preview.jawaban})</Header>
-                <div>
-                  {" "}
-                
-                </div>
-              </section>
-            </>
-          )}
-          <section className="border rounded-lg p-5">
-           <section className="flex items-center justify-between"> <Header size="medium">Uraian Soal</Header>
-            <EditButton
-                    onClick={() => {
-                      navigate(`/guru/bank-soal/update/${preview.id}`, {
-                        replace: true,
-                      });
-                    }}
-                  /></section>
-            <Divider horizontal>=</Divider>
-            <div>{htmr(`<div>${soal.soal}</div>`)}</div>
-          </section>
-
-         
-        </ModalDescription>
-      </ModalContent> */}
-
       <ModalActions>
-        <Button color="red" inverted onClick={() => setOpen(false)}>
+        <Button color="red" onClick={() => setOpen(false)}>
           <Icon name="remove" /> Batal
         </Button>
         <Button
-          color="green"
-          inverted
+          color="teal"
           loading={mutate.isLoading}
-          disabled={mutate.isLoading}
+          disabled={
+            mutate.isLoading || !!jawaban === false || jawaban.length === 0
+          }
           onClick={() => {
             mutate.mutate(
               {
