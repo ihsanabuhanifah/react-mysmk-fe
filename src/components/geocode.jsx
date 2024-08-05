@@ -1,120 +1,88 @@
-// import React, { useState } from 'react';
-// import Geocode from 'react-geocode';
-// import { FaFacebook, FaTwitter } from 'react-icons/fa';
-// import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-// // import GOOGLE_API from './env'
+import React, { useState, useRef, useCallback } from 'react';
+import { GoogleMap, LoadScript, Marker, Autocomplete } from '@react-google-maps/api';
 
-// // Set your Google Maps API key here
-// Geocode.setApiKey(GOOGLE_API);
-// Geocode.setLanguage('en');
+const libraries = ['places'];
 
-// const mapContainerStyle = {
-//   height: '400px',
-//   width: '800px'
-// };
+const MapComponent = () => {
+  const [map, setMap] = useState(null);
+  const [center, setCenter] = useState({ lat: -6.58296, lng: 106.77569 });
+  const [latitude, setLatitude] = useState(center.lat);
+  const [longitude, setLongitude] = useState(center.lng);
+  const autocompleteRef = useRef(null);
 
-// const center = {
-//   lat: -6.58296,
-//   lng: 106.77569
-// };
+  const onLoad = (autoC) => {
+    autocompleteRef.current = autoC;
+  };
 
-// const LocationSearch = () => {
-//   const [address, setAddress] = useState('');
-//   const [latitude, setLatitude] = useState('');
-//   const [longitude, setLongitude] = useState('');
+  const onPlaceChanged = () => {
+    if (autocompleteRef.current) {
+      const place = autocompleteRef.current.getPlace();
+      if (place.geometry) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        setLatitude(lat);
+        setLongitude(lng);
+        setCenter({ lat, lng });
+      }
+    }
+  };
 
-//   const handleSearch = async () => {
-//     try {
-//       const response = await Geocode.fromAddress(address);
-//       const { lat, lng } = response.results[0].geometry.location;
-//       setLatitude(lat);
-//       setLongitude(lng);
-//     } catch (error) {
-//       console.error('Error fetching geocode:', error);
-//     }
-//   };
+  const handleLoadMap = useCallback((map) => {
+    setMap(map);
+  }, []);
 
-//   return (
-//     <div className="p-8 bg-green-100">
-//       <div className="mb-4">
-//         <label className="block text-gray-700 text-sm font-bold mb-2">
-//           Place Name
-//         </label>
-//         <input
-//           type="text"
-//           value={address}
-//           onChange={(e) => setAddress(e.target.value)}
-//           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-//         />
-//         <button
-//           onClick={handleSearch}
-//           className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
-//         >
-//           Find
-//         </button>
-//       </div>
-//       <div className="mb-4">
-//         <label className="block text-gray-700 text-sm font-bold mb-2">
-//           Latitude
-//         </label>
-//         <input
-//           type="text"
-//           value={latitude}
-//           readOnly
-//           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-//         />
-//       </div>
-//       <div className="mb-4">
-//         <label className="block text-gray-700 text-sm font-bold mb-2">
-//           Longitude
-//         </label>
-//         <input
-//           type="text"
-//           value={longitude}
-//           readOnly
-//           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-//         />
-//       </div>
-//       <div className="flex space-x-4 mb-4">
-//         <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all">
-//           <FaFacebook />
-//         </button>
-//         <button className="bg-blue-400 text-white px-4 py-2 rounded hover:bg-blue-500 transition-all">
-//           <FaTwitter />
-//         </button>
-//       </div>
-//       <div className="mb-4">
-//         <p className="text-gray-700 text-sm">
-//           For better accuracy please type Name Address City State Zipcode.
-//         </p>
-//       </div>
-//       <div className="mb-4">
-//         {latitude && longitude && (
-//           <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-//             <GoogleMap
-//               mapContainerStyle={mapContainerStyle}
-//               center={{ lat: parseFloat(latitude), lng: parseFloat(longitude) }}
-//               zoom={13}
-//             >
-//               <Marker position={{ lat: parseFloat(latitude), lng: parseFloat(longitude) }} />
-//             </GoogleMap>
-//           </LoadScript>
-//         )}
-//       </div>
-//       <div>
-//         {latitude && longitude && (
-//           <a
-//             href={`https://www.google.com/maps?q=${latitude},${longitude}`}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="px-4 py-2 bg-blue-500 text-white text-lg rounded hover:bg-blue-600 transition-all"
-//           >
-//             Lihat peta lebih besar
-//           </a>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+  const handleMapError = (error) => {
+    console.error('Google Maps error:', error);
+  };
 
-// export default LocationSearch;
+  return (
+    <LoadScript
+      googleMapsApiKey="AIzaSyCLkYHCK6PaBQgtzUaKJzqLoRy5fWXOVYc"
+      libraries={libraries}
+      onError={handleMapError}
+    >
+      <div className="container mx-auto p-6 space-y-6">
+        <div className="bg-green-100 p-6 rounded-lg shadow-lg space-y-4">
+          <div className="flex space-x-4 items-center">
+            <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+              <input
+                type="text"
+                placeholder="Enter a location"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </Autocomplete>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300"
+              onClick={onPlaceChanged}
+            >
+              Find
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700">Latitude</label>
+              <input type="text" value={latitude} readOnly className="w-full p-2 border border-gray-300 rounded bg-gray-100" />
+            </div>
+            <div>
+              <label className="block text-gray-700">Longitude</label>
+              <input type="text" value={longitude} readOnly className="w-full p-2 border border-gray-300 rounded bg-gray-100" />
+            </div>
+          </div>
+        </div>
+        <div className="h-96">
+          <GoogleMap
+            mapContainerStyle={{ width: '100%', height: '100%' }}
+            center={center}
+            zoom={15}
+            onLoad={handleLoadMap}
+            onError={handleMapError}
+          >
+            <Marker position={center} />
+          </GoogleMap>
+        </div>
+      </div>
+    </LoadScript>
+  );
+};
+
+export default MapComponent;

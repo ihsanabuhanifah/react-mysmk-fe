@@ -306,7 +306,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )} */}
-        
+
         {checkRole(roles, "guru") && (
           // <AccordionNavButton  title="prestasi" logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
           //   ? "text-white-400"
@@ -319,12 +319,12 @@ export default function SidebarGuru({ setSidebar }) {
           //     </>
           //   )}
           // </AccordionNavButton>
-          <AccordionNavButton title="fitur-siswa-pkl" path={"fitur-siswa-pkl"} to={"fitur-siswa-pkl"} logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
+          <AccordionNavButton title="Fitur-siswa-pkl" path={"fitur-siswa-pkl"} to={"fitur-siswa-pkl"} logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
             ? "text-white-400"
             : "text-gray-600"
-            }`}/>}>
-            <NavButton handleSidebar={handleSiderbar} to="halaqoh-siswa" path="halaqoh-siswa" title="Daftar Halaqoh" logo={<MdOutlineSupervisorAccount />} />
-            <NavButton handleSidebar={handleSiderbar} to="halaqoh/absensi" path="halaqoh" title="Absensi Halaqoh" logo={<MdFingerprint />} />
+            }`} />}>
+            <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/tambah" path="fitur-siswa-pkl/tambah" title="Tambah Siswa Pkl" logo={<MdOutlineSupervisorAccount className="h-8 w-8" />} />
+            <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/tambah" path="fitur-siswa-pkl/tambah" title="Perbaiki" logo={<MdFingerprint className="h-8 w-8" />} />
           </AccordionNavButton>
         )}
 
@@ -362,7 +362,7 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
         handleSidebar();
         return navigate(to);
       }}
-      className={`flex items-center px-5  h-10 ${url === path
+      className={`flex  items-center px-5  h-10 ${url === path
         ? "bg-[#00b5ad] rounded-lg text-white font-black"
         : "text-black"
         }`}

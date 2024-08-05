@@ -18,15 +18,15 @@ export function AccordionNavButton({ to, path, title, logo, children }) {
       <div>
         <button
           onClick={toggleAccordion}
-          className={`flex items-center px-5 h-10 w-full ${url === path || isOpen ? "bg-[#00b5ad] text-white font-black" : "text-black"}`}
+          className={`flex items-center px-5  w-full ${url === path  ? "bg-[#00b5ad] text-white font-black rounded-md" : "text-black"}`}
         >
           <div className="w-8 h-8">{logo}</div>
-          <p className={`ml-5 text-xs whitespace-nowrap font-poppins text-left ${url === path || isOpen ? "text-white font-black" : "text-black"}`}>
+          <p className={`ml-5 text-xs  font-poppins text-left ${url === path  ? "text-white font-black" : "text-black"}`}>
             {title}
           </p>
         </button>
         {isOpen && (
-          <div className="pl-10 space-y-2">
+          <div className="pl-10 flex justify-center flex-col space-y-2">
             {children}
             
           </div>

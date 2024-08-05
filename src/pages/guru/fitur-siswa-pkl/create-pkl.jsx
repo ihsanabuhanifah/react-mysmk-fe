@@ -11,6 +11,7 @@ import { listSiswaPklOptions } from '../../../api/list';
 
 import { ReactSelectAsync, FormLabel } from "../../../components";
 import { getOptions } from '../../../utils/format';
+import MapComponent from '../../../components/geocode';
 // import LocationSearch from '../../../components/geocode';
 
 export const CreatePkl = () => {
@@ -358,6 +359,7 @@ export const CreatePkl = () => {
                             name: `data[${index}]guru_id`,
                           }}
                         />
+                          {/* <MapComponent></MapComponent> */}
                         </section>
 
                         {/* <section>
