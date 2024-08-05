@@ -56,7 +56,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "set PORT=2001 &&  TAILWIND_MODE=watch craco --openssl-legacy-provider start ",
+    "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start",
+
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"
