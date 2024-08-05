@@ -137,7 +137,7 @@ export const LabelTipeUjian = ({ status }) => {
 
   return  <Label size="tiny" content="-"  as={"a"} />
 
-  
+
 };
 
 
@@ -154,3 +154,17 @@ return (
    
 );
 }
+
+
+export const LabelKeterangan = ({status}) => {
+ if(status === "-"){
+ return  <Label size="tiny" content={"-"}  as={"a"} />
+ }
+  
+
+  return (
+    <Label size="tiny" content={status} color="red" as={"a"} />
+     
+  );
+  }
+  

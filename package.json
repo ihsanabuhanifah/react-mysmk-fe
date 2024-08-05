@@ -29,6 +29,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^17.0.2",
+    "react-dropzone": "^14.2.3",
     "react-icons": "^4.4.0",
     "react-image-file-resizer": "^0.4.8",
     "react-katex": "^3.0.1",
@@ -56,6 +57,7 @@
   },
   "scripts": {
     "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start",
+
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"

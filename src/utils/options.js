@@ -123,9 +123,10 @@ const tfOptions = [
 const jenisOptions = [
   { key: "1", value: "tugas", text: "Tugas" },
   { key: "2", value: "harian", text: "Ulangan Harian" },
-  { key: "3", value: "PTS", text: "Penilaian Tengah Semester" },
-  { key: "4", value: "PAS", text: "Penilain Akhir Semester" },
-  { key: "5", value: "US", text: "Ujian Sekolah" },
+  { key: "3", value: "projek", text: "Projek" },
+  { key: "4", value: "pts", text: "Penilaian Tengah Semester" },
+  { key: "5", value: "pas", text: "Penilain Akhir Semester" },
+  { key: "6", value: "us", text: "Ujian Sekolah" },
   
 ];
 

@@ -7,7 +7,9 @@ import useList from "./useList";
 
 export default function useNotif() {
 
-  let roles = useList()
+  let {roles} = useList()
+
+  
   let { data: notifAbsensi } = useQuery(
     //query key
     ["notifikasi_absensi_kelas"],
