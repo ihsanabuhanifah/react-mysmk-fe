@@ -25,7 +25,7 @@ import { useListReport } from "../../../api/guru/report";
 
 export default function HasilBelajar() {
   const { dataKelas, dataMapel, dataTa } = useList();
-  const { data, isFetching, payload, handlePayload } = useListReport();
+  const { data, isFetching, payload, handlePayload, handleParams, params } = useListReport();
 
  
   
@@ -34,6 +34,7 @@ export default function HasilBelajar() {
   return (
     <LayoutPage title={"Hasil Belajar"}>
       {JSON.stringify(payload)}
+      {JSON.stringify(params)}
       <Form>
         <section className=" grid grid-cols-4 gap-5 mb-5">
           <div className="text-left">
@@ -118,6 +119,7 @@ export default function HasilBelajar() {
               />
             </FormLabel>
           </div>
+          <div><button onClick={handleParams}>Filter</button></div>
 
           <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4"></div>
         </section>
@@ -126,20 +128,23 @@ export default function HasilBelajar() {
         <Table>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell></Table.HeaderCell>
-
+              
               <Table.HeaderCell>No</Table.HeaderCell>
+              <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell>Semester</Table.HeaderCell>
+              <Table.HeaderCell>Guru</Table.HeaderCell>
+              <Table.HeaderCell>Kelas</Table.HeaderCell>
 
-              <Table.HeaderCell>Jam Mulai</Table.HeaderCell>
-              <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
-              <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
-
+              <Table.HeaderCell>Tugas</Table.HeaderCell>
+              <Table.HeaderCell>Harian</Table.HeaderCell>
+              <Table.HeaderCell>Projek</Table.HeaderCell>
+              <Table.HeaderCell>PTS</Table.HeaderCell>
+              <Table.HeaderCell>PAS</Table.HeaderCell>
+              <Table.HeaderCell>US</Table.HeaderCell>
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-              <Table.HeaderCell>Keterangan</Table.HeaderCell>
-              <Table.HeaderCell>Penilaian</Table.HeaderCell>
+              <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
+
+             
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -148,7 +153,18 @@ export default function HasilBelajar() {
               isLoading={false}
               data={0}
               messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
-            ></TableLoading>
+            >
+              {data && data?.data?.map((value, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{value.siswa?.nama_siswa}</Table.Cell>
+                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                  <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                </Table.Row>
+              ))}
+            </TableLoading>
           </Table.Body>
         </Table>
       </TableWrapper>

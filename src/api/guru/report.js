@@ -59,8 +59,9 @@ export const useListReport = () => {
   };
 
   const handleParams = () => {
-    setParams(() => {
+    setParams((params) => {
       return {
+       
         ...payload,
         student_id: payload.student_id.value,
       };
@@ -68,7 +69,7 @@ export const useListReport = () => {
   };
 
   const { isLoading, data, isFetching } = useQuery(
-    ["/guru/nilai/list/teacher", params],
+    ["/guru/nilai/list/teacher", [params]],
     () => listReport(params),
     {
       keepPreviousData: true,
@@ -83,6 +84,7 @@ export const useListReport = () => {
     isFetching,
     setParams,
     payload,
+    params,
     handlePayload,
     handleParams,
   };
