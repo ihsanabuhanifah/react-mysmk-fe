@@ -55,7 +55,7 @@ export default function ProfileEdit() {
 			<div className="flex flex-col w-full items-center ml-5">
 				<div className="w-[85px] border relative h-[85px] rounded-full bg-red-200 mb-4">
 					<img src={BlankProfile} alt="You" className="w-full relative z-0 rounded-full" />
-					<div className="w-[20px] h-[20px] bg-blue-500 absolute z-10 rounded-full bottom-1 right-1 "></div>
+					<div className="w-[20px] h-[20px] bg-blue-500 absolute z-[5] rounded-full bottom-1 right-1 "></div>
 				</div>
 
 				<Formik initialValues={initialState} validationSchema={profileSchema} enableReinitialize onSubmit={onSubmit}>
