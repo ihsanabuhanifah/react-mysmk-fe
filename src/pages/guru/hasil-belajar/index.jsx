@@ -1,46 +1,35 @@
 import LayoutPage from "../../../module/layoutPage";
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
-  Dropdown,
   Form,
-  Icon,
-  Input,
   Select,
   Table,
 } from "semantic-ui-react";
 import { FormLabel, ReactSelectAsync, TableLoading } from "../../../components";
-import { LabelKeterangan, LabelStatus } from "../../../components/Label";
-
-import { formatWaktu } from "../../../utils/waktu";
-
-import Checkbox from "../../../components/Checkbox";
-
 import { TableWrapper } from "../../../components/TableWrap";
-import { waktuOptions } from "../../../utils/options";
 import { getOptions } from "../../../utils/format";
 import useList from "../../../hook/useList";
 import { listSiswaOptions } from "../../../api/list";
-import { useListReport } from "../../../api/guru/report";
+import { useGenerateReport, useListReport } from "../../../api/guru/report";
 
 export default function HasilBelajar() {
   const { dataKelas, dataMapel, dataTa } = useList();
-  const { data, isFetching, payload, handlePayload, handleParams, params } = useListReport();
+  const { data, isFetching, payload, handlePayload, handleParams, params } =
+    useListReport();
 
- 
-  
-
-  console.log("data report", data);
+  const mutate = useGenerateReport();
   return (
     <LayoutPage title={"Hasil Belajar"}>
       {JSON.stringify(payload)}
       {JSON.stringify(params)}
+
       <Form>
         <section className=" grid grid-cols-4 gap-5 mb-5">
           <div className="text-left">
             <Form.Field
               control={Select}
-              //   value={payload?.nama_kelas}
+                value={payload?.kelas_id}
               options={getOptions(dataKelas?.data, "nama_kelas")}
               label={{
                 children: "Kelas",
@@ -63,7 +52,7 @@ export default function HasilBelajar() {
           <div className="text-left">
             <Form.Field
               control={Select}
-              value={payload?.nama_mapel}
+              value={payload?.mapel_id}
               options={getOptions(dataMapel?.data, "nama_mapel")}
               label={{
                 children: "Mata Pelajaran",
@@ -79,7 +68,7 @@ export default function HasilBelajar() {
           <div className="">
             <Form.Field
               control={Select}
-              // value={absen?.nama_guru}
+              value={payload?.ta_id}
               options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
               label={{
                 children: "Tahun Pelajaran",
@@ -119,7 +108,31 @@ export default function HasilBelajar() {
               />
             </FormLabel>
           </div>
-          <div><button onClick={handleParams}>Filter</button></div>
+          <div>
+            <Button
+              color="blue"
+              loading={mutate.isLoading}
+              disabled={mutate.isLoading}
+              onClick={handleParams}
+              content="Filter"
+            />
+          </div>
+          <div>
+            <Button
+              color="teal"
+              loading={mutate.isLoading}
+              disabled={
+                mutate.isLoading ||
+                !!payload.kelas_id === false ||
+                !!payload.mapel_id === false ||
+                !!payload.ta_id === false
+              }
+              onClick={() => {
+                mutate.mutate(payload);
+              }}
+              content="Generate Hasil Akhir"
+            />
+          </div>
 
           <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4"></div>
         </section>
@@ -128,42 +141,54 @@ export default function HasilBelajar() {
         <Table>
           <Table.Header>
             <Table.Row>
-              
               <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
               <Table.HeaderCell>Guru</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
-
-              <Table.HeaderCell>Tugas</Table.HeaderCell>
+              <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
               <Table.HeaderCell>Harian</Table.HeaderCell>
+              <Table.HeaderCell>Tugas</Table.HeaderCell>
               <Table.HeaderCell>Projek</Table.HeaderCell>
+
               <Table.HeaderCell>PTS</Table.HeaderCell>
               <Table.HeaderCell>PAS</Table.HeaderCell>
               <Table.HeaderCell>US</Table.HeaderCell>
+              <Table.HeaderCell>Kehadiran</Table.HeaderCell>
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-              <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-
-             
+              <Table.HeaderCell>Deskripsi</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             <TableLoading
-              count={12}
-              isLoading={false}
-              data={0}
-              messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
+              count={20}
+              isLoading={isFetching}
+              data={data?.data}
+              messageEmpty={"Tidak Terdapat Hasil Ujian"}
             >
-              {data && data?.data?.map((value, index) => (
-                <Table.Row key={index}>
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{value.siswa?.nama_siswa}</Table.Cell>
-                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                  <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
-                  <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                  <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                </Table.Row>
-              ))}
+              {data &&
+                data?.data?.map((value, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>{value.siswa?.nama_siswa}</Table.Cell>
+                    <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
+                    <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+                    <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                    <Table.Cell>{value?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
+                    <Table.Cell>{value?.rata_nilai_harian || "-"}</Table.Cell>
+                    <Table.Cell>{value?.rata_nilai_tugas || "-"}</Table.Cell>
+                    <Table.Cell>{value?.rata_nilai_projek || "-"}</Table.Cell>
+
+                    <Table.Cell>{value?.rata_nilai_pts || "-"}</Table.Cell>
+                    <Table.Cell>{value?.rata_nilai_pas || "-"}</Table.Cell>
+                    <Table.Cell>{value?.rata_nilai_us || "-"}</Table.Cell>
+                    <Table.Cell>
+                      {value?.rata_nilai_kehadiran || "-"}
+                    </Table.Cell>
+                    <Table.Cell>{value?.nilai || "-"}</Table.Cell>
+                    <Table.Cell>{value?.deskripsi || "-"}</Table.Cell>
+                  </Table.Row>
+                ))}
             </TableLoading>
           </Table.Body>
         </Table>
