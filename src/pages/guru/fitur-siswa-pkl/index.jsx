@@ -43,7 +43,7 @@ export default function FiturPkl() {
     let queryClient = useQueryClient();
     let [mode, setMode] = React.useState("add");
     let [isOpen, setIsOpen] = React.useState(false);
-   
+
 
     const initialValue = {
         createpkl: [
@@ -124,7 +124,7 @@ export default function FiturPkl() {
                                 <Table.HeaderCell>No</Table.HeaderCell>
                                 <Table.HeaderCell>Nama Perusahaan</Table.HeaderCell>
                                 <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                                {/* <Table.HeaderCell>Alamat</Table.HeaderCell>
+                                <Table.HeaderCell>Alamat</Table.HeaderCell>
                                 <Table.HeaderCell>Provinsi</Table.HeaderCell>
                                 <Table.HeaderCell>Kota</Table.HeaderCell>
                                 <Table.HeaderCell>Kecamatan</Table.HeaderCell>
@@ -134,7 +134,7 @@ export default function FiturPkl() {
                                 <Table.HeaderCell>Kodepos</Table.HeaderCell>
                                 <Table.HeaderCell>Nomer Telepon</Table.HeaderCell>
                                 <Table.HeaderCell>Penangung Jawab Perusahaan</Table.HeaderCell>
-                                <Table.HeaderCell>Penangung Jawab Sekolah</Table.HeaderCell> */}
+                                <Table.HeaderCell>Penangung Jawab Sekolah</Table.HeaderCell>
                                 <Table.HeaderCell>Aksi</Table.HeaderCell>
 
                                 {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell>
@@ -159,11 +159,11 @@ export default function FiturPkl() {
                                     <Table.Row key={index}>
                                         <Table.Cell>{index + 1}</Table.Cell>
 
-                    
+
 
                                         <Table.Cell>{value?.nama_perusahaan}</Table.Cell>
                                         <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
-                                        {/* <Table.Cell>{value?.alamat}</Table.Cell>
+                                        <Table.Cell>{value?.alamat}</Table.Cell>
                                         <Table.Cell>{value?.provinsi}</Table.Cell>
                                         <Table.Cell>{value?.kota}</Table.Cell>
                                         <Table.Cell>{value?.kecamatan}</Table.Cell>
@@ -172,9 +172,10 @@ export default function FiturPkl() {
                                         <Table.Cell>{value?.rw}</Table.Cell>
                                         <Table.Cell>{value?.kode_pos}</Table.Cell>
                                         <Table.Cell>{value?.no_hp}</Table.Cell>
-                                        <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
-                                        <Table.Cell>{value?.penanggung_jawab_perusahaan}</Table.Cell> */}
-                                        
+                                        {/* <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell> */}
+                                        <Table.Cell>{value?.penanggung_jawab_perusahaan
+                                        }</Table.Cell>
+
                                         {/* <Table.Cell>
                                             {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
                                         </Table.Cell>

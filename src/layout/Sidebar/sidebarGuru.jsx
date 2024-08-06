@@ -324,7 +324,7 @@ export default function SidebarGuru({ setSidebar }) {
             : "text-gray-600"
             }`} />}>
             <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/tambah" path="fitur-siswa-pkl/tambah" title="Tambah Siswa Pkl" logo={<MdOutlineSupervisorAccount className="h-8 w-8" />} />
-            <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/tambah" path="fitur-siswa-pkl/tambah" title="Perbaiki" logo={<MdFingerprint className="h-8 w-8" />} />
+            <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/update" path="fitur-siswa-pkl/update" title="Perbaiki" logo={<MdFingerprint className="h-8 w-8" />} />
           </AccordionNavButton>
         )}
 

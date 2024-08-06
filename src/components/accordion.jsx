@@ -26,7 +26,7 @@ export function AccordionNavButton({ to, path, title, logo, children }) {
           </p>
         </button>
         {isOpen && (
-          <div className="pl-10 flex justify-center flex-col space-y-2">
+          <div className={`pl-10 flex justify-center flex-col space-y-2 `}>
             {children}
             
           </div>

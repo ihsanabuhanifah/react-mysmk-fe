@@ -95,6 +95,19 @@ export default function useList() {
       select: (response) => response.data,
     }
   );
+  // let { data: dataPembimbing } = useQuery(
+  //   //query key
+  //   ["pembimbing"],
+  //   //axios function,triggered when page/pageSize change
+  //   () => listPembimbing(),
+  //   //configuration
+  //   {
+  //     keepPreviousData: true,
+  //     staleTime: 1000 * 60 * 60 * 12,
+  //     refetchOnWindowFocus: false,
+  //     select: (response) => response.data,
+  //   }
+  // );
   let { data: dataTa } = useQuery(
     //query key
     ["list_tahun_ajaran"],
@@ -131,5 +144,6 @@ export default function useList() {
     roles,
     dataAlquran,
     dataHalaqoh,
+    // dataPembimbing
   };
 }
