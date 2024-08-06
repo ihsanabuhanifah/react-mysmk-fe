@@ -21,9 +21,7 @@ export default function HasilBelajar() {
   const mutate = useGenerateReport();
   return (
     <LayoutPage title={"Hasil Belajar"}>
-      {JSON.stringify(payload)}
-      {JSON.stringify(params)}
-
+    
       <Form>
         <section className=" grid grid-cols-4 gap-5 mb-5">
           <div className="text-left">
@@ -108,7 +106,8 @@ export default function HasilBelajar() {
               />
             </FormLabel>
           </div>
-          <div>
+         
+          <div className="col-start-3">
             <Button
               color="blue"
               loading={mutate.isLoading}
@@ -133,9 +132,12 @@ export default function HasilBelajar() {
               content="Generate Hasil Akhir"
             />
           </div>
+         
 
-          <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4"></div>
+        
         </section>
+
+        
       </Form>
       <TableWrapper>
         <Table>
