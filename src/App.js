@@ -54,6 +54,8 @@ import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
 import LandingPage from "./pages/ppdb";
 import LoginPpdb from "./pages/ppdb/login";
+import RegisterPpdb from "./pages/ppdb/register/register";
+import DashboardPpdb from "./pages/ppdb/dashboard/dashboard";
 
 function App() {
   return (
@@ -183,7 +185,9 @@ function App() {
         {/* Routes PPDB */}
 
         <Route path="/ppdb" element={<LandingPage />} />
-        <Route path="login" element={<LoginPpdb />} />
+        <Route path="/ppdb/login" element={<LoginPpdb />} />
+        <Route path="/ppdb/register" element={<RegisterPpdb />} />
+        <Route path="/ppdb/dashboard" element={<DashboardPpdb />} />
       </Routes>
     </div>
   );
