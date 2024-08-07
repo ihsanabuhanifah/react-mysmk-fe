@@ -15,7 +15,7 @@ import { useGenerateReport, useListReport } from "../../../api/guru/report";
 
 export default function HasilBelajar() {
   const { dataKelas, dataMapel, dataTa } = useList();
-  const { data, isFetching, payload, handlePayload, handleParams, params } =
+  const { data, isFetching, payload, handlePayload, handleParams } =
     useListReport();
 
   const mutate = useGenerateReport();
@@ -142,23 +142,30 @@ export default function HasilBelajar() {
       <TableWrapper>
         <Table>
           <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>No</Table.HeaderCell>
-              <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-              <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell>Guru</Table.HeaderCell>
-              <Table.HeaderCell>Kelas</Table.HeaderCell>
-              <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-              <Table.HeaderCell>Harian</Table.HeaderCell>
-              <Table.HeaderCell>Tugas</Table.HeaderCell>
-              <Table.HeaderCell>Projek</Table.HeaderCell>
+            <Table.Row> 
+              <Table.HeaderCell  rowSpan={2}>No</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2}>Nama Siswa</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2}> Mata Pelajaran</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2}>Guru</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2}>Kelas</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2} >Tahun Ajaran</Table.HeaderCell>
+              <Table.HeaderCell  textAlign="center" colSpan={7}>Nilai Rata-rata</Table.HeaderCell>
+              
+            
+              <Table.HeaderCell  rowSpan={2}>Nilai Akhir</Table.HeaderCell>
+              <Table.HeaderCell  rowSpan={2}>Deskripsi</Table.HeaderCell>
+            </Table.Row>
+            <Table.Row> 
+             
+              <Table.HeaderCell >Harian</Table.HeaderCell>
+              <Table.HeaderCell >Tugas</Table.HeaderCell>
+              <Table.HeaderCell >Projek</Table.HeaderCell>
 
-              <Table.HeaderCell>PTS</Table.HeaderCell>
-              <Table.HeaderCell>PAS</Table.HeaderCell>
-              <Table.HeaderCell>US</Table.HeaderCell>
-              <Table.HeaderCell>Kehadiran</Table.HeaderCell>
-              <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-              <Table.HeaderCell>Deskripsi</Table.HeaderCell>
+              <Table.HeaderCell >PTS</Table.HeaderCell>
+              <Table.HeaderCell >PAS</Table.HeaderCell>
+              <Table.HeaderCell >US</Table.HeaderCell>
+              <Table.HeaderCell >Kehadiran</Table.HeaderCell>
+              
             </Table.Row>
           </Table.Header>
           <Table.Body>
