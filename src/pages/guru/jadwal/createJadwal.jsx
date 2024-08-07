@@ -155,30 +155,6 @@ export function CreateJadwal() {
                         <section>
                           <Form.Field
                             control={Select}
-                            value={value?.kelas_id}
-                            options={getOptions(dataKelas?.data, "nama_kelas")}
-                            label={{
-                              children: "Kelas",
-                              htmlFor: `data[${index}]kelas_id`,
-                              name: `data[${index}]kelas_id`,
-                            }}
-                            onChange={(event, data) => {
-                              setFieldValue(
-                                `data[${index}]kelas_id`,
-                                data?.value
-                              );
-                            }}
-                            placeholder="Pilih Kelas"
-                            search
-                            searchInput={{
-                              id: `data[${index}]kelas_id`,
-                              name: `data[${index}]kelas_id`,
-                            }}
-                          />
-                        </section>
-                        <section>
-                          <Form.Field
-                            control={Select}
                             value={value?.teacher_id}
                             options={getOptions(dataGuru?.data, "nama_guru")}
                             label={{
@@ -203,8 +179,78 @@ export function CreateJadwal() {
                         <section>
                           <Form.Field
                             control={Select}
+                            value={value?.kelas_id}
+                            options={getOptions(dataKelas?.data, "nama_kelas")}
+                            label={{
+                              children: "Kelas",
+                              htmlFor: `data[${index}]kelas_id`,
+                              name: `data[${index}]kelas_id`,
+                            }}
+                            onChange={(event, data) => {
+                              setFieldValue(
+                                `data[${index}]kelas_id`,
+                                data?.value
+                              );
+                            }}
+                            placeholder="Pilih Kelas"
+                            search
+                            searchInput={{
+                              id: `data[${index}]kelas_id`,
+                              name: `data[${index}]kelas_id`,
+                            }}
+                          />
+                        </section>
+                        <section>
+                          <Form.Dropdown
+                            selection
+                            search
+                            label={{
+                              children: "Semester",
+                              htmlFor: `data[${index}]semester`,
+                              name: `data[${index}]semester`,
+                            }}
+                            placeholder="Pilih"
+                            options={[
+                              { key: "1", value: 1, text: 1 },
+                              { key: "2", value: 2, text: 2 },
+                              { key: "3", value: 3, text: 3 },
+                              { key: "4", value: 4, text: 4 },
+                              { key: "5", value: 5, text: 5 },
+                              { key: "6", value: 6, text: 6 },
+                            ]}
+                            id={`data[${index}]semester`}
+                            name={`data[${index}]semester`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `data[${index}]semester`,
+                                data.value
+                              );
+
+                              setFieldValue(
+                                `data[${index}]mapel_id`,
+                                ""
+                              );
+                            }}
+                            // error={
+                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
+                            //     ?.alasan !== undefined &&
+                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
+                            //     ?.alasan
+                            // }
+                            value={value?.semester}
+                          />
+                        </section>
+
+                        {console.log('va', value.mapel_id)}
+                       
+
+                       
+                        <section>
+                          <Form.Field
+                          disabled={!!value?.semester === false}
+                            control={Select}
                             value={value?.mapel_id}
-                            options={getOptions(dataMapel?.data, "nama_mapel")}
+                            options={getOptions(dataMapel?.data?.filter((item)=> Number(item.kategori) === value?.semester), "nama_mapel")}
                             label={{
                               children: "Mata Pelajaran",
                               htmlFor: `data[${index}]mapel_id`,
@@ -295,41 +341,7 @@ export function CreateJadwal() {
                             value={value?.jumlah_jam}
                           />
                         </section>
-                        <section>
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Semester",
-                              htmlFor: `data[${index}]semester`,
-                              name: `data[${index}]semester`,
-                            }}
-                            placeholder="Pilih"
-                            options={[
-                              { key: "1", value: 1, text: 1 },
-                              { key: "2", value: 2, text: 2 },
-                              { key: "3", value: 3, text: 3 },
-                              { key: "4", value: 4, text: 4 },
-                              { key: "5", value: 5, text: 5 },
-                              { key: "6", value: 6, text: 6 },
-                            ]}
-                            id={`data[${index}]semester`}
-                            name={`data[${index}]semester`}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `data[${index}]semester`,
-                                data.value
-                              );
-                            }}
-                            // error={
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan !== undefined &&
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan
-                            // }
-                            value={value?.semester}
-                          />
-                        </section>
+                        
                         <section>
                           <Form.Field
                             control={Select}
@@ -373,14 +385,14 @@ export function CreateJadwal() {
                       setFieldValue("data", [
                         ...values?.data,
                         {
-                          hari: "",
-                          kelas_id: "",
+                          hari: values?.data?.[0]?.hari,
+                          kelas_id: values?.data?.[0]?.kelas_id,
                           teacher_id: "",
                           mapel_id: "",
                           jam_ke: "",
                           jumlah_jam: "",
-                          semester: "",
-                          ta_id: "",
+                          semester:  values?.data?.[0]?.semestar,
+                          ta_id: values?.data?.[0]?.ta_id,
                           student: "",
                           status: 1,
                         },

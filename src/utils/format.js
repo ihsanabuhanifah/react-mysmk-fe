@@ -16,6 +16,7 @@ const getOptions = (array, text) => {
       key: index,
       value: data.id,
       text: data[`${text}`],
+      item : data
     };
     options.push(option);
   });

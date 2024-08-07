@@ -14,6 +14,8 @@ export const useUploadFile = () => {
     },
 
     onError: (error) => {
+
+
       warningToast(error);
     },
   });
@@ -25,4 +27,25 @@ export const uploadFile = (file) => {
   const formData = new FormData();
   formData.append("file", file);
   return axios.post(`/upload/file`, formData);
+};
+
+export const useDeleteFile = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`/delete/file`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+
+        console.log('err')
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
 };
