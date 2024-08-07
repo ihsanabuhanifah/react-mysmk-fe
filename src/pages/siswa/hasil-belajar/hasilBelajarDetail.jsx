@@ -4,7 +4,7 @@ import LayoutSiswa from '../../../module/layoutSiswa'
 import { useGetHasilBelajarDetail } from '../../../api/siswa/hasil_belajar'
 import { Table } from 'semantic-ui-react'
 import { IoArrowBackOutline } from 'react-icons/io5'
-import { TableLoading } from '../../../components'
+import { LoadingPage, TableLoading } from '../../../components'
 import { format } from 'date-fns'
 
 export default function HasilBelajarDetail() {
@@ -13,7 +13,11 @@ export default function HasilBelajarDetail() {
 
 	const { data, isLoading } = useGetHasilBelajarDetail(id_mapel)
 
-	console.log('hehe', data)
+	console.log(data)
+
+	if(isLoading) {
+		return <LoadingPage />
+	}
 
 	return (
 		<LayoutSiswa title={`Hasil Belajar ${data?.data[0] ? data?.data[0].mapel?.nama_mapel : ''}`}>
@@ -39,7 +43,7 @@ export default function HasilBelajarDetail() {
 							{data?.data?.map((value, i) => (
 								<Table.Row>
 									<Table.Cell>{i + 1}</Table.Cell>
-									<Table.Cell className='capitalize'>{value?.ujian?.jenis_ujian}</Table.Cell>
+									<Table.Cell className='capitalize'>{value?.jenis_ujian}</Table.Cell>
 									<Table.Cell>{value?.exam_result}</Table.Cell>
 									<Table.Cell>{value?.ujian?.durasi}</Table.Cell>
 									<Table.Cell>{format(new Date(value?.jam_mulai), 'HH:mm')}</Table.Cell>
