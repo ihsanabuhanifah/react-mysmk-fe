@@ -1,11 +1,6 @@
 import LayoutPage from "../../../module/layoutPage";
 import React from "react";
-import {
-  Button,
-  Form,
-  Select,
-  Table,
-} from "semantic-ui-react";
+import { Button, Form, Select, Table } from "semantic-ui-react";
 import { FormLabel, ReactSelectAsync, TableLoading } from "../../../components";
 import { TableWrapper } from "../../../components/TableWrap";
 import { getOptions } from "../../../utils/format";
@@ -21,13 +16,12 @@ export default function HasilBelajar() {
   const mutate = useGenerateReport();
   return (
     <LayoutPage title={"Hasil Belajar"}>
-    
       <Form>
         <section className=" grid grid-cols-4 gap-5 mb-5">
           <div className="text-left">
             <Form.Field
               control={Select}
-                value={payload?.kelas_id}
+              value={payload?.kelas_id}
               options={getOptions(dataKelas?.data, "nama_kelas")}
               label={{
                 children: "Kelas",
@@ -106,7 +100,7 @@ export default function HasilBelajar() {
               />
             </FormLabel>
           </div>
-         
+
           <div className="col-start-3">
             <Button
               color="blue"
@@ -122,9 +116,9 @@ export default function HasilBelajar() {
               loading={mutate.isLoading}
               disabled={
                 mutate.isLoading ||
-                !!payload.kelas_id === false ||
-                !!payload.mapel_id === false ||
-                !!payload.ta_id === false
+                (!!payload.kelas_id === false &&
+                  !!payload.mapel_id === false &&
+                  !!payload.ta_id === false)
               }
               onClick={() => {
                 mutate.mutate(payload);
@@ -132,40 +126,34 @@ export default function HasilBelajar() {
               content="Generate Hasil Akhir"
             />
           </div>
-         
-
-        
         </section>
-
-        
       </Form>
       <TableWrapper>
         <Table>
           <Table.Header>
-            <Table.Row> 
-              <Table.HeaderCell  rowSpan={2}>No</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2}>Nama Siswa</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2}> Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2}>Guru</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2}>Kelas</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2} >Tahun Ajaran</Table.HeaderCell>
-              <Table.HeaderCell  textAlign="center" colSpan={7}>Nilai Rata-rata</Table.HeaderCell>
-              
-            
-              <Table.HeaderCell  rowSpan={2}>Nilai Akhir</Table.HeaderCell>
-              <Table.HeaderCell  rowSpan={2}>Deskripsi</Table.HeaderCell>
-            </Table.Row>
-            <Table.Row> 
-             
-              <Table.HeaderCell >Harian</Table.HeaderCell>
-              <Table.HeaderCell >Tugas</Table.HeaderCell>
-              <Table.HeaderCell >Projek</Table.HeaderCell>
+            <Table.Row>
+              <Table.HeaderCell rowSpan={2}>No</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}>Nama Siswa</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}> Mata Pelajaran</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}>Guru</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}>Kelas</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}>Tahun Ajaran</Table.HeaderCell>
+              <Table.HeaderCell textAlign="center" colSpan={7}>
+                Nilai Rata-rata
+              </Table.HeaderCell>
 
-              <Table.HeaderCell >PTS</Table.HeaderCell>
-              <Table.HeaderCell >PAS</Table.HeaderCell>
-              <Table.HeaderCell >US</Table.HeaderCell>
-              <Table.HeaderCell >Kehadiran</Table.HeaderCell>
-              
+              <Table.HeaderCell rowSpan={2}>Nilai Akhir</Table.HeaderCell>
+              <Table.HeaderCell rowSpan={2}>Deskripsi</Table.HeaderCell>
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Harian</Table.HeaderCell>
+              <Table.HeaderCell>Tugas</Table.HeaderCell>
+              <Table.HeaderCell>Projek</Table.HeaderCell>
+
+              <Table.HeaderCell>PTS</Table.HeaderCell>
+              <Table.HeaderCell>PAS</Table.HeaderCell>
+              <Table.HeaderCell>US</Table.HeaderCell>
+              <Table.HeaderCell>Kehadiran</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -183,7 +171,9 @@ export default function HasilBelajar() {
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{value?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
+                    <Table.Cell>
+                      {value?.tahun_ajaran?.nama_tahun_ajaran}
+                    </Table.Cell>
                     <Table.Cell>{value?.rata_nilai_harian || "-"}</Table.Cell>
                     <Table.Cell>{value?.rata_nilai_tugas || "-"}</Table.Cell>
                     <Table.Cell>{value?.rata_nilai_projek || "-"}</Table.Cell>

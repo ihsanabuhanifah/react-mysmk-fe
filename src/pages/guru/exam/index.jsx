@@ -166,9 +166,9 @@ export default function ListExam() {
                         />
                         <DeleteButton
                          disabled={
-                          value?.status !== "draft" ||
-                          value.teacher_id !== roles?.teacher_id
-                        }
+                            value?.status !== "draft" ||
+                            value.teacher_id !== roles?.teacher_id
+                          }
                           onClick={() => {
                             confirmDelete(value?.id);
                           }}
