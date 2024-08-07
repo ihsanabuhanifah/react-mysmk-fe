@@ -110,8 +110,8 @@ export default function HasilBelajar() {
           <div className="col-start-3">
             <Button
               color="blue"
-              loading={mutate.isLoading}
-              disabled={mutate.isLoading}
+              loading={isFetching}
+              disabled={isFetching}
               onClick={handleParams}
               content="Filter"
             />
