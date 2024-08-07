@@ -21,11 +21,13 @@
     "js-file-download": "^0.4.12",
     "jwt-decode": "^3.1.2",
     "katex": "^0.16.11",
+    "lodash": "^4.17.21",
     "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-collapse": "^5.1.1",
     "react-data-table-component": "^7.6.2",
     "react-date-range": "^1.4.0",
+    "react-datepicker": "^7.3.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^17.0.2",
@@ -56,8 +58,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start",
 
+    "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start ",
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"

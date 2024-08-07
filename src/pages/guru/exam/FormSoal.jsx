@@ -77,6 +77,7 @@ export default function FormExam() {
           payload: [
             {
               jenis_ujian: data.jenis_ujian,
+              judul_ujian: data.judul_ujian,
               mapel_id: data.mapel_id,
               kelas_id: data.kelas_id,
               waktu_mulai: addSevenHours(data.waktu_mulai),
@@ -86,7 +87,7 @@ export default function FormExam() {
               soal: JSON.parse(data.soal),
               tipe_ujian: data.tipe_ujian,
               durasi: data.durasi,
-              ta_id : data.ta_id
+              ta_id: data.ta_id,
             },
           ],
         });
@@ -135,6 +136,7 @@ export default function FormExam() {
   const [initialState, setInitialState] = useState({
     payload: [
       {
+        judul_ujian: "",
         jenis_ujian: "",
         mapel_id: null,
         kelas_id: null,
@@ -145,7 +147,7 @@ export default function FormExam() {
         soal: [],
         tipe_ujian: "",
         durasi: null,
-        ta_id : null
+        ta_id: null,
       },
     ],
   });
@@ -176,7 +178,7 @@ export default function FormExam() {
               status: "draft",
               student_access: [],
               soal: [],
-              ta_id : null
+              ta_id: null,
             },
           ],
         });
@@ -264,6 +266,32 @@ export default function FormExam() {
                     key={index}
                   >
                     <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={{
+                            children: "Judul Ujian",
+                            htmlFor: `payload[${index}]judul_ujian`,
+                            name: `payload[${index}]judul_ujian`,
+                          }}
+                          placeholder="Judul Ujian"
+                          options={jenisOptions}
+                          id={`payload[${index}]judul_ujian`}
+                          name={`payload[${index}]judul_ujian`}
+                          onChange={(e) => {
+                            setFieldValue(
+                              `payload[${index}]judul_ujian`,
+                              e.target.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.judul_ujian !==
+                              undefined && errors?.payload?.[index]?.judul_ujian
+                          }
+                         
+                          value={value?.judul_ujian}
+                        />
+                      </div>
                       <div>
                         <Form.Field
                           control={Select}
@@ -458,34 +486,31 @@ export default function FormExam() {
                       </div>
                       <div>
                         <Form.Field
-                            control={Select}
-                            value={value?.ta_id}
-                            options={getOptions(
-                              dataTa?.data,
-                              "nama_tahun_ajaran"
-                            )}
-                            label={{
-                              children: "Tahun Pelajaran",
-                              htmlFor: `payload[${index}]ta_id`,
-                              name: `payload[${index}]ta_id`,
-                            }}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `payload[${index}]ta_id`,
-                                data.value
-                              );
-                            }}
-                            placeholder="Pilih"
-                            search
-                            error={
-                              errors?.payload?.[index]?.ta_id !== undefined &&
-                              errors?.payload?.[index]?.ta_id
-                            }
-                            searchInput={{
-                              id: `payload[${index}]ta_id`,
-                              name: `payload[${index}]ta_id`,
-                            }}
-                          />
+                          control={Select}
+                          value={value?.ta_id}
+                          options={getOptions(
+                            dataTa?.data,
+                            "nama_tahun_ajaran"
+                          )}
+                          label={{
+                            children: "Tahun Pelajaran",
+                            htmlFor: `payload[${index}]ta_id`,
+                            name: `payload[${index}]ta_id`,
+                          }}
+                          onChange={(e, data) => {
+                            setFieldValue(`payload[${index}]ta_id`, data.value);
+                          }}
+                          placeholder="Pilih"
+                          search
+                          error={
+                            errors?.payload?.[index]?.ta_id !== undefined &&
+                            errors?.payload?.[index]?.ta_id
+                          }
+                          searchInput={{
+                            id: `payload[${index}]ta_id`,
+                            name: `payload[${index}]ta_id`,
+                          }}
+                        />
                       </div>
                     </section>
                     <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
