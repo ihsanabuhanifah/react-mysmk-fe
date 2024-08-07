@@ -7,18 +7,16 @@ export function listPulang(params) {
 }
 
 export function responsePulang(values) {
- 
   syncToken()
   const payload = values.filter((data) => {
-  
     return data.updated === true;
   });
 
- 
   return axios.put(`guru/pulang/response`, {
     payload,
   });
 }
+
 export function laporanPulang(values) {
   syncToken()
   const payload = values.filter((data) => {
