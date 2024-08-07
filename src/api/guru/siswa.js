@@ -21,3 +21,13 @@ export function deleteSiswaKelasHandle(id) {
   syncToken();
   return axios.delete(`/guru/siswa/kelas/delete/${id}`);
 }
+
+export function updateSiswaKelasHandle(id) {
+  syncToken();
+  return axios.put(`/guru/siswa/kelas/update/${id}`);
+}
+
+export function getSiswaById(nama) {
+  syncToken();
+  return axios.get(`/guru/siswa/detail/${encodeURIComponent(nama)}`);
+}

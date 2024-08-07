@@ -40,7 +40,7 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
-  console.log('ro;e', roles)
+  
 
   return (
     <>
@@ -194,6 +194,21 @@ export default function SidebarGuru({ setSidebar }) {
               <MdKeyboard
                 className={`h-8 w-8 ${
                   url === `exam` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+         {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to={`hasil-belajar`}
+            path={"hasil-belajar"}
+            title={["Hasil Belajar"]}
+            logo={
+              <MdKeyboard
+                className={`h-8 w-8 ${
+                  url === `hasil-belajar` ? "text-white-400" : "text-gray-600"
                 }`}
               />
             }

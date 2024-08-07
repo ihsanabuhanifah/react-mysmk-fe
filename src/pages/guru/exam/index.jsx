@@ -22,12 +22,14 @@ import { useQueryClient } from "react-query";
 import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
-import ModalPenilaian from "./PenilaianPage";
+
 import { LabelStatus, LabelTipeUjian } from "../../../components/Label";
+import useList from "../../../hook/useList";
 
 export default function ListExam() {
   const navigate = useNavigate();
   let [open, setOpen] = useState(false);
+  let { roles } = useList();
 
   let [payload, setPayload] = useState({});
   let { page, pageSize, setPage, setPageSize } = usePage();
@@ -45,6 +47,7 @@ export default function ListExam() {
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
+      staleTime: 100 * 60 * 5,
       select: (response) => {
         return response.data;
       },
@@ -63,6 +66,10 @@ export default function ListExam() {
       return deleteUjian(id);
     },
   });
+
+  {
+    console.log("role", roles);
+  }
 
   return (
     <LayoutPage title="List Ujian">
@@ -131,9 +138,15 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{<LabelStatus status={value?.jenis_ujian}/>}</Table.Cell>
-                    <Table.Cell><LabelTipeUjian status={value?.tipe_ujian}/></Table.Cell>
-                    <Table.Cell><LabelTipeUjian status={value?.status}/></Table.Cell>
+                    <Table.Cell>
+                      {<LabelStatus status={value?.jenis_ujian} />}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <LabelTipeUjian status={value?.tipe_ujian} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <LabelTipeUjian status={value?.status} />
+                    </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
                       {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
@@ -152,6 +165,10 @@ export default function ListExam() {
                           }}
                         />
                         <DeleteButton
+                         disabled={
+                            value?.status !== "draft" ||
+                            value.teacher_id !== roles?.teacher_id
+                          }
                           onClick={() => {
                             confirmDelete(value?.id);
                           }}
@@ -175,7 +192,10 @@ export default function ListExam() {
                         />
                       ) : (
                         <Button
-                          disabled={value?.status !== "draft"}
+                          disabled={
+                            value?.status !== "draft" ||
+                            value.teacher_id !== roles?.teacher_id
+                          }
                           type="button"
                           color="teal"
                           icon={() => <Icon name="external alternate" />}

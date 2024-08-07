@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   listKelas,
   listMapel,
@@ -7,7 +6,6 @@ import {
   listAlquran,
   listHalaqohGroup,
 } from "../api/list";
-import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
@@ -15,7 +13,7 @@ import jwt_decode from "jwt-decode";
 import Cookies from "js-cookie";
 
 export default function useList() {
-  let roles = jwt_decode(Cookies.get("mysmk_token"))
+  let roles = jwt_decode(Cookies.get("mysmk_token"));
   let { data: identitas } = useQuery(
     //query key
     ["authme"],
@@ -33,7 +31,6 @@ export default function useList() {
       },
     }
   );
-
 
   let { data: dataKelas } = useQuery(
     //query key
