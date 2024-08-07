@@ -90,6 +90,7 @@ export default function Absensi() {
     //configuration
     {
       keepPreviousData: true,
+      staleTime : 1000 * 60 *5,
       select: (response) => response.data,
       onSuccess: (data) => {
         let session = sessionStorage.getItem(
