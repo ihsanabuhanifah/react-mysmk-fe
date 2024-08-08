@@ -1,13 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { Formik } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import Banner from "../../../image/ppdb/backgorund.png";
 import LogoMq from "../../../image/ppdb/ppdb.png";
+import Laptop from "../../../image/ppdb/laptop.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Form, Input, Message, Select } from "semantic-ui-react";
+import { Button, Form, Icon, Message, Select } from "semantic-ui-react";
 import Cookies from "js-cookie";
 import * as yup from "yup";
 import { loginPpdb } from "../../../api/ppdb/ppdbAuth";
+import { Input, Label } from "../../../components/input";
 
 // Skema validasi menggunakan yup
 const LoginPpdbSchema = yup.object().shape({
@@ -76,129 +78,91 @@ const LoginPpdb = () => {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <section className="relative flex flex-wrap lg:h-screen lg:items-center">
-              <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-                <div className="mx-auto max-w-lg text-center">
-                  <div className="w-full flex justify-center mb-4">
-                    <img
-                      alt="LogoMq"
-                      src={LogoMq}
-                      width={200} // sesuaikan dengan ukuran yang diinginkan
-                      height={200} // sesuaikan dengan ukuran yang diinginkan
-                    />
-                  </div>
-                  <h1 className="text-2xl font-bold sm:text-3xl">
-                    Selamat Datang!
-                  </h1>
-                  <p className="mt-4 text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Et
-                    libero nulla eaque error neque ipsa culpa autem, at itaque
-                    nostrum!
-                  </p>
-                </div>
-                {errors.msg && <Message color="red"> {errors.msg}</Message>}
-                <Form.Field
-                  control={Input}
-                  label="Email"
-                  placeholder="Masukkan Email Anda"
-                  name="email"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={"envelope"}
-                  iconPosition="left"
-                  error={
-                    errors.email &&
-                    touched.email && {
-                      content: `${errors.email}`,
-                      pointing: "above",
-                    }
-                  }
-                  type="email"
-                />
-                <Form.Field
-                  control={Input}
-                  label="Kata Sandi"
-                  placeholder="Masukkan Kata Sandi"
-                  name="password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={{
-                    name: showPassword ? "eye slash" : "eye",
-                    circular: true,
-                    link: true,
-                    onClick: () => setShowPassword(!showPassword),
-                  }}
-                  iconPosition="left"
-                  error={
-                    errors.password &&
-                    touched.password && {
-                      content: `${errors.password}`,
-                      pointing: "above",
-                    }
-                  }
-                  type={showPassword ? "text" : "password"}
-                />
-                {/* <Form.Field
-                  control={Select}
-                  options={rolesOptions}
-                  label={{
-                    children: "Masuk Sebagai",
-                    htmlFor: "loginAs",
-                    name: "loginAs",
-                  }}
-                  onChange={(event, data) => {
-                    setFieldValue("loginAs", data.value);
-                  }}
-                  onBlur={handleBlur}
-                  value={values.loginAs}
-                  disabled={isSubmitting}
-                  placeholder="Pilih Role"
-                  error={
-                    errors.loginAs &&
-                    touched.loginAs && {
-                      content: `${errors?.loginAs}`,
-                      pointing: "above",
-                    }
-                  }
-                  search
-                  searchInput={{ id: "loginAs", name: "loginAs" }}
-                /> */}
-                <div className="flex flex-col items-center justify-center">
-                  <Button
-                    content={isSubmitting ? "Proses" : "Masuk"}
-                    type="submit"
-                    fluid
-                    size="medium"
-                    color="green"
-                    loading={isSubmitting}
+            <div className="bg-imageAbstrak h-screen overflow-hidden">
+              <img
+                alt="LogoMq"
+                src={LogoMq}
+                width={200}
+                height={200}
+                className="absolute top-0 left-0 m-5 p-0"
+              />
+              <section className="relative flex flex-wrap justify-between h-full items-center">
+                <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
+                  {errors.msg && <Message color="red"> {errors.msg}</Message>}
+                  <p className="text-lg font-normal">Email</p>
+                  <Input
+                    placeholder="Masukan email kamu"
+                    name="email"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.email}
                     disabled={isSubmitting}
+                    error={
+                      errors.email &&
+                      touched.email && {
+                        content: `${errors.email}`,
+                        pointing: "above",
+                      }
+                    }
+                    size="normal"
                   />
-                  <Link to="/ppdb/register" className="my-4">
-                    <p className="text-sm text-gray-500">
-                      Tidak Punya akun?
-                      <a className="underline" href="#">
-                        Daftar
-                      </a>
-                    </p>
-                  </Link>
+                  <p className="text-lg font-medium mt-6">Password</p>
+                  <Input
+                    placeholder="Masukan Password kamu"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    disabled={isSubmitting}
+                    error={
+                      errors.password &&
+                      touched.password && {
+                        content: `${errors.password}`,
+                        pointing: "above",
+                      }
+                    }
+                    size="normal"
+                  />
+                  <span
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  ></span>
+                  {errors && touched && <ErrorMessage>{errors}</ErrorMessage>}
+                  <div className="flex flex-col items-center justify-center mt-4">
+                    <Button
+                      content={isSubmitting ? "Proses" : "Masuk"}
+                      type="submit"
+                      fluid
+                      size="medium"
+                      color="green"
+                      loading={isSubmitting}
+                      disabled={isSubmitting}
+                    />
+                    <Link to="/ppdb/register" className="my-16">
+                      <p className="text-sm text-gray-500">
+                        Tidak Punya akun?
+                        <a className="underline" href="#">
+                          Daftar
+                        </a>
+                      </p>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-
-              <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
-                <img
-                  alt="Banner"
-                  src={Banner}
-                  layout="fill"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </div>
-            </section>
+                <div className="relative w-full lg:w-[491px] h-full">
+                  <img
+                    src={Banner}
+                    alt="Banner"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                  <img
+                    src={Laptop}
+                    alt="Laptop"
+                    className="hidden lg:block absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[600px] h-[400px] object-cover z-20"
+                  />
+                </div>
+              </section>
+            </div>
           </Form>
         )}
       </Formik>

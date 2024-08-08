@@ -23,6 +23,10 @@ module.exports = {
         'backgroundFooter':"url('/src/image/ppdb/backgroundFooter.png')"
         // tambahkan lebih banyak gambar sesuai kebutuhan
       },
+      borderRadius: {
+        'custom-30': '30px',
+        'custom-50': '50px',
+      },
     },
   },
   variants: {

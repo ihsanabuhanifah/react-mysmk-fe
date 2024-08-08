@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import Banner from "../../../image/ppdb/backgorund.png";
 import LogoMq from "../../../image/ppdb/ppdb.png";
-import { Button, Form, Input, Select } from "semantic-ui-react";
+import { Button, Form, Select } from "semantic-ui-react";
 import { registerPpdb } from "../../../api/ppdb/ppdbAuth";
 import Cookies from "js-cookie";
+import { Input } from "../../../components/input";
 
 // Skema validasi menggunakan yup
 const RegisterPpdbSchema = yup.object().shape({
@@ -105,201 +106,176 @@ const RegisterPpdb = () => {
           setFieldValue,
           isSubmitting,
         }) => (
-          <section className="relative flex flex-wrap lg:h-screen lg:items-center h-full">
-            <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24">
-              <div className="mx-auto max-w-lg text-center">
-              <div className="w-full flex justify-center mb-4">
-                    <img
-                      alt="LogoMq"
-                      src={LogoMq}
-                      width={150} // sesuaikan dengan ukuran yang diinginkan
-                      height={150} // sesuaikan dengan ukuran yang diinginkan
-                    />
-                  </div>
-                <h1 className="text-2xl font-bold sm:text-3xl">
-                  Ayo Daftarkan Diri Anda!
-                </h1>
-                <p className="mt-2 text-gray-500">
-                  Silahkan isi data di bawah ini untuk membuat akun di Aplikasi
-                  PSB Online SMK MADINATULQUR’AN
-                </p>
-              </div>
-
-              <Form onSubmit={handleSubmit}>
-                <Form.Field
-                  control={Input}
-                  label="username"
-                  placeholder="Masukkan Nama Anda"
-                  name="name"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.name}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={"envelope"}
-                  iconPosition="left"
-                  error={
-                    errors.name &&
-                    touched.name && {
-                      content: `${errors.name}`,
-                      pointing: "above",
-                    }
-                  }
-                  type="text"
+          <body className="bg-imageAbstrak h-screen overflow-hidden">
+            <section className="relative flex flex-wrap lg:h-screen h-full">
+              <div className="relative w-full lg:w-1/2 h-full lg:h-screen">
+                <img
+                  src={Banner}
+                  alt="Banner"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
-                <Form.Field
-                  control={Input}
-                  label="No Handphone"
-                  placeholder="Masukkan Nomor  Anda"
-                  name="no_hp"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  onClick={() => handleNoHpClick(setFieldValue)}
-                  value={values.no_hp}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={"phone"}
-                  iconPosition="left"
-                  error={
-                    errors.no_hp &&
-                    touched.no_hp && {
-                      content: `${errors.no_hp}`,
-                      pointing: "above",
-                    }
-                  }
-                  type="text"
-                />
-                <Form.Field
-                  control={Input}
-                  label="Email"
-                  placeholder="Masukkan Email Anda"
-                  name="email"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={"envelope"}
-                  iconPosition="left"
-                  error={
-                    errors.email &&
-                    touched.email && {
-                      content: `${errors.email}`,
-                      pointing: "above",
-                    }
-                  }
-                  type="email"
-                />
-                <Form.Field
-                  control={Input}
-                  label="Password"
-                  placeholder="Masukkan Password"
-                  name="password"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={{
-                    name: showPassword ? "eye slash" : "eye",
-                    circular: true,
-                    link: true,
-                    onClick: () => setShowPassword(!showPassword),
-                  }}
-                  iconPosition="left"
-                  error={
-                    errors.password &&
-                    touched.password && {
-                      content: `${errors.password}`,
-                      pointing: "above",
-                    }
-                  }
-                  type={showPassword ? "text" : "password"}
-                />
-                <Form.Field
-                  control={Input}
-                  label="Konfirmasi Password"
-                  placeholder="Masukkan konfirmasi password"
-                  name="passwordConfirmation"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.passwordConfirmation}
-                  disabled={isSubmitting}
-                  fluid
-                  icon={{
-                    name: showPassword ? "eye slash" : "eye",
-                    circular: true,
-                    link: true,
-                    onClick: () => setShowPassword(!showPassword),
-                  }}
-                  iconPosition="left"
-                  error={
-                    errors.passwordConfirmation &&
-                    touched.passwordConfirmation && {
-                      content: `${errors.passwordConfirmation}`,
-                      pointing: "above",
-                    }
-                  }
-                  type={showPassword ? "text" : "password"}
-                />
-
-                {/* <Form.Field
-                  control={Select}
-                  options={rolesOptions}
-                  label={{
-                    children: "Masuk Sebagai",
-                    htmlFor: "loginAs",
-                    name: "loginAs",
-                  }}
-                  onChange={(event, data) => {
-                    setFieldValue("loginAs", data.value);
-                  }}
-                  onBlur={handleBlur}
-                  value={values.loginAs}
-                  disabled={isSubmitting}
-                  placeholder="Pilih Role"
-                  error={
-                    errors.loginAs &&
-                    touched.loginAs && {
-                      content: `${errors?.loginAs}`,
-                      pointing: "above",
-                    }
-                  }
-                  search
-                  searchInput={{ id: "loginAs", name: "loginAs" }}
-                /> */}
-
-                <div className="flex flex-col items-center justify-center">
-                  <Button
-                    content={isSubmitting ? "Proses" : "Daftar"}
-                    type="submit"
-                    fluid
-                    size="medium"
-                    color="green"
-                    loading={isSubmitting}
-                    disabled={isSubmitting}
+                <div className="absolute top-4 left-4">
+                  <img
+                    alt="LogoMq"
+                    src={LogoMq}
+                    width={200} // sesuaikan dengan ukuran yang diinginkan
+                    height={200} // sesuaikan dengan ukuran yang diinginkan
                   />
-
-                  <Link to="/ppdb/login" className="my-4">
-                    <p className="text-sm text-gray-500 ">
-                      Kembali Ke -
-                      <a className="hover:underline" href="#">
-                        Login
-                      </a>
-                    </p>
-                  </Link>
                 </div>
-              </Form>
-            </div>
+              </div>
+              <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24 flex items-center justify-center">
+                <div className="mx-auto max-w-lg text-left">
+                  <h1 className="text-2xl font-bold sm:text-3xl">
+                    Ayo bergabung bersama Kami!
+                  </h1>
+                  <p className="mt-2 text-gray-500">
+                    Silahkan isi data di bawah ini untuk membuat akun di
+                    Aplikasi PSB Online SMK MADINATULQUR’AN
+                  </p>
 
-            <div className="relative h-full w-full sm:h-96 lg:h-full lg:w-1/2">
-              <img
-                src={Banner}
-                alt="Banner"
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            </div>
-          </section>
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Field
+                      control={Input}
+                      label="username"
+                      placeholder="Masukkan Nama Anda"
+                      name="name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.name}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={"envelope"}
+                      iconPosition="left"
+                      error={
+                        errors.name &&
+                        touched.name && {
+                          content: `${errors.name}`,
+                          pointing: "above",
+                        }
+                      }
+                      type="text"
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="No Handphone"
+                      placeholder="Masukkan Nomor  Anda"
+                      name="no_hp"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      onClick={() => handleNoHpClick(setFieldValue)}
+                      value={values.no_hp}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={"phone"}
+                      iconPosition="left"
+                      error={
+                        errors.no_hp &&
+                        touched.no_hp && {
+                          content: `${errors.no_hp}`,
+                          pointing: "above",
+                        }
+                      }
+                      type="text"
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="Email"
+                      placeholder="Masukkan Email Anda"
+                      name="email"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.email}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={"envelope"}
+                      iconPosition="left"
+                      error={
+                        errors.email &&
+                        touched.email && {
+                          content: `${errors.email}`,
+                          pointing: "above",
+                        }
+                      }
+                      type="email"
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="Password"
+                      placeholder="Masukkan Password"
+                      name="password"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={{
+                        name: showPassword ? "eye slash" : "eye",
+                        circular: true,
+                        link: true,
+                        onClick: () => setShowPassword(!showPassword),
+                      }}
+                      iconPosition="left"
+                      error={
+                        errors.password &&
+                        touched.password && {
+                          content: `${errors.password}`,
+                          pointing: "above",
+                        }
+                      }
+                      type={showPassword ? "text" : "password"}
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="Konfirmasi Password"
+                      placeholder="Masukkan konfirmasi password"
+                      name="passwordConfirmation"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.passwordConfirmation}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={{
+                        name: showPassword ? "eye slash" : "eye",
+                        circular: true,
+                        link: true,
+                        onClick: () => setShowPassword(!showPassword),
+                      }}
+                      iconPosition="left"
+                      error={
+                        errors.passwordConfirmation &&
+                        touched.passwordConfirmation && {
+                          content: `${errors.passwordConfirmation}`,
+                          pointing: "above",
+                        }
+                      }
+                      type={showPassword ? "text" : "password"}
+                    />
+
+                    <div className="flex flex-col items-center justify-center">
+                      <Button
+                        content={isSubmitting ? "Proses" : "Daftar"}
+                        type="submit"
+                        fluid
+                        size="medium"
+                        color="green"
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
+                      />
+
+                      {/* <Link to="/ppdb/login" className="my-4">
+                        <p className="text-sm text-gray-500">
+                          Kembali Ke -
+                          <a className="hover:underline" href="#">
+                            Login
+                          </a>
+                        </p>
+                      </Link> */}
+                    </div>
+                  </Form>
+                </div>
+              </div>
+            </section>
+          </body>
         )}
       </Formik>
     </>
