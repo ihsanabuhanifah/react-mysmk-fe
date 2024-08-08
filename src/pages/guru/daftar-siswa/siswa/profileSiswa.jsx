@@ -65,7 +65,8 @@ const FormikComponent = ({ onSuccess, onError }) => {
     error,
   } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
     enabled: !!id,
-    onSuccess: (response) => {
+    staleTime : 1000 * 60 * 60,
+    select: (response) => {
       if (response && response.data && response.data.siswa) {
         setInitialValues({
           user_id: response.data.siswa.user_id || "",
@@ -92,6 +93,9 @@ const FormikComponent = ({ onSuccess, onError }) => {
       } else {
         warningToast("Data siswa tidak ditemukan.");
       }
+
+
+      return response.data
     },
     onError: (err) => {
       warningToast("Gagal mengambil data siswa");
@@ -108,6 +112,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
     // console.log(values)
   };
 
+  console.log('swa', siswaData)
   return (
     <Formik
       initialValues={initialValues}
