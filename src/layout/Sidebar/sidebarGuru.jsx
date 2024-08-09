@@ -356,13 +356,13 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
       <div style={{
         zomm : '80%'
       }} className="w-8 h-8 ">{logo}</div>
-      {/* <p
+      <p
         className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}
          `}
       >
         {title}
-      </p> */}
+      </p>
     </button>
   );
 }
