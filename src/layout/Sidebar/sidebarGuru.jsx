@@ -28,8 +28,6 @@ import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
 import { ModalLogout } from "../../components";
 import useList from "../../hook/useList";
-import { AccordionNavButton } from "../../components/accordion";
-// import { AccordionNavButton } from "../../components/accordion";
 
 export default function SidebarGuru({ setSidebar }) {
   let date = new Date();
@@ -290,7 +288,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {/* {checkRole(roles, "guru") && (
+        {checkRole(roles, "guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="fitur-siswa-pkl"
@@ -305,28 +303,20 @@ export default function SidebarGuru({ setSidebar }) {
               />
             }
           />
-        )} */}
+        )}
 
-        {checkRole(roles, "guru") && (
-          // <AccordionNavButton  title="prestasi" logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
-          //   ? "text-white-400"
-          //   : "text-gray-600"
-          //   }`} />} isOpen={accordionOpen === 'prestasi'} onToggle={() => toggleAccordion('prestasi')}>
-          //   {checkRole(roles, "guru") && (
-          //     <>
-          //       <NavButton handleSidebar={handleSiderbar} to="bank-soal" path="bank-soal" title="Bank Soal" url={url} />
-          //       <NavButton handleSidebar={handleSiderbar} to="exam" path="exam" title="Exam" url={url} />
-          //     </>
-          //   )}
-          // </AccordionNavButton>
+        {/* {checkRole(roles, "guru") && (
+          
           <AccordionNavButton title="Fitur-siswa-pkl" path={"fitur-siswa-pkl"} to={"fitur-siswa-pkl"} logo={<MdApartment className={`h-8 w-8 ${url === "fitur-siswa-pkl"
             ? "text-white-400"
             : "text-gray-600"
             }`} />}>
+           
             <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/tambah" path="fitur-siswa-pkl/tambah" title="Tambah Siswa Pkl" logo={<MdOutlineSupervisorAccount className="h-8 w-8" />} />
             <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/update" path="fitur-siswa-pkl/update" title="Perbaiki" logo={<MdFingerprint className="h-8 w-8" />} />
+            <NavButton handleSidebar={handleSiderbar} to="fitur-siswa-pkl/jurnal" path="fitur-siswa-pkl/jurnal" title="Jurnal Harian" logo={<MdFingerprint className="h-8 w-8" />} />
           </AccordionNavButton>
-        )}
+        )} */}
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}

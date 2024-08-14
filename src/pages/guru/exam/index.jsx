@@ -41,6 +41,7 @@ export default function ListExam() {
     {
       // refetchInterval: 1000 * 60 * 60,
       select: (response) => {
+        console.log(response.data)
         return response.data;
       },
     }

@@ -1,83 +1,96 @@
-import React from 'react'
+import React from 'react';
 import LayoutPage from '../../../module/layoutPage';
-import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading, ViewButton } from '../../../components';
+import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from '../../../components';
 import useDelete from '../../../hook/useDelete';
 import { useQuery, useQueryClient } from 'react-query';
-import { Formik } from 'formik';
-import * as Yup from "yup";
-import useDebounce from '../../../hook/useDebounce';
-import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
-import dayjs from 'dayjs';
+import { Button, Icon, Input, Table } from "semantic-ui-react";
 import { useNavigate } from 'react-router-dom';
 import usePage from "../../../hook/usePage";
-import { deleteSiswaPkl, listSiswaPkl } from '../../../api/guru/fitur-pkl';
+import { createSiswaPkl, deleteSiswaPkl, listSiswaPkl, updateSiswaPkl } from '../../../api/guru/fitur-pkl';
+import { toast } from 'react-toastify';
+import * as Yup from "yup"
+import useDebounce from '../../../hook/useDebounce';
+import FormFiturPkl from './FormSiswaPkl';
+import { Collapse } from 'react-collapse';
+import { handleViewNull } from '../../../utils';
+import { Formik } from 'formik';
 
-// let fiturPklSchema = Yup.object().shape({
-//     student_id: Yup.string().required("wajib diisi"),
-//     nama_siswa: Yup.string().required("wajib diisi"),
-//     alamat: Yup.string().required("wajib diisi"),
-//     provinsi: Yup.string().required("wajib diisi"),
-//     kota: Yup.string().required("wajib diisi"),
-//     kecamatan: Yup.string().required("wajib diisi"),
-//     desa: Yup.string().required("wajib diisi"),
-//     rt: Yup.string().required("wajib diisi"),
-//     rw: Yup.string().required("wajib diisi"),
-//     kodepos: Yup.number().required("wajib diisi"),
-//     // nama_perusahaan: Yup.string().required("wajib diisi"),
-//     // daerah_perusahaan: Yup.string().required("wajib diisi"),
-//     no_hp: Yup.number().required("wajib diisi"),
-// });
+let siswapklSchema = Yup.object().shape({
+    student_id: Yup.string().required("wajib pilih"),
+    nama_perusahaan: Yup.string().required("wajib diisi"),
+    pembimbing_id: Yup.string().required("wajib diisi"),
+    penanggung_jawab_perusahaan: Yup.string().required("wajib diisi"),
+    alamat: Yup.string().required("wajib diisi"),
+    provinsi: Yup.string().required("wajib diisi"),
+    kota: Yup.string().required("wajib diisi"),
+    kecamatan: Yup.string().required("wajib diisi"),
+    desa: Yup.string().required("wajib diisi"),
+    rt: Yup.string().required("wajib diisi"),
+    rw: Yup.string().required("wajib diisi"),
+    kodepos: Yup.string().required("wajib diisi"),
+    no_hp: Yup.string().required("wajib diisi"),
+    longtitude: Yup.string().required("wajib diisi"),
+    latitude: Yup.string().required("wajib diisi"),
+});
 
-// let fiturPklArraySchema = Yup.object().shape({
-//     fiturPkl: Yup.array().of(fiturPklSchema),
-// });
+let siswapklArraySchema = Yup.object().shape({
+    data: Yup.array().of(siswapklSchema),
+});
 
 export default function FiturPkl() {
-
-    const navigate = useNavigate();
-    // let [page, setPage] = React.useState(1);
-    // let [pageSize, setPageSize] = React.useState(10);
-    let { page, pageSize, setPage, setPageSize } = usePage();
     let [nama, setNama] = React.useState("");
     let debouncedName = useDebounce(nama, 600);
+    let navigate = useNavigate();
+    let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
     let [mode, setMode] = React.useState("add");
     let [isOpen, setIsOpen] = React.useState(false);
 
-
-    const initialValue = {
-        createpkl: [
-            {
-                student_id: "",
-                nama_siswa: "",
-                perusahaan_name: "",
-                daerah_perusahaan_name: "",
-                nomertelepon: "",
-            },
-        ],
-    };
-
     let params = {
         page,
         pageSize,
-
-        // is_all: 1,
+        nama_siswa: debouncedName
     };
+
     let { data, isLoading } = useQuery(
-        //query key
         ["/tempat-pkl/list", params],
-        //axios function,triggered when page/pageSize change
         () => listSiswaPkl(params),
-        //configuration
         {
-            // refetchInterval: 1000 * 60 * 60,
+            // select: (response) => response.data,
+            refetchInterval: 1000 * 60 * 60,
             select: (response) => {
+                console.log(response.data)
                 return response.data;
             },
         }
     );
+    const initialValue = {
+        data: [
+            {
+                student_id: "",
+                nama_siswa: null,
+                nama_perusahaan: "",
+                // guru_id: "",
+                // nama_guru: "",
 
-    let {
+                pembimbing_id: "",
+                // nama_pembimbing: "",
+                penangung_jawab_perusahaan: "",
+                alamat: "",
+                provinsi: "",
+                kota: "",
+                kecamatan: "",
+                desa: "",
+                rt: "",
+                rw: "",
+                kodepos: "",
+                no_hp: "",
+                longtitude: "",
+                latitude: "",
+            }
+        ]
+    };
+    const {
         showAlertDelete,
         setShowAlertDelete,
         deleteLoading,
@@ -85,12 +98,47 @@ export default function FiturPkl() {
         onConfirmDelete,
     } = useDelete({
         afterDeleted: () => queryClient.invalidateQueries("/tempat-pkl/list"),
-        onDelete: (id) => {
-            return deleteSiswaPkl(id);
-        },
+        onDelete: (id) => deleteSiswaPkl(id),
     });
 
-
+    const onSubmit = async (values, { resetForm }) => {
+        try {
+          let response;
+          if (mode === "update") {
+            response = await updateSiswaPkl(values);
+          } else {
+            response = await createSiswaPkl(values);
+          }
+          console.log(response);
+          queryClient.invalidateQueries("/tempat-pkl/list");
+          resetForm();
+          setIsOpen(false);
+        //   console.log('data',data)
+          return toast.success(response?.data?.msg, {
+            
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        } catch (err) {
+          console.log(err);
+          return toast.error("Ada Kesalahan", {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
+      };
 
     return (
         <LayoutPage title={'Fitur Pkl'}>
@@ -99,119 +147,232 @@ export default function FiturPkl() {
                 setOpen={setShowAlertDelete}
                 loading={deleteLoading}
                 onConfirm={onConfirmDelete}
-                title={"Apakah yakin akan menghapus pelanggaran terpilih ?"}
+                title={"Apakah yakin akan menghapus FiturPkl terpilih?"}
             />
-            <div className="mt-5 space-y-5">
-                <section className="grid grid-cols-5 gap-5">
-                    <div className="col-span-4 lg:col-span-1">
-                        <Button
-                            type="button"
-                            color="teal"
-                            icon={() => <Icon name="add" />}
-                            onClick={() => {
-                                navigate("tambah", {
-                                    replace: true,
-                                });
-                            }}
-                            content="Tambah "
-                        />
-                    </div>
-                </section>
-                <section>
-                    <Table celled selectable>
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>No</Table.HeaderCell>
-                                <Table.HeaderCell>Nama Perusahaan</Table.HeaderCell>
-                                <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                                <Table.HeaderCell>Alamat</Table.HeaderCell>
-                                <Table.HeaderCell>Provinsi</Table.HeaderCell>
-                                <Table.HeaderCell>Kota</Table.HeaderCell>
-                                <Table.HeaderCell>Kecamatan</Table.HeaderCell>
-                                <Table.HeaderCell>Desa</Table.HeaderCell>
-                                <Table.HeaderCell>Rt</Table.HeaderCell>
-                                <Table.HeaderCell>Rw</Table.HeaderCell>
-                                <Table.HeaderCell>Kodepos</Table.HeaderCell>
-                                <Table.HeaderCell>Nomer Telepon</Table.HeaderCell>
-                                <Table.HeaderCell>Penangung Jawab Perusahaan</Table.HeaderCell>
-                                <Table.HeaderCell>Penangung Jawab Sekolah</Table.HeaderCell>
-                                <Table.HeaderCell>Aksi</Table.HeaderCell>
 
-                                {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell>
-                                <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-                                <Table.HeaderCell>Kelas</Table.HeaderCell>
-                                <Table.HeaderCell>Jenis Ujian</Table.HeaderCell>
-                                <Table.HeaderCell>Status</Table.HeaderCell>
-                                <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
-                                <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
-                                <Table.HeaderCell>Aksi</Table.HeaderCell> */}
+            
 
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            <TableLoading
-                                count={8}
-                                isLoading={isLoading}
+            <Formik
+                initialValues={initialValue}
+                enableReinitialize
+                validationSchema={siswapklArraySchema}
+                onSubmit={onSubmit}
+            >
+                
+                {({
+                    values,
+                    setValues,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                    setFieldTouched,
+                    setFieldValue,
+                    resetForm,
+                }) => (
+                    <>
+                    {JSON.stringify(values)}
+                        <Collapse
+                            theme={{ collapse: "foo", content: "bar" }}
+                            isOpened={isOpen}
+                        >
+                            <FormFiturPkl
                                 data={data?.data}
-                                messageEmpty={"Data Tidak Ditemukan"}
-                            >
-                                {data?.data?.rows?.map((value, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.Cell>{index + 1}</Table.Cell>
-
-
-
-                                        <Table.Cell>{value?.nama_perusahaan}</Table.Cell>
-                                        <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
-                                        <Table.Cell>{value?.alamat}</Table.Cell>
-                                        <Table.Cell>{value?.provinsi}</Table.Cell>
-                                        <Table.Cell>{value?.kota}</Table.Cell>
-                                        <Table.Cell>{value?.kecamatan}</Table.Cell>
-                                        <Table.Cell>{value?.desa}</Table.Cell>
-                                        <Table.Cell>{value?.rt}</Table.Cell>
-                                        <Table.Cell>{value?.rw}</Table.Cell>
-                                        <Table.Cell>{value?.kode_pos}</Table.Cell>
-                                        <Table.Cell>{value?.no_hp}</Table.Cell>
-                                        {/* <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell> */}
-                                        <Table.Cell>{value?.penanggung_jawab_perusahaan
-                                        }</Table.Cell>
-
-                                        {/* <Table.Cell>
-                                            {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
-                                        </Table.Cell> */}
-
-                                        <Table.Cell>
-
-                                            <EditButton
-                                                onClick={() => {
-                                                    navigate(`update/${value.id}`, {
-                                                        replace: true,
-                                                    });
+                                values={values}
+                                setValues={setValues}
+                                errors={errors}
+                                touched={touched}
+                                handleChange={handleChange}
+                                handleBlur={handleBlur}
+                                handleSubmit={handleSubmit}
+                                isSubmitting={isSubmitting}
+                                setFieldTouched={setFieldTouched}
+                                setFieldValue={setFieldValue}
+                                resetForm={resetForm}
+                                mode={mode}
+                                setIsOpen={setIsOpen}
+                            />
+                        </Collapse>
+                        <section className="mt-5">
+                            <div className="overflow-auto">
+                                <div className="">
+                                    <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+                                        {/* <div className=" grid-cols-1 lg:col-span-3">
+                                            <Input
+                                                onChange={(e) => {
+                                                    setNama(e.target.value);
                                                 }}
+                                                fluid
+                                                value={nama}
+                                                icon="search"
+                                                placeholder="Nama Siswa..."
                                             />
-                                            <DeleteButton
+                                        </div> */}
+                                        <div className="col-span-1 lg:col-span-2">
+                                            <Button
+                                                type="button"
+                                                color="teal"
+                                                icon={() => <Icon name='add' />}
                                                 onClick={() => {
-                                                    confirmDelete(value?.id);
+                                                    setIsOpen(true);
+                                                    setMode("add");
+                                                    return window.scrollTo(0, 0);
                                                 }}
+                                                content="Buat Pkl Siswa"
                                             />
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </TableLoading>
-                        </Table.Body>
-                    </Table>
-                    <PaginationTable
-                        page={page}
-                        pageSize={pageSize}
-                        setPageSize={setPageSize}
-                        setPage={setPage}
-                        totalPages={data?.data?.count}
-                    />
-                </section>
-            </div>
+                                        </div>
+                                    </div>
+                                    <Table celled selectable>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell>No</Table.HeaderCell>
+                                                <Table.HeaderCell>Nama Perusahaan</Table.HeaderCell>
+                                                <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
+                                                <Table.HeaderCell>Alamat</Table.HeaderCell>
+                                                <Table.HeaderCell>Provinsi</Table.HeaderCell>
+                                                <Table.HeaderCell>Kota</Table.HeaderCell>
+                                                <Table.HeaderCell>Kecamatan</Table.HeaderCell>
+                                                <Table.HeaderCell>Desa</Table.HeaderCell>
+                                                <Table.HeaderCell>Rt</Table.HeaderCell>
+                                                <Table.HeaderCell>Rw</Table.HeaderCell>
+                                                <Table.HeaderCell>Kodepos</Table.HeaderCell>
+                                                <Table.HeaderCell>Nomer Telepon</Table.HeaderCell>
+                                                <Table.HeaderCell>Penangung Jawab Perusahaan</Table.HeaderCell>
+                                                <Table.HeaderCell>Penangung Jawab Sekolah</Table.HeaderCell>
+                                                <Table.HeaderCell>Pengampu</Table.HeaderCell>
+                                                <Table.HeaderCell singleLine>Aksi</Table.HeaderCell>
+                                            </Table.Row>
+                                        </Table.Header>
+                                        <Table.Body>
+                                            <TableLoading
+                                                count={13}
+                                                isLoading={isLoading}
+                                                data={data?.data}
+                                                messageEmpty={"Tidak Ada Data Siswa Pkl"}
+                                            >
+                                                {data?.data?.map((value, index) => (
+                                                    <Table.Row key={index}>
+                                                        <Table.Cell>{index + 1}</Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(
+                                                                value?.nama_perusahaan
+                                                            )}
+                                                        </Table.Cell>
+                                                        <Table.Cell>
+                                                            <span className="capitalize">
+                                                                {handleViewNull(value?.siswa?.nama_siswa)}
+                                                            </span>
+                                                        </Table.Cell>
+                                                        
+
+                                                        <Table.Cell textAlign="left">
+                                                            <span className="capitalize">
+                                                                
+                                                                {handleViewNull(value?.alamat)}
+                                                            </span>
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            <span className="capitalize">
+                                                                {/* {" "} */}
+                                                                {handleViewNull(value?.provinsi)}
+                                                            </span>
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.kota)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.kecamatan)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.desa)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.rt)}
+                                                        </Table.Cell>
+                                                        
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.rw)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.kode_pos)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.no_hp)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(value?.penanggung_jawab_perusahaan)}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            <span className="capitalize">
+                                                                {" "}
+                                                                {handleViewNull(value?.teacher?.nama_guru)}
+                                                            </span>
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            {handleViewNull(
+                                                                value?.pembimbing?.nama_guru
+                                                            )}
+                                                        </Table.Cell>
+                                                        <Table.Cell textAlign="left">
+                                                            <div className="flex items-center">
+                                                                {" "}
+                                                                <EditButton
+                                                                    onClick={() => {
+                                                                        setMode("update");
+                                                                        setIsOpen(true);
+                                                                        window.scrollTo(0, 0);
+                                                                        setValues({
+                                                                            data: [
+                                                                                {
+                                                                                    id: value?.id,
+                                                                                    student_id: value?.siswa?.id,
+                                                                                    nama_siswa: {
+                                                                                        value: value?.siswa?.id,
+                                                                                        label: value?.siswa?.nama_siswa,
+                                                                                    },
+                                                                                    nama_perusahaan: value?.nama_perusahaan,
+                                                                                    pembimbing_id: value?.pembimbing?.id,
+                                                                                    nama_guru: {
+                                                                                        value: value?.teacher?.id,
+                                                                                        label: value?.teacher?.nama_guru,
+                                                                                    },
+                                                                                    penanggung_jawab_perusahaan: value?.penanggung_jawab_perusahaan,
+                                                                                    alamat: value?.alamat,
+                                                                                    provinsi: value?.provinsi,
+                                                                                    kota: value?.kota,
+                                                                                    kecamatan: value?.kecamatan,
+                                                                                    desa: value?.desa,
+                                                                                    rt: value?.rt,
+                                                                                    rw: value?.rw,
+                                                                                    kodepos: value?.kode_pos,
+                                                                                    no_hp: value?.no_hp,
+                                                                                    longtitude: value?.longtitude,
+                                                                                    latitude: value?.latitude,
+                                                                                    
+                                                                                },
+                                                                            ],
+                                                                        });
+                                                                    }}
+                                                                />
+                                                                <DeleteButton
+                                                                    onClick={() => confirmDelete(value?.id)}
+                                                                />
+                                                            </div>
+                                                        </Table.Cell>
+                                                    </Table.Row>
+                                                ))}
+                                            </TableLoading>
+                                        </Table.Body>
+
+                                    </Table>
+                                </div>
+                            </div>
+                        </section>
+                    </>
+                )}
+            </Formik>
         </LayoutPage>
     );
 }

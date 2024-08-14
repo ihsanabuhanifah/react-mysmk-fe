@@ -46,6 +46,7 @@ export default function FormPrestasi({
         <Header>Form Pencatatan Prestasi</Header>
         <Divider></Divider>
         <Form onSubmit={handleSubmit}>
+          {JSON.stringify(values)}
           {values?.prestasi?.map((value, index) => (
             <div
               key={index}

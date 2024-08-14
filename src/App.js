@@ -44,6 +44,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
+import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
 
 function App() {
   return (
@@ -144,7 +145,9 @@ function App() {
             element={<Absensi />}
           />
           <Route path="fitur-siswa-pkl" element={<FiturPkl />} />
-          <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
+          {/* <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
+          <Route path="fitur-siswa-pkl/update/:id" element={<CreatePkl />} /> */}
+          <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
         </Route>
 
         <Route

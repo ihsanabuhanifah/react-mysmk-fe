@@ -207,7 +207,7 @@ export default function Pelanggaran() {
                       <Button
                         type="button"
                         color="teal"
-                        icon={()=> <Icon name='add'/>}
+                        icon={() => <Icon name='add' />}
                         onClick={() => {
                           setIsOpen(true);
                           setMode("add");
@@ -354,7 +354,7 @@ export default function Pelanggaran() {
                         ))}
                       </TableLoading>
                     </Table.Body>
-                    
+
                   </Table>
                 </div>
               </div>
@@ -363,5 +363,7 @@ export default function Pelanggaran() {
         )}
       </Formik>
     </LayoutPage>
+    
   );
 }
+

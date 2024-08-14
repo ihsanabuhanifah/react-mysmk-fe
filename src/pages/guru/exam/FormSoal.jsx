@@ -207,6 +207,7 @@ export default function FormExam() {
             isSubmitting,
           }) => (
             <Form onSubmit={handleSubmit}>
+              {JSON.stringify(values)}
               {values?.payload?.map((value, index) => (
                 <div className="space-y-5 border  p-5 shadow-md " key={index}>
                   {id === undefined && (
