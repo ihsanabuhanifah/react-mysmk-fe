@@ -16,8 +16,7 @@ export function Input({
       "h-8 text-xs": size === "xs",
       "h-10 text-sm": size == "sm",
       "h-12 text-base": size == "normal",
-      "w-full" : width === true,
-      
+      "w-full": width === true,
     }
   );
   return <input className={cl} {...props} />;
@@ -44,5 +43,9 @@ export function FormText({ children, flexDirection = "col", ...props }) {
 }
 
 export function ErrorMEssage({ children }) {
-  return <span className="text-red-500 text-xs font-semibold italic">{children}</span>;
+  return (
+    <span className="text-red-500 text-xs font-semibold italic">
+      {children}
+    </span>
+  );
 }

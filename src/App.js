@@ -56,6 +56,7 @@ import LandingPage from "./pages/ppdb";
 import LoginPpdb from "./pages/ppdb/login";
 import RegisterPpdb from "./pages/ppdb/register/register";
 import DashboardPpdb from "./pages/ppdb/dashboard/dashboard";
+import PrivateRoute from "./routers/ProtectLoginPpdb";
 
 function App() {
   return (
@@ -186,8 +187,16 @@ function App() {
 
         <Route path="/ppdb" element={<LandingPage />} />
         <Route path="/ppdb/login" element={<LoginPpdb />} />
+        <Route
+          path="/ppdb/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPpdb />
+            </PrivateRoute>
+          }
+        />
         <Route path="/ppdb/register" element={<RegisterPpdb />} />
-        <Route path="/ppdb/dashboard" element={<DashboardPpdb />} />
+        {/* <Route path="/ppdb/dashboard" element={<DashboardPpdb />} /> */}
       </Routes>
     </div>
   );

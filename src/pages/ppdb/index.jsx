@@ -450,6 +450,31 @@ const LandingPage = () => {
         </div>
 
         {/*  Akhir 5 */}
+
+        <div className="min-h-[50vh] flex justify-center items-center bg-parallax bg-fixed bg-no-repeat bg-cover bg-center">
+          <div className="text-center">
+            <h3 className="text-white font-medium text-4xl">
+              Segera daftarkan putra anda sekarang
+            </h3>
+            <div className="text-white text-xl font-normal text-center max-w-lg mx-auto">
+              <p>
+                InsyaAllah kami adalah jawaban ayah bunda yang ingin putranya
+                belajar IT, tetapi tetap menomor satukan belajar diniyah sebagai
+                bekal hidupnya.
+              </p>
+            </div>
+            <div className="pt-4">
+              <Link to="login">
+                <button className="w-auto h-auto bg-white rounded-lg px-8 py-2">
+                  <p className="text-customGreen font-semibold text-lg">
+                    Daftar sekarang
+                  </p>
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div className="flex items-center justify-center gap-8">
           <Link to="login" className="text-blue-500 hover:text-green-400 ">
             Login
@@ -463,11 +488,11 @@ const LandingPage = () => {
         </div>
 
         <footer className="bg-backgroundFooter">
-          <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
-            <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 lg:py-16 sm:px-6 lg:px-8">
+            <div className="mt-8 sm:mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
               <div className="text-center sm:text-left">
                 <p className="text-2xl font-semibold text-white">Kontak</p>
-                <ul className="mt-8 space-y-4 text-lg">
+                <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
                   <li>
                     <a
                       className="text-white transition hover:text-gray-700/75"
@@ -495,12 +520,12 @@ const LandingPage = () => {
                 </ul>
               </div>
 
-              <div className="text-center sm:text-left">
+              <div className="text-center sm:text-left sm:pl-10 lg:pl-20">
                 <p className="text-2xl font-semibold text-white">
                   Media Sosial
                 </p>
-                <ul className="mt-8 space-y-4 text-lg">
-                  <li className="flex items-center gap-4">
+                <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
+                  <li className="flex justify-center sm:justify-start items-center gap-4">
                     <a
                       href="https://facebook.com"
                       rel="noreferrer"
@@ -528,7 +553,7 @@ const LandingPage = () => {
                       Facebook
                     </a>
                   </li>
-                  <li className="flex items-center gap-4">
+                  <li className="flex justify-center sm:justify-start items-center gap-4">
                     <a
                       href="https://instagram.com"
                       rel="noreferrer"
@@ -556,73 +581,50 @@ const LandingPage = () => {
                       Instagram
                     </a>
                   </li>
-                  <li className="flex items-center gap-4">
-                    <a
-                      href="https://youtube.com"
-                      rel="noreferrer"
-                      target="_blank"
-                      className="text-white transition hover:text-teal-700/75 flex items-center"
-                    >
-                      <svg
-                        className="h-6 w-6"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M21.8 8.001c-.262-1.434-1.509-2.565-2.987-2.827C16.881 5 12.014 5 12.014 5s-4.867 0-6.8.174c-1.478.262-2.725 1.393-2.987 2.827C2 10.001 2 12.001 2 12.001s0 2 .227 3.999c.262 1.434 1.509 2.565 2.987 2.827C7.147 19 12.014 19 12.014 19s4.867 0 6.8-.174c1.478-.262 2.725-1.393 2.987-2.827C22.014 14.001 22.014 12.001 22.014 12.001s0-2-.214-3.999zM9.71 14.692v-5.385L15.21 12l-5.5 2.692z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="sr-only">YouTube</span>
-                    </a>
-                    <a
-                      href="https://youtube.com"
-                      className="text-white transition hover:text-gray-700/75"
-                    >
-                      YouTube
-                    </a>
-                  </li>
                 </ul>
               </div>
-
-              <div className="text-center sm:text-left text-white">
-                <p className="text-2xl font-semibold">Alamat</p>
-                <ul className="text-lg mt-8">
-                  <li className="flex items-center gap-4">
-                    <a
-                      href="https://goo.gl/maps/your-location" // Ganti dengan link peta Anda
-                      rel="noreferrer"
-                      target="_blank"
-                      className="text-white transition hover:text-teal-700/75 flex items-center"
+              <div className="text-center sm:text-left">
+                <p className="text-2xl font-semibold text-white">Alamat</p>
+                <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
+                  <li className="flex items-start gap-2">
+                    <svg
+                      className="h-8 w-8 text-white flex-shrink-0 mt-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
-                      <svg
-                        className="h-6 w-6"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12 2C8.14 2 5 5.14 5 9c0 4.4 6 11 7 11s7-6.6 7-11c0-3.86-3.14-7-7-7zm0 13c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm0-3c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="sr-only">Location</span>
-                    </a>
-                    <span className="text-white">
+                      <path
+                        fillRule="evenodd"
+                        d="M12 2a6 6 0 00-6 6c0 4.418 6 12 6 12s6-7.582 6-12a6 6 0 00-6-6zm0 9a3 3 0 110-6 3 3 0 010 6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <p className="text-white">
                       Kp.Kebon Kelapa, RT.02/RW.011, Singasari, Kec. Jonggol,
                       Bogor, Jawa Barat 16830 NPSN : 69944176
-                    </span>
+                    </p>
                   </li>
                 </ul>
               </div>
+
+              {/* <div className="text-center sm:text-left">
+                <p className="text-2xl font-semibold text-white">Kerjasama</p>
+                <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
+                  <li>
+                    <a
+                      className="text-white transition hover:text-gray-700/75"
+                      href="mailto:partnership@smkmadinatulquran.sch.id"
+                    >
+                      partnership@smkmadinatulquran.sch.id
+                    </a>
+                  </li>
+                </ul>
+              </div> */}
             </div>
 
-            <div className="mt-16 border-t border-gray-200 pt-8 text-center text-white">
-              <p className="text-xl">
-                &copy; 2023 All Right Reserved. SMK MADINATULQURAN
+            <div className="mt-8 border-t border-white pt-4 text-center text-sm text-white sm:flex sm:justify-between">
+              <p className="sm:order-first">
+                &copy; 2024 SMK Madinatulquran. All rights reserved.
               </p>
             </div>
           </div>
