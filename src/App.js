@@ -39,7 +39,6 @@ import {
   EditSiswa,
 } from "./pages/guru";
 
-
 import NotFound from "./pages/NotFound";
 
 import { ToastContainer } from "react-toastify";
@@ -56,7 +55,8 @@ import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajar from "./pages/guru/hasil-belajar";
-
+import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
+import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 
 function App() {
   return (
@@ -171,6 +171,8 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardSiswa />} />
+          <Route path="laporan-pkl" element={<LaporanPkl />} />
+          <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>
