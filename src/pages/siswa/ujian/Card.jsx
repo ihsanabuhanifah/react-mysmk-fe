@@ -5,6 +5,7 @@ import { formatWaktu } from '../../../utils/waktu'
 import { Button, Icon, Label } from 'semantic-ui-react'
 
 export default function Card({ item, handleExam }) {
+  console.log(item)
 	return (
 		<div className="border flex flex-col rounded-md text-xs w-full h-[330px] shadow-sm">
 			<div className="bg-gray-400 relative w-full h-[55%] overflow-hidden rounded-t-md">

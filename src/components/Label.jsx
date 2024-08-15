@@ -34,6 +34,13 @@ export const LabelStatus = ({ status }) => {
     );
   }
 
+  if (status === "projek") {
+    return (
+      <Label size="tiny" content="Proyek" color="black" as={"a"} />
+       
+    );
+  }
+
 
 
   if (status === "hadir") {
