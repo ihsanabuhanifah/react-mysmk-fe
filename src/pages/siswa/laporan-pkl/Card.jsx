@@ -34,7 +34,7 @@ const Card = ({ item, isFetching, isLoading }) => {
               </div>
             </div>
             <div className="flex gap-5 items-center h-full">
-              <Button color="instagram">Laporan Diniyyah</Button>
+              <Button primary>Laporan Diniyyah</Button>
               <Button icon className="p-2">
                 <Icon name="edit" />
               </Button>

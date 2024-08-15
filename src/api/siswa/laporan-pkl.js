@@ -11,6 +11,27 @@ export function getLaporanPklDetail(id) {
   syncToken();
   return axios.get(`/santri/laporan-harian-pkl/detail/${id}`);
 }
+export function getLokasiPkl() {
+  syncToken();
+  return axios.get("/santri/tempat-pkl/lokasi");
+}
+export const useLokasiPkl = () => {
+  let [params, setParams] = useState({ page: 1, pageSize: 10 });
+  const { isLoading, data, isFetching } = useQuery(
+    ["/santri/tempat-pkl/lokasi", params],
+    () => getLokasiPkl(params),
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+  return {
+    data,
+    isFetching,
+    isLoading,
+  };
+};
 
 export const useLaporanPklList = () => {
   let [params, setParams] = useState({ page: 1, pageSize: 10 });
@@ -44,42 +65,6 @@ export function createLaporanPkl(payload) {
   syncToken();
   return axios.post("/santri/laporan-harian-pkl/create", payload);
 }
-const useUserLocation = () => {
-  const [location, setLocation] = useState({
-    latitude: null,
-    longitude: null,
-    error: null,
-  });
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-          });
-        },
-        (error) => {
-          setLocation({
-            latitude: null,
-            longitude: null,
-            error: error.message,
-          });
-        }
-      );
-    } else {
-      setLocation({
-        latitude: null,
-        longitude: null,
-        error: "Geolocation is not supported by this browser.",
-      });
-    }
-  }, []);
-
-  return location;
-};
 
 export const useCreateLaporanPkl = () => {
   const { successToast, warningToast } = useToast();
