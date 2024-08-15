@@ -58,7 +58,6 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-
     "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start ",
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",

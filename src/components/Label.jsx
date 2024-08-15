@@ -67,7 +67,7 @@ export const LabelStatus = ({ status }) => {
     );
   }
 
-  if (status === "PTS") {
+  if (status.toUpperCase() === "PTS") {
     return (
       <Label size="tiny" content="PTS" color="olive" as={"a"} />
        
