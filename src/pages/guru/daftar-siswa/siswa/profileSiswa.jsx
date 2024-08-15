@@ -65,7 +65,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
     error,
   } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
     enabled: !!id,
-    staleTime : 1000 * 60 * 60,
+    staleTime : 1000 * 60 * 60 * 24,
     select: (response) => {
       if (response && response.data && response.data.siswa) {
         setInitialValues({
