@@ -5,7 +5,7 @@ import { Form, Tab } from 'semantic-ui-react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getSiswaById } from '../../../api/guru/siswa';
-import FormikComponent from './siswa/profile';
+import FormikComponent from './siswa/profileSiswa';
 import { toast } from 'react-toastify';
 
 const NilaiContent = () => <div>Konten Nilai</div>;
@@ -17,25 +17,7 @@ export function EditSiswa() {
   const navigate = useNavigate();
   const { nama } = useParams();
 
-  // const {
-  //   data: siswaData,
-  //   isLoading,
-  //   error,
-  // } = useQuery(['siswa/detail', nama], () => getSiswaById(nama), {
-  //   onError: (err) => {
-  //     console.error('Failed to fetch siswa data:', err);
-  //     toast.error('Gagal mengambil data siswa', {
-  //       position: 'top-right',
-  //       autoClose: 2000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: 'colored',
-  //     });
-  //   },
-  // });
+ 
 
   const panes = [
     {

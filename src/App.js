@@ -53,8 +53,10 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
+import HasilBelajar from "./pages/siswa/hasil-belajar/hasilBelajar";
+import HasilBelajarDetail from "./pages/siswa/hasil-belajar/hasilBelajarDetail";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
-import HasilBelajar from "./pages/guru/hasil-belajar";
+import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 
@@ -133,7 +135,7 @@ function App() {
           <Route path="bank-soal/tambah" element={<FormSoal />} />
           <Route path="bank-soal/update/:id" element={<FormSoal />} />
           <Route path="exam" element={<ListExam />} />
-          <Route path="hasil-belajar" element={<HasilBelajar />} />
+          <Route path="hasil-belajar" element={<HasilBelajarGuru />} />
 
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
@@ -179,6 +181,8 @@ function App() {
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="security" element={<SecuritySiswa />} />
           </Route>
+          <Route path="hasil-belajar" element={<HasilBelajar />} />
+            <Route path="hasil-belajar/:id_mapel" element={<HasilBelajarDetail />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
