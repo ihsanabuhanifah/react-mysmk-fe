@@ -21,6 +21,13 @@ export function detailUjian(id) {
   return axios.get(`guru/ujian/detail/${id}`);
 }
 
+
+export function notifikasiExam() {
+  syncToken();
+  return axios.get("/guru/nilai/notifikasi");
+}
+
+
 export function updateUjian(id, values) {
   let payload = values.payload[0];
 
@@ -182,7 +189,9 @@ export const useExamResult = () => {
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        queryClient.invalidateQueries("/guru//nilai/notifikasi");
         successToast(response);
+        
       },
 
       onError: (error) => {
