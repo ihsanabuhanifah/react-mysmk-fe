@@ -48,7 +48,7 @@ export default function HasilBelajarDetail() {
 									<Table.Cell>{format(new Date(value?.jam_mulai), 'HH:mm')}</Table.Cell>
 									<Table.Cell>{format(new Date(value?.jam_selesai), 'HH:mm')}</Table.Cell>
 									<Table.Cell>{value?.exam_result}</Table.Cell>
-									<Table.Cell>{value?.exam.slice(1, -1) ?? '-'}</Table.Cell>
+									<Table.Cell>{value?.exam ? value?.exam.slice(1, -1) : '-'}</Table.Cell>
 									<Table.Cell>{value?.keterangan ?? '-'}</Table.Cell>
 								</Table.Row>
 							))}
