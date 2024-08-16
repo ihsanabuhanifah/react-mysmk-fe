@@ -17,12 +17,14 @@ export default function Profile() {
 	return (
 		<LayoutSiswa title="My Profile">
 			<div className="flex h-full w-full">
-				<div className="flex flex-col bg-white border-r border-black/5 h-full w-[185px] ml-2">
+				<div className="flex overflow-y-auto pb-3 flex-col bg-white border-r border-black/5 h-full w-[185px] ml-2">
 					<ButtonLink title="Edit Profile" logo={<IoPencilOutline size={22} className={`${pathname === "/siswa/profile/edit" ? 'text-[#18a558]' : 'text-gray-400'}`} />} to="/siswa/profile/edit" />
 					<ButtonLink title="Password & Security" logo={<IoShieldOutline size={22} className={`${pathname === "/siswa/profile/security" ? 'text-[#18a558]' : 'text-gray-400'}`} />} to="/siswa/profile/security" />
 				</div>
 
-				<div className="flex-1 h-full bg-white"></div>
+				<div className="flex-1 h-full">
+					<Outlet />
+				</div>
 			</div>
 		</LayoutSiswa>
 	)
@@ -30,7 +32,6 @@ export default function Profile() {
 
 function ButtonLink({ logo, to, title }) {
 	let { pathname } = useLocation()
-	let url = pathname.split('/')[3]
 	const navigate = useNavigate()
 
 	console.log(pathname)

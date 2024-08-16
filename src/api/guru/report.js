@@ -3,31 +3,33 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-import { toast } from "react-toastify";
+
 import useToast from "../../hook/useToast";
 import { useState } from "react";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
 }
 
-// export const useListReport = () => {
-//   const { successToast, warningToast } = useToast();
-//   const mutate = useMutation(
-//     (payload) => {
-//       return axios.post(`/guru/report/list`);
-//     },
-//     {
-//       onSuccess: (response) => {
-//         successToast(response);
-//       },
+export const useGenerateReport = () => {
+  let queryClient = useQueryClient()
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`/guru/report/generate`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        queryClient.invalidateQueries("/guru/nilai/list/teacher")
+        successToast(response);
+      },
 
-//       onError: (error) => {
-//         warningToast(error);
-//       },
-//     }
-//   );
-//   return mutate;
-// };
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
 
 export function listReport(params) {
   syncToken();
@@ -63,7 +65,7 @@ export const useListReport = () => {
       return {
        
         ...payload,
-        student_id: payload.student_id.value,
+       
       };
     });
   };
