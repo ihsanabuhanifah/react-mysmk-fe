@@ -1,5 +1,5 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+import Cookies from "js-cookie";  
 import qs from "qs";
 
 const headers = {
@@ -12,7 +12,8 @@ const axiosClient = axios.create({
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
 baseURL: "http://localhost:8085/",
 // baseURL : "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
-// baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
+ // baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
+
 
 
   timeout: 1000 * 60 * 3,

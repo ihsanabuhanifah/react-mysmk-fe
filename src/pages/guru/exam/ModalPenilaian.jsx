@@ -12,10 +12,12 @@ import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
 import { useUpdateLastExam } from "../../../api/guru/ujian";
+import useList from "../../../hook/useList";
 
-function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
+function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem, values }) {
   const [payload, setPayload] = useState(jawaban);
   const mutate = useUpdateLastExam();
+  const {roles} = useList()
 
   console.log("jawaban", !!jawaban, jawaban);
 
@@ -73,7 +75,8 @@ function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
         <Button color="red" onClick={() => setOpen(false)}>
           <Icon name="remove" /> Batal
         </Button>
-        <Button
+
+        {values?.data?.[0]?.teacher_id === roles?.teacher_id &&  <Button
           color="teal"
           loading={mutate.isLoading}
           disabled={
@@ -95,7 +98,8 @@ function ModalPenilaian({ open, setOpen, soal, jawaban, item, setItem }) {
           }}
         >
           <Icon name="check" /> Perbaharui
-        </Button>
+        </Button> }
+       
       </ModalActions>
     </Modal>
   );

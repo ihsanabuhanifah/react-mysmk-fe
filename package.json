@@ -12,6 +12,7 @@
     "@wojtekmaj/react-daterange-picker": "^3.4.0",
     "axios": "^0.24.0",
     "clsx": "^1.1.1",
+    "color-convert": "^2.0.1",
     "date-fns": "^2.29.1",
     "dayjs": "^1.10.7",
     "firebase": "^9.9.2",
@@ -58,7 +59,9 @@
     "yup": "^0.32.11"
   },
   "scripts": {
+
     "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start ",
+
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"
