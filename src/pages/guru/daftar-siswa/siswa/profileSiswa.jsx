@@ -11,6 +11,7 @@ import {
 import { useParams } from "react-router-dom";
 import useToast from "../../../../hook/useToast"; // Import useToast
 import { useUpdateProfile } from "./profile";
+import { LoadingPage } from "../../../../components";
 
 const FormikComponent = ({ onSuccess, onError }) => {
   const params = useParams();
@@ -22,6 +23,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
 
   const [initialValues, setInitialValues] = useState({
     nama_siswa: "",
+    nik: "",
     nis: "",
     nisn: "",
     tempat_lahir: "",
@@ -40,6 +42,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
 
   const validationSchema = Yup.object().shape({
     nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
+    nik: Yup.string().required("NIK wajib diisi"),
     nis: Yup.string().required("NIS wajib diisi"),
     nisn: Yup.string().required("NISN wajib diisi"),
     tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
@@ -65,11 +68,13 @@ const FormikComponent = ({ onSuccess, onError }) => {
     error,
   } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
     enabled: !!id,
-    onSuccess: (response) => {
+    staleTime : 1000 * 60 * 60 * 24, //24 jam
+    select: (response) => {
       if (response && response.data && response.data.siswa) {
         setInitialValues({
           user_id: response.data.siswa.user_id || "",
           nama_siswa: response.data.siswa.nama_siswa || "",
+          nik: response.data.siswa.nik || "",
           nis: response.data.siswa.nis || "",
           nisn: response.data.siswa.nisn || "",
           tempat_lahir: response.data.siswa.tempat_lahir || "",
@@ -92,6 +97,9 @@ const FormikComponent = ({ onSuccess, onError }) => {
       } else {
         warningToast("Data siswa tidak ditemukan.");
       }
+
+
+      return response.data
     },
     onError: (err) => {
       warningToast("Gagal mengambil data siswa");
@@ -107,6 +115,10 @@ const FormikComponent = ({ onSuccess, onError }) => {
     mutate(values);
     // console.log(values)
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <Formik
@@ -128,6 +140,9 @@ const FormikComponent = ({ onSuccess, onError }) => {
           <div className="flex flex-col gap-y-2 shadow-md p-5">
             <div className="flex">
               <div className="flex flex-col gap-y-4 w-full pr-4">
+                {/* <div>
+                  <p>content</p>
+                </div> */}
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Data Pribadi</h3>
                   <div className="border-b-2 border-gray-300"></div>
@@ -142,6 +157,19 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nama_siswa && errors.nama_siswa}
+                    disabled
+                  />
+                </section>
+                <section>
+                  <label htmlFor="nik">NIK</label>
+                  <SemanticForm.Input
+                    value={values.nik}
+                    id="nik"
+                    name="nik"
+                    onChange={handleChange}
+                    style={{ width: "100%" }}
+                    error={touched.nik && errors.nik}
+                    disabled
                   />
                 </section>
                 <section>
@@ -153,6 +181,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nis && errors.nis}
+                    disabled
                   />
                 </section>
                 <section>
@@ -164,6 +193,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nisn && errors.nisn}
+                    disabled
                   />
                 </section>
                 <section>
@@ -175,6 +205,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.tempat_lahir && errors.tempat_lahir}
+                    disabled
                   />
                 </section>
                 <section>
@@ -189,6 +220,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }
                     style={{ width: "100%" }}
                     error={touched.tanggal_lahir && errors.tanggal_lahir}
+                    disabled
                   />
                 </section>
                 <section>
@@ -200,6 +232,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.jenis_kelamin && errors.jenis_kelamin}
+                    disabled
                   />
                 </section>
                 <section>
@@ -225,6 +258,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }}
                     style={{ width: "100%" }}
                     error={touched.anak_ke && errors.anak_ke}
+                    disabled
                   />
                 </section>
                 <section>
@@ -236,6 +270,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.alamat && errors.alamat}
+                    disabled
                   />
                 </section>
                 <section>
@@ -247,6 +282,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.email && errors.email}
+                    disabled
                   />
                 </section>
               </div>
@@ -266,6 +302,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.sekolah_asal && errors.sekolah_asal}
+                    disabled
                   />
                 </section>
                 <section>
@@ -280,6 +317,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }
                     style={{ width: "100%" }}
                     error={touched.tanggal_diterima && errors.tanggal_diterima}
+                    disabled
                   />
                 </section>
                 <section>
@@ -291,6 +329,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.angkatan && errors.angkatan}
+                    disabled
                   />
                 </section>
                 <section>
@@ -316,6 +355,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.tahun_ajaran && errors.tahun_ajaran}
+                    disabled
                   />
                 </section>
 
@@ -335,6 +375,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.status && errors.status}
+                    disabled
                   />
                 </section>
                 <section>
@@ -355,11 +396,12 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.keterangan && errors.keterangan}
+                    disabled
                   />
                 </section>
               </div>
             </div>
-            <div className="mt-5">
+            {/* <div className="mt-5">
               <Button
                 content={"Update Siswa"}
                 type="submit"
@@ -370,7 +412,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 size="medium"
                 color="teal"
               />
-            </div>
+            </div> */}
           </div>
         </Form>
       )}
