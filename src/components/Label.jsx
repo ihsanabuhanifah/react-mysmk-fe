@@ -34,6 +34,23 @@ export const LabelStatus = ({ status }) => {
     );
   }
 
+  if (status === "projek") {
+    return (
+      <Label size="tiny" content="Proyek" color="black" as={"a"} />
+       
+    );
+  }
+
+
+  if (status === "projek") {
+    return (
+      <Label size="tiny" content="Projek" color="facebook" as={"a"} />
+       
+    );
+  }
+
+  
+
 
 
   if (status === "hadir") {
@@ -67,7 +84,7 @@ export const LabelStatus = ({ status }) => {
     );
   }
 
-  if (status === "PTS") {
+  if (status.toUpperCase() === "PTS") {
     return (
       <Label size="tiny" content="PTS" color="olive" as={"a"} />
        

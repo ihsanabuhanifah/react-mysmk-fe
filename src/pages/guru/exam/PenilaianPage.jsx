@@ -20,12 +20,14 @@ import Checkbox from "../../../components/Checkbox";
 import { TableWrapper } from "../../../components/TableWrap";
 import ModalPenilaian from "./ModalPenilaian";
 import { FormikProvider, useFormik } from "formik";
+import useList from "../../../hook/useList";
 
 function PenilaianPage() {
   const { id, mapel } = useParams();
-  const { isLoading, data } = usePenilaian({
+  const { isFetching, data } = usePenilaian({
     ujian_id: id,
   });
+  let { roles } = useList();
   const mutateExam = useExamResult();
 
   const [open, setOpen] = useState(false);
@@ -76,6 +78,7 @@ function PenilaianPage() {
           setOpen={setOpen}
           soal={dataSoal?.soal}
           jawaban={jawaban}
+          values={values}
         />
       )}
       <section
@@ -150,7 +153,7 @@ function PenilaianPage() {
                 <Table.Body>
                   <TableLoading
                     count={12}
-                    isLoading={isLoading}
+                    isLoading={isFetching}
                     data={data?.data}
                     messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
                   >
@@ -253,15 +256,17 @@ function PenilaianPage() {
                 </Table.Body>
               </Table>
               <section className="mt-5">
-                <Button
+
+                { values?.data?.[0]?.teacher_id === roles?.teacher_id &&    <Button
                   color="teal"
                   fluid
                   loading={mutateExam.isLoading}
-                  disabled={mutateExam.isLoading || isLoading}
+                  disabled={mutateExam.isLoading || isFetching}
                   type="submit"
                 >
                   <Icon name="check" /> Perbaharui Nilai
-                </Button>
+                </Button> }
+             
               </section>
             </TableWrapper>
           </Form>

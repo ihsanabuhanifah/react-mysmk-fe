@@ -16,7 +16,7 @@ export function takeExam(id) {
 }
 
 export const useExam = (id) => {
-  let [params, setParams] = useState({ page: 1, pageSize: 10 });
+  let [params, setParams] = useState({ page: 1, pageSize: 10, status: 'progress' });
   const { isLoading, data, isFetching } = useQuery(
     ["/santri/exam/list", params],
     () => getExam(params),

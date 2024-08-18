@@ -1,129 +1,50 @@
 import LayoutPage from "../../../module/layoutPage";
 import React from "react";
-import { Button, Form, Select, Table } from "semantic-ui-react";
-import { FormLabel, ReactSelectAsync, TableLoading } from "../../../components";
+import { Button, Form, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
+import { TableLoading } from "../../../components";
 import { TableWrapper } from "../../../components/TableWrap";
-import { getOptions } from "../../../utils/format";
-import useList from "../../../hook/useList";
-import { listSiswaOptions } from "../../../api/list";
-import { useGenerateReport, useListReport } from "../../../api/guru/report";
+
+import { useListReport } from "../../../api/guru/report";
+import Filter from "./filter";
 
 export default function HasilBelajar() {
-  const { dataKelas, dataMapel, dataTa } = useList();
+  let [visible, setVisible] = React.useState(false);
   const { data, isFetching, payload, handlePayload, handleParams } =
     useListReport();
 
-  const mutate = useGenerateReport();
   return (
     <LayoutPage title={"Hasil Belajar"}>
+      <Sidebar
+        as={Menu}
+        animation="overlay"
+        icon="labeled"
+        inverted
+        direction="right"
+        onHide={() => setVisible(false)}
+        vertical
+        visible={visible}
+        width="wide"
+      >
+        <Filter
+          payload={payload}
+          handlePayload={handlePayload}
+          setVisible={setVisible}
+          onClick={handleParams}
+        />
+      </Sidebar>
       <Form>
-        <section className=" grid grid-cols-4 gap-5 mb-5">
-          <div className="text-left">
-            <Form.Field
-              control={Select}
-              value={payload?.kelas_id}
-              options={getOptions(dataKelas?.data, "nama_kelas")}
-              label={{
-                children: "Kelas",
-              }}
-              onChange={(event, data) => {
-                console.log("data", data);
-                handlePayload("kelas_id", data?.value);
-              }}
-              placeholder="Nama Kelas"
-              search
-              clearable
-              searchInput={
-                {
-                  //   id: `laporan.guru.absen[${index}]nama_kelas`,
-                  //   name: `laporan.guru.absen[${index}]nama_kelas`,
-                }
-              }
-            />
-          </div>
-          <div className="text-left">
-            <Form.Field
-              control={Select}
-              value={payload?.mapel_id}
-              options={getOptions(dataMapel?.data, "nama_mapel")}
-              label={{
-                children: "Mata Pelajaran",
-              }}
-              onChange={(event, data) => {
-                handlePayload("mapel_id", data?.value);
-              }}
-              placeholder="Mata Pelajaran"
-              search
-              clearable
-            />
-          </div>
-          <div className="">
-            <Form.Field
-              control={Select}
-              value={payload?.ta_id}
-              options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
-              label={{
-                children: "Tahun Pelajaran",
-                //   htmlFor: `laporan.guru.absen[${index}]nama_guru`,
-                //   name: `laporan.guru.absen[${index}]nama_guru`,
-              }}
-              onChange={(event, data) => {
-                handlePayload("ta_id", data?.value);
-              }}
-              placeholder="Tahun Pelajaran"
-              search
-              // value={values?.tahun_ajaran}
-              clearable
-              searchInput={
-                {
-                  //   id: `laporan.guru.absen[${index}]nama_guru`,
-                  //   name: `laporan.guru.absen[${index}]nama_guru`,
-                }
-              }
-            />
-          </div>
-
-          <div className="text-left">
-            <FormLabel label={"Nama Siswa"}>
-              <ReactSelectAsync
-                debounceTimeout={300}
-                value={payload?.student_id}
-                onChange={(data) => {
-                  handlePayload("student_id", data);
-                }}
-                loadOptions={listSiswaOptions}
-                isClearable
-                placeholder="Nama Siswa"
-                additional={{
-                  page: 1,
-                }}
-              />
-            </FormLabel>
-          </div>
-
-          <div className="col-start-3">
+        <section className=" grid grid-cols-6 gap-5 mb-5">
+          <div >
             <Button
-              color="blue"
-              loading={isFetching}
-              disabled={isFetching}
-              onClick={handleParams}
-              content="Filter"
-            />
-          </div>
-          <div>
-            <Button
+              content={"Filter"}
+              type="button"
+              fluid
+              icon={() => <Icon name="filter" />}
+              size="medium"
               color="teal"
-              loading={mutate.isLoading}
-              disabled={
-                mutate.isLoading ||
-                (!!payload.kelas_id === false &&
-                  !!payload.mapel_id === false &&
-                  !!payload.ta_id === false)
-              }
               onClick={() => {
-                mutate.mutate(payload);
+                setVisible(true);
               }}
-              content="Generate Hasil Akhir"
             />
           </div>
         </section>

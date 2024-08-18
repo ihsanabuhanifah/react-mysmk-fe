@@ -69,6 +69,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
   } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
     enabled: !!id,
     staleTime : 1000 * 60 * 60 * 24, //24 jam
+
     select: (response) => {
       if (response && response.data && response.data.siswa) {
         setInitialValues({
@@ -119,6 +120,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
   if (isLoading) {
     return <LoadingPage />;
   }
+
 
   return (
     <Formik
