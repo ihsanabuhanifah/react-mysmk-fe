@@ -15,7 +15,7 @@ export default function Notifikasi({ setNotif }) {
     setNotif(false);
   };
 
-  console.log("not", notifExam);
+
 
   return (
     <section className="mt-0 overflow-auto p-3 h-full xl:h-full xl:border-l-2">

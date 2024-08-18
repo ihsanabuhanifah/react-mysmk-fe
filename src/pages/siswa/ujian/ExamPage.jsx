@@ -14,7 +14,7 @@ export default function ExamPage({ examActive, setExamActive }) {
 	})
 
 	let [soal, setSoal] = useState([])
-	let [cutDown, setCutDown] = useState(10) // Set initial countdown to 10
+	let [cutDown, setCutDown] = useState(5) // Set initial countdown to 10
 	let [open, setOpen] = useState(false)
 	let [mouse, setMouse] = useState(false)
   let [modalAutoSubmit, setModalAutoSubmit] = useState(false);
@@ -127,12 +127,12 @@ export default function ExamPage({ examActive, setExamActive }) {
 
 	return (
 		<div
-			// onMouseLeave={() => {
-			//   setMouse(true); // Start countdown on mouse leave
-			// }}
-			// onMouseEnter={() => {
-			//   setMouse(false); // Stop countdown on mouse enter, but don't reset it
-			// }}
+			onMouseLeave={() => {
+			  setMouse(true); // Start countdown on mouse leave
+			}}
+			onMouseEnter={() => {
+			  setMouse(false); // Stop countdown on mouse enter, but don't reset it
+			}}
 			className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
 		>
 			<ModalKonfirmasi

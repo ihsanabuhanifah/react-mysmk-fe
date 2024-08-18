@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   durasiOptions,
@@ -57,6 +57,11 @@ export default function FormExam() {
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas, dataTa } = useList();
   const { id } = useParams();
+  let queryClient = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  console.log("pat", location?.pathname);
   let { data: dataExam } = useQuery(
     //query key
     ["/bank-soal/update", id],
@@ -79,7 +84,9 @@ export default function FormExam() {
               jenis_ujian: data.jenis_ujian,
               judul_ujian: data.judul_ujian,
               mapel_id: data.mapel_id,
-              kelas_id: data.kelas_id,
+              kelas_id: location?.pathname?.includes("copy")
+                ? ""
+                : data.kelas_id,
               waktu_mulai: addSevenHours(data.waktu_mulai),
               waktu_selesai: addSevenHours(data.waktu_selesai),
               status: data.status,
@@ -183,14 +190,26 @@ export default function FormExam() {
           ],
         });
       } else {
-        response = await updateExam(id, {
-          payload: [
-            {
-              ...values.payload[0],
-              soal: soal,
-            },
-          ],
-        });
+        if (location?.pathname?.includes("copy")) {
+          response = await createExam({
+            payload: [
+              {
+                ...values.payload[0],
+                soal: soal,
+              },
+            ],
+          });
+          resetForm();
+        } else {
+          response = await updateExam(id, {
+            payload: [
+              {
+                ...values.payload[0],
+                soal: soal,
+              },
+            ],
+          });
+        }
       }
 
       toast.success(response?.data?.msg, {
@@ -203,7 +222,11 @@ export default function FormExam() {
         progress: undefined,
         theme: "colored",
       });
+
+      navigate("/guru/exam");
+      queryClient.invalidateQueries("/ujian/list");
     } catch (err) {
+      console.log("err", err);
       if (err?.response?.status === 422) {
         return toast.warn(err?.response?.data?.msg, {
           position: "top-right",
@@ -288,7 +311,6 @@ export default function FormExam() {
                             errors?.payload?.[index]?.judul_ujian !==
                               undefined && errors?.payload?.[index]?.judul_ujian
                           }
-                         
                           value={value?.judul_ujian}
                         />
                       </div>
@@ -572,16 +594,29 @@ export default function FormExam() {
 
               <div className="mt-5">
                 {id ? (
-                  <Button
-                    content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
-                    type="submit"
-                    fluid
-                    icon={() => <Icon name="save" />}
-                    loading={isSubmitting}
-                    size="medium"
-                    color="teal"
-                    disabled={isSubmitting}
-                  />
+                  location?.pathname?.includes("copy") ? (
+                    <Button
+                      content={isSubmitting ? "Menyimpan" : "Simpan"}
+                      type="submit"
+                      fluid
+                      icon={() => <Icon name="save" />}
+                      loading={isSubmitting}
+                      size="medium"
+                      color="teal"
+                      disabled={isSubmitting}
+                    />
+                  ) : (
+                    <Button
+                      content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
+                      type="submit"
+                      fluid
+                      icon={() => <Icon name="save" />}
+                      loading={isSubmitting}
+                      size="medium"
+                      color="teal"
+                      disabled={isSubmitting}
+                    />
+                  )
                 ) : (
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}

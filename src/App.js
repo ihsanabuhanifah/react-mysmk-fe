@@ -59,6 +59,7 @@ import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
+import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 
 function App() {
   return (
@@ -140,6 +141,8 @@ function App() {
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
+          <Route path="exam/copy/:id" element={<FormExam />} />
+          <Route path="exam/analisis/:id/:mapel" element={<AnalisisPage />} />
 
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route
