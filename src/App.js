@@ -56,6 +56,7 @@ import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajar from "./pages/guru/hasil-belajar";
+import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
 
 
 function App() {
@@ -119,6 +120,7 @@ function App() {
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
           <Route path="absensi/jadwal/tambah" element={<CreateJadwal />} />
+          <Route path="absensi/jadwal/update/:id" element={<UpdateJadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="pelanggaran" element={<Pelanggaran />} />
