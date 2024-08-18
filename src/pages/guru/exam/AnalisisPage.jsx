@@ -4,7 +4,7 @@ import LayoutPage from "../../../module/layoutPage";
 import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
-import LingkaranChart from "../../../components/Chart/Lingkaran";
+
 
 export default function AnalisisPage() {
   const { id, mapel } = useParams();
@@ -72,13 +72,14 @@ export default function AnalisisPage() {
                           {data.analisis[index].pilihan.e.persentase} %)
                         </p>
                       </div>
-                      {/* <LingkaranChart/> */}
+                     
                     </div>
                   </section>
                 )}
                 {item.tipe === "TF" && (
-                  <section className="mb-5 border rounded-lg shadow-md p-5">
-                    <TF
+                  <section className="mb-5 border rounded-lg shadow-md p-5 grid grid-cols-3 gap-5 ">
+                  <div>
+                  <TF
                       nomor={index + 1}
                       soals={JSON.parse(item.soal)}
                       jawaban={[
@@ -90,6 +91,25 @@ export default function AnalisisPage() {
                       ]}
                       item={item}
                     />
+                  </div>
+                  <div className="col-span-2 grid grid-cols-2 gap-5">
+                      <div>
+                        <p>
+                          Siswa Menjawab Benar : {data.analisis[index].benar} ({" "}
+                          {data.analisis[index].persentaseBenar} %)
+                        </p>
+                        <p>
+                          Siswa Menjawab Salah : {data.analisis[index].salah} ({" "}
+                          {data.analisis[index].persentaseSalah} %)
+                        </p>
+                        <p>
+                          Siswa Tidak Manjawab : {data.analisis[index].tidakMenjawab} ({" "}
+                          {data.analisis[index].persentaseTidakMenjawab} %)
+                        </p>
+                      </div>
+                     
+                    </div>
+                  
                   </section>
                 )}
                 {item.tipe === "ES" && (
