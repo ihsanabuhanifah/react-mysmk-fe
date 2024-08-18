@@ -23,6 +23,7 @@
     "katex": "^0.16.11",
     "qs": "^6.10.3",
     "react": "^17.0.2",
+    "react-charts": "^3.0.0-beta.57",
     "react-collapse": "^5.1.1",
     "react-data-table-component": "^7.6.2",
     "react-date-range": "^1.4.0",
@@ -57,7 +58,6 @@
   },
   "scripts": {
     "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start",
-
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"
