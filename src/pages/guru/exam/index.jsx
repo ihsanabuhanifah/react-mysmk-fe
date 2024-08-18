@@ -73,7 +73,7 @@ export default function ListExam() {
   }
 
   return (
-    <LayoutPage title="List Ujian">
+    <LayoutPage title="List Ujian" isLoading={isLoading}>
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
@@ -120,8 +120,8 @@ export default function ListExam() {
                 <Table.HeaderCell>Tipe Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Durasi</Table.HeaderCell>
-                <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
-                <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
+                <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
+                <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
                 <Table.HeaderCell>Analisis</Table.HeaderCell>
                 <Table.HeaderCell>Publish</Table.HeaderCell>
@@ -129,7 +129,7 @@ export default function ListExam() {
             </Table.Header>
             <Table.Body>
               <TableLoading
-                count={12}
+                count={20}
                 isLoading={isLoading}
                 data={data?.data?.rows}
                 messageEmpty={"Data Tidak Ditemukan"}
@@ -189,8 +189,8 @@ export default function ListExam() {
                     <Table.Cell>
                     <Button
                           type="button"
-                          color="facebook"
-                          icon={() => <Icon name="laptop" />}
+                          color="twitter"
+                          icon={() => <Icon name="chart line" />}
                           onClick={() => {
                             navigate(
                               `analisis/${value.id}/${value?.mapel?.nama_mapel}`,

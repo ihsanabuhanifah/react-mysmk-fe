@@ -51,7 +51,7 @@ export default function ES({ soals, jawaban, item, nomor, setPayload }) {
           </div>
         </section>
 
-        <div className="rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
+        <div className=" p-2 rounded-md border text-justify">{htmr(`<div>${soals.soal}</div>`)}</div>
 
         <div>
           <h5>Jawaban :</h5>

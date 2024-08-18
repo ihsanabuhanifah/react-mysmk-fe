@@ -101,7 +101,7 @@ export default function FormSoal() {
   const { dataMapel } = useList();
   const { id } = useParams();
   const queryClient = useQueryClient();
-  let { data, isLoading } = useQuery(
+  let { data, isFetching } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -114,7 +114,7 @@ export default function FormSoal() {
       select: (response) => {
         let data = response.data.soal;
 
-        console.log('data', data)
+        console.log("data", data);
         data.soal = JSON.parse(data.soal);
         setInitialState({
           payload: [data],
@@ -218,6 +218,7 @@ export default function FormSoal() {
   };
   return (
     <LayoutPage
+      isLoading={isFetching}
       title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
       <div className="p-0  ">

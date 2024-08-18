@@ -1,10 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
 
-.quill-editor {
+.quill-editor  {
   font-family: 'Noto Sans Arabic', sans-serif;
   position: relative;
 }
+
+.quill-editor .container {
+ 
+  position: relative;
+}
+
 
 /* .quill-editor .ql-formula {
   width: 100%;
@@ -17,13 +23,14 @@
 
 
 .quill-editor .ql-tooltip[data-mode="formula"] {
+  width: 100%;
   position: absolute;
   z-index: 1000;
   right: 0;
   left: 100;
   
-  width: 100%;
-  
+ 
+   
   
 }
 

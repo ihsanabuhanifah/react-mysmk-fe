@@ -8,12 +8,12 @@ import ES from "./ES";
 
 export default function AnalisisPage() {
   const { id, mapel } = useParams();
-  const { isFetching, data } = useAnalisisUjian(id);
+  const { isLoading, data } = useAnalisisUjian(id);
 
   console.log("data", data);
 
   return (
-    <LayoutPage title={"Analiis Ujian "}>
+    <LayoutPage title={"Analiis Ujian "} isLoading={isLoading}>
       <section>
         {data &&
           data?.soal?.map((item, index) => {

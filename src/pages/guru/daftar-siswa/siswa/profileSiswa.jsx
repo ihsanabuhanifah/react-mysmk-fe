@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { Button, Form as SemanticForm, Icon } from "semantic-ui-react";
@@ -62,55 +62,56 @@ const FormikComponent = ({ onSuccess, onError }) => {
     anak_ke: Yup.string().optional(),
   });
 
+  const formatDate = (date) => {
+    const d = new Date(date);
+    return d.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  };
   const {
-    data: siswaData,
+    data,
     isLoading,
     error,
   } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
     enabled: !!id,
     staleTime : 1000 * 60 * 60 * 24, //24 jam
 
-    select: (response) => {
-      if (response && response.data && response.data.siswa) {
-        setInitialValues({
-          user_id: response.data.siswa.user_id || "",
-          nama_siswa: response.data.siswa.nama_siswa || "",
-          nik: response.data.siswa.nik || "",
-          nis: response.data.siswa.nis || "",
-          nisn: response.data.siswa.nisn || "",
-          tempat_lahir: response.data.siswa.tempat_lahir || "",
-          tanggal_lahir: response.data.siswa.tanggal_lahir
-            ? formatDate(response.data.siswa.tanggal_lahir)
-            : "",
-          alamat: response.data.siswa.alamat || "",
-          sekolah_asal: response.data.siswa.sekolah_asal || "",
-          jenis_kelamin: response.data.siswa.jenis_kelamin || "",
-          anak_ke: response.data.siswa.anak_ke || "",
-          tanggal_diterima: response.data.siswa.tanggal_diterima
-            ? formatDate(response.data.siswa.tanggal_diterima)
-            : "",
-          angkatan: response.data.siswa.angkatan || "",
-          tahun_ajaran: response.data.siswa.tahun_ajaran || "",
-          status: response.data.siswa.status || "",
-          keterangan: response.data.siswa.keterangan || "",
-          email: response.data.siswa.user.email || "",
-        });
-      } else {
-        warningToast("Data siswa tidak ditemukan.");
-      }
-
-
-      return response.data
-    },
+   
+   
     onError: (err) => {
       warningToast("Gagal mengambil data siswa");
     },
   });
 
-  const formatDate = (date) => {
-    const d = new Date(date);
-    return d.toISOString().split("T")[0]; // Format: YYYY-MM-DD
-  };
+  useEffect(()=> {
+
+    if (data && data.data && data.data.siswa) {
+      setInitialValues({
+        user_id: data.data.siswa.user_id || "",
+        nama_siswa: data.data.siswa.nama_siswa || "",
+        nik: data.data.siswa.nik || "",
+        nis: data.data.siswa.nis || "",
+        nisn: data.data.siswa.nisn || "",
+        tempat_lahir: data.data.siswa.tempat_lahir || "",
+        tanggal_lahir: data.data.siswa.tanggal_lahir
+          ? formatDate(data.data.siswa.tanggal_lahir)
+          : "",
+        alamat: data.data.siswa.alamat || "",
+        sekolah_asal: data.data.siswa.sekolah_asal || "",
+        jenis_kelamin: data.data.siswa.jenis_kelamin || "",
+        anak_ke: data.data.siswa.anak_ke || "",
+        tanggal_diterima: data.data.siswa.tanggal_diterima
+          ? formatDate(data.data.siswa.tanggal_diterima)
+          : "",
+        angkatan: data.data.siswa.angkatan || "",
+        tahun_ajaran: data.data.siswa.tahun_ajaran || "",
+        status: data.data.siswa.status || "",
+        keterangan: data.data.siswa.keterangan || "",
+        email: data.data.siswa.user.email || "",
+      });
+    } 
+
+
+  },[data])
+  
 
   const onSubmit = async (values, { resetForm }) => {
     mutate(values);
@@ -159,7 +160,19 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nama_siswa && errors.nama_siswa}
-                    disabled
+                  
+                  />
+                </section>
+                <section>
+                  <label htmlFor="email">Email</label>
+                  <SemanticForm.Input
+                    value={values.email}
+                    id="email"
+                    name="email"
+                    onChange={handleChange}
+                    style={{ width: "100%" }}
+                    error={touched.email && errors.email}
+                  
                   />
                 </section>
                 <section>
@@ -171,7 +184,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nik && errors.nik}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -183,7 +196,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nis && errors.nis}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -195,7 +208,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nisn && errors.nisn}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -204,10 +217,12 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     value={values.tempat_lahir}
                     id="tempat_lahir"
                     name="tempat_lahir"
-                    onChange={handleChange}
+                    onChange={(e)=> {
+                      setFieldValue('tempat_lahir', e.target.value)
+                    }}
                     style={{ width: "100%" }}
                     error={touched.tempat_lahir && errors.tempat_lahir}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -222,7 +237,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }
                     style={{ width: "100%" }}
                     error={touched.tanggal_lahir && errors.tanggal_lahir}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -234,7 +249,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.jenis_kelamin && errors.jenis_kelamin}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -260,7 +275,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }}
                     style={{ width: "100%" }}
                     error={touched.anak_ke && errors.anak_ke}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -272,21 +287,10 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.alamat && errors.alamat}
-                    disabled
+                  
                   />
                 </section>
-                <section>
-                  <label htmlFor="email">Email</label>
-                  <SemanticForm.Input
-                    value={values.email}
-                    id="email"
-                    name="email"
-                    onChange={handleChange}
-                    style={{ width: "100%" }}
-                    error={touched.email && errors.email}
-                    disabled
-                  />
-                </section>
+               
               </div>
               <div className="border-l-2 border-gray-300 mx-4"></div>
               <div className="flex flex-col gap-y-4 w-full pl-4">
@@ -304,7 +308,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.sekolah_asal && errors.sekolah_asal}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -319,7 +323,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     }
                     style={{ width: "100%" }}
                     error={touched.tanggal_diterima && errors.tanggal_diterima}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -331,7 +335,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.angkatan && errors.angkatan}
-                    disabled
+                  
                   />
                 </section>
                 <section>
@@ -357,7 +361,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.tahun_ajaran && errors.tahun_ajaran}
-                    disabled
+                  
                   />
                 </section>
 
@@ -403,7 +407,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 </section>
               </div>
             </div>
-            {/* <div className="mt-5">
+            <div className="mt-5">
               <Button
                 content={"Update Siswa"}
                 type="submit"
@@ -414,7 +418,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 size="medium"
                 color="teal"
               />
-            </div> */}
+            </div>
           </div>
         </Form>
       )}

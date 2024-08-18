@@ -61,8 +61,8 @@ export default function FormExam() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log("pat", location?.pathname);
-  let { data: dataExam } = useQuery(
+  
+  let { data: dataExam, isFetching:isLoadingSoal } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -255,6 +255,7 @@ export default function FormExam() {
 
   return (
     <LayoutPage
+    isLoading={isLoadingSoal}
       title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
