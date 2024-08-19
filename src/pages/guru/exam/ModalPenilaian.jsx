@@ -24,14 +24,16 @@ function ModalPenilaian({
   item,
   setItem,
   values,
+  namaSiswa,
 }) {
+  let [loading, setLoading] = useState(false)
   const [payload, setPayload] = useState(jawaban);
   const mutate = useUpdateLastExam();
   const { roles } = useList();
 
   const ref = useRef();
 
-  
+  console.log("va", values);
 
   return (
     <Modal
@@ -42,10 +44,11 @@ function ModalPenilaian({
     >
       <ModalHeader>
         <section className="flex items-center justify-end">
-         
           <Button
+          loading={loading}
             onClick={async () => {
-              handleDownloadPdf(ref);
+              setLoading(true)
+              handleDownloadPdf(ref, namaSiswa, setLoading);
             }}
           >
             Download Sebagai PDF
@@ -55,6 +58,10 @@ function ModalPenilaian({
 
       <ModalContent>
         <section ref={ref}>
+          <section className="mb-5 flex items-center">
+            <p className="opacity-90">{namaSiswa.nama_siswa}    <p className="opacity-90">{namaSiswa.mapel}</p></p>
+          
+          </section>
           {soal &&
             soal?.map((item, index) => {
               return (
@@ -67,8 +74,6 @@ function ModalPenilaian({
                         jawaban={payload}
                         item={item}
                       />
-
-                     
                     </section>
                   )}
                   {item.tipe === "TF" && (
@@ -135,7 +140,7 @@ function ModalPenilaian({
 
 export default ModalPenilaian;
 
-const handleDownloadPdf = async (printRef) => {
+const handleDownloadPdf = async (printRef, profile, setLoading) => {
   const element = printRef.current;
   const canvas = await html2canvas(element, {
     scale: window.devicePixelRatio || 1,
@@ -156,5 +161,6 @@ const handleDownloadPdf = async (printRef) => {
   const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
 
   pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-  pdf.save("download.pdf");
+  pdf.save(`${profile.nama_siswa} - ${profile.mapel} - ${new Date}`);
+  setLoading(false)
 };

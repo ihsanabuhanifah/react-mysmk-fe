@@ -60,7 +60,6 @@ import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
-import HasilBelajar from "./pages/guru/hasil-belajar";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
 
 

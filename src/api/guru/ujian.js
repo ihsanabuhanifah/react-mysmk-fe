@@ -68,7 +68,7 @@ export function listPenilaianMateri(params) {
 }
 
 export const usePenilaian = (payload) => {
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["/guru/nilai/list/teacher", payload],
     () => listPenilaianMateri(payload),
     {
@@ -78,7 +78,7 @@ export const usePenilaian = (payload) => {
     }
   );
 
-  return { isLoading, data, isFetching };
+  return { isLoading, data, isFetching, refetch };
 };
 
 //soal
