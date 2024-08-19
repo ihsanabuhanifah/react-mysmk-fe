@@ -53,13 +53,14 @@ export const useLaporanPklList = () => {
 
 export const useLaporanPklDetail = (id) => {
   const { data, isLoading, isFetching } = useQuery(
-    ["/santri/laporan-harian-pkl/detail", id],
+    ["/santri/laporan-harian-pkl/detail/", id],
     () => getLaporanPklDetail(id),
     {
       enabled: id !== undefined,
-      select: (response) => response,
+      select: (response) => response.data.data,
     }
   );
+  return { data, isLoading, isFetching }
 };
 export function createLaporanPkl(payload) {
   syncToken();
@@ -69,13 +70,21 @@ export function createLaporanPkl(payload) {
 export const useCreateLaporanPkl = () => {
   const { successToast, warningToast } = useToast();
 
-  const mutate = useMutation((payload) => createLaporanPkl(payload), {
-    onSuccess: (response) => {
-      successToast(response);
-    },
-    onError: (err) => {
-      warningToast(err);
-    },
-  });
-  return mutate;
+  const { mutate, isLoading } = useMutation(
+    (payload) => createLaporanPkl(payload),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        successToast(response);
+      },
+      onError: (err) => {
+        console.log(err, "err");
+        console.log(err.Error.config.response, "err ddd");
+        warningToast(err);
+      },
+    }
+  );
+  return { mutate, isLoading };
 };
+
+
