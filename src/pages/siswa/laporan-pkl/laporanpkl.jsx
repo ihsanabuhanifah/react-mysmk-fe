@@ -25,7 +25,7 @@ const LaporanPkl = () => {
     <LayoutSiswa title="Laporan Pkl">
       <Button
         color="green"
-        size="medium" 
+        size="medium"
         disabled={hasSubmittedToday}
         onClick={() => navigate("/siswa/laporan-pkl/create")}
       >
@@ -60,11 +60,23 @@ const LaporanPkl = () => {
           </div>
         ) : (
           data &&
-          data.data.map((item, index) => (
-            <React.Fragment key={index}>
-              <Card isFetching={isFetching} isLoading={isLoading} item={item} />
-            </React.Fragment>
-          ))
+          data.data.map((item, index) =>
+            data.data.length !== 0 ? (
+              <React.Fragment key={index}>
+                <Card
+                  isFetching={isFetching}
+                  isLoading={isLoading}
+                  item={item}
+                />
+              </React.Fragment>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <h2 className="text-4xl font-semibold">
+                  Anda Belum Memiliki Laporan
+                </h2>
+              </div>
+            )
+          )
         )}
       </div>
     </LayoutSiswa>
