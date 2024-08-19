@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import {
   durasiOptions,
@@ -57,7 +57,12 @@ export default function FormExam() {
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas, dataTa } = useList();
   const { id } = useParams();
-  let { data: dataExam } = useQuery(
+  let queryClient = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  
+  let { data: dataExam, isFetching:isLoadingSoal } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -77,8 +82,11 @@ export default function FormExam() {
           payload: [
             {
               jenis_ujian: data.jenis_ujian,
+              judul_ujian: data.judul_ujian,
               mapel_id: data.mapel_id,
-              kelas_id: data.kelas_id,
+              kelas_id: location?.pathname?.includes("copy")
+                ? ""
+                : data.kelas_id,
               waktu_mulai: addSevenHours(data.waktu_mulai),
               waktu_selesai: addSevenHours(data.waktu_selesai),
               status: data.status,
@@ -86,7 +94,7 @@ export default function FormExam() {
               soal: JSON.parse(data.soal),
               tipe_ujian: data.tipe_ujian,
               durasi: data.durasi,
-              ta_id : data.ta_id
+              ta_id: data.ta_id,
             },
           ],
         });
@@ -135,6 +143,7 @@ export default function FormExam() {
   const [initialState, setInitialState] = useState({
     payload: [
       {
+        judul_ujian: "",
         jenis_ujian: "",
         mapel_id: null,
         kelas_id: null,
@@ -145,7 +154,7 @@ export default function FormExam() {
         soal: [],
         tipe_ujian: "",
         durasi: null,
-        ta_id : null
+        ta_id: null,
       },
     ],
   });
@@ -176,19 +185,31 @@ export default function FormExam() {
               status: "draft",
               student_access: [],
               soal: [],
-              ta_id : null
+              ta_id: null,
             },
           ],
         });
       } else {
-        response = await updateExam(id, {
-          payload: [
-            {
-              ...values.payload[0],
-              soal: soal,
-            },
-          ],
-        });
+        if (location?.pathname?.includes("copy")) {
+          response = await createExam({
+            payload: [
+              {
+                ...values.payload[0],
+                soal: soal,
+              },
+            ],
+          });
+          resetForm();
+        } else {
+          response = await updateExam(id, {
+            payload: [
+              {
+                ...values.payload[0],
+                soal: soal,
+              },
+            ],
+          });
+        }
       }
 
       toast.success(response?.data?.msg, {
@@ -201,7 +222,11 @@ export default function FormExam() {
         progress: undefined,
         theme: "colored",
       });
+
+      navigate("/guru/exam");
+      queryClient.invalidateQueries("/ujian/list");
     } catch (err) {
+      console.log("err", err);
       if (err?.response?.status === 422) {
         return toast.warn(err?.response?.data?.msg, {
           position: "top-right",
@@ -230,6 +255,7 @@ export default function FormExam() {
 
   return (
     <LayoutPage
+    isLoading={isLoadingSoal}
       title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
@@ -264,6 +290,31 @@ export default function FormExam() {
                     key={index}
                   >
                     <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                      <div>
+                        <Form.Field
+                          control={Input}
+                          label={{
+                            children: "Judul Ujian",
+                            htmlFor: `payload[${index}]judul_ujian`,
+                            name: `payload[${index}]judul_ujian`,
+                          }}
+                          placeholder="Judul Ujian"
+                          options={jenisOptions}
+                          id={`payload[${index}]judul_ujian`}
+                          name={`payload[${index}]judul_ujian`}
+                          onChange={(e) => {
+                            setFieldValue(
+                              `payload[${index}]judul_ujian`,
+                              e.target.value
+                            );
+                          }}
+                          error={
+                            errors?.payload?.[index]?.judul_ujian !==
+                              undefined && errors?.payload?.[index]?.judul_ujian
+                          }
+                          value={value?.judul_ujian}
+                        />
+                      </div>
                       <div>
                         <Form.Field
                           control={Select}
@@ -458,34 +509,31 @@ export default function FormExam() {
                       </div>
                       <div>
                         <Form.Field
-                            control={Select}
-                            value={value?.ta_id}
-                            options={getOptions(
-                              dataTa?.data,
-                              "nama_tahun_ajaran"
-                            )}
-                            label={{
-                              children: "Tahun Pelajaran",
-                              htmlFor: `payload[${index}]ta_id`,
-                              name: `payload[${index}]ta_id`,
-                            }}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `payload[${index}]ta_id`,
-                                data.value
-                              );
-                            }}
-                            placeholder="Pilih"
-                            search
-                            error={
-                              errors?.payload?.[index]?.ta_id !== undefined &&
-                              errors?.payload?.[index]?.ta_id
-                            }
-                            searchInput={{
-                              id: `payload[${index}]ta_id`,
-                              name: `payload[${index}]ta_id`,
-                            }}
-                          />
+                          control={Select}
+                          value={value?.ta_id}
+                          options={getOptions(
+                            dataTa?.data,
+                            "nama_tahun_ajaran"
+                          )}
+                          label={{
+                            children: "Tahun Pelajaran",
+                            htmlFor: `payload[${index}]ta_id`,
+                            name: `payload[${index}]ta_id`,
+                          }}
+                          onChange={(e, data) => {
+                            setFieldValue(`payload[${index}]ta_id`, data.value);
+                          }}
+                          placeholder="Pilih"
+                          search
+                          error={
+                            errors?.payload?.[index]?.ta_id !== undefined &&
+                            errors?.payload?.[index]?.ta_id
+                          }
+                          searchInput={{
+                            id: `payload[${index}]ta_id`,
+                            name: `payload[${index}]ta_id`,
+                          }}
+                        />
                       </div>
                     </section>
                     <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
@@ -547,16 +595,29 @@ export default function FormExam() {
 
               <div className="mt-5">
                 {id ? (
-                  <Button
-                    content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
-                    type="submit"
-                    fluid
-                    icon={() => <Icon name="save" />}
-                    loading={isSubmitting}
-                    size="medium"
-                    color="teal"
-                    disabled={isSubmitting}
-                  />
+                  location?.pathname?.includes("copy") ? (
+                    <Button
+                      content={isSubmitting ? "Menyimpan" : "Simpan"}
+                      type="submit"
+                      fluid
+                      icon={() => <Icon name="save" />}
+                      loading={isSubmitting}
+                      size="medium"
+                      color="teal"
+                      disabled={isSubmitting}
+                    />
+                  ) : (
+                    <Button
+                      content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
+                      type="submit"
+                      fluid
+                      icon={() => <Icon name="save" />}
+                      loading={isSubmitting}
+                      size="medium"
+                      color="teal"
+                      disabled={isSubmitting}
+                    />
+                  )
                 ) : (
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}

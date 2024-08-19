@@ -21,6 +21,11 @@ export function detailUjian(id) {
   return axios.get(`guru/ujian/detail/${id}`);
 }
 
+export function notifikasiExam() {
+  syncToken();
+  return axios.get("/guru/nilai/notifikasi");
+}
+
 export function updateUjian(id, values) {
   let payload = values.payload[0];
 
@@ -39,8 +44,8 @@ export const useCreatePenilaian = () => {
         kelas_id: payload.kelas_id,
         mapel_id: payload.mapel_id,
         durasi: payload.durasi,
-        jenis_ujian : payload.jenis_ujian,
-        ta_id : payload?.ta_id
+        jenis_ujian: payload.jenis_ujian,
+        ta_id: payload?.ta_id,
       });
     },
     {
@@ -63,7 +68,7 @@ export function listPenilaianMateri(params) {
 }
 
 export const usePenilaian = (payload) => {
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["/guru/nilai/list/teacher", payload],
     () => listPenilaianMateri(payload),
     {
@@ -73,7 +78,7 @@ export const usePenilaian = (payload) => {
     }
   );
 
-  return { isLoading, data, isFetching };
+  return { isLoading, data, isFetching, refetch };
 };
 
 //soal
@@ -151,9 +156,7 @@ export const useUpdateLastExam = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
-      return axios.put(`/guru/nilai/update-last-exam`, 
-        payload,
-      );
+      return axios.put(`/guru/nilai/update-last-exam`, payload);
     },
     {
       onSuccess: (response) => {
@@ -169,19 +172,17 @@ export const useUpdateLastExam = () => {
   return mutate;
 };
 
-
 export const useExamResult = () => {
   let queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
-      return axios.put(`/guru/nilai/exam-result`, 
-        payload,
-      );
+      return axios.put(`/guru/nilai/exam-result`, payload);
     },
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries("/guru/nilai/list/teacher");
+        queryClient.invalidateQueries("/guru//nilai/notifikasi");
         successToast(response);
       },
 
@@ -191,4 +192,25 @@ export const useExamResult = () => {
     }
   );
   return mutate;
+};
+
+export function getAnalisUjian(id) {
+  syncToken();
+  return axios.get(`/guru/ujian/analisa/${id}`);
+}
+
+export const useAnalisisUjian = (id) => {
+  const { isLoading, data, isFetching } = useQuery(
+    ["/guru/ujian/analisa", id],
+    () => getAnalisUjian(id),
+    {
+      keepPreviousData: true,
+      enabled: !!id === true,
+
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+
+  return { isLoading, data, isFetching };
 };

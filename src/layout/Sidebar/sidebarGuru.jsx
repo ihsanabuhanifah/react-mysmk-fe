@@ -377,13 +377,13 @@ function LogoutButton({ to, title, logo, onClick }) {
       className="flex items-center font-extrabold  h-10  pl-2 "
     >
       <div className="w-8 h-8 ">{logo}</div>
-      {/* <p
+      <p
         className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
       >
         {title}
-      </p> */}
+      </p>
     </button>
   );
 }

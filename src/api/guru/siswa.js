@@ -22,12 +22,13 @@ export function deleteSiswaKelasHandle(id) {
   return axios.delete(`/guru/siswa/kelas/delete/${id}`);
 }
 
-export function updateSiswaKelasHandle(id) {
+export function updateSiswaKelasHandle(id, payload) {
   syncToken();
-  return axios.put(`/guru/siswa/kelas/update/${id}`);
+  return axios.put(`/guru/siswa/update/${id}`, payload);
 }
 
-export function getSiswaById(nama) {
+export function getSiswaById(id) {
   syncToken();
-  return axios.get(`/guru/siswa/detail/${encodeURIComponent(nama)}`);
+  return axios.get(`/guru/siswa/detail/${id}`);
 }
+ 
