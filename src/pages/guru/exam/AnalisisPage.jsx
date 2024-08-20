@@ -9,6 +9,8 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
 import { Button } from "semantic-ui-react";
+import { saveAs } from 'file-saver';
+
 
 export default function AnalisisPage() {
   const { id, mapel } = useParams();
@@ -172,43 +174,57 @@ export default function AnalisisPage() {
   );
 }
 
+
+
 const handleDownloadPdf = async (printRef) => {
+  try {
     const element = printRef.current;
-  
-    // Tentukan ukuran A4 dalam satuan titik (pt)
-    const a4Width = 595.28; // 210mm dalam pt
-    const a4Height = 841.89; // 297mm dalam pt
-    const padding = 20; // padding dalam pt
-  
     const canvas = await html2canvas(element, {
-      scale: 1.5, // meningkatkan skala untuk resolusi yang lebih baik
-      useCORS: true,
+      scale: Math.min(2, window.devicePixelRatio || 1),
+      logging: true,
       width: element.scrollWidth,
       height: element.scrollHeight,
     });
-  
-    const imgData = canvas.toDataURL('image/png');
+
+    const imgData = canvas.toDataURL("image/jpeg", 0.8); // 80% quality
     const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'pt',
-      format: 'a4',
+      orientation: "portrait",
+      unit: "pt",
+      format: [canvas.width, canvas.height],
     });
-  
-    const imgWidth = a4Width - 2 * padding;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    // Calculate the number of pages needed
     let heightLeft = imgHeight;
     let position = 0;
-  
+
+    // Add pages
     while (heightLeft > 0) {
-      pdf.addImage(imgData, 'PNG', padding, position, imgWidth, imgHeight);
-      heightLeft -= a4Height - 2 * padding;
-      position -= a4Height - 2 * padding;
+      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      heightLeft -= pdfHeight;
+      position -= pdfHeight;
+      
       if (heightLeft > 0) {
         pdf.addPage();
       }
     }
-  
-    pdf.save(`Analisis-Jawaban-${new Date().toISOString().split('T')[0]}.pdf`);
-  };
-  
+
+    // Save the PDF
+    const fileName = `Analisis-Jawaban-${new Date().toISOString().split('T')[0]}.pdf`;
+    pdf.save(fileName);
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+  }
+};
+
+// Function to compress the PDF Blob to a specified size limit
+const compressPdfBlob = async (blob, maxSize) => {
+  // This function would require a PDF compression library or server-side compression
+  // Implement compression logic here (for example using a library or API)
+  // For now, just return the original blob for demonstration purposes
+  return blob;
+};

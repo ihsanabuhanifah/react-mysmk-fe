@@ -16,6 +16,7 @@
     "date-fns": "^2.29.1",
     "dayjs": "^1.10.7",
     "deps": "^1.0.0",
+    "file-saver": "^2.0.5",
     "firebase": "^9.9.2",
     "formik": "^2.2.9",
     "html-to-image": "^1.11.11",
