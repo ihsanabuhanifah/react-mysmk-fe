@@ -118,7 +118,7 @@ export async function listSiswaPklOptions(keyword, loadedOptions, additional) {
     params: {
       // page: additional.page,
       // tahun_ajaran:'2022/2023',
-      angkatan:8,
+      // angkatan:8,
       status:1,
       nama_kelas:'XII Rekayasa Perangkat Lunak',
       // pageSize: 50,

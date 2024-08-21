@@ -27,6 +27,8 @@ import FormSoal from "./bank-soal/FormSoal";
 import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
+import  CreatePkl  from "./fitur-siswa-pkl/create-pkl";
+import  UpdatePkl  from "./fitur-siswa-pkl/update-pkl";
 // import { JurnalSantri } from "./fitur-siswa-pkl/jurnal";
 
 export {
@@ -59,7 +61,8 @@ export {
   ListExam,
   CreateSiswa,
   FiturPkl,
-  // JurnalSantri,
+  CreatePkl,
+  UpdatePkl // JurnalSantri,
   // FormFiturPkl,
 
 };

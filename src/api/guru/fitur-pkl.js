@@ -32,33 +32,36 @@ export function listSiswaPkl(params) {
   return axiosClient.get("/guru/tempat-pkl/list", { params });
 }
 
-// export function createSiswaPkl(payload) {
-//   syncToken();
-//   return axiosClient.post("/guru/tempat-pkl/create", payload);
-// }
 export function createSiswaPkl(payload) {
   syncToken();
-  return axiosClient.post("/guru/tempat-pkl/create", {
-    payload:payload?.data,
-  });
+  console.log(payload);
+  
+  return axiosClient.post("/guru/tempat-pkl/create", payload);
 }
+export function updateSiswaPkl(id, values) {
+  syncToken();
+  // let payload = values.payload[0];
+  console.log('update pkl tes', values)
+  return axiosClient.put(`guru/tempat-pkl/update/${id}`, values);
+}
+// export function createSiswaPkl(payload) {
+//   syncToken();
+//   return axiosClient.post("/guru/tempat-pkl/create", {
+//     payload:payload?.data,
+//   });
+// }
 
 export function deleteSiswaPkl(id) {
   syncToken();
   return axiosClient.delete(`guru/tempat-pkl/delete/${id}`);
 }
 
-export function detailSiswaPkl(id) {
+export function detailSiswaPkl(id)  {
   syncToken();
+  console.log("api detail");
   return axiosClient.get(`guru/tempat-pkl/detail/${id}`);
 }
 
-export function updateSiswaPkl(id, values) {
-  syncToken();
-  let payload = values.payload[0];
-  console.log('update pkl tes', values)
-  return axiosClient.put(`guru/tempat-pkl/update/${id}`, payload);
-}
 // export function updateSiswaPkl(payload) {
 //   syncToken()
 //   return axios.put("/guru/tempat-pkl/update", {

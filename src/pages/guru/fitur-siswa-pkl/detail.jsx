@@ -1,20 +1,18 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import useList from '../../../hook/useList';
 import LayoutPage from '../../../module/layoutPage';
 import { Formik } from 'formik';
 import { Form, Select, Button, Icon, Header, Input } from "semantic-ui-react";
-import { AddButton, DeleteButton } from '../../../components';
-import { useQuery, useQueryClient } from 'react-query';
+import { ReactSelectAsync, FormLabel } from "../../../components";
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { listSiswaPklOptions } from '../../../api/list';
-import { ReactSelectAsync, FormLabel } from "../../../components";
 import { getOptions } from '../../../utils/format';
-import { number } from 'yup';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createSiswaPkl, deleteSiswaPkl, detailSiswaPkl, listSiswaPkl } from '../../../api/guru/fitur-pkl';
-import usePage from '../../../hook/usePage';
-import * as Yup from "yup"
-import useDelete from '../../../hook/useDelete';
+import { updateSiswaPkl, detailSiswaPkl } from '../../../api/guru/fitur-pkl';
+import * as Yup from "yup";
+import axios from 'axios';
 
 let siswapklSchema = Yup.object().shape({
   student_id: Yup.string().required("wajib pilih"),
@@ -33,66 +31,70 @@ let siswapklSchema = Yup.object().shape({
   latitude: Yup.string().required("wajib diisi"),
   penanggung_jawab_perusahaan: Yup.string().required("wajib diisi"),
 });
-export default function CreatePkl() {
-  const navigate = useNavigate();
+
+export default function DetailPkl() {
+  // const navigate = useNavigate();
   const { id } = useParams();
-  let { page, pageSize, setPage, setPageSize } = usePage();
+  const queryClient = useQueryClient();
 
-  let params = {
-    page,
-    pageSize,
-
-    // is_all: 1,
-  };
-  let { data, isLoading } = useQuery(
+  
+  let { data ,isLoading: isLoadingUpdate } = useQuery(
     //query key
-    ["/tempat-pkl/list", params],
+    ["/tempat-pkl/update"],
     //axios function,triggered when page/pageSize change
-    () => listSiswaPkl(params),
+    () => detailSiswaPkl(id),
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
+      enabled: id !== undefined,
       select: (response) => {
-        // console.log(response.data)
+        console.log('data detail', response.data);
         return response.data;
+        
+      },
+      onSuccess: (data) => {
+        console.log("data suksus", data);
+        // data.soal = JSON.parse(data.soal);
+
+        setInitialState({
+          ...data
+        });
       },
     }
   );
-  let queryClient = useQueryClient();
-  const {
-
-    showAlertDelete,
-    setShowAlertDelete,
-    deleteLoading,
-    confirmDelete,
-    onConfirmDelete,
-  } = useDelete({
-    afterDeleted: () => queryClient.invalidateQueries("/tempat-pkl/list"),
-    onDelete: (id) => deleteSiswaPkl(id),
-  });
-  const [initialState, setInitialState] = React.useState({
-    student_id: "",
-    nama_perusahaan: "",
-    pembimbing_id: "",
-    penanggung_jawab_perusahaan: "",
-    alamat: "",
-    provinsi: "",
-    kota: "",
-    kecamatan: "",
-    desa: "",
-    rt: "",
-    rw: "",
-    kode_pos: "",
-    no_hp: "",
-    longtitude: "",
-    latitude: "",
+  const [initialState, setInitialState] = useState( {
+    id: data?.id,
+    student_id: data?.siswa?.id,
+    nama_siswa: {
+      value: data?.siswa?.id,
+      label: data?.siswa?.nama_siswa,
+    },
+    nama_perusahaan: data?.nama_perusahaan,
+    pembimbing_id: data?.pembimbing?.id,
+    nama_guru: {
+      value: data?.teacher?.id,
+      label: data?.teacher?.nama_guru,
+    },
+    penanggung_jawab_perusahaan: data?.penanggung_jawab_perusahaan,
+    alamat: data?.alamat,
+    provinsi: data?.provinsi,
+    kota: data?.kota,
+    kecamatan: data?.kecamatan,
+    desa: data?.desa,
+    rt: data?.rt,
+    rw: data?.rw,
+    kode_pos: data?.kode_pos,
+    no_hp: data?.no_hp,
+    longtitude: data?.longtitude,
+    latitude: data?.latitude,
   });
 
+ 
 
-  const onSubmit = async (values, { resetForm }) => {
+  
+  const onSubmit = async (values) => {
     try {
-
-      const response = await createSiswaPkl(values);
+      const response = await updateSiswaPkl(id, values);
 
       toast.success(response?.data?.msg, {
         position: "top-right",
@@ -104,36 +106,9 @@ export default function CreatePkl() {
         progress: undefined,
         theme: "colored",
       });
-      resetForm();
-      // setInitialState({
-      //   data: [
-      //     {
-      //       student_id: "",
-      //       // nama_siswa: "",
-      //       nama_perusahaan: "",
-      //       // guru_id: "",
-      //       // nama_guru: "",
-
-      //       pembimbing_id: "",
-      //       // nama_pembimbing: "",
-      //       penanggung_jawab_perusahaan: "",
-      //       alamat: "",
-      //       provinsi: "",
-      //       kota: "",
-      //       kecamatan: "",
-      //       desa: "",
-      //       rt: "",
-      //       rw: "",
-      //       kode_pos: "",
-      //       no_hp: "",
-      //       longtitude: "",
-      //       latitude: "",
-      //     }
-      //   ]
-      // });
       queryClient.invalidateQueries("tempat-pkl/list");
-    }
-    catch (err) {
+      // navigate(`/pkl/detail/${id}`);
+    } catch (err) {
       if (err?.response?.status === 422) {
         return toast.warn(err?.response?.data?.msg, {
           position: "top-right",
@@ -144,7 +119,7 @@ export default function CreatePkl() {
           draggable: true,
           progress: undefined,
           theme: "colored",
-        })
+        });
       }
       return toast.error("Ada Kesalahan", {
         position: "top-right",
@@ -158,12 +133,18 @@ export default function CreatePkl() {
       });
     }
   };
+
+
+
+
   let { dataKelas, dataGuru } = useList();
+
+
   return (
-    <LayoutPage title={'Input Tempat Santri'}>
+    <LayoutPage title={'Update Tempat Santri'}>
       <section className='md:mt-5 px-2'>
         <Header>
-          {"Form Tambah Tempat PKL santri"}
+          {"Form Update Tempat PKL santri"}
         </Header>
         <Formik initialValues={initialState} enableReinitialize onSubmit={onSubmit} validationSchema={siswapklSchema}>
           {({
@@ -178,17 +159,11 @@ export default function CreatePkl() {
             setFieldValue,
             resetForm
           }) => (
-            <Form onSubmit={handleSubmit}
-            >
-              
+            <Form onSubmit={handleSubmit}>
               {console.log('err fatih', errors)}
               {console.log('err touched', touched)}
               {JSON.stringify(values)}
-
-
               <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
-                
-
                 <div className="col-span-3 lg:col-span-1">
                   <FormLabel
                     error={errors?.student_id && touched?.student_id}
@@ -196,10 +171,10 @@ export default function CreatePkl() {
                   >
                     <ReactSelectAsync
                       debounceTimeout={300}
-                      value={values?.nama_siswa}
+                      value={values.nama_siswa}
                       loadOptions={listSiswaPklOptions}
                       onChange={(data) => {
-                        // console.log(data);
+                        // console.log('data siswa', data);
                         setFieldValue(`nama_siswa`, data);
                         setFieldValue(
                           `student_id`,
@@ -226,7 +201,7 @@ export default function CreatePkl() {
                     label="Perusahaan PKL Santri"
                     placeholder="Ketikan Perusahaan PKL Santri"
                     name={`nama_perusahaan`}
-                    value={values?.nama_perusahaan}
+                    value={values.nama_perusahaan}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fluid
@@ -448,7 +423,7 @@ export default function CreatePkl() {
                     label="Kode pos"
                     placeholder="Ketikan kode_pos Santri"
                     name={`kode_pos`}
-                    value={values?.kode_pos}
+                    value={values.kode_pos}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     fluid
@@ -576,12 +551,9 @@ export default function CreatePkl() {
                   )}
                 </section>
 
-                {/* Section Input Lainnya */}
               </div>
 
-
               <div>
-
                 <Button
                   content={isSubmitting ? "Menyimpan" : "Simpan"}
                   type="submit"
@@ -598,5 +570,5 @@ export default function CreatePkl() {
         </Formik>
       </section>
     </LayoutPage>
-  )
+  );
 }

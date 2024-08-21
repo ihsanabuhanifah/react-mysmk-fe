@@ -35,6 +35,7 @@ import {
   CreateSiswa,
   FiturPkl,
   CreatePkl,
+  UpdatePkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -145,8 +146,8 @@ function App() {
             element={<Absensi />}
           />
           <Route path="fitur-siswa-pkl" element={<FiturPkl />} />
-          {/* <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
-          <Route path="fitur-siswa-pkl/update/:id" element={<CreatePkl />} /> */}
+          <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
+          <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePkl />} />
           <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
         </Route>
 

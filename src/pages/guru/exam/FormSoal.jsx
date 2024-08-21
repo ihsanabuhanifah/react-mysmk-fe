@@ -184,6 +184,7 @@ export default function FormExam() {
     }
   };
   return (
+    <LayoutPage title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}>
     <Segment>
       <div className="p-0 lg:p-5  ">
         <Header>
@@ -436,5 +437,6 @@ export default function FormExam() {
         </Formik>
       </div>
     </Segment>
+    </LayoutPage>
   );
 }

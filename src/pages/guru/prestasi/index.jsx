@@ -187,6 +187,8 @@ export default function Prestasi() {
               theme={{ collapse: "foo", content: "bar" }}
               isOpened={isOpen}
             >
+              {console.log('errr',errors,)}
+              {console.log('errr touch',touched,)}
               <FormPrestasi
                 data={data?.data?.rows}
                 values={values}
