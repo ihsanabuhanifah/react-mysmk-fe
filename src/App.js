@@ -180,7 +180,7 @@ function App() {
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
-          <Route path="laporan-pkl/laporan-diniyyah" element={<LaporanDiniyyah />} />
+          <Route path="laporan-pkl/laporan-diniyyah/:id" element={<LaporanDiniyyah />} />
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>

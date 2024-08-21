@@ -19,7 +19,7 @@ const DetailLaporan = () => {
   const navigate = useNavigate();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div
         style={{
@@ -61,11 +61,11 @@ const DetailLaporan = () => {
           {data.siswa.nama_siswa}
         </h1>
       </div>
-      <Segment>
+      <Segment className="w-full h-full overflow-y-auto">
         <Header
           as="h2"
           textAlign="center"
-        >{`Laporan tanggal ${formatTanggalIndo(data.tanggal)}`}</Header>
+        >{data.status === "hadir" ? `Laporan tanggal ${formatTanggalIndo(data.tanggal)}` : `Izin pada tanggal ${formatTanggalIndo(data.tanggal)}`}</Header>
         <Divider />
         <div className="flex justify-center mb-6">
           {!isImageLoaded && (
@@ -92,7 +92,7 @@ const DetailLaporan = () => {
           <h2 className="text-4xl font-semibold ">{data.judul_kegiatan}</h2>
         </div>
         <div className="text-left">
-          <p className="text-xl"> <span className="font-bold text-2xl">ISI LAPORAN :</span> { data.isi_laporan}</p>
+          <p className="text-xl"> <span className="font-bold text-2xl">{data.status === "hadir" ? "ISI LAPORAN" : "Deskripsi Izin"}</span> { data.isi_laporan}</p>
         </div>
       </Segment>
     </LayoutSiswa>
