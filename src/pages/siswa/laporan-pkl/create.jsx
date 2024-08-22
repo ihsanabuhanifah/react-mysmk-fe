@@ -10,12 +10,14 @@ import {
   Dimmer,
   Icon,
   Tab,
-  Placeholder,
 } from "semantic-ui-react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import DropzoneFile from "../../../components/Dropzone";
-import { useCreateLaporanPkl, useLokasiPkl } from "../../../api/siswa/laporan-pkl";
+import {
+  useCreateLaporanPkl,
+  useLokasiPkl,
+} from "../../../api/siswa/laporan-pkl";
 import { useNavigate } from "react-router-dom";
 
 const CreateLaporanPkl = () => {
@@ -26,17 +28,44 @@ const CreateLaporanPkl = () => {
     longtitude: null,
     latitude: null,
   });
+  const [isWithinRange, setIsWithinRange] = useState(true);
   const navigate = useNavigate();
   const [statusKehadiran, setStatusKehadiran] = useState("hadir");
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the earth in km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+    return distance;
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserLocation({
+          const currentLocation = {
             longtitude: position.coords.longitude,
             latitude: position.coords.latitude,
-          });
+          };
+          setUserLocation(currentLocation);
+
+          if (data && data.data) {
+            const distance = calculateDistance(
+              currentLocation.latitude,
+              currentLocation.longtitude,
+              data.data.latitude,
+              data.data.longtitude
+            );
+            setIsWithinRange(distance <= 1);
+          }
         },
         (error) => {
           console.error("Error obtaining location:", error);
@@ -45,30 +74,24 @@ const CreateLaporanPkl = () => {
     } else {
       console.error("Geolocation is not supported by this browser.");
     }
-  }, []);
+  }, [data]);
 
   const validationSchema = yup.object().shape({
-    judul_kegiatan: yup
-      .string()
-      .when("status", {
-        is: "izin",
-        then: yup.string().required("Alasan izin harus diisi"),
-        otherwise: yup.string().required("Judul kegiatan harus diisi"),
-      }),
-    isi_laporan: yup
-      .string()
-      .when("status", {
-        is: "izin",
-        then: yup.string().required("Keterangan izin harus diisi"),
-        otherwise: yup.string().required("Isi laporan wajib diisi"),
-      }),
-    foto: yup
-      .string()
-      .when("status", {
-        is: "izin",
-        then: yup.string().required("Bukti izin harus diunggah"),
-        otherwise: yup.string().required("Foto dokumentasi wajib diunggah"),
-      }),
+    judul_kegiatan: yup.string().when("status", {
+      is: "izin",
+      then: yup.string().required("Alasan izin harus diisi"),
+      otherwise: yup.string().required("Judul kegiatan harus diisi"),
+    }),
+    isi_laporan: yup.string().when("status", {
+      is: "izin",
+      then: yup.string().required("Keterangan izin harus diisi"),
+      otherwise: yup.string().required("Isi laporan wajib diisi"),
+    }),
+    foto: yup.string().when("status", {
+      is: "izin",
+      then: yup.string().required("Bukti izin harus diunggah"),
+      otherwise: yup.string().required("Foto dokumentasi wajib diunggah"),
+    }),
     status: yup
       .string()
       .oneOf(["hadir", "izin"])
@@ -218,19 +241,15 @@ const CreateLaporanPkl = () => {
                       loading={isLoadingCreate}
                       type="submit"
                       color="green"
-                      disabled={
-                        userLocation.longtitude !== data.data.longtitude &&
-                        userLocation.latitude !== data.data.latitude
-                      }
+                      disabled={!isWithinRange} // Disable jika di luar jangkauan
                     >
                       Submit
                     </Button>
-                    {userLocation.longtitude !== data.data.longtitude &&
-                      userLocation.latitude !== data.data.latitude && (
-                        <div className="ui pointing red basic label w-auto">
-                          Anda Harus Berada di Dekat Perusahaan anda
-                        </div>
-                      )}
+                    {!isWithinRange && (
+                      <div className="ui pointing red basic label w-auto">
+                        Anda Harus Berada dalam Jarak 1km dari Perusahaan Anda
+                      </div>
+                    )}
                   </div>
                 </Segment>
               </Form>
@@ -277,7 +296,7 @@ const CreateLaporanPkl = () => {
                   </Form.Field>
 
                   <Form.Field>
-                    <label>Tanggal Izin</label>
+                    <label>Tanggal Jurnal</label>
                     <Input value={new Date().toLocaleDateString()} disabled />
                   </Form.Field>
 
@@ -313,10 +332,10 @@ const CreateLaporanPkl = () => {
                   </Form.Field>
 
                   <Form.Field>
-                    <label>Keterangan Izin</label>
+                    <label>Keterangan</label>
                     <TextArea
                       name="isi_laporan"
-                      placeholder="Masukkan keterangan izin"
+                      placeholder="Keterangan tambahan"
                       value={values.isi_laporan}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -327,25 +346,9 @@ const CreateLaporanPkl = () => {
                       </div>
                     )}
                   </Form.Field>
-                  <div className="flex flex-col w-max">
-                    <Button
-                      loading={isLoadingCreate}
-                      type="submit"
-                      color="green"
-                      disabled={
-                        userLocation.longtitude !== data.data.longtitude &&
-                        userLocation.latitude !== data.data.latitude
-                      }
-                    >
-                      Submit
-                    </Button>
-                    {userLocation.longtitude !== data.data.longtitude &&
-                      userLocation.latitude !== data.data.latitude && (
-                        <div className="ui pointing red basic label w-auto">
-                          Anda Harus Berada di Dekat Perusahaan anda
-                        </div>
-                      )}
-                  </div>
+                  <Button loading={isLoadingCreate} type="submit" color="green">
+                    Submit
+                  </Button>
                 </Segment>
               </Form>
             )}
@@ -356,17 +359,19 @@ const CreateLaporanPkl = () => {
   ];
 
   return (
-    <>
-      <LayoutSiswa title="Laporan Harian">
-        <Icon
-          className="mb-2 cursor-pointer"
-          onClick={() => navigate(-1)}
-          name="arrow left"
-          size="large"
-        />
-        <Tab panes={panes} className="mt-4"/>
-      </LayoutSiswa>
-    </>
+    <LayoutSiswa title="Buat Jurnal Harian PKL">
+      <div className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5">
+        <div className="mb-6">
+          <Icon
+            name="arrow left"
+            size="large"
+            onClick={() => navigate(-1)}
+            className="cursor-pointer pb-4"
+          />
+        </div>
+        <Tab panes={panes} />
+      </div>
+    </LayoutSiswa>
   );
 };
 

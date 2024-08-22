@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useLaporanPklDetail,
   useUpdateLaporanPkl,
@@ -8,6 +8,7 @@ import {
   Button,
   Dimmer,
   Form,
+  Icon,
   Input,
   Loader,
   Segment,
@@ -51,9 +52,12 @@ const UpdateLaporan = () => {
   const { data, isFetching, isLoading } = useLaporanPklDetail(id);
   const { isLoading: isLoadingUpdate, mutate } = useUpdateLaporanPkl(id);
   const [file, setFile] = useState("");
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     console.log(values);
+    console.log(id);
+
     mutate(values);
   };
   const formik = useFormik({
@@ -79,7 +83,7 @@ const UpdateLaporan = () => {
     touched,
   } = formik;
 
-  if (isLoading || isFetching) {
+  if (isFetching) {
     return (
       <div
         style={{
@@ -113,100 +117,117 @@ const UpdateLaporan = () => {
       <LayoutSiswa
         title={`Edit Laporan tanggal ${formatTanggalIndo(data?.tanggal)}`}
       >
-        {JSON.stringify(values)}
-        <Form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5"
-        >
-          <Segment>
-            <Form.Field>
-              <label>
-                {data?.status === "hadir"
-                  ? "Judul Jurnal Harian"
-                  : "Alasan Izin"}
-              </label>
-              <Input
-                name="judul_kegiatan"
-                placeholder="Masukkan judul jurnal"
-                value={values.judul_kegiatan}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.judul_kegiatan && errors.judul_kegiatan && (
-                <div className="ui pointing red basic label">
-                  {errors.judul_kegiatan}
-                </div>
-              )}
-            </Form.Field>
-
-            <Form.Field>
-              <label> Tanggal Jurnal</label>
-              <Input value={data?.tanggal} disabled />
-            </Form.Field>
-
-            <Form.Field>
-              <label>
-                {data?.status === "hadir" ? "Foto Dokumentasi" : "Bukti Izin"}{" "}
-              </label>
-              {/* Gambar yang diunggah oleh pengguna atau yang sudah ada */}
-              <img
-                className="w-full h-auto max-h-52 object-cover mb-4 rounded-lg"
-                src={values.foto || data?.foto}
-                alt={`Foto Laporan Harian ${data.siswa.nama_siswa} tanggal ${data.tanggal}`}
-              />
-              {!file ? (
-                <DropzoneFile
-                  handleDrop={(content) => {
-                    setFile(content);
-                    setFieldValue("foto", content);
-                  }}
+        <div className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5">
+          {" "}
+          <div className="mb-10">
+            <Icon
+              name="arrow left"
+              size="large"
+              onClick={() => navigate(-1)}
+              className="cursor-pointer pb-4"
+            />
+          </div>
+          <Form
+            onSubmit={formik.handleSubmit}
+            className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5"
+          >
+            <Segment>
+              <Form.Field>
+                <label>
+                  {data?.status === "hadir"
+                    ? "Judul Jurnal Harian"
+                    : "Alasan Izin"}
+                </label>
+                <Input
+                  name="judul_kegiatan"
+                  placeholder="Masukkan judul jurnal"
+                  value={values.judul_kegiatan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                 />
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Button
-                    icon="delete"
-                    color="red"
-                    onClick={() => {
-                      setFile("");
-                      setFieldValue("foto", "");
+                {touched.judul_kegiatan && errors.judul_kegiatan && (
+                  <div className="ui pointing red basic label">
+                    {errors.judul_kegiatan}
+                  </div>
+                )}
+              </Form.Field>
+
+              <Form.Field>
+                <label> Tanggal Jurnal</label>
+                <Input value={data?.tanggal} disabled />
+              </Form.Field>
+
+              <Form.Field>
+                <label>
+                  {data?.status === "hadir" ? "Foto Dokumentasi" : "Bukti Izin"}{" "}
+                </label>
+                {/* Gambar yang diunggah oleh pengguna atau yang sudah ada */}
+                <img
+                  className="w-full h-auto max-h-52 object-cover mb-4 rounded-lg"
+                  src={values.foto || data?.foto}
+                  alt={`Foto Laporan Harian ${data.siswa.nama_siswa} tanggal ${data.tanggal}`}
+                />
+                {!file ? (
+                  <DropzoneFile
+                    handleDrop={(content) => {
+                      setFile(content);
+                      setFieldValue("foto", content);
                     }}
                   />
-                  <a target="_blank" rel="noreferrer" href={file}>
-                    {file.split("/").pop()}
-                  </a>
-                </div>
-              )}
-              {touched.foto && errors.foto && (
-                <div className="ui pointing red basic label">{errors.foto}</div>
-              )}
-            </Form.Field>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      icon="delete"
+                      color="red"
+                      onClick={() => {
+                        setFile("");
+                        setFieldValue("foto", "");
+                      }}
+                    />
+                    <a target="_blank" rel="noreferrer" href={file}>
+                      {file.split("/").pop()}
+                    </a>
+                  </div>
+                )}
+                {touched.foto && errors.foto && (
+                  <div className="ui pointing red basic label">
+                    {errors.foto}
+                  </div>
+                )}
+              </Form.Field>
 
-            <Form.Field>
-              <label>
-                {data?.status === "hadir"
-                  ? "Deskripsi Jurnal Harian"
-                  : "Keterangan Izin"}
-              </label>
-              <TextArea
-                name="isi_laporan"
-                placeholder="Apa yang antum kerjakan hari ini?"
-                value={values.isi_laporan}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.isi_laporan && errors.isi_laporan && (
-                <div className="ui pointing red basic label">
-                  {errors.isi_laporan}
-                </div>
-              )}
-            </Form.Field>
-            <div className="flex flex-col w-max">
-              <Button type="submit" color="green" disabled={!formik.dirty}>
-                Submit
-              </Button>
-            </div>
-          </Segment>
-        </Form>
+              <Form.Field>
+                <label>
+                  {data?.status === "hadir"
+                    ? "Deskripsi Jurnal Harian"
+                    : "Keterangan Izin"}
+                </label>
+                <TextArea
+                  name="isi_laporan"
+                  placeholder="Apa yang antum kerjakan hari ini?"
+                  value={values.isi_laporan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.isi_laporan && errors.isi_laporan && (
+                  <div className="ui pointing red basic label">
+                    {errors.isi_laporan}
+                  </div>
+                )}
+              </Form.Field>
+              <div className="flex flex-col w-max">
+                <Button
+                  type="submit"
+                  color="green"
+                  loading={isLoadingUpdate}
+                  disabled={!formik.dirty}
+                >
+                  Submit
+                </Button>
+              </div>
+            </Segment>
+          </Form>
+        </div>
       </LayoutSiswa>
     </>
   );

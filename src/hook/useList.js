@@ -9,6 +9,7 @@ import {
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
+import axios from "../api/axiosClient";
 
 import Cookies from "js-cookie";
 
@@ -110,6 +111,31 @@ export default function useList() {
       select: (response) => response.data,
     }
   );
+  async function listDataAlquran(keyword, loadedOptions, additional) {
+    let result = await axios.get(`/list/alquran`, {
+      params: {
+        page: additional.page,
+        pageSize: 115,
+        keyword,
+      },
+    });
+
+    result = result.data;
+
+    let options = result.data.map((item) => ({
+      label: item.nama_surat,
+      value: item.nama_surat,
+    }));
+
+    return {
+      options: options,
+      hasMore: result.pagination?.current_page < result.pagination?.total_page,
+      additional: {
+        page: additional?.page + 1,
+        scope_of_service: additional?.scope_of_service,
+      },
+    };
+  }
 
   return {
     dataKelas,
@@ -120,5 +146,6 @@ export default function useList() {
     roles,
     dataAlquran,
     dataHalaqoh,
+    listDataAlquran,
   };
 }

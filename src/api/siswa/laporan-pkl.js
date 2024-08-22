@@ -4,6 +4,7 @@ import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import useToast from "../../hook/useToast";
 import usePage from "../../hook/usePage";
+import { usePagination } from "../../hook/usePagination";
 export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/santri/laporan-harian-pkl/list", { params });
@@ -44,15 +45,24 @@ export const useLokasiPkl = () => {
 };
 
 export const useLaporanPklList = () => {
-  let { page, pageSize, setPage, setPageSize } = usePage();
-  console.log(setPage);
-  console.log(setPageSize);
-  console.log(pageSize);
-  let params = {
-    page,
-    pageSize,
+  
+  // console.log(setPage);
+  // console.log(setPageSize);
+  // console.log(params);
+  // console.log(pageSize);
+  let defParams = {
+    page : 1,
+    pageSize : 10,
   };
-  console.log(params);
+  const {
+    params,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+  } = usePagination(defParams);
 
   const { isLoading, data, isFetching } = useQuery(
     ["/santri/laporan-harian-pkl/list", params],
@@ -64,14 +74,16 @@ export const useLaporanPklList = () => {
     }
   );
   return {
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
     data,
     isFetching,
     isLoading,
-    page,
-    pageSize,
-    setPage,
-    pageSize,
-    setPageSize,
+    params
   };
 };
 
@@ -111,25 +123,28 @@ export const useCreateLaporanPkl = () => {
   return { mutate, isLoading };
 };
 
-export function updateLaporanPkl(id) {
+export function updateLaporanPkl(id, payload) {
   syncToken();
-  return axios.get(`/santri/laporan-harian-pkl/update/${id}`);
+  return axios.put(`/santri/laporan-harian-pkl/update/${id}`, payload);
 }
 export const useUpdateLaporanPkl = (id) => {
   const queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
 
-  const { mutate, isLoading } = useMutation((id) => updateLaporanPkl(id), {
-    onSuccess: (response) => {
-      console.log(response);
-      successToast(response);
-      queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
-    },
-    onError: (err) => {
-      console.log(err, "err");
-      console.log(err.Error.config.response, "err ddd");
-      warningToast(err);
-    },
-  });
+  const { mutate, isLoading } = useMutation(
+    (payload) => axios.put(`/santri/laporan-harian-pkl/update/${id}`, payload),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        successToast(response);
+        queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
+      },
+      onError: (err) => {
+        console.log(err, "err");
+        console.log(err.config.response, "err ddd");
+        warningToast(err);
+      },
+    }
+  );
   return { mutate, isLoading };
 };

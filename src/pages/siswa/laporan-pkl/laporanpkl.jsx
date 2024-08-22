@@ -1,25 +1,28 @@
 import React from "react";
 import LayoutSiswa from "../../../module/layoutSiswa";
-import {
-  Button,
-  Dimmer,
-  Icon,
-  Image,
-  Loader,
-  Placeholder,
-  PlaceholderLine,
-  Segment,
-} from "semantic-ui-react";
+import { Button, Icon, Placeholder, Segment } from "semantic-ui-react";
 import { useLaporanPklList } from "../../../api/siswa/laporan-pkl";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import usePage from "../../../hook/usePage";
-import { PaginationTable } from "../../../components";
+import Pagination from "../../../components/Pagination";
+
 const LaporanPkl = () => {
-  const { data, isFetching, isLoading, page, pageSize, setPage, setPageSize } =
-    useLaporanPklList();
-  console.log(data, "dataaaaaa");
+  
+  const {
+    data,
+    isFetching,
+    isLoading,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    params
+  } = useLaporanPklList();
+  console.log(data && data)
+  console.log(data?.data?.length)
   let navigate = useNavigate();
   const today = dayjs().format("YYYY-MM-DD");
   const hasSubmittedToday = data?.data.some((item) => item.tanggal === today);
@@ -37,38 +40,29 @@ const LaporanPkl = () => {
             Buat Laporan
           </Button>
           <Button color="red" size="medium">
-            {" "}
             <Icon name="filter" />
             Filter
           </Button>
         </div>
         <div className="md:mt-8 mt-6">
           {isFetching ? (
-            <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-
-                zIndex: 50,
-              }}
-              className="fixed flex items-center justify-center "
-            >
-              <div>
-                <Dimmer
-                  style={{
-                    backgroundColor: "rgba(255, 255,255, 0.5)", // semi-transparent white
-                    backdropFilter: "blur(0.5px)", // applies blur effect
-                  }}
-                  active
-                  inverted
-                >
-                  <Loader size="large">Loading data ... </Loader>
-                </Dimmer>
-              </div>
-            </div>
+            <>
+              {/* Placeholder shimmer untuk loading state */}
+              {[...Array(5)].map((_, index) => (
+                <Segment key={index} className="mb-4">
+                  <Placeholder>
+                    <Placeholder.Header>
+                      <Placeholder.Line />
+                      <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Paragraph>
+                      <Placeholder.Line length="medium" />
+                      <Placeholder.Line length="short" />
+                    </Placeholder.Paragraph>
+                  </Placeholder>
+                </Segment>
+              ))}
+            </>
           ) : (
             data &&
             data.data.map((item, index) =>
@@ -91,13 +85,7 @@ const LaporanPkl = () => {
           )}
         </div>
         <div className="w-full justify-center my-4">
-          <PaginationTable
-            page={page}
-            pageSize={pageSize}
-            setPage={setPage}
-            setPageSize={setPageSize}
-            totalPages={data && data.data.length}
-          />
+         <Pagination handlePage={handlePage} handlePageSize={handlePageSize} page={params.page} pageSize={params.pageSize} pagination={data?.pagination}/>
         </div>
       </div>
     </LayoutSiswa>
