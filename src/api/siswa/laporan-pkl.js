@@ -46,10 +46,7 @@ export const useLokasiPkl = () => {
 
 export const useLaporanPklList = () => {
   
-  // console.log(setPage);
-  // console.log(setPageSize);
-  // console.log(params);
-  // console.log(pageSize);
+  
   let defParams = {
     page : 1,
     pageSize : 10,
@@ -142,6 +139,29 @@ export const useUpdateLaporanPkl = (id) => {
       onError: (err) => {
         console.log(err, "err");
         console.log(err.config.response, "err ddd");
+        warningToast(err);
+      },
+    }
+  );
+  return { mutate, isLoading };
+};
+export function createLaporanDiniyyah(payload) {
+  syncToken();
+  return axios.post("/santri/laporan-diniyyah/create", payload);
+}
+export const useCreateLaporanDiniyyah = () => {
+  const { successToast, warningToast } = useToast();
+
+  const { mutate, isLoading } = useMutation(
+    (payload) => createLaporanDiniyyah(payload),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        successToast(response);
+      },
+      onError: (err) => {
+        console.log(err, "err");
+        console.log(err.Error.config.response, "err ddd");
         warningToast(err);
       },
     }

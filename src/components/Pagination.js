@@ -40,7 +40,7 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
   }
 
   let pages = getPage(
-    pagination?.total || 4,
+    pagination?.total || 0,
     pagination?.page || 1,
     pagination?.pageSize || 10
   );
@@ -62,16 +62,21 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
           selection
           options={pageOptions}
           value={pageSize}
-          onChange={(e, { value }) => handlePageSize(e)}
+          onChange={(e, { value }) =>{
+            console.log(e)
+            console.log(e.target.value)
+            console.log(value)
+            handlePageSize(value)
+          }}
         />
-        <p>dari {pagination?.total} data</p>
+        <p className="pt-2">dari {pagination?.total} data</p>
       </div>
 
       <div>
         <SemanticPagination
           activePage={page}
           totalPages={pages.totalPages}
-          onPageChange={(e, { activePage }) => handlePage(activePage)}
+          onPageChange={(e, { activePage }) => handlePage(e.target.value)}
         />
       </div>
     </div>

@@ -220,7 +220,7 @@ const UpdateLaporan = () => {
                   type="submit"
                   color="green"
                   loading={isLoadingUpdate}
-                  disabled={!formik.dirty}
+                  disabled={!formik.dirty || isLoadingUpdate}
                 >
                   Submit
                 </Button>
