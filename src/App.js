@@ -61,6 +61,7 @@ import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
+import RegisterWali from "./pages/auth/RegisterWali";
 
 
 
@@ -85,6 +86,14 @@ function App() {
           element={
             <ProtectLogin>
               <Login />
+            </ProtectLogin>
+          }
+        />
+         <Route
+          path="/register/wali"
+          element={
+            <ProtectLogin>
+              <RegisterWali/>
             </ProtectLogin>
           }
         />
