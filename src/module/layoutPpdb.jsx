@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function LayoutSiswa({ title, children }) {
+export default function LayoutPpdb({ title, children }) {
   return (
     <div className="w-full h-screen flex flex-col">
       <div className="w-full border-b border-black/5 h-[73px] bg-white flex items-center">

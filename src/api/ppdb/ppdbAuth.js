@@ -13,26 +13,26 @@ export function loginPpdb(values) {
 }
 
 // Fungsi untuk mendapatkan data autentikasi pengguna
-export function authme() {
-    syncToken(); // Sinkronisasi token jika diperlukan
-    return axios.get("/authme");
-}
+// export function authme() {
+//     syncToken(); // Sinkronisasi token jika diperlukan
+//     return axios.get("/authme");
+// }
 
 // Hook React Query untuk mendapatkan data autentikasi
-export const useAuthMe = () => {
-    // Menggunakan useQuery untuk mendapatkan data dari endpoint /authme
-    let { data: dataMe } = useQuery(
-      // Kunci query, yang dapat digunakan untuk cache
-      ["authme"],
-      // Fungsi axios yang akan dipanggil
-      () => authme(),
-      // Konfigurasi query
-      {
-        staleTime: 60 * 1000 * 60 * 12, // 12 jam
-        select: (response) => response.data // Memilih data yang relevan dari respons
-      }
-    );
+// export const useAuthMe = () => {
+//     // Menggunakan useQuery untuk mendapatkan data dari endpoint /authme
+//     let { data: dataMe } = useQuery(
+//       // Kunci query, yang dapat digunakan untuk cache
+//       ["authme"],
+//       // Fungsi axios yang akan dipanggil
+//       () => authme(),
+//       // Konfigurasi query
+//       {
+//         staleTime: 60 * 1000 * 60 * 12, // 12 jam
+//         select: (response) => response.data // Memilih data yang relevan dari respons
+//       }
+//     );
   
-    // Mengembalikan dataMe dari hook
-    return { dataMe };
-}
+//     // Mengembalikan dataMe dari hook
+//     return { dataMe };
+// }

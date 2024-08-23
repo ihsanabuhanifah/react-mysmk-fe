@@ -13,6 +13,7 @@ import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 
 import Cookies from "js-cookie";
+import { getProfileCalonSantri } from "../api/ppdb/profile";
 
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"))
@@ -31,6 +32,20 @@ export default function useList() {
         let decoded = jwt_decode(data);
         return decoded;
       },
+    }
+  );
+
+  let { data: dataCalonSantri } = useQuery(
+    //query key
+    [`/ppdb/detail-calsan/{id}`],
+    //axios function,triggered when page/pageSize change
+    () => getProfileCalonSantri(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
+      select: (response) => response.data,
     }
   );
 
@@ -123,5 +138,6 @@ export default function useList() {
     roles,
     dataAlquran,
     dataHalaqoh,
+    dataCalonSantri
   };
 }

@@ -52,11 +52,18 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
-import LandingPage from "./pages/ppdb";
+
+// PPDB
+import LandingPage from "./pages/ppdb/Landing-page/";
 import LoginPpdb from "./pages/ppdb/login";
 import RegisterPpdb from "./pages/ppdb/register/register";
-import DashboardPpdb from "./pages/ppdb/dashboard/dashboard";
-import PrivateRoute from "./routers/ProtectLoginPpdb";
+import DashboardPpdb from "./pages/ppdb/dashboard/dashboardppdb";
+import ProtectRoutePpdb from "./routers/ProtectRoutePpdb";
+import PendaftaranCalonSantri from "./pages/ppdb/pendaftaran/pendaftaran";
+import Ppdb from "./layout/ppdb";
+import ProfilePpdb from "./pages/ppdb/biodata";
+import SecurityPpdb from "./pages/ppdb/security/SecurityPpdb";
+import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
 
 function App() {
   return (
@@ -185,18 +192,33 @@ function App() {
 
         {/* Routes PPDB */}
 
-        <Route path="/ppdb" element={<LandingPage />} />
-        <Route path="/ppdb/login" element={<LoginPpdb />} />
+        <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/landingpage/register" element={<RegisterPpdb />} />
+        <Route path="/landingpage/login" element={<LoginPpdb />} />
         <Route
-          path="/ppdb/dashboard"
+          path="/ppdb"
           element={
-            <PrivateRoute>
-              <DashboardPpdb />
-            </PrivateRoute>
+            <ProtectRoutePpdb userRole="Calon Santri">
+              <Ppdb />
+            </ProtectRoutePpdb>
           }
-        />
-        <Route path="/ppdb/register" element={<RegisterPpdb />} />
-        {/* <Route path="/ppdb/dashboard" element={<DashboardPpdb />} /> */}
+        >
+          <Route path="dashboard" element={<DashboardPpdb />} />
+          <Route path="biodata" element={<ProfilePpdb />}>
+            <Route path="update" element={<BiodataUpdatePPdb />} />
+            <Route path="security" element={<SecurityPpdb />} />
+          </Route>
+          <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
+        </Route>
+
+        {/* <Route
+          path="/ppdb/pendaftaran"
+          element={
+            <ProtectRoutePpdb userRole="Calon Santri">
+              <PendaftaranCalonSantri />
+            </ProtectRoutePpdb>
+          }
+        /> */}
       </Routes>
     </div>
   );
@@ -210,7 +232,7 @@ const Home = () => {
       <p>Home</p>
       <Link to="/login">login</Link>
       <br></br>
-      <Link to="/ppdb">ppdb</Link>
+      <Link to="/landingpage">ppdb</Link>
     </div>
   );
 };

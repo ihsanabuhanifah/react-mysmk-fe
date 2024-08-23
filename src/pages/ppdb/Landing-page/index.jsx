@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link } from "react-router-dom";
-import LogoPpdb from "../../image/ppdb/ppdb.png";
-import Banner from "../../image/ppdb/banner.png";
-import Gambarsatu from "../../image/ppdb/s1.png";
-import GambarTiga from "../../image/ppdb/s3.png";
-import Diniyyah from "../../image/ppdb/diniyyah.png";
-import TKJ from "../../image/ppdb/TKJ.png";
-import RPL from "../../image/ppdb/RPL.png";
-import ProgramUnggulan from "../../image/ppdb/Program.png";
-import Nav from "../../components/Nav";
+import Banner from "../../../image/ppdb/banner.png";
+import Gambarsatu from "../../../image/ppdb/s1.png";
+import GambarTiga from "../../../image/ppdb/s3.png";
+import Diniyyah from "../../../image/ppdb/diniyyah.png";
+import TKJ from "../../../image/ppdb/TKJ.png";
+import RPL from "../../../image/ppdb/RPL.png";
+import ProgramUnggulan from "../../../image/ppdb/Program.png";
+import Nav from "../../../components/Nav"
 
 const LandingPage = () => {
   return (

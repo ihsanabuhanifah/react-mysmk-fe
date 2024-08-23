@@ -15,6 +15,7 @@ module.exports = {
       },
       colors: {
         customGreen: "#18A558",
+        btnCustom: "#32CD32",
       },
       backgroundImage: {
         'imageBackground': "url('/src/image/ppdb/backgorund.png')",

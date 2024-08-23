@@ -57,6 +57,7 @@
   },
   "scripts": {
     "start": "cross-env TAILWIND_MODE=watch set PORT=2001 && craco --openssl-legacy-provider start",
+    
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"
