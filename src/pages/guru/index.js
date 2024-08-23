@@ -62,7 +62,8 @@ export {
   CreateSiswa,
   FiturPkl,
   CreatePkl,
-  UpdatePkl // JurnalSantri,
+  UpdatePkl, // JurnalSantri,
   // FormFiturPkl,
+ 
 
 };

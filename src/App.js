@@ -46,6 +46,7 @@ import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
+import FileCoba from "./components/fileupload";
 
 function App() {
   return (
@@ -149,6 +150,7 @@ function App() {
           <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
           <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePkl />} />
           <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
+          {/* <Route path="fitur-siswa-pkl/filecoba" element={<FileCoba />} /> */}
         </Route>
 
         <Route

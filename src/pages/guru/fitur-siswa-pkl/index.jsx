@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LayoutPage from '../../../module/layoutPage';
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from '../../../components';
 import useDelete from '../../../hook/useDelete';
 import { useQuery, useQueryClient } from 'react-query';
-import { Button, Icon, Table } from "semantic-ui-react";
+import { Button, Icon, Input, Table } from "semantic-ui-react";
 import { useNavigate } from 'react-router-dom';
 import usePage from "../../../hook/usePage";
 import { createSiswaPkl, deleteSiswaPkl, listSiswaPkl, updateSiswaPkl } from '../../../api/guru/fitur-pkl';
 import { toast } from 'react-toastify';
+import UploadExcel from '../../../components/ModalUploadExel';
+import useDebounce from '../../../hook/useDebounce';
 
 export default function FiturPkl() {
 
     const navigate = useNavigate();
     let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
-    let [isOpen, setIsOpen] = React.useState(false);
+    let [isOpen, setIsOpen] = useState(false);
+    // let [keyword, setKeyword] = React.useState("");
+    // let debouncedKeyword = useDebounce(keyword, 500);
+
 
     const params = {
         page,
         pageSize,
+        // keyword:debouncedKeyword
     };
+
 
     const { data, isLoading } = useQuery(
         ["/tempat-pkl/list", params],
@@ -91,15 +98,34 @@ export default function FiturPkl() {
                 title={"Apakah yakin akan menghapus pelanggaran terpilih?"}
             />
             <div className="mt-5 space-y-5">
-                <section className="grid grid-cols-5 gap-5">
-                    <div className="col-span-4 lg:col-span-1">
+                <section className="grid grid-cols-6 gap-5 ">
+                    {/* <div className="col-span-5   lg:col-span-3 xl:col-span-3">
+                        <Input
+                            fluid
+                            loading={false}
+                            icon="search"
+                            onChange={(e) => {
+                                setKeyword(e.target.value);
+                            }}
+                            iconPosition="left"
+                            placeholder="Search..."
+                        />
+                    </div> */}
+                    <div className="col-span-6 lg:col-span-1 xl:col-span-1">
                         <Button
                             type="button"
                             color="teal"
                             icon={<Icon name="add" />}
                             onClick={() => navigate("tambah", { replace: true })}
                             content="Tambah"
+                            size='medium'
+                            fluid
                         />
+                        
+                    </div>
+                    
+                    <div className="col-span-6 lg:col-span-1 xl:col-span-1 transform transition-all duration-300">
+                        <UploadExcel />
                     </div>
                 </section>
                 <section>

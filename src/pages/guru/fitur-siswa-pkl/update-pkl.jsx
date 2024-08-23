@@ -37,10 +37,10 @@ export default function UpdatePkl() {
   const { id } = useParams();
   const queryClient = useQueryClient();
 
-  
-  let { data ,isLoading: isLoadingUpdate } = useQuery(
+
+  let { data, isFetching } = useQuery(
     //query key
-    ["/tempat-pkl/update"],
+    ["/tempat-pkl/update", id],
     //axios function,triggered when page/pageSize change
     () => detailSiswaPkl(id),
     //configuration
@@ -50,19 +50,30 @@ export default function UpdatePkl() {
       select: (response) => {
         console.log('data detail', response.data.data);
         return response.data.data;
-        
+
       },
       onSuccess: (data) => {
         console.log("data suksus", data);
         // data.soal = JSON.parse(data.soal);
 
-        setInitialState({
-          ...data
-        });
+
       },
     }
   );
-  const [initialState, setInitialState] = useState( {
+
+  useEffect(() => {
+    if(!!data === true){
+      setInitialState({
+        ...data,
+        nama_siswa : {
+          value : data.student_id,
+          label : data.siswa.nama_siswa
+        }
+      });
+    }
+  }, [data])
+
+  const [initialState, setInitialState] = useState({
     id: data?.id,
     student_id: data?.siswa?.id,
     nama_siswa: {
@@ -89,9 +100,9 @@ export default function UpdatePkl() {
     latitude: data?.latitude,
   });
 
- 
 
-  
+
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -190,13 +201,13 @@ export default function UpdatePkl() {
   //   }
   // };
 
-  
+
 
   let { dataKelas, dataGuru } = useList();
 
 
   return (
-    <LayoutPage title={'Update Tempat Santri'}>
+    <LayoutPage title={'Update Tempat Santri'} isLoading={isFetching}>
       <section className='md:mt-5 px-2'>
         <Header>
           {"Form Update Tempat PKL santri"}
