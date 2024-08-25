@@ -17,6 +17,7 @@ const DetailLaporan = () => {
   const { id } = useParams();
   const { data, isFetching, isLoading } = useLaporanPklDetail(id);
   const navigate = useNavigate();
+  console.log(data, "data")
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   if (isLoading || isFetching) {

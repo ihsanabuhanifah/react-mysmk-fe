@@ -9,10 +9,14 @@ import {
 } from "semantic-ui-react";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
-const Card = ({ item }) => {
+const Card = ({ item, hasSubmit }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const navigate = useNavigate();
+  const today = dayjs().format("YYYY-MM-DD");
+
+  const isSameDay = item.tanggal === today;
 
   return (
     <ItemGroup divided className="hover:shadow-md">
@@ -63,8 +67,9 @@ const Card = ({ item }) => {
         </div>
         <div className="flex flex-col md:w-auto w-full md:flex-row gap-2 md:gap-5 items-center mt-4 md:mt-0">
           <Button
-          className="w-full md:w-auto"
+            className="w-full md:w-auto"
             primary
+            disabled={!isSameDay}
             onClick={() =>
               navigate(`/siswa/laporan-pkl/laporan-diniyyah/${item.id}`)
             }

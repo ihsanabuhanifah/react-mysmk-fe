@@ -76,7 +76,10 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
         <SemanticPagination
           activePage={page}
           totalPages={pages.totalPages}
-          onPageChange={(e, { activePage }) => handlePage(e.target.value)}
+          onPageChange={(e, { activePage }) => {
+            console.log(activePage)
+            handlePage(activePage)
+          }}
         />
       </div>
     </div>

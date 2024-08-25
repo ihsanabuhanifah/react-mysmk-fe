@@ -48,6 +48,7 @@ export const usePagination = (defaultParams) => {
 
   const handlePageSize = (e) => {
     console.log(e, "ddada")
+    // console.log()
     setParams((params) => ({ ...params, pageSize: e, page: 1 }));
     setFilterParams((params) => ({
       ...params,

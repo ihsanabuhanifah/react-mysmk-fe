@@ -5,6 +5,7 @@ import { syncToken } from "../axiosClient";
 import useToast from "../../hook/useToast";
 import usePage from "../../hook/usePage";
 import { usePagination } from "../../hook/usePagination";
+import { useNavigate } from "react-router-dom";
 export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/santri/laporan-harian-pkl/list", { params });
@@ -45,11 +46,9 @@ export const useLokasiPkl = () => {
 };
 
 export const useLaporanPklList = () => {
-  
-  
   let defParams = {
-    page : 1,
-    pageSize : 10,
+    page: 1,
+    pageSize: 10,
   };
   const {
     params,
@@ -80,7 +79,7 @@ export const useLaporanPklList = () => {
     data,
     isFetching,
     isLoading,
-    params
+    params,
   };
 };
 
@@ -102,13 +101,16 @@ export function createLaporanPkl(payload) {
 
 export const useCreateLaporanPkl = () => {
   const { successToast, warningToast } = useToast();
-
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { mutate, isLoading } = useMutation(
     (payload) => createLaporanPkl(payload),
     {
       onSuccess: (response) => {
         console.log(response);
         successToast(response);
+        queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
+        navigate("/siswa/laporan-pkl")
       },
       onError: (err) => {
         console.log(err, "err");
@@ -151,6 +153,7 @@ export function createLaporanDiniyyah(payload) {
 }
 export const useCreateLaporanDiniyyah = () => {
   const { successToast, warningToast } = useToast();
+  const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(
     (payload) => createLaporanDiniyyah(payload),
@@ -158,10 +161,53 @@ export const useCreateLaporanDiniyyah = () => {
       onSuccess: (response) => {
         console.log(response);
         successToast(response);
+        queryClient.invalidateQueries("/santri/laporan-diniyyah/detailPkl/");
+
       },
       onError: (err) => {
         console.log(err, "err");
         console.log(err.Error.config.response, "err ddd");
+        warningToast(err);
+      },
+    }
+  );
+  return { mutate, isLoading };
+};
+
+export function getLaporanPklDiniyyahDetail(id) {
+  syncToken();
+  return axios.get(`/santri/laporan-diniyyah/detailPkl/${id}`);
+}
+export const useLaporanPklDiniyyahDetail = (id) => {
+  const { data, isLoading, isFetching } = useQuery(
+    ["/santri/laporan-diniyyah/detailPkl/", id],
+    () => getLaporanPklDiniyyahDetail(id),
+    {
+      enabled: id !== undefined,
+      select: (response) => response.data.data,
+    }
+  );
+  return { data, isLoading, isFetching };
+};
+export function updateLaporanDiniyyah(id, payload) {
+  syncToken();
+  return axios.put(`/santri/laporan-diniyyah/update/${id}`, payload);
+}
+export const useUpdateLaporanDiniyyah = (id) => {
+  const queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+
+  const { mutate, isLoading } = useMutation(
+    (payload) => axios.put(`/santri/laporan-diniyyah/update/${id}`, payload),
+    {
+      onSuccess: (response) => {
+        console.log(response);
+        successToast(response);
+        queryClient.invalidateQueries("/santri/laporan-diniyyah/detail");
+      },
+      onError: (err) => {
+        console.log(err, "err");
+        console.log(err.config.response, "err ddd");
         warningToast(err);
       },
     }

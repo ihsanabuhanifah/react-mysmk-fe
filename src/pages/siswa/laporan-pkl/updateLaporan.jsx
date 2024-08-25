@@ -53,10 +53,10 @@ const UpdateLaporan = () => {
   const { isLoading: isLoadingUpdate, mutate } = useUpdateLaporanPkl(id);
   const [file, setFile] = useState("");
   const navigate = useNavigate();
-
+  console.log(data && data)
+console.log(isFetching)
   const onSubmit = async (values) => {
-    console.log(values);
-    console.log(id);
+  
 
     mutate(values);
   };
@@ -162,10 +162,11 @@ const UpdateLaporan = () => {
                   {data?.status === "hadir" ? "Foto Dokumentasi" : "Bukti Izin"}{" "}
                 </label>
                 {/* Gambar yang diunggah oleh pengguna atau yang sudah ada */}
-                <img
+                 <img
                   className="w-full h-auto max-h-52 object-cover mb-4 rounded-lg"
                   src={values.foto || data?.foto}
-                  alt={`Foto Laporan Harian ${data.siswa.nama_siswa} tanggal ${data.tanggal}`}
+                  alt="..."
+                  // alt={`Foto Laporan Harian ${data.siswa.nama_siswa} tanggal ${data.tanggal}`}
                 />
                 {!file ? (
                   <DropzoneFile
@@ -223,12 +224,12 @@ const UpdateLaporan = () => {
                   disabled={!formik.dirty || isLoadingUpdate}
                 >
                   Submit
-                </Button>
+                 </Button>
               </div>
             </Segment>
           </Form>
         </div>
-      </LayoutSiswa>
+      </LayoutSiswa> 
     </>
   );
 };

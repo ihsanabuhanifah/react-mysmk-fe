@@ -39,7 +39,7 @@ const LaporanPkl = () => {
           >
             Buat Laporan
           </Button>
-          <Button color="red" size="medium">
+          <Button  size="medium">
             <Icon name="filter" />
             Filter
           </Button>
