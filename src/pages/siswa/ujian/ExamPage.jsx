@@ -123,16 +123,19 @@ export default function ExamPage({ examActive, setExamActive }) {
 		)
 	}
 
-	console.log(data.waktu_tersisa)
-
 	return (
 		<div
-			onMouseLeave={() => {
-			  setMouse(true); // Start countdown on mouse leave
-			}}
-			onMouseEnter={() => {
-			  setMouse(false); // Stop countdown on mouse enter, but don't reset it
-			}}
+		onMouseLeave={() => {
+			if (data?.data?.tipe_ujian === 'closed') {
+				setMouse(true); // Start countdown on mouse leave
+			}
+		}}
+		onMouseEnter={() => {
+			if (data?.data?.tipe_ujian === 'closed') {
+				setMouse(false); // Stop countdown on mouse enter, but don't reset it
+			}
+		}}
+
 			className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
 		>
 			<ModalKonfirmasi
