@@ -12,6 +12,20 @@ export function EditButton({ onClick, disabled, size = "small" }) {
     </button>
   );
 }
+
+
+export function CopyButton({ onClick, disabled, size = "small" }) {
+  return (
+    <button
+      className="bg-none"
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon size={size} disabled={disabled} name="copy" color="teal" />
+    </button>
+  );
+}
 export function AddButton({ onClick, disabled, size = "small" }) {
   return (
     <button

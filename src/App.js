@@ -59,6 +59,10 @@ import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
+import AnalisisPage from "./pages/guru/exam/AnalisisPage";
+import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
+
+
 
 function App() {
   return (
@@ -121,6 +125,7 @@ function App() {
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
           <Route path="absensi/jadwal/tambah" element={<CreateJadwal />} />
+          <Route path="absensi/jadwal/update/:id" element={<UpdateJadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="pelanggaran" element={<Pelanggaran />} />
@@ -140,6 +145,8 @@ function App() {
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
+          <Route path="exam/copy/:id" element={<FormExam />} />
+          <Route path="exam/analisis/:id/:mapel" element={<AnalisisPage />} />
 
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route

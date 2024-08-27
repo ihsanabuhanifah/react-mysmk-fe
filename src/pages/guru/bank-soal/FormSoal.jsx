@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import {
@@ -101,20 +101,20 @@ export default function FormSoal() {
   const { dataMapel } = useList();
   const { id } = useParams();
   const queryClient = useQueryClient();
-  let { data, isLoading } = useQuery(
+  let { data, isFetching, refetch } = useQuery(
     //query key
-    ["/bank-soal/update", id],
+    ["/bank-soal/update", [id]],
     //axios function,triggered when page/pageSize change
     () => detailBankSoal(id),
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
-
+      staleTime: 1000 * 60 * 10,
       select: (response) => {
         let data = response.data.soal;
 
-        console.log('data', data)
+        console.log("data", data);
         data.soal = JSON.parse(data.soal);
         setInitialState({
           payload: [data],
@@ -123,6 +123,10 @@ export default function FormSoal() {
       },
     }
   );
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
 
   const [initialState, setInitialState] = useState({
     payload: [
@@ -218,6 +222,7 @@ export default function FormSoal() {
   };
   return (
     <LayoutPage
+      isLoading={isFetching}
       title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
       <div className="p-0  ">

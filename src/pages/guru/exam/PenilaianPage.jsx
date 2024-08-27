@@ -24,7 +24,8 @@ import useList from "../../../hook/useList";
 
 function PenilaianPage() {
   const { id, mapel } = useParams();
-  const { isFetching, data } = usePenilaian({
+  let [namaSiswa, setNamaSiswa] = useState({})
+  const { isFetching, data, refetch } = usePenilaian({
     ujian_id: id,
   });
   let { roles } = useList();
@@ -79,6 +80,7 @@ function PenilaianPage() {
           soal={dataSoal?.soal}
           jawaban={jawaban}
           values={values}
+          namaSiswa={namaSiswa}
         />
       )}
       <section
@@ -120,6 +122,20 @@ function PenilaianPage() {
                 setPayload([]);
               },
             });
+          }}
+        />
+
+        <Button
+          content={"Refresh"}
+          type="button"
+          fluid
+          loading={isFetching}
+          disabled={isFetching}
+          icon={() => <Icon name="refresh" />}
+          size="medium"
+          color="blue"
+          onClick={() => {
+            return refetch();
           }}
         />
       </section>
@@ -234,7 +250,13 @@ function PenilaianPage() {
                             color="linkedin"
                             type="button"
                             onClick={() => {
+
+                              
                               setOpen(true);
+                              setNamaSiswa({
+                                nama_siswa : item.siswa.nama_siswa,
+                                mapel : mapel
+                              })
 
                               console.log("item", item);
                               setItem(item);
@@ -256,17 +278,17 @@ function PenilaianPage() {
                 </Table.Body>
               </Table>
               <section className="mt-5">
-
-                { values?.data?.[0]?.teacher_id === roles?.teacher_id &&    <Button
-                  color="teal"
-                  fluid
-                  loading={mutateExam.isLoading}
-                  disabled={mutateExam.isLoading || isFetching}
-                  type="submit"
-                >
-                  <Icon name="check" /> Perbaharui Nilai
-                </Button> }
-             
+                {values?.data?.[0]?.teacher_id === roles?.teacher_id && (
+                  <Button
+                    color="teal"
+                    fluid
+                    loading={mutateExam.isLoading}
+                    disabled={mutateExam.isLoading || isFetching}
+                    type="submit"
+                  >
+                    <Icon name="check" /> Perbaharui Nilai
+                  </Button>
+                )}
               </section>
             </TableWrapper>
           </Form>
