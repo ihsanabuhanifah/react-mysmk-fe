@@ -252,7 +252,7 @@ const RegisterPpdb = () => {
                         disabled={isSubmitting}
                       />
 
-                      <Link to="/ppdb/login" className="my-4">
+                      <Link to="/landingpage/login" className="my-4">
                         <p className="text-sm text-gray-500">
                           Kembali Ke -{" "}
                           <a className="hover:underline" href="#">

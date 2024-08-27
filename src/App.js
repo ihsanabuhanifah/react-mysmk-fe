@@ -61,9 +61,9 @@ import DashboardPpdb from "./pages/ppdb/dashboard/dashboardppdb";
 import ProtectRoutePpdb from "./routers/ProtectRoutePpdb";
 import PendaftaranCalonSantri from "./pages/ppdb/pendaftaran/pendaftaran";
 import Ppdb from "./layout/ppdb";
-import ProfilePpdb from "./pages/ppdb/biodata";
-import SecurityPpdb from "./pages/ppdb/security/SecurityPpdb";
 import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
+import BiodataPpdb from "./pages/ppdb/biodata";
+import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
 
 function App() {
   return (
@@ -204,9 +204,9 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardPpdb />} />
-          <Route path="biodata" element={<ProfilePpdb />}>
+          <Route path="biodata" element={<BiodataPpdb />}>
             <Route path="update" element={<BiodataUpdatePPdb />} />
-            <Route path="security" element={<SecurityPpdb />} />
+            <Route path="berkas" element={<BerkasPpdb />} />
           </Route>
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
         </Route>

@@ -147,7 +147,7 @@ export default function Ppdb() {
           >
             <div id="sidebar" className="h-full w-full">
               {/* <Outlet data={data} /> */}
-			  <Outlet/>
+              <Outlet />
             </div>
           </div>
         </main>

@@ -180,7 +180,7 @@ const LoginPpdb = () => {
                       </div>
                     </div>
                     <Link
-                      to="/ppdb/register"
+                      to="/landingpage/register"
                       className="my-16 w-full flex justify-center md:mr-18"
                     >
                       <p className="text-sm text-gray-500 text-center -ml-16">
