@@ -245,7 +245,22 @@ export default function FormSoal() {
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
                 <div className="space-y-5 " key={index}>
-                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5 border rounded-lg mt-10 p-5">
+                    {id === undefined && <div className="col-span-3 flex justify-end ">
+                      <DeleteButton
+                        disabled={values.payload.length <= 1}
+                        onClick={() => {
+                          let filtered = values.payload.filter(
+                            (i, itemIndex) => {
+                              return itemIndex != index;
+                            }
+                          );
+
+                          setFieldValue("payload", filtered);
+                        }}
+                        size="small"
+                      />
+                    </div>}
                     <div>
                       <Form.Field
                         control={Select}
@@ -491,6 +506,41 @@ export default function FormSoal() {
                   </section>
                 </div>
               ))}
+
+              <div className="mt-5">
+              {id === undefined &&   <Button
+                  basic
+                  fluid
+                  type="button"
+                  onClick={() => {
+                    setFieldValue("payload", [
+                      ...values.payload,
+                      {
+                        materi:
+                          values.payload[values.payload.length - 1].materi,
+                        mapel_id:
+                          values.payload[values.payload.length - 1].mapel_id,
+                        soal: {
+                          soal: "",
+                          tipe: "",
+                          a: null,
+                          b: null,
+                          c: null,
+                          d: null,
+                          e: null,
+                        },
+                        jawaban: "",
+                        tipe: values.payload[values.payload.length - 1].tipe,
+                        point: values.payload[values.payload.length - 1].point,
+                      },
+                    ]);
+                  }}
+                  color="teal"
+                  content="Tambah"
+                  icon="add"
+                  labelPosition="left"
+                />}
+              </div>
 
               <div className="mt-5">
                 <Button

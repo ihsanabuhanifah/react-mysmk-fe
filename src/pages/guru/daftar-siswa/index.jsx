@@ -206,7 +206,7 @@ export default function DaftarSiswa() {
 
                   <Table.Cell>{value?.siswa?.nis}</Table.Cell>
                   <Table.Cell>{value?.siswa?.nisn}</Table.Cell>
-                  <Table.Cell>{value?.siswa?.email}</Table.Cell>
+                  <Table.Cell>{value?.siswa?.user?.email}</Table.Cell>
 
                   <Table.Cell>
                     {value?.siswa?.tempat_lahir},{" "}
@@ -234,7 +234,7 @@ export default function DaftarSiswa() {
                       /> */}
                       <EditButton
                         onClick={() =>
-                          navigate(`update-siswa/${value?.siswa?.id}`)
+                          window.open(`daftar-siswa/update-siswa/${value?.siswa?.id}`)
                         }
                       />
                       <DeleteButton

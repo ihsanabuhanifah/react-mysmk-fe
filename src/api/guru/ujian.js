@@ -46,6 +46,7 @@ export const useCreatePenilaian = () => {
         durasi: payload.durasi,
         jenis_ujian: payload.jenis_ujian,
         ta_id: payload?.ta_id,
+        urutan : payload?.urutan
       });
     },
     {
@@ -213,4 +214,25 @@ export const useAnalisisUjian = (id) => {
   );
 
   return { isLoading, data, isFetching };
+};
+
+
+
+export const useCekUrutan = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`guru//ujian/cek-urutan`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
 };

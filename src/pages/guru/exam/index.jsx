@@ -122,6 +122,7 @@ export default function ListExam() {
                 <Table.HeaderCell>Durasi</Table.HeaderCell>
                 <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
                 <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
+                <Table.HeaderCell>Urutan</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
                 <Table.HeaderCell>Analisis</Table.HeaderCell>
                 <Table.HeaderCell>Publish</Table.HeaderCell>
@@ -158,6 +159,7 @@ export default function ListExam() {
                     <Table.Cell>
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
+                    <Table.Cell>{value?.urutan}</Table.Cell>
                     <Table.Cell>
                       <span className="flex items-center">
                         {" "}

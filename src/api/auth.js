@@ -72,3 +72,22 @@ export const useRegisterWali = () => {
   );
   return mutate;
 };
+
+export const useNISNCek = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`/nisn/cek`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};

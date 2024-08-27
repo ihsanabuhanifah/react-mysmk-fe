@@ -24,7 +24,7 @@ import useList from "../../../hook/useList";
 
 function PenilaianPage() {
   const { id, mapel } = useParams();
-  let [namaSiswa, setNamaSiswa] = useState({})
+  let [namaSiswa, setNamaSiswa] = useState({});
   const { isFetching, data, refetch } = usePenilaian({
     ujian_id: id,
   });
@@ -55,6 +55,7 @@ function PenilaianPage() {
             id: item.id,
             exam_result: item.exam_result,
             last_result: item.last_result,
+            is_lulus: item.is_lulus,
           };
         } else {
           return {};
@@ -68,6 +69,8 @@ function PenilaianPage() {
   });
 
   const { handleSubmit, setFieldValue, values } = formik;
+
+  console.log("va", values);
 
   return (
     <LayoutPage title={"Penilaian"}>
@@ -163,6 +166,7 @@ function PenilaianPage() {
 
                     <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
                     <Table.HeaderCell>Keterangan</Table.HeaderCell>
+                    <Table.HeaderCell>Lulus</Table.HeaderCell>
                     <Table.HeaderCell>Penilaian</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
@@ -219,12 +223,18 @@ function PenilaianPage() {
                                 );
 
                                 if (value === 0) {
-                                  value = "";
+                                  value = 0;
                                 }
                                 setFieldValue(
                                   `data[${index}]exam_result`,
                                   value
                                 );
+
+                                if (value > 74) {
+                                  setFieldValue(`data[${index}]is_lulus`, 1);
+                                } else {
+                                  setFieldValue(`data[${index}]is_lulus`, 0);
+                                }
 
                                 setFieldValue(
                                   `data[${index}]last_result`,
@@ -239,6 +249,7 @@ function PenilaianPage() {
                             />
                           }
                         </Table.Cell>
+
                         <Table.Cell>
                           <span className="text-xs">
                             {" "}
@@ -246,17 +257,18 @@ function PenilaianPage() {
                           </span>
                         </Table.Cell>
                         <Table.Cell>
+                          <LabelKeterangan status={item.is_lulus || "-"} />
+                        </Table.Cell>
+                        <Table.Cell>
                           <Button
                             color="linkedin"
                             type="button"
                             onClick={() => {
-
-                              
                               setOpen(true);
                               setNamaSiswa({
-                                nama_siswa : item.siswa.nama_siswa,
-                                mapel : mapel
-                              })
+                                nama_siswa: item.siswa.nama_siswa,
+                                mapel: mapel,
+                              });
 
                               console.log("item", item);
                               setItem(item);

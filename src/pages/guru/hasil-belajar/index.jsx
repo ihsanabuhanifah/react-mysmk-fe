@@ -34,7 +34,7 @@ export default function HasilBelajar() {
       </Sidebar>
       <Form>
         <section className=" grid grid-cols-6 gap-5 mb-5">
-          <div >
+          <div>
             <Button
               content={"Filter"}
               type="button"
@@ -56,7 +56,7 @@ export default function HasilBelajar() {
               <Table.HeaderCell rowSpan={2}>No</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}> Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell rowSpan={2}>Guru</Table.HeaderCell>
+
               <Table.HeaderCell rowSpan={2}>Kelas</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}>Tahun Ajaran</Table.HeaderCell>
               <Table.HeaderCell textAlign="center" colSpan={7}>
@@ -90,7 +90,7 @@ export default function HasilBelajar() {
                     <Table.Cell>{index + 1}</Table.Cell>
                     <Table.Cell>{value.siswa?.nama_siswa}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                    <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>
                       {value?.tahun_ajaran?.nama_tahun_ajaran}

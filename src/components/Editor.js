@@ -166,7 +166,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
   );
 }
 
-const resizeFile = async (file, rotate) => {
+export const resizeFile = async (file, rotate) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,

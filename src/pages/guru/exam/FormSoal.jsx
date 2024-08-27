@@ -15,6 +15,7 @@ import {
   Input,
   Message,
   MessageHeader,
+  Checkbox,
 } from "semantic-ui-react";
 
 import { toast } from "react-toastify";
@@ -22,7 +23,7 @@ import { getOptions } from "../../../utils/format";
 
 import usePage from "../../../hook/usePage";
 import useList from "../../../hook/useList";
-import { Formik } from "formik";
+import { Formik, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import {
   listBankSoal,
@@ -32,7 +33,7 @@ import {
 
 import LayoutPage from "../../../module/layoutPage";
 
-import { detailUjian } from "../../../api/guru/ujian";
+import { detailUjian, useCekUrutan } from "../../../api/guru/ujian";
 import ModalView from "./ModalView";
 import TableSoal from "./TableSoal";
 import useDebounce from "../../../hook/useDebounce";
@@ -56,13 +57,13 @@ export default function FormExam() {
   let [open, setOpen] = useState(false);
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas, dataTa } = useList();
+  let [urutan, setUrutan] = useState(0);
   const { id } = useParams();
   let queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
 
-  
-  let { data: dataExam, isFetching:isLoadingSoal } = useQuery(
+  let { data: dataExam, isFetching: isLoadingSoal } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -95,6 +96,7 @@ export default function FormExam() {
               tipe_ujian: data.tipe_ujian,
               durasi: data.durasi,
               ta_id: data.ta_id,
+              urutan: data.urutan,
             },
           ],
         });
@@ -114,7 +116,6 @@ export default function FormExam() {
     }
   }, [dataExam?.mapel_id]);
 
-  console.log("dataExam", dataExam);
   let params = {
     page,
     pageSize,
@@ -155,6 +156,8 @@ export default function FormExam() {
         tipe_ujian: "",
         durasi: null,
         ta_id: null,
+        before: "",
+        urutan: 1,
       },
     ],
   });
@@ -186,6 +189,8 @@ export default function FormExam() {
               student_access: [],
               soal: [],
               ta_id: null,
+              before: "",
+              urutan: 1,
             },
           ],
         });
@@ -223,7 +228,6 @@ export default function FormExam() {
         theme: "colored",
       });
 
-      navigate("/guru/exam");
       queryClient.invalidateQueries("/ujian/list");
     } catch (err) {
       console.log("err", err);
@@ -253,9 +257,48 @@ export default function FormExam() {
     }
   };
 
+  const formik = useFormik({
+    initialValues: initialState,
+    validationSchema: AbsensiSchema,
+    enableReinitialize: true,
+    onSubmit: onSubmit,
+  });
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+    isSubmitting,
+  } = formik;
+
+  const mutate = useCekUrutan();
+
+  useEffect(() => {
+    if (
+      !!values.payload[0].mapel_id === true &&
+      !!values.payload[0].kelas_id &&
+      !!values.payload[0].ta_id
+    ) {
+      mutate.mutate(values.payload[0], {
+        onSuccess: (res) => {
+          console.log("res", res);
+          setUrutan(res.data.data);
+        },
+      });
+    }
+  }, [
+    values.payload[0].mapel_id,
+    values.payload[0].kelas_id,
+    values.payload[0].ta_id,
+  ]);
+
   return (
     <LayoutPage
-    isLoading={isLoadingSoal}
+      isLoading={isLoadingSoal}
       title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
@@ -265,360 +308,321 @@ export default function FormExam() {
         }}
         className="p-0 lg:p-2  "
       >
-        <Formik
-          initialValues={initialState}
-          enableReinitialize
-          validationSchema={AbsensiSchema}
-          onSubmit={onSubmit}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            setFieldValue,
-            isSubmitting,
-          }) => (
-            <Form onSubmit={handleSubmit}>
-              {console.log("err", errors)}
-              <section>
-                {values?.payload?.map((value, index) => (
-                  <div
-                    className="space-y-5 col-span-3  p-5   overflow-auto "
-                    key={index}
-                  >
-                    <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
-                      <div>
-                        <Form.Field
-                          control={Input}
-                          label={{
-                            children: "Judul Ujian",
-                            htmlFor: `payload[${index}]judul_ujian`,
-                            name: `payload[${index}]judul_ujian`,
-                          }}
-                          placeholder="Judul Ujian"
-                          options={jenisOptions}
-                          id={`payload[${index}]judul_ujian`}
-                          name={`payload[${index}]judul_ujian`}
-                          onChange={(e) => {
-                            setFieldValue(
-                              `payload[${index}]judul_ujian`,
-                              e.target.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.judul_ujian !==
-                              undefined && errors?.payload?.[index]?.judul_ujian
-                          }
-                          value={value?.judul_ujian}
-                        />
-                      </div>
-                      <div>
-                        <Form.Field
-                          control={Select}
-                          value={value?.kelas_id}
-                          options={getOptions(dataKelas?.data, "nama_kelas")}
-                          label={{
-                            children: "Kelas",
-                            htmlFor: `payload[${index}]kelas_id`,
-                            name: `payload[${index}]kelas_id`,
-                          }}
-                          onChange={(event, data) => {
-                            setFieldValue(
-                              `payload[${index}]kelas_id`,
-                              data?.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.kelas_id !== undefined &&
-                            errors?.payload?.[index]?.kelas_id
-                          }
-                          placeholder="Pilih Kelas"
-                          search
-                          searchInput={{
-                            id: `payload[${index}]kelas_id`,
-                            name: `payload[${index}]kelas_id`,
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <Form.Field
-                          disabled={values.payload[0].soal.length > 0}
-                          control={Select}
-                          value={value?.mapel_id}
-                          options={getOptions(dataMapel?.data, "nama_mapel")}
-                          label={{
-                            children: "Mata Pelajaran",
-                            htmlFor: `payload[${index}]mapel_id`,
-                            name: `payload[${index}]mapel_id`,
-                          }}
-                          onChange={(event, data) => {
-                            setFieldValue(
-                              `payload[${index}]mapel_id`,
-                              data?.value
-                            );
+        <FormikProvider value={formik}>
+          <Form onSubmit={handleSubmit}>
+            {id && values.payload[0].urutan > 1 && (
+              <Message
+                warning
+                header="You must register before you can do that!"
+                content="Visit our registration page, then try again."
+              />
+            )}
+            <section>
+              {values?.payload?.map((value, index) => (
+                <div
+                  className="space-y-5 col-span-3  p-5   overflow-auto "
+                  key={index}
+                >
+                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <div>
+                      <Form.Field
+                        control={Input}
+                        label={{
+                          children: "Judul Ujian",
+                          htmlFor: `payload[${index}]judul_ujian`,
+                          name: `payload[${index}]judul_ujian`,
+                        }}
+                        placeholder="Judul Ujian"
+                        options={jenisOptions}
+                        id={`payload[${index}]judul_ujian`}
+                        name={`payload[${index}]judul_ujian`}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `payload[${index}]judul_ujian`,
+                            e.target.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.judul_ujian !== undefined &&
+                          errors?.payload?.[index]?.judul_ujian
+                        }
+                        value={value?.judul_ujian}
+                      />
+                    </div>
+                    <div>
+                      <Form.Field
+                        control={Select}
+                        value={value?.kelas_id}
+                        options={getOptions(dataKelas?.data, "nama_kelas")}
+                        label={{
+                          children: "Kelas",
+                          htmlFor: `payload[${index}]kelas_id`,
+                          name: `payload[${index}]kelas_id`,
+                        }}
+                        onChange={(event, data) => {
+                          setFieldValue(
+                            `payload[${index}]kelas_id`,
+                            data?.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.kelas_id !== undefined &&
+                          errors?.payload?.[index]?.kelas_id
+                        }
+                        placeholder="Pilih Kelas"
+                        search
+                        searchInput={{
+                          id: `payload[${index}]kelas_id`,
+                          name: `payload[${index}]kelas_id`,
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Form.Field
+                        disabled={values.payload[0].soal.length > 0}
+                        control={Select}
+                        value={value?.mapel_id}
+                        options={getOptions(dataMapel?.data, "nama_mapel")}
+                        label={{
+                          children: "Mata Pelajaran",
+                          htmlFor: `payload[${index}]mapel_id`,
+                          name: `payload[${index}]mapel_id`,
+                        }}
+                        onChange={(event, data) => {
+                          setFieldValue(
+                            `payload[${index}]mapel_id`,
+                            data?.value
+                          );
 
-                            setMapel_id(data?.value);
-                          }}
-                          error={
-                            errors?.payload?.[index]?.mapel_id !== undefined &&
-                            errors?.payload?.[index]?.mapel_id
-                          }
-                          placeholder="Pilih Mata Pelajaran"
-                          search
-                          searchInput={{
-                            id: `payload[${index}]mapel_id`,
-                            name: `payload[${index}]mapel_id`,
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <Form.Dropdown
-                          selection
-                          search
-                          label={{
-                            children: "Jenis Ujian",
-                            htmlFor: `payload[${index}]jenis_ujian`,
-                            name: `payload[${index}]jenis_ujian`,
-                          }}
-                          placeholder="Jenis Ujian"
-                          options={jenisOptions}
-                          id={`payload[${index}]jenis_ujian`}
-                          name={`payload[${index}]jenis_ujian`}
-                          onChange={(e, data) => {
-                            setFieldValue(
-                              `payload[${index}]jenis_ujian`,
-                              data.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.jenis_ujian !==
-                              undefined && errors?.payload?.[index]?.jenis_ujian
-                          }
-                          value={value?.jenis_ujian}
-                        />
-                      </div>
+                          setMapel_id(data?.value);
+                        }}
+                        error={
+                          errors?.payload?.[index]?.mapel_id !== undefined &&
+                          errors?.payload?.[index]?.mapel_id
+                        }
+                        placeholder="Pilih Mata Pelajaran"
+                        search
+                        searchInput={{
+                          id: `payload[${index}]mapel_id`,
+                          name: `payload[${index}]mapel_id`,
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Form.Dropdown
+                        selection
+                        search
+                        label={{
+                          children: "Jenis Ujian",
+                          htmlFor: `payload[${index}]jenis_ujian`,
+                          name: `payload[${index}]jenis_ujian`,
+                        }}
+                        placeholder="Jenis Ujian"
+                        options={jenisOptions}
+                        id={`payload[${index}]jenis_ujian`}
+                        name={`payload[${index}]jenis_ujian`}
+                        onChange={(e, data) => {
+                          setFieldValue(
+                            `payload[${index}]jenis_ujian`,
+                            data.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.jenis_ujian !== undefined &&
+                          errors?.payload?.[index]?.jenis_ujian
+                        }
+                        value={value?.jenis_ujian}
+                      />
+                    </div>
 
-                      <div>
-                        <Form.Field
-                          control={Input}
-                          label={{
-                            children: "Waktu Mulai",
-                            htmlFor: `payload[${index}]waktu_mulai`,
-                            name: `payload[${index}]waktu_mulai`,
-                          }}
-                          placeholder="Jenis Ujian"
-                          options={jenisOptions}
-                          id={`payload[${index}]waktu_mulai`}
-                          name={`payload[${index}]waktu_mulai`}
-                          onChange={(e) => {
-                            setFieldValue(
-                              `payload[${index}]waktu_mulai`,
-                              e.target.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.waktu_mulai !==
-                              undefined && errors?.payload?.[index]?.waktu_mulai
-                          }
-                          type="datetime-local"
-                          value={value?.waktu_mulai}
-                        />
-                      </div>
-                      <div>
-                        <Form.Field
-                          control={Input}
-                          label={{
-                            children: "Waktu Selesai",
-                            htmlFor: `payload[${index}]waktu_selesai`,
-                            name: `payload[${index}]waktu_selesai`,
-                          }}
-                          placeholder="Jenis Ujian"
-                          options={jenisOptions}
-                          id={`payload[${index}]waktu_selesai`}
-                          name={`payload[${index}]waktu_selesai`}
-                          onChange={(e) => {
-                            setFieldValue(
-                              `payload[${index}]waktu_selesai`,
-                              e.target.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.waktu_selesai !==
-                              undefined &&
-                            errors?.payload?.[index]?.waktu_selesai
-                          }
-                          type="datetime-local"
-                          value={value?.waktu_selesai}
-                        />
-                      </div>
+                    <div>
+                      <Form.Field
+                        control={Input}
+                        label={{
+                          children: "Waktu Mulai",
+                          htmlFor: `payload[${index}]waktu_mulai`,
+                          name: `payload[${index}]waktu_mulai`,
+                        }}
+                        placeholder="Jenis Ujian"
+                        options={jenisOptions}
+                        id={`payload[${index}]waktu_mulai`}
+                        name={`payload[${index}]waktu_mulai`}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `payload[${index}]waktu_mulai`,
+                            e.target.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.waktu_mulai !== undefined &&
+                          errors?.payload?.[index]?.waktu_mulai
+                        }
+                        type="datetime-local"
+                        value={value?.waktu_mulai}
+                      />
+                    </div>
+                    <div>
+                      <Form.Field
+                        control={Input}
+                        label={{
+                          children: "Waktu Selesai",
+                          htmlFor: `payload[${index}]waktu_selesai`,
+                          name: `payload[${index}]waktu_selesai`,
+                        }}
+                        placeholder="Jenis Ujian"
+                        options={jenisOptions}
+                        id={`payload[${index}]waktu_selesai`}
+                        name={`payload[${index}]waktu_selesai`}
+                        onChange={(e) => {
+                          setFieldValue(
+                            `payload[${index}]waktu_selesai`,
+                            e.target.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.waktu_selesai !==
+                            undefined && errors?.payload?.[index]?.waktu_selesai
+                        }
+                        type="datetime-local"
+                        value={value?.waktu_selesai}
+                      />
+                    </div>
 
-                      <div>
-                        <Form.Dropdown
-                          selection
-                          search
-                          label={{
-                            children: "Tipe Ujian",
-                            htmlFor: `payload[${index}]tipe_ujian`,
-                            name: `payload[${index}]tipe_ujian`,
-                          }}
-                          placeholder="Pilih"
-                          options={tipeUjianOptions}
-                          id={`payload[${index}]tipe_ujian`}
-                          name={`payload[${index}]tipe_ujian`}
-                          onChange={(e, data) => {
-                            setFieldValue(
-                              `payload[${index}]tipe_ujian`,
-                              data.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.tipe_ujian !==
-                              undefined && errors?.payload?.[index]?.tipe_ujian
-                          }
-                          value={value?.tipe_ujian}
-                        />
-                      </div>
-                      <div>
-                        <Form.Dropdown
-                          selection
-                          search
-                          label={{
-                            children: "Durasi",
-                            htmlFor: `payload[${index}]durasi`,
-                            name: `payload[${index}]durasi`,
-                          }}
-                          placeholder="Jenis Ujian"
-                          options={durasiOptions}
-                          id={`payload[${index}]durasi`}
-                          name={`payload[${index}]durasi`}
-                          onChange={(e, data) => {
-                            setFieldValue(
-                              `payload[${index}]durasi`,
-                              data.value
-                            );
-                          }}
-                          error={
-                            errors?.payload?.[index]?.durasi !== undefined &&
-                            errors?.payload?.[index]?.durasi
-                          }
-                          value={value?.durasi}
-                        />
-                      </div>
-                      <div>
-                        <Form.Field
-                          control={Select}
-                          value={value?.ta_id}
-                          options={getOptions(
-                            dataTa?.data,
-                            "nama_tahun_ajaran"
-                          )}
-                          label={{
-                            children: "Tahun Pelajaran",
-                            htmlFor: `payload[${index}]ta_id`,
-                            name: `payload[${index}]ta_id`,
-                          }}
-                          onChange={(e, data) => {
-                            setFieldValue(`payload[${index}]ta_id`, data.value);
-                          }}
-                          placeholder="Pilih"
-                          search
-                          error={
-                            errors?.payload?.[index]?.ta_id !== undefined &&
-                            errors?.payload?.[index]?.ta_id
-                          }
-                          searchInput={{
-                            id: `payload[${index}]ta_id`,
-                            name: `payload[${index}]ta_id`,
-                          }}
-                        />
-                      </div>
-                    </section>
-                    <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
-                      <div>
-                        <TableSoal
-                          materi={materi}
-                          setMateri={setMateri}
-                          data={data}
-                          value={value}
-                          setFieldValue={setFieldValue}
-                          isLoading={isLoading}
-                          index={index}
-                          setPreview={setPreview}
-                          setOpen={setOpen}
-                          page={page}
-                          setPageSize={setPageSize}
-                          pageSize={pageSize}
-                          setPage={setPage}
-                          title={"Daftar Soal Tersedia"}
-                        />
-                      </div>
+                    <div>
+                      <Form.Dropdown
+                        selection
+                        search
+                        label={{
+                          children: "Tipe Ujian",
+                          htmlFor: `payload[${index}]tipe_ujian`,
+                          name: `payload[${index}]tipe_ujian`,
+                        }}
+                        placeholder="Pilih"
+                        options={tipeUjianOptions}
+                        id={`payload[${index}]tipe_ujian`}
+                        name={`payload[${index}]tipe_ujian`}
+                        onChange={(e, data) => {
+                          setFieldValue(
+                            `payload[${index}]tipe_ujian`,
+                            data.value
+                          );
+                        }}
+                        error={
+                          errors?.payload?.[index]?.tipe_ujian !== undefined &&
+                          errors?.payload?.[index]?.tipe_ujian
+                        }
+                        value={value?.tipe_ujian}
+                      />
+                    </div>
+                    <div>
+                      <Form.Dropdown
+                        selection
+                        search
+                        label={{
+                          children: "Durasi",
+                          htmlFor: `payload[${index}]durasi`,
+                          name: `payload[${index}]durasi`,
+                        }}
+                        placeholder="Jenis Ujian"
+                        options={durasiOptions}
+                        id={`payload[${index}]durasi`}
+                        name={`payload[${index}]durasi`}
+                        onChange={(e, data) => {
+                          setFieldValue(`payload[${index}]durasi`, data.value);
+                        }}
+                        error={
+                          errors?.payload?.[index]?.durasi !== undefined &&
+                          errors?.payload?.[index]?.durasi
+                        }
+                        value={value?.durasi}
+                      />
+                    </div>
+                    <div>
+                      <Form.Field
+                        control={Select}
+                        value={value?.ta_id}
+                        options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
+                        label={{
+                          children: "Tahun Pelajaran",
+                          htmlFor: `payload[${index}]ta_id`,
+                          name: `payload[${index}]ta_id`,
+                        }}
+                        onChange={(e, data) => {
+                          setFieldValue(`payload[${index}]ta_id`, data.value);
+                        }}
+                        placeholder="Pilih"
+                        search
+                        error={
+                          errors?.payload?.[index]?.ta_id !== undefined &&
+                          errors?.payload?.[index]?.ta_id
+                        }
+                        searchInput={{
+                          id: `payload[${index}]ta_id`,
+                          name: `payload[${index}]ta_id`,
+                        }}
+                      />
+                    </div>
+                  </section>
+                  <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
+                    <div>
+                      <TableSoal
+                        materi={materi}
+                        setMateri={setMateri}
+                        data={data}
+                        value={value}
+                        setFieldValue={setFieldValue}
+                        isLoading={false}
+                        index={index}
+                        setPreview={setPreview}
+                        setOpen={setOpen}
+                        page={page}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        setPage={setPage}
+                        title={"Daftar Soal Tersedia"}
+                      />
+                    </div>
 
-                      <div>
-                        {" "}
-                        <TableSoal
-                          data={{
-                            data: {
-                              rows: values.payload[0].soal,
-                            },
-                          }}
-                          value={value}
-                          setFieldValue={setFieldValue}
-                          isLoading={isLoading}
-                          index={index}
-                          setPreview={setPreview}
-                          setOpen={setOpen}
-                          page={page}
-                          setPageSize={setPageSize}
-                          pageSize={pageSize}
-                          setPage={setPage}
-                          isSoal
-                          title={"Daftar Soal Dipilih"}
-                        />
+                    <div>
+                      {" "}
+                      <TableSoal
+                        data={{
+                          data: {
+                            rows: values.payload[0].soal,
+                          },
+                        }}
+                        value={value}
+                        setFieldValue={setFieldValue}
+                        isLoading={isLoading}
+                        index={index}
+                        setPreview={setPreview}
+                        setOpen={setOpen}
+                        page={page}
+                        setPageSize={setPageSize}
+                        pageSize={pageSize}
+                        setPage={setPage}
+                        isSoal
+                        title={"Daftar Soal Dipilih"}
+                      />
+                    </div>
+
+                    {!!errors?.payload?.[index]?.soal === true && (
+                      <div className="col-span-2">
+                        <Message negative>
+                          <MessageHeader>
+                            {errors?.payload?.[index]?.soal}
+                          </MessageHeader>
+                        </Message>
                       </div>
+                    )}
+                  </section>
+                </div>
+              ))}
+            </section>
 
-                      {!!errors?.payload?.[index]?.soal === true && (
-                        <div className="col-span-2">
-                          <Message negative>
-                            <MessageHeader>
-                              {errors?.payload?.[index]?.soal}
-                            </MessageHeader>
-                          </Message>
-                        </div>
-                      )}
-                    </section>
-                  </div>
-                ))}
-              </section>
-
-              <div className="mt-5">
-                {id ? (
-                  location?.pathname?.includes("copy") ? (
-                    <Button
-                      content={isSubmitting ? "Menyimpan" : "Simpan"}
-                      type="submit"
-                      fluid
-                      icon={() => <Icon name="save" />}
-                      loading={isSubmitting}
-                      size="medium"
-                      color="teal"
-                      disabled={isSubmitting}
-                    />
-                  ) : (
-                    <Button
-                      content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
-                      type="submit"
-                      fluid
-                      icon={() => <Icon name="save" />}
-                      loading={isSubmitting}
-                      size="medium"
-                      color="teal"
-                      disabled={isSubmitting}
-                    />
-                  )
-                ) : (
+            <div className="mt-5">
+              {id ? (
+                location?.pathname?.includes("copy") ? (
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}
                     type="submit"
@@ -629,11 +633,82 @@ export default function FormExam() {
                     color="teal"
                     disabled={isSubmitting}
                   />
-                )}
-              </div>
-            </Form>
-          )}
-        </Formik>
+                ) : (
+                  <Button
+                    content={isSubmitting ? "Memperbaharui" : "Perbaharui"}
+                    type="submit"
+                    fluid
+                    icon={() => <Icon name="save" />}
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    disabled={isSubmitting}
+                  />
+                )
+              ) : (
+                <>
+                  {urutan > 0 && (
+                    <section className="mb-5 border rounded-lg shadow-lg p-5">
+                      <h4>
+                        Mata Pelajaran ini memiliki memiliki {urutan} ujian
+                        sebelumnya, apakah anda ingin membuat ujian ini tidak
+                        bisa dikerjakan jika {urutan} ujian sebelumnya belum
+                        lulus ?
+                      </h4>
+
+                      <div>
+                        <Form.Dropdown
+                          selection
+                          search
+                          placeholder="Pilih"
+                          options={[
+                            {
+                              key: 1,
+                              value: 1,
+                              text: "Ya",
+                            },
+                            {
+                              key: 2,
+                              value: 2,
+                              text: "Tidak",
+                            },
+                          ]}
+                          id={`payload[${0}]before`}
+                          name={`payload[${0}]before`}
+                          onChange={(e, data) => {
+                            setFieldValue(`payload[${0}]before`, data.value);
+
+                            if (data.value === 1) {
+                              setFieldValue(`payload[${0}]urutan`, urutan + 1);
+                            }
+                          }}
+                          error={
+                            errors?.payload?.[0]?.before !== undefined &&
+                            errors?.payload?.[0]?.before
+                          }
+                          value={values?.payload[0].before}
+                        />
+                      </div>
+                    </section>
+                  )}
+                  <Button
+                    content={isSubmitting ? "Menyimpan" : "Simpan"}
+                    type="submit"
+                    fluid
+                    icon={() => <Icon name="save" />}
+                    loading={isSubmitting}
+                    size="medium"
+                    color="teal"
+                    disabled={
+                      isSubmitting ||
+                      (urutan > 1 && !!values?.payload[0].before === false)
+                    }
+                  />
+                </>
+              )}
+            </div>
+          </Form>
+        </FormikProvider>
       </div>
     </LayoutPage>
   );

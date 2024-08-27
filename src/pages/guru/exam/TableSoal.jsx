@@ -29,14 +29,14 @@ const TableSoal = ({
       <section className="flex items-center justify-between">
         <h1 className="text-xl capitalize  font-bold font-poppins">{title}</h1>
 
-       {!isSoal &&  <Input
+       {!isSoal && <>  <Input
         placeholder='Cari'
           value={materi}
           icon="search"
           onChange={(e) => {
             setMateri(e.target.value);
           }}
-        />}
+        /></>}
       </section>
       <Table celled selectable>
         <Table.Header>
