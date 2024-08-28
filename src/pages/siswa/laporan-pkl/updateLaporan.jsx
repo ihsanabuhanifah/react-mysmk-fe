@@ -19,6 +19,7 @@ import * as yup from "yup";
 import DropzoneFile from "../../../components/Dropzone";
 import LayoutSiswa from "../../../module/layoutSiswa";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
+import dayjs from "dayjs";
 
 const validationSchema = yup.object().shape({
   judul_kegiatan: yup.string().when("status", {
@@ -80,43 +81,16 @@ const UpdateLaporan = () => {
     errors,
     touched,
   } = formik;
+  const today = dayjs().format("YYYY-MM-DD");
 
-  if (isFetching) {
-    return (
-      <div
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 50,
-        }}
-        className="fixed flex items-center justify-center"
-      >
-        <div>
-          <Dimmer
-            style={{
-              backgroundColor: "rgba(255, 255, 255, 0.5)", // semi-transparent white
-              backdropFilter: "blur(0.5px)", // applies blur effect
-            }}
-            active
-            inverted
-          >
-            <Loader size="large">Loading data ... </Loader>
-          </Dimmer>
-        </div>
-      </div>
-    );
-  }
+ 
 
   return (
     <>
       <LayoutSiswa
-        title={`Edit Laporan tanggal ${formatTanggalIndo(data?.tanggal)}`}
+        title={`Edit Laporan tanggal ${data?.tanggal ? formatTanggalIndo(data?.tanggal) : "loading ... "}`}
       >
         <div className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5">
-          {JSON.stringify(values)}
           <div className="mb-10">
             <Icon
               name="arrow left"
@@ -129,7 +103,7 @@ const UpdateLaporan = () => {
             onSubmit={formik.handleSubmit}
             className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5"
           >
-            <Segment>
+            <Segment loading={isFetching || isLoading }>
               <Form.Field>
                 <label>
                   {data?.status === "hadir"
@@ -176,7 +150,7 @@ const UpdateLaporan = () => {
               </Form.Field>
             </Segment>
 
-            <Segment>
+            <Segment loading={isFetching || isLoading}>
               <Form.Field>
                 <label>
                   {data?.status === "hadir" ? "Foto Dokumentasi" : "Bukti Izin"}{" "}

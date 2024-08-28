@@ -9,12 +9,18 @@ import {
   Menu,
   Form,
   Input,
+  Select,
 } from "semantic-ui-react";
 import { useLaporanPklList } from "../../../api/siswa/laporan-pkl";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Pagination from "../../../components/Pagination";
+
+const Statusoptions = [
+  { key: "hadir", value: "hadir", text: "Hadir" },
+  { key: "izin", value: "izin", text: "Izin" },
+];
 
 const LaporanPkl = () => {
   const [visible, setVisible] = useState(false);
@@ -110,6 +116,20 @@ const LaporanPkl = () => {
                 name="sampaiTanggal"
                 value={params?.sampaiTanggal?.value}
                 onChange={handleDateChange}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Status kehadiran</label>
+              <Select
+                options={Statusoptions}
+                placeholder="pilih status"
+                value={params?.status_kehadiran?.value}
+                onChange={(e, data) => {
+                  setParams((params) => ({
+                    ...params,
+                    status_kehadiran: data.value,
+                  }));
+                }}
               />
             </Form.Field>
             <Form.Field>

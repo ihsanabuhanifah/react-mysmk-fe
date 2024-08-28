@@ -51,6 +51,7 @@ export const useLaporanPklList = () => {
     pageSize: 10,
     dariTanggal: null,
     sampaiTanggal: null,
+    status_kehadiran: null,
   };
   const {
     params,
