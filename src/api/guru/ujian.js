@@ -46,7 +46,8 @@ export const useCreatePenilaian = () => {
         durasi: payload.durasi,
         jenis_ujian: payload.jenis_ujian,
         ta_id: payload?.ta_id,
-        urutan : payload?.urutan
+        urutan : payload?.urutan,
+        is_hirarki : payload.is_hirarki
       });
     },
     {

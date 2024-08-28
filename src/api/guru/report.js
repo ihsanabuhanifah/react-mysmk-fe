@@ -42,6 +42,8 @@ export const useListReport = () => {
     kelas_id: "",
     mapel_id: "",
     ta_id: "",
+    page: 1, 
+    pageSize : 10
   });
 
   const [payload, setPayload] = useState({
@@ -49,6 +51,8 @@ export const useListReport = () => {
     kelas_id: "",
     mapel_id: "",
     ta_id: "",
+    page: 1, 
+    pageSize : 10
   });
 
   const handlePayload = (nama, value) => {

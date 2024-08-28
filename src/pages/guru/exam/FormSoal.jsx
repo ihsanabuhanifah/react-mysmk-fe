@@ -97,6 +97,7 @@ export default function FormExam() {
               durasi: data.durasi,
               ta_id: data.ta_id,
               urutan: data.urutan,
+              is_hirarki: data.is_hirarki,
             },
           ],
         });
@@ -158,6 +159,7 @@ export default function FormExam() {
         ta_id: null,
         before: "",
         urutan: 1,
+        is_hirarki: "",
       },
     ],
   });
@@ -191,6 +193,7 @@ export default function FormExam() {
               ta_id: null,
               before: "",
               urutan: 1,
+              is_hirarki: "",
             },
           ],
         });
@@ -680,6 +683,9 @@ export default function FormExam() {
 
                             if (data.value === 1) {
                               setFieldValue(`payload[${0}]urutan`, urutan + 1);
+                              setFieldValue(`payload[${0}]is_hirarki`, 1);
+                            } else {
+                              setFieldValue(`payload[${0}]is_hirarki`, 0);
                             }
                           }}
                           error={
@@ -691,6 +697,50 @@ export default function FormExam() {
                       </div>
                     </section>
                   )}
+
+                  {(values?.payload[0].before === 2 ||
+                    !!values?.payload[0].before === false) &&
+                    urutan < 1 && (
+                      <section className="mb-5 border rounded-lg shadow-lg p-5">
+                        <h4>
+                          Apakah anda akan menjadikan ini adalah exam
+                          bertingkat?
+                        </h4>
+
+                        <div>
+                          <Form.Dropdown
+                            selection
+                            search
+                            placeholder="Pilih"
+                            options={[
+                              {
+                                key: 1,
+                                value: 1,
+                                text: "Ya",
+                              },
+                              {
+                                key: 2,
+                                value: 0,
+                                text: "Tidak",
+                              },
+                            ]}
+                            id={`payload[${0}]is_hirarki`}
+                            name={`payload[${0}]is_hirarki`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${0}]is_hirarki`,
+                                data.value
+                              );
+                            }}
+                            error={
+                              errors?.payload?.[0]?.is_hirarki !== undefined &&
+                              errors?.payload?.[0]?.is_hirarki
+                            }
+                            value={values?.payload[0].is_hirarki}
+                          />
+                        </div>
+                      </section>
+                    )}
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}
                     type="submit"
@@ -701,7 +751,8 @@ export default function FormExam() {
                     color="teal"
                     disabled={
                       isSubmitting ||
-                      (urutan > 1 && !!values?.payload[0].before === false)
+                      (urutan > 1 && !!values?.payload[0].before === false) ||
+                      values?.payload[0].is_hirarki === ""
                     }
                   />
                 </>
