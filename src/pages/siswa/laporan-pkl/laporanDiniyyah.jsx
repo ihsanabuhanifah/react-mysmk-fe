@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -61,7 +61,8 @@ const LaporanDiniyyah = () => {
   const { data, isLoading: detailIsLoading } = useLaporanPklDiniyyahDetail(id);
   const { mutate, isLoading } = useCreateLaporanDiniyyah();
   const { isLoading: updateIsLoading, mutate: updateMutate } =
-    useUpdateLaporanDiniyyah(id);
+    useUpdateLaporanDiniyyah(data?.id);
+  console.log(data && data ? "ok" : "no");
   const handleSubmit = (values) => {
     if (data !== null) {
       updateMutate(values);
@@ -69,9 +70,45 @@ const LaporanDiniyyah = () => {
       mutate(values);
     }
   };
-  console.log(data, "data")
-  const navigate = useNavigate();
 
+  console.log(data, "data");
+  const navigate = useNavigate();
+  const [initialValues, setInitialValues] = useState({
+    dzikir_pagi: false,
+    dzikir_petang: false,
+    sholat_shubuh: "",
+    sholat_dzuhur: "",
+    sholat_ashar: "",
+    sholat_magrib: "",
+    sholat_isya: "",
+    dari_surat: "",
+    sampai_surat: "",
+    dari_ayat: null,
+    sampai_ayat: null,
+    laporan_harian_pkl_id: id,
+  });
+
+  useEffect(() => {
+    if (data) {
+      console.log("true");
+      setInitialValues({
+        dzikir_pagi: data.dzikir_pagi || false,
+        dzikir_petang: data.dzikir_petang || false,
+        sholat_shubuh: data.sholat_shubuh || "",
+        sholat_dzuhur: data.sholat_dzuhur || "",
+        sholat_ashar: data.sholat_ashar || "",
+        sholat_magrib: data.sholat_magrib || "",
+        sholat_isya: data.sholat_isya || "",
+        dari_surat: data.dari_surat || "",
+        sampai_surat: data.sampai_surat || "",
+        dari_ayat: data.dari_ayat || null,
+        sampai_ayat: data.sampai_ayat || null,
+        laporan_harian_pkl_id: id,
+      });
+
+      console.log("tes", initialValues.sholat_shubuh);
+    }
+  }, [data, id]);
   return (
     <LayoutSiswa title="Laporan Diniyyah Harian">
       <div className="mb-10">
@@ -84,22 +121,10 @@ const LaporanDiniyyah = () => {
       </div>
       <div className="flex flex-col gap-y-4 overflow-y-auto pb-12 w-full h-full pl-2 pr-5 mb-2">
         <Formik
-          initialValues={{
-            dzikir_pagi: data?.dzikir_pagi || false,
-            dzikir_petang: data?.dzikir_petang || false,
-            sholat_shubuh: data?.sholat_shubuh || "",
-            sholat_dzuhur: data?.sholat_dzuhur || "",
-            sholat_ashar: data?.sholat_ashar || "",
-            sholat_magrib: data?.sholat_magrib || "",
-            sholat_isya: data?.sholat_isya || "",
-            dari_surat: data?.dari_surat || "",
-            sampai_surat: data?.sampai_surat || "",
-            dari_ayat: data?.dari_ayat || null,
-            sampai_ayat: data?.sampai_ayat || null,
-            laporan_harian_pkl_id: id,
-          }}
+          initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
           {({
             values,
@@ -112,7 +137,9 @@ const LaporanDiniyyah = () => {
             dirty,
           }) => (
             <>
-              <Segment>
+              
+
+              <Segment loading={detailIsLoading}>
                 <Form className="ui form" onSubmit={handleSubmit}>
                   <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
@@ -322,12 +349,12 @@ const LaporanDiniyyah = () => {
                   </div>
 
                   <Button
-                  className="mt-2"
-                    style={{ marginBottom: "20px", marginTop : "15px" }}
+                    className="mt-2"
+                    style={{ marginBottom: "20px", marginTop: "15px" }}
                     type="submit"
                     color="green"
-                    loading={isLoading}
-                    disabled={!dirty || isLoading}
+                    loading={isLoading || updateIsLoading}
+                    disabled={!dirty || isLoading || updateIsLoading}
                   >
                     Submit
                   </Button>

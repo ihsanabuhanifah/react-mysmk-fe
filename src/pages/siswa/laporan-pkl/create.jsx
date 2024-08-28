@@ -104,6 +104,7 @@ const CreateLaporanPkl = () => {
       .number()
       .required("Latitude wajib diisi")
       .typeError("Latitude harus berupa angka"),
+    is_absen: yup.boolean().required(),
   });
 
   const initialValues = {
@@ -113,6 +114,7 @@ const CreateLaporanPkl = () => {
     status: "hadir",
     longtitude: userLocation.longtitude || "",
     latitude: userLocation.latitude || "",
+    is_absen: true,
   };
 
   const handleSubmit = (values) => {
@@ -264,7 +266,11 @@ const CreateLaporanPkl = () => {
         <Tab.Pane>
           <Formik
             enableReinitialize
-            initialValues={{ ...initialValues, status: "izin" }}
+            initialValues={{
+              ...initialValues,
+              status: "izin",
+              is_absen: false,
+            }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >

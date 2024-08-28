@@ -53,11 +53,9 @@ const UpdateLaporan = () => {
   const { isLoading: isLoadingUpdate, mutate } = useUpdateLaporanPkl(id);
   const [file, setFile] = useState("");
   const navigate = useNavigate();
-  console.log(data && data)
-console.log(isFetching)
+  console.log(data && data);
+  console.log(isFetching);
   const onSubmit = async (values) => {
-  
-
     mutate(values);
   };
   const formik = useFormik({
@@ -118,7 +116,7 @@ console.log(isFetching)
         title={`Edit Laporan tanggal ${formatTanggalIndo(data?.tanggal)}`}
       >
         <div className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5">
-          {" "}
+          {JSON.stringify(values)}
           <div className="mb-10">
             <Icon
               name="arrow left"
@@ -159,15 +157,38 @@ console.log(isFetching)
 
               <Form.Field>
                 <label>
+                  {data?.status === "hadir"
+                    ? "Deskripsi Jurnal Harian"
+                    : "Keterangan Izin"}
+                </label>
+                <TextArea
+                  name="isi_laporan"
+                  placeholder="Apa yang antum kerjakan hari ini?"
+                  value={values.isi_laporan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {touched.isi_laporan && errors.isi_laporan && (
+                  <div className="ui pointing red basic label">
+                    {errors.isi_laporan}
+                  </div>
+                )}
+              </Form.Field>
+            </Segment>
+
+            <Segment>
+              <Form.Field>
+                <label>
                   {data?.status === "hadir" ? "Foto Dokumentasi" : "Bukti Izin"}{" "}
                 </label>
-                {/* Gambar yang diunggah oleh pengguna atau yang sudah ada */}
-                 <img
-                  className="w-full h-auto max-h-52 object-cover mb-4 rounded-lg"
-                  src={values.foto || data?.foto}
-                  alt="..."
-                  // alt={`Foto Laporan Harian ${data.siswa.nama_siswa} tanggal ${data.tanggal}`}
-                />
+                <div className="w-full flex items-center justify-center">
+                  <img
+                    className="w-1/2 h-auto max-h-96 object-contain mb-4 rounded-lg"
+                    src={values.foto || data?.foto}
+                    // alt="..."
+                    alt={`Foto Laporan Harian ${data?.siswa.nama_siswa} tanggal ${data?.tanggal}`}
+                  />
+                </div>
                 {!file ? (
                   <DropzoneFile
                     handleDrop={(content) => {
@@ -196,40 +217,20 @@ console.log(isFetching)
                   </div>
                 )}
               </Form.Field>
-
-              <Form.Field>
-                <label>
-                  {data?.status === "hadir"
-                    ? "Deskripsi Jurnal Harian"
-                    : "Keterangan Izin"}
-                </label>
-                <TextArea
-                  name="isi_laporan"
-                  placeholder="Apa yang antum kerjakan hari ini?"
-                  value={values.isi_laporan}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {touched.isi_laporan && errors.isi_laporan && (
-                  <div className="ui pointing red basic label">
-                    {errors.isi_laporan}
-                  </div>
-                )}
-              </Form.Field>
-              <div className="flex flex-col w-max">
-                <Button
-                  type="submit"
-                  color="green"
-                  loading={isLoadingUpdate}
-                  disabled={!formik.dirty || isLoadingUpdate}
-                >
-                  Submit
-                 </Button>
-              </div>
             </Segment>
+            <div className="flex flex-col w-max">
+              <Button
+                type="submit"
+                color="green"
+                loading={isLoadingUpdate}
+                disabled={!formik.dirty || isLoadingUpdate}
+              >
+                Submit
+              </Button>
+            </div>
           </Form>
         </div>
-      </LayoutSiswa> 
+      </LayoutSiswa>
     </>
   );
 };

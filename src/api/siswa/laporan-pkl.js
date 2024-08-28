@@ -49,6 +49,8 @@ export const useLaporanPklList = () => {
   let defParams = {
     page: 1,
     pageSize: 10,
+    dariTanggal: null,
+    sampaiTanggal: null,
   };
   const {
     params,
@@ -110,7 +112,7 @@ export const useCreateLaporanPkl = () => {
         console.log(response);
         successToast(response);
         queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
-        navigate("/siswa/laporan-pkl")
+        navigate("/siswa/laporan-pkl");
       },
       onError: (err) => {
         console.log(err, "err");
@@ -161,8 +163,7 @@ export const useCreateLaporanDiniyyah = () => {
       onSuccess: (response) => {
         console.log(response);
         successToast(response);
-        queryClient.invalidateQueries("/santri/laporan-diniyyah/detailPkl/");
-
+        queryClient.invalidateQueries(["/santri/laporan-diniyyah/detailPkl/"]);
       },
       onError: (err) => {
         console.log(err, "err");
