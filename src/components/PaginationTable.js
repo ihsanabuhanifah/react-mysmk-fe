@@ -30,7 +30,7 @@ export default function PaginationTable({
           value={pageSize}
           placeholder="Select Page"
           options={[
-            { key: 1, value: 10, text: 10 },
+            { key: 1, value: 10, text: 10  },
             { key: 2, value: 25, text: 25 },
             { key: 3, value: 50, text: 50 },
             { key: 4, value: 100, text: 100 },
@@ -56,7 +56,7 @@ export default function PaginationTable({
           firstItem={{
             content: <Icon name="angle double left" />,
             icon: true,
-          }}
+          }} 
           lastItem={{
             content: <Icon name="angle double right" />,
             icon: true,

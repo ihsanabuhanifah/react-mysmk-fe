@@ -6,6 +6,7 @@
     "@craco/craco": "^6.4.0",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@heroicons/react": "^1.0.6",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

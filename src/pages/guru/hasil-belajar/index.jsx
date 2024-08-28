@@ -1,7 +1,7 @@
 import LayoutPage from "../../../module/layoutPage";
 import React from "react";
 import { Button, Form, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
-import { TableLoading } from "../../../components";
+import { PaginationTable, TableLoading } from "../../../components";
 import { TableWrapper } from "../../../components/TableWrap";
 
 import { useListReport } from "../../../api/guru/report";
@@ -9,8 +9,21 @@ import Filter from "./filter";
 
 export default function HasilBelajar() {
   let [visible, setVisible] = React.useState(false);
-  const { data, isFetching, payload, handlePayload, handleParams } =
-    useListReport();
+  const {
+    isLoading,
+    data,
+    isFetching,
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
+    handlePayload
+  } = useListReport();
 
   return (
     <LayoutPage title={"Hasil Belajar"}>
@@ -26,10 +39,10 @@ export default function HasilBelajar() {
         width="wide"
       >
         <Filter
-          payload={payload}
+          payload={params}
           handlePayload={handlePayload}
           setVisible={setVisible}
-          onClick={handleParams}
+          onClick={handleFilter}
         />
       </Sidebar>
       <Form>
@@ -113,6 +126,14 @@ export default function HasilBelajar() {
           </Table.Body>
         </Table>
       </TableWrapper>
+
+      <PaginationTable
+          page={params.page}
+          pageSize={params.pageSize}
+          setPageSize={handlePageSize}
+          setPage={handlePage}
+          totalPages={data?.data?.count}
+        />
     </LayoutPage>
   );
 }

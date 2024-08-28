@@ -65,6 +65,11 @@ import RegisterWali from "./pages/auth/RegisterWali";
 
 
 
+import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
+import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
+import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
+
+
 function App() {
   return (
     <div className="font-poppins">
@@ -191,6 +196,9 @@ function App() {
           <Route path="dashboard" element={<DashboardSiswa />} />
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
+          <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
+          <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
+          <Route path="laporan-pkl/laporan-diniyyah/:id" element={<LaporanDiniyyah />} />
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>
@@ -198,7 +206,10 @@ function App() {
             <Route path="security" element={<SecuritySiswa />} />
           </Route>
           <Route path="hasil-belajar" element={<HasilBelajar />} />
-            <Route path="hasil-belajar/:id_mapel" element={<HasilBelajarDetail />} />
+          <Route
+            path="hasil-belajar/:id_mapel"
+            element={<HasilBelajarDetail />}
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
