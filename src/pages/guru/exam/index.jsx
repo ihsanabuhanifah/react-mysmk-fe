@@ -45,6 +45,7 @@ export default function ListExam() {
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
+      staleTime: 100 * 60 * 5,
       select: (response) => {
         return response.data;
       },
@@ -131,9 +132,15 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{<LabelStatus status={value?.jenis_ujian}/>}</Table.Cell>
-                    <Table.Cell><LabelTipeUjian status={value?.tipe_ujian}/></Table.Cell>
-                    <Table.Cell><LabelTipeUjian status={value?.status}/></Table.Cell>
+                    <Table.Cell>
+                      {<LabelStatus status={value?.jenis_ujian} />}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <LabelTipeUjian status={value?.tipe_ujian} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <LabelTipeUjian status={value?.status} />
+                    </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
                       {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}

@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Form } from "semantic-ui-react";
 import { Input } from "../../../components/input";
 import { Formik } from "formik";
@@ -58,7 +58,10 @@ const BiodataCalonSantriSchema = yup.object().shape({
 export default function BiodataUpdatePPdb() {
   const navigate = useNavigate();
   const { profileData } = useProfileCalonSantri();
-  const {updateProfile,mutate} = useUpdateProfileCalonSantri(profileData?.id);
+  const { updateProfile, mutate } = useUpdateProfileCalonSantri(
+    profileData?.id
+  );
+
 
   const initialState = {
     nama_siswa: profileData.nama_siswa,
@@ -75,13 +78,13 @@ export default function BiodataUpdatePPdb() {
     pekerjaan_ayah: profileData.pekerjaan_ayah,
     nama_ibu: profileData.nama_ibu,
     pekerjaan_ibu: profileData.pekerjaan_ibu,
-    nama_wali: profileData.nama_wali || "",
+    nama_wali: profileData.nama_wali,
     pekerjaan_wali: profileData.pekerjaan_wali,
     hubungan: profileData.hubungan,
   };
 
   const onSubmit = async (values, { setErrors }) => {
-    console.log("values yang di kirim pada mutate adalah:",values);
+    console.log("values yang di kirim pada mutate adalah:", values);
     mutate(values);
   };
 

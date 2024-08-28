@@ -45,9 +45,8 @@ let personalSchema = Yup.object().shape({
   waktu_selesai: Yup.string().nullable().required("wajib disii"),
   tipe_ujian: Yup.string().nullable().required("wajib disii"),
   durasi: Yup.string().nullable().required("wajib disii"),
+  ta_id: Yup.string().nullable().required("wajib disii"),
   soal: Yup.array().min(1, "Minimal pilih satu soal"),
-
- 
 });
 let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
@@ -56,9 +55,9 @@ let AbsensiSchema = Yup.object().shape({
 export default function FormExam() {
   let [open, setOpen] = useState(false);
   let [preview, setPreview] = useState({});
-  const { dataMapel, dataKelas } = useList();
+  const { dataMapel, dataKelas, dataTa } = useList();
   const { id } = useParams();
-  let { isLoading: isLoadingUpdate, data: dataExam } = useQuery(
+  let { data: dataExam } = useQuery(
     //query key
     ["/bank-soal/update", id],
     //axios function,triggered when page/pageSize change
@@ -87,6 +86,7 @@ export default function FormExam() {
               soal: JSON.parse(data.soal),
               tipe_ujian: data.tipe_ujian,
               durasi: data.durasi,
+              ta_id : data.ta_id
             },
           ],
         });
@@ -145,6 +145,7 @@ export default function FormExam() {
         soal: [],
         tipe_ujian: "",
         durasi: null,
+        ta_id : null
       },
     ],
   });
@@ -175,6 +176,7 @@ export default function FormExam() {
               status: "draft",
               student_access: [],
               soal: [],
+              ta_id : null
             },
           ],
         });
@@ -454,6 +456,37 @@ export default function FormExam() {
                           value={value?.durasi}
                         />
                       </div>
+                      <div>
+                        <Form.Field
+                            control={Select}
+                            value={value?.ta_id}
+                            options={getOptions(
+                              dataTa?.data,
+                              "nama_tahun_ajaran"
+                            )}
+                            label={{
+                              children: "Tahun Pelajaran",
+                              htmlFor: `payload[${index}]ta_id`,
+                              name: `payload[${index}]ta_id`,
+                            }}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${index}]ta_id`,
+                                data.value
+                              );
+                            }}
+                            placeholder="Pilih"
+                            search
+                            error={
+                              errors?.payload?.[index]?.ta_id !== undefined &&
+                              errors?.payload?.[index]?.ta_id
+                            }
+                            searchInput={{
+                              id: `payload[${index}]ta_id`,
+                              name: `payload[${index}]ta_id`,
+                            }}
+                          />
+                      </div>
                     </section>
                     <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
                       <div>
@@ -499,16 +532,19 @@ export default function FormExam() {
                       </div>
 
                       {!!errors?.payload?.[index]?.soal === true && (
-                <div className="col-span-2" ><Message negative>
-                <MessageHeader>{errors?.payload?.[index]?.soal}</MessageHeader>
-              </Message></div>
-              )}
+                        <div className="col-span-2">
+                          <Message negative>
+                            <MessageHeader>
+                              {errors?.payload?.[index]?.soal}
+                            </MessageHeader>
+                          </Message>
+                        </div>
+                      )}
                     </section>
                   </div>
                 ))}
               </section>
 
-             
               <div className="mt-5">
                 {id ? (
                   <Button

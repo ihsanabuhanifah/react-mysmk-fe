@@ -38,6 +38,7 @@ export default function ListBankSoal() {
     () => listBankSoal(params),
     //configuration
     {
+      staleTime : 1000 * 60 * 5,
       // refetchInterval: 1000 * 60 * 60,
       select: (response) => {
         return response.data;

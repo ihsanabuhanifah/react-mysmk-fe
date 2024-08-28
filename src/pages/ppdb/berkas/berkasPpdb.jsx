@@ -7,37 +7,38 @@ import {
   useProfileCalonSantri,
   useUpdateProfileCalonSantri,
 } from "../../../api/ppdb/profile";
+import Dropzone from "react-dropzone";
+import { useNavigate } from "react-router-dom";
+import DropzoneFile from "../../../components/Dropzone";
 
 const BerkasPpdbSchema = yup.object().shape({
-  kk: yup.mixed().required("File harus diunggah!"),
-  ijazah: yup.mixed().required("File harus diunggah!"),
-  akte: yup.mixed().required("File harus diunggah!"),
-  skb: yup.mixed().required("File harus diunggah!"),
-  surat_pernyataan: yup.mixed().required("File harus diunggah!"),
+  foto: yup.string().nullable(),
+  kk: yup.string().nullable(),
+  ijazah: yup.string().nullable().required("File harus diunggah!"),
+  akte: yup.string().nullable().required("File harus diunggah!"),
+  skb: yup.string().nullable().required("File harus diunggah!"),
+  surat_pernyataan: yup.string().nullable().required("File harus diunggah!"),
 });
 
 export default function BerkasPpdb() {
+  const [file, setFile] = useState("");
+  const navigate = useNavigate();
   const { profileData } = useProfileCalonSantri();
   const { updateProfile, mutate } = useUpdateProfileCalonSantri(
     profileData?.id
   );
 
   const initialState = {
-    kk: profileData.kk || "",
-    ijazah: profileData.ijazah || "",
-    akte: profileData.akte | "",
-    skb: profileData.skb | "",
-    surat_pernyataan: profileData.surat_pernyataan | "",
+    kk:profileData.kk,
+    ijazah: profileData.ijazah,
+    akte: profileData.akte,
+    skb: profileData.skb,
+    surat_pernyataan: profileData.surat_pernyataan,
   };
 
-  const handleSubmit = (values) => {
-    const formData = new FormData();
-    Object.keys(values).forEach((key) => {
-      if (values[key]) {
-        formData.append(key, values[key]);
-      }
-    });
-    mutate(formData);
+  const onSubmit = async (values, { setErrors }) => {
+    console.log("values yang di kirim pada mutate adalah:", values);
+    mutate(values);
   };
 
 
@@ -48,7 +49,7 @@ export default function BerkasPpdb() {
   //   formData.append("akte", values.akte);
   //   formData.append("skb", values.skb);
   //   formData.append("surat_pernyataan", values.surat_pernyataan);
-  
+
   //   mutate(formData);
   // };
 
@@ -65,7 +66,7 @@ export default function BerkasPpdb() {
       <Formik
         initialValues={initialState}
         validationSchema={BerkasPpdbSchema}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
         {({
           values,
@@ -78,179 +79,220 @@ export default function BerkasPpdb() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit} className="w-full">
-            <Form.Field className="mb-4">
-              <label htmlFor="kk">Kartu Keluarga</label>
-              <div className="relative">
-                <input
-                  id="kk"
-                  name="kk"
-                  type="file"
-                  className="hidden"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("kk", file);
+           <Form.Field className="mb-4">
+              <label>Kartu Keluarga</label>
+              {!values.kk ? (
+                <Dropzone
+                  onDrop={(acceptedFiles) => {
+                    setFieldValue("kk", acceptedFiles[0]);
                   }}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                <div className="flex items-center border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100">
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop file Kartu Keluarga di sini, atau klik
+                        untuk memilih file
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              ) : (
+                <div className="flex items-center space-x-2">
                   <Button
-                    as="label"
-                    htmlFor="kk"
-                    type="button"
-                    className="ml-auto"
-                    disabled={isSubmitting}
+                    icon="delete"
+                    color="red"
+                    onClick={() => {
+                      setFieldValue("kk", null);
+                    }}
+                  />
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={URL.createObjectURL(values.kk)}
                   >
-                    <Icon name="upload" />
-                  </Button>
-                  <span className="mr-2 text-gray-500">
-                    {values.kk ? values.kk.name : "Pilih File"}
-                  </span>
+                    {values.kk.name}
+                  </a>
                 </div>
-              </div>
-              {errors.kk && touched.kk && (
+              )}
+              {touched.kk && errors.kk && (
                 <div className="text-red-500 text-sm mt-1">{errors.kk}</div>
               )}
             </Form.Field>
-
             <Form.Field className="mb-4">
-              <label htmlFor="ijazah">Ijazah Sekolah</label>
-              <div className="relative">
-                <input
-                  id="ijazah"
-                  name="ijazah"
-                  type="file"
-                  className="hidden"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("ijazah", file);
+              <label>Ijazah Sekolah</label>
+              {!values.ijazah ? (
+                <Dropzone
+                  onDrop={(acceptedFiles) => {
+                    setFieldValue("ijazah", acceptedFiles[0]);
                   }}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                <div className="flex items-center border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100">
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop file Kartu Keluarga di sini, atau klik
+                        untuk memilih file
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              ) : (
+                <div className="flex items-center space-x-2">
                   <Button
-                    as="label"
-                    htmlFor="ijazah"
-                    type="button"
-                    className="ml-auto"
-                    disabled={isSubmitting}
+                    icon="delete"
+                    color="red"
+                    onClick={() => {
+                      setFieldValue("ijazah", null);
+                    }}
+                  />
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={URL.createObjectURL(values.ijazah)}
                   >
-                    <Icon name="upload" />
-                  </Button>
-                  <span className="mr-2 text-gray-500">
-                    {values.ijazah ? values.ijazah.name : "Pilih File"}
-                  </span>
+                    {values.ijazah.name}
+                  </a>
                 </div>
-              </div>
-              {errors.ijazah && touched.ijazah && (
+              )}
+              {touched.ijazah && errors.ijazah && (
                 <div className="text-red-500 text-sm mt-1">{errors.ijazah}</div>
               )}
             </Form.Field>
-
             <Form.Field className="mb-4">
-              <label htmlFor="akte">Akte Kelahiran</label>
-              <div className="relative">
-                <input
-                  id="akte"
-                  name="akte"
-                  type="file"
-                  className="hidden"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("akte", file);
+              <label>Akte Kelahiran</label>
+              {!values.akte ? (
+                <Dropzone
+                  onDrop={(acceptedFiles) => {
+                    setFieldValue("akte", acceptedFiles[0]);
                   }}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                <div className="flex items-center border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100">
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop file Akte Keluarga di sini, atau klik
+                        untuk memilih file
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              ) : (
+                <div className="flex items-center space-x-2">
                   <Button
-                    as="label"
-                    htmlFor="akte"
-                    type="button"
-                    className="ml-auto"
-                    disabled={isSubmitting}
+                    icon="delete"
+                    color="red"
+                    onClick={() => {
+                      setFieldValue("akte", null);
+                    }}
+                  />
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={URL.createObjectURL(values.akte)}
                   >
-                    <Icon name="upload" />
-                  </Button>
-                  <span className="mr-2 text-gray-500">
-                    {values.akte ? values.akte.name : "Pilih File"}
-                  </span>
+                    {values.akte.name}
+                  </a>
                 </div>
-              </div>
-              {errors.akte && touched.akte && (
+              )}
+              {touched.akte && errors.akte && (
                 <div className="text-red-500 text-sm mt-1">{errors.akte}</div>
               )}
             </Form.Field>
 
             <Form.Field className="mb-4">
-              <label htmlFor="skb">Surat Keterangan Baik</label>
-              <div className="relative">
-                <input
-                  id="skb"
-                  name="skb"
-                  type="file"
-                  className="hidden"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("skb", file);
+              <label>Surat Keterangan Baik</label>
+              {!values.skb ? (
+                <Dropzone
+                  onDrop={(acceptedFiles) => {
+                    setFieldValue("skb", acceptedFiles[0]);
                   }}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                <div className="flex items-center border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100">
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop file Surat Keterangan Baik di sini, atau
+                        klik untuk memilih file
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              ) : (
+                <div className="flex items-center space-x-2">
                   <Button
-                    as="label"
-                    htmlFor="skb"
-                    type="button"
-                    className="ml-auto"
-                    disabled={isSubmitting}
+                    icon="delete"
+                    color="red"
+                    onClick={() => {
+                      setFieldValue("skb", null);
+                    }}
+                  />
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={URL.createObjectURL(values.skb)}
                   >
-                    <Icon name="upload" />
-                  </Button>
-                  <span className="mr-2 text-gray-500">
-                    {values.skb ? values.skb.name : "Pilih File"}
-                  </span>
+                    {values.skb.name}
+                  </a>
                 </div>
-              </div>
-              {errors.skb && touched.skb && (
+              )}
+              {touched.skb && errors.skb && (
                 <div className="text-red-500 text-sm mt-1">{errors.skb}</div>
               )}
             </Form.Field>
 
             <Form.Field className="mb-4">
-              <label htmlFor="surat_pernyataan">Surat Pernyataan</label>
-              <div className="relative">
-                <input
-                  id="surat_pernyataan"
-                  name="surat_pernyataan"
-                  type="file"
-                  className="hidden"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("surat_pernyataan", file);
+              <label>Surat Pernyataan</label>
+              {!values.surat_pernyataan ? (
+                <Dropzone
+                  onDrop={(acceptedFiles) => {
+                    setFieldValue("surat_pernyataan", acceptedFiles[0]);
                   }}
-                  onBlur={handleBlur}
-                  disabled={isSubmitting}
-                />
-                <div className="flex items-center border border-gray-300 rounded px-4 py-2 cursor-pointer hover:bg-gray-100">
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <div
+                      {...getRootProps()}
+                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
+                    >
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag 'n' drop file surat_pernyataan di sini, atau klik
+                        untuk memilih file
+                      </p>
+                    </div>
+                  )}
+                </Dropzone>
+              ) : (
+                <div className="flex items-center space-x-2">
                   <Button
-                    as="label"
-                    htmlFor="surat_pernyataan"
-                    type="button"
-                    className="ml-auto"
-                    disabled={isSubmitting}
+                    icon="delete"
+                    color="red"
+                    onClick={() => {
+                      setFieldValue("surat_pernyataan", null);
+                    }}
+                  />
+                  <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href={URL.createObjectURL(values.surat_pernyataan)}
                   >
-                    <Icon name="upload" />
-                  </Button>
-                  <span className="mr-2 text-gray-500">
-                    {values.surat_pernyataan
-                      ? values.surat_pernyataan.name
-                      : "Pilih File"}
-                  </span>
+                    {values.surat_pernyataan.name}
+                  </a>
                 </div>
-              </div>
-              {errors.surat_pernyataan && touched.surat_pernyataan && (
+              )}
+              {touched.surat_pernyataan && errors.surat_pernyataan && (
                 <div className="text-red-500 text-sm mt-1">
                   {errors.surat_pernyataan}
                 </div>

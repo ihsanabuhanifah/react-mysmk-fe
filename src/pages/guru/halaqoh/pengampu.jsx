@@ -71,21 +71,10 @@ export default function PengampuHalaqoh() {
 
   let { identitas } = useList();
   let queryClient = useQueryClient();
-  let [hari, setHari] = React.useState(formatHari(new Date()));
+
   let [waktu, setWaktu] = React.useState("pagi");
 
   let { page, pageSize, setPageSize, setPage } = usePage();
-
-  const dayOptions = [
-    { key: "1", value: "semua", text: "Semua" },
-    { key: "2", value: "senin", text: "Senin" },
-    { key: "3", value: "selasa", text: "Selasa" },
-    { key: "4", value: "rabu", text: "Rabu" },
-    { key: "5", value: "kamis", text: "Kamis" },
-    { key: "6", value: "jumat", text: "Jumat" },
-    { key: "7", value: "sabtu", text: "Sabtu" },
-    { key: "8", value: "minggu", text: "Minggu" },
-  ];
 
   let [visible, setVisible] = React.useState(false);
   const [filter, setFilter] = React.useState({});

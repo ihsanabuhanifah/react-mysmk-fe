@@ -30,7 +30,8 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^17.0.2",
-    "react-icons": "^4.12.0",
+    "react-dropzone": "^14.2.3",
+    "react-icons": "^4.4.0",
     "react-image-file-resizer": "^0.4.8",
     "react-katex": "^3.0.1",
     "react-modern-calendar-datepicker": "^3.1.6",
@@ -56,8 +57,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "cross-env TAILWIND_MODE=watch set PORT=2001 && craco --openssl-legacy-provider start",
-    
+    "start": "cross-env PORT=2001 TAILWIND_MODE=watch craco --openssl-legacy-provider start",
     "build": "craco --openssl-legacy-provider build",
     "test": "craco test",
     "eject": "react-scripts eject"

@@ -6,7 +6,7 @@ import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
 
-export const useUploadFile = () => {
+export const useUploadFileCalonSantri = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation((file) => {}, {
     onSuccess: (response) => {
@@ -22,7 +22,7 @@ export const useUploadFile = () => {
   return mutate;
 };
 
-export const uploadFile = (file) => {
+export const uploadFileCalonSantri = (file) => {
   syncToken();
   const formData = new FormData();
   formData.append("file", file);

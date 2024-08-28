@@ -40,7 +40,7 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
-  console.log('ro;e', roles)
+  
 
   return (
     <>
@@ -199,6 +199,21 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+         {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to={`hasil-belajar`}
+            path={"hasil-belajar"}
+            title={["Hasil Belajar"]}
+            logo={
+              <MdKeyboard
+                className={`h-8 w-8 ${
+                  url === `hasil-belajar` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
@@ -341,13 +356,13 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
       <div style={{
         zomm : '80%'
       }} className="w-8 h-8 ">{logo}</div>
-      <p
+      {/* <p
         className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}
          `}
       >
         {title}
-      </p>
+      </p> */}
     </button>
   );
 }
@@ -362,13 +377,13 @@ function LogoutButton({ to, title, logo, onClick }) {
       className="flex items-center font-extrabold  h-10  pl-2 "
     >
       <div className="w-8 h-8 ">{logo}</div>
-      <p
+      {/* <p
         className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
           url === to ? "text-white-400 " : "text-gray-600 "
         } font-bold hover:text-green-400`}
       >
         {title}
-      </p>
+      </p> */}
     </button>
   );
 }

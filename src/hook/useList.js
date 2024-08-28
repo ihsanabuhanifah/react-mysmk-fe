@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   listKelas,
   listMapel,
@@ -7,7 +6,6 @@ import {
   listAlquran,
   listHalaqohGroup,
 } from "../api/list";
-import { getRoleMe } from "../api/auth";
 import { useQuery } from "react-query";
 import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";

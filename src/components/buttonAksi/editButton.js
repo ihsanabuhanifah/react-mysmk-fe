@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button, Icon } from "semantic-ui-react";
 export function EditButton({ onClick, disabled, size = "small" }) {
   return (

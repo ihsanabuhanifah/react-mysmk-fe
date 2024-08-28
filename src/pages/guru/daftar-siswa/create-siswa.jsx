@@ -82,9 +82,9 @@ export function CreateSiswa() {
       });
     }
   };
-  let { dataKelas, dataGuru, dataMapel, dataTa } = useList();
+  let { dataKelas, dataTa } = useList();
   return (
-    <LayoutPage title={"Tambah Jadwal"}>
+    <LayoutPage title={"Tambah  Siswa"}>
       <section className="mt-5">
         <Formik
           initialValues={initialState}
