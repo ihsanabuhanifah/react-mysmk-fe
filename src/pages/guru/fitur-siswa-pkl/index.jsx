@@ -3,13 +3,15 @@ import LayoutPage from '../../../module/layoutPage';
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from '../../../components';
 import useDelete from '../../../hook/useDelete';
 import { useQuery, useQueryClient } from 'react-query';
-import { Button, Icon, Input, Table } from "semantic-ui-react";
+import { Button, Icon, Input, Menu, Sidebar, Table } from "semantic-ui-react";
 import { useNavigate } from 'react-router-dom';
 import usePage from "../../../hook/usePage";
 import { createSiswaPkl, deleteSiswaPkl, listSiswaPkl, updateSiswaPkl } from '../../../api/guru/fitur-pkl';
 import { toast } from 'react-toastify';
 import UploadExcel from '../../../components/ModalUploadExel';
 import useDebounce from '../../../hook/useDebounce';
+import FilterSiswaPkl from './filter';
+import { encodeURlFormat } from '../../../utils';
 
 export default function FiturPkl() {
 
@@ -17,14 +19,27 @@ export default function FiturPkl() {
     let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
     let [isOpen, setIsOpen] = useState(false);
-    // let [keyword, setKeyword] = React.useState("");
-    // let debouncedKeyword = useDebounce(keyword, 500);
+    let [keyword, setKeyword] = React.useState("");
+    let debouncedKeyword = useDebounce(keyword, 500);
+    let [visible, setVisible] = React.useState(false);
+    let [filter, setFilter] = React.useState({});
 
 
     const params = {
         page,
         pageSize,
-        // keyword:debouncedKeyword
+        keyword: debouncedKeyword,
+        ...filter,
+        nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
+        nama_perusahaan: encodeURlFormat(filter?.nama_perusahaan),
+        // alamat: encodeURlFormat(filter?.alamat),
+        // kota: encodeURlFormat(filter?.kota),
+        // kode_pos: encodeURlFormat(filter?.kode_pos),
+        // no_hp: encodeURlFormat(filter?.no_hp),
+        // penanggung_jawab_perusahaan: encodeURlFormat(filter?.penanggung_jawab_perusahaan),
+        // penanggung_jawab_sekolah: encodeURlFormat(filter?.penanggung_jawab_sekolah),
+        // nama_guru: encodeURlFormat(filter?.nama_guru),
+
     };
 
 
@@ -32,6 +47,7 @@ export default function FiturPkl() {
         ["/tempat-pkl/list", params],
         () => listSiswaPkl(params),
         {
+            refetchOnWindowFocus: false,
             // select: (response) => response.data,
             select: (response) => {
                 console.log(response.data)
@@ -88,6 +104,13 @@ export default function FiturPkl() {
     //     }
     //   };
 
+    const handleEvent = (event) => {
+        console.log("ee", event);
+        if (event.key === "x") {
+            console.log("ok", event);
+        }
+    };
+
     return (
         <LayoutPage title={'Fitur Pkl'}>
             <ModalAlert
@@ -95,9 +118,24 @@ export default function FiturPkl() {
                 setOpen={setShowAlertDelete}
                 loading={deleteLoading}
                 onConfirm={onConfirmDelete}
-                title={"Apakah yakin akan menghapus pelanggaran terpilih?"}
+                title={"Apakah yakin akan menghapus Siswa terpilih?"}
             />
-            <div className="mt-5 space-y-5">
+            <Sidebar
+                as={Menu}
+                animation="overlay"
+                icon="labeled"
+                inverted
+                direction="right"
+                onHide={() => setVisible(false)}
+                vertical
+                visible={visible}
+                width="wide"
+            >
+
+                <FilterSiswaPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterSiswaPkl>
+            </Sidebar>
+
+            <div className="mt-5 space-y-5" onKeyPress={handleEvent}>
                 <section className="grid grid-cols-6 gap-5 ">
                     {/* <div className="col-span-5   lg:col-span-3 xl:col-span-3">
                         <Input
@@ -121,11 +159,24 @@ export default function FiturPkl() {
                             size='medium'
                             fluid
                         />
-                        
+
                     </div>
-                    
+
                     <div className="col-span-6 lg:col-span-1 xl:col-span-1 transform transition-all duration-300">
                         <UploadExcel />
+                    </div>
+                    <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+                        <Button
+                            content={"Filter"}
+                            type="button"
+                            fluid
+                            icon={() => <Icon name="filter" />}
+                            size="medium"
+                            color="teal"
+                            onClick={() => {
+                                setVisible(!visible);
+                            }}
+                        />
                     </div>
                 </section>
                 <section>
@@ -136,12 +187,12 @@ export default function FiturPkl() {
                                 <Table.HeaderCell>Nama Perusahaan</Table.HeaderCell>
                                 <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                                 <Table.HeaderCell>Alamat</Table.HeaderCell>
-                                <Table.HeaderCell>Provinsi</Table.HeaderCell>
                                 <Table.HeaderCell>Kota</Table.HeaderCell>
+                                {/* <Table.HeaderCell>Provinsi</Table.HeaderCell>
                                 <Table.HeaderCell>Kecamatan</Table.HeaderCell>
                                 <Table.HeaderCell>Desa</Table.HeaderCell>
                                 <Table.HeaderCell>Rt</Table.HeaderCell>
-                                <Table.HeaderCell>Rw</Table.HeaderCell>
+                                <Table.HeaderCell>Rw</Table.HeaderCell> */}
                                 <Table.HeaderCell>Kodepos</Table.HeaderCell>
                                 <Table.HeaderCell>Nomer Telepon</Table.HeaderCell>
                                 <Table.HeaderCell>Penangung Jawab Perusahaan</Table.HeaderCell>
@@ -163,12 +214,12 @@ export default function FiturPkl() {
                                         <Table.Cell>{value?.nama_perusahaan}</Table.Cell>
                                         <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
                                         <Table.Cell>{value?.alamat}</Table.Cell>
-                                        <Table.Cell>{value?.provinsi}</Table.Cell>
                                         <Table.Cell>{value?.kota}</Table.Cell>
+                                        {/* <Table.Cell>{value?.provinsi}</Table.Cell>
                                         <Table.Cell>{value?.kecamatan}</Table.Cell>
                                         <Table.Cell>{value?.desa}</Table.Cell>
                                         <Table.Cell>{value?.rt}</Table.Cell>
-                                        <Table.Cell>{value?.rw}</Table.Cell>
+                                        <Table.Cell>{value?.rw}</Table.Cell> */}
                                         <Table.Cell>{value?.kode_pos}</Table.Cell>
                                         <Table.Cell>{value?.no_hp}</Table.Cell>
                                         <Table.Cell>{value?.penanggung_jawab_perusahaan}</Table.Cell>

@@ -8,7 +8,7 @@ import * as XLSX from "xlsx";
 import React from "react";
 import { TableLoading } from "../../../components";
 
-const PDF_FILE_URL = "http://localhost:8085/santripkl.xlsx";
+const PDF_FILE_URL = "http://localhost:8085/santriexcel.xlsx";
 export default function Dashboard() {
   let navigate = useNavigate();
   const [open, setOpen] = useState(false);

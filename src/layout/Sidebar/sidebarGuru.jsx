@@ -304,6 +304,22 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="laporan-pkl"
+            path="laporan-pkl"
+            title={"Laporan Siswa PKL"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${url === "laporan-pkl"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
+              />
+            }
+          />
+        )}
 
         {/* {checkRole(roles, "guru") && (
           

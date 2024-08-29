@@ -34,8 +34,10 @@ import {
   FormExam,
   CreateSiswa,
   FiturPkl,
+
+  CreateLaporanSiswa,
+  UpdateLaporanPkl,
   CreatePkl,
-  UpdatePkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -47,6 +49,9 @@ import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
 import FileCoba from "./components/fileupload";
+import TestFatih from "./pages/guru/dashboard/test";
+import LaporanPkl from "./pages/guru/laporan-pkl";
+import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
 
 function App() {
   return (
@@ -98,6 +103,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="test" element={<TestFatih />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
@@ -150,7 +156,12 @@ function App() {
           <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
           <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePkl />} />
           <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
+          {/* <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePklPage />} />
+          <Route path="fitur-siswa-pkl/tambah" element={<CreatePklPage />} /> */}
+          {/* <Route path="fitur-siswa-pkl/tes" element={<CreateLaporanSiswa />} /> */}
           {/* <Route path="fitur-siswa-pkl/filecoba" element={<FileCoba />} /> */}
+          <Route path="laporan-pkl" element={<LaporanPkl />} />
+          <Route path="laporan-pkl/update/:id" element={<UpdateLaporanPkl />} />
         </Route>
 
         <Route

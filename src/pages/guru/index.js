@@ -1,6 +1,7 @@
 import Absensi from "./jadwal/absensi";
 import Jadwal from "./jadwal";
 import Dashboard from "./dashboard/dashboard";
+import TestFatih from "./dashboard/test";
 import Halaqoh from "./halaqoh/halaqoh";
 import Kunjungan from "./kunjungan";
 import Pulang from "./pulang";
@@ -29,6 +30,9 @@ import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
 import  CreatePkl  from "./fitur-siswa-pkl/create-pkl";
 import  UpdatePkl  from "./fitur-siswa-pkl/update-pkl";
+import  CreateLaporanPkl  from "./laporan-pkl";
+import  UpdateLaporanPkl  from "./laporan-pkl/UpdateLaporanPkl";
+// import  CreateLaporanPkl  from "./fitur-siswa-pkl/createlaporanpkl";
 // import { JurnalSantri } from "./fitur-siswa-pkl/jurnal";
 
 export {
@@ -62,7 +66,11 @@ export {
   CreateSiswa,
   FiturPkl,
   CreatePkl,
-  UpdatePkl, // JurnalSantri,
+  TestFatih,
+  CreateLaporanPkl, 
+  UpdateLaporanPkl, 
+  
+  // JurnalSantri,
   // FormFiturPkl,
  
 
