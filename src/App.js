@@ -39,7 +39,6 @@ import {
   EditSiswa,
 } from "./pages/guru";
 
-
 import NotFound from "./pages/NotFound";
 
 import { ToastContainer } from "react-toastify";
@@ -57,7 +56,6 @@ import UjianSiswa from "./pages/siswa/ujian";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 
-
 // PPDB
 import LandingPage from "./pages/ppdb/Landing-page/";
 import LoginPpdb from "./pages/ppdb/login";
@@ -69,6 +67,7 @@ import Ppdb from "./layout/ppdb";
 import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
 import BiodataPpdb from "./pages/ppdb/biodata";
 import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
+import BiayaPendaftaran from "./pages/ppdb/biaya-pendaftaran/biaya-pendaftaran";
 
 function App() {
   return (
@@ -217,6 +216,7 @@ function App() {
             <Route path="update" element={<BiodataUpdatePPdb />} />
             <Route path="berkas" element={<BerkasPpdb />} />
           </Route>
+          <Route path="biaya-pendaftaran" element={<BiayaPendaftaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
         </Route>
 

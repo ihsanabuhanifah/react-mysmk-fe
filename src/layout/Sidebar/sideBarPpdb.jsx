@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { MdClose, MdLaptopMac } from "react-icons/md";
-import { IoPerson, IoStatsChart } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { MdClose } from "react-icons/md";
+import {
+  IoPerson,
+  IoStatsChart,
+} from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import ProfileImage from "../../image/ppdb/profile.png";
-import { getProfileCalonSantri, useProfileCalonSantri } from "../../api/ppdb/profile"; // Pastikan import dari path yang benar
+import {
+  getProfileCalonSantri,
+  useProfileCalonSantri,
+} from "../../api/ppdb/profile"; // Pastikan import dari path yang benar
 import { setProfile } from "../../redux/actions"; // Pastikan import dari path yang benar
+import { HiUpload } from "react-icons/hi";
 
 export default function SidebarPpdb({ setSidebar }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   // const CalonSantriProfile = useSelector((state) => state.data.CalonSantriProfile);
-  const { profileData, isLoading, isError} = useProfileCalonSantri();
-  
+  const { profileData} = useProfileCalonSantri();
+
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
 
@@ -101,6 +108,19 @@ export default function SidebarPpdb({ setSidebar }) {
             <IoPerson
               className={`h-6 w-6 ${
                 url === "biodata" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="biaya-pendaftaran"
+          path="biaya-pendaftaran"
+          title={"Biaya Pendaftaran"}
+          logo={
+            <HiUpload
+              className={`h-6 w-6 ${
+                url === "biaya-pendaftaran" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }

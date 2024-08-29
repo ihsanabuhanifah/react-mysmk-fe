@@ -59,7 +59,7 @@ const RegisterPpdb = () => {
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-        navigate("/ppdb/login");
+        navigate("/landingpage/login");
       }, 3000);
     } catch (err) {
       setErrors(err.response?.data || { msg: "Periksa koneksi internet Anda" });
@@ -79,7 +79,7 @@ const RegisterPpdb = () => {
         <Button
           onClick={() => {
             setShowPopup(false);
-            navigate("/ppdb/login");
+            navigate("/landingpage/login");
           }}
           color="green"
         >

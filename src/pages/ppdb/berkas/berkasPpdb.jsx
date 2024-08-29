@@ -29,7 +29,7 @@ export default function BerkasPpdb() {
   );
 
   const initialState = {
-    kk:profileData.kk,
+    kk: profileData.kk,
     ijazah: profileData.ijazah,
     akte: profileData.akte,
     skb: profileData.skb,
@@ -40,18 +40,6 @@ export default function BerkasPpdb() {
     console.log("values yang di kirim pada mutate adalah:", values);
     mutate(values);
   };
-
-
-  // const onSubmit = (values) => {
-  //   const formData = new FormData();
-  //   formData.append("kk", values.kk);
-  //   formData.append("ijazah", values.ijazah);
-  //   formData.append("akte", values.akte);
-  //   formData.append("skb", values.skb);
-  //   formData.append("surat_pernyataan", values.surat_pernyataan);
-
-  //   mutate(formData);
-  // };
 
   return (
     <div className="mt-4 ml-4 pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
@@ -79,7 +67,7 @@ export default function BerkasPpdb() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit} className="w-full">
-           <Form.Field className="mb-4">
+            <Form.Field className="mb-4">
               <label>Kartu Keluarga</label>
               {!values.kk ? (
                 <Dropzone
@@ -109,19 +97,22 @@ export default function BerkasPpdb() {
                       setFieldValue("kk", null);
                     }}
                   />
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={URL.createObjectURL(values.kk)}
-                  >
-                    {values.kk.name}
-                  </a>
+                  {values.kk instanceof File && (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={URL.createObjectURL(values.kk)}
+                    >
+                      {values.kk.name}
+                    </a>
+                  )}
                 </div>
               )}
               {touched.kk && errors.kk && (
                 <div className="text-red-500 text-sm mt-1">{errors.kk}</div>
               )}
             </Form.Field>
+
             <Form.Field className="mb-4">
               <label>Ijazah Sekolah</label>
               {!values.ijazah ? (
@@ -137,8 +128,7 @@ export default function BerkasPpdb() {
                     >
                       <input {...getInputProps()} />
                       <p>
-                        Drag 'n' drop file Kartu Keluarga di sini, atau klik
-                        untuk memilih file
+                        Drag 'n' drop file Ijazah di sini, atau klik untuk memilih file
                       </p>
                     </div>
                   )}
@@ -152,19 +142,22 @@ export default function BerkasPpdb() {
                       setFieldValue("ijazah", null);
                     }}
                   />
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={URL.createObjectURL(values.ijazah)}
-                  >
-                    {values.ijazah.name}
-                  </a>
+                  {values.ijazah instanceof File && (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={URL.createObjectURL(values.ijazah)}
+                    >
+                      {values.ijazah.name}
+                    </a>
+                  )}
                 </div>
               )}
               {touched.ijazah && errors.ijazah && (
                 <div className="text-red-500 text-sm mt-1">{errors.ijazah}</div>
               )}
             </Form.Field>
+
             <Form.Field className="mb-4">
               <label>Akte Kelahiran</label>
               {!values.akte ? (
@@ -180,8 +173,7 @@ export default function BerkasPpdb() {
                     >
                       <input {...getInputProps()} />
                       <p>
-                        Drag 'n' drop file Akte Keluarga di sini, atau klik
-                        untuk memilih file
+                        Drag 'n' drop file Akte di sini, atau klik untuk memilih file
                       </p>
                     </div>
                   )}
@@ -195,13 +187,15 @@ export default function BerkasPpdb() {
                       setFieldValue("akte", null);
                     }}
                   />
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={URL.createObjectURL(values.akte)}
-                  >
-                    {values.akte.name}
-                  </a>
+                  {values.akte instanceof File && (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={URL.createObjectURL(values.akte)}
+                    >
+                      {values.akte.name}
+                    </a>
+                  )}
                 </div>
               )}
               {touched.akte && errors.akte && (
@@ -239,13 +233,15 @@ export default function BerkasPpdb() {
                       setFieldValue("skb", null);
                     }}
                   />
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={URL.createObjectURL(values.skb)}
-                  >
-                    {values.skb.name}
-                  </a>
+                  {values.skb instanceof File && (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={URL.createObjectURL(values.skb)}
+                    >
+                      {values.skb.name}
+                    </a>
+                  )}
                 </div>
               )}
               {touched.skb && errors.skb && (
@@ -268,8 +264,7 @@ export default function BerkasPpdb() {
                     >
                       <input {...getInputProps()} />
                       <p>
-                        Drag 'n' drop file surat_pernyataan di sini, atau klik
-                        untuk memilih file
+                        Drag 'n' drop file Surat Pernyataan di sini, atau klik untuk memilih file
                       </p>
                     </div>
                   )}
@@ -283,13 +278,15 @@ export default function BerkasPpdb() {
                       setFieldValue("surat_pernyataan", null);
                     }}
                   />
-                  <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={URL.createObjectURL(values.surat_pernyataan)}
-                  >
-                    {values.surat_pernyataan.name}
-                  </a>
+                  {values.surat_pernyataan instanceof File && (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={URL.createObjectURL(values.surat_pernyataan)}
+                    >
+                      {values.surat_pernyataan.name}
+                    </a>
+                  )}
                 </div>
               )}
               {touched.surat_pernyataan && errors.surat_pernyataan && (
@@ -298,17 +295,10 @@ export default function BerkasPpdb() {
                 </div>
               )}
             </Form.Field>
-            {/* Add similar fields for 'akte', 'skb', and 'surat_pernyataan' with unique name and id */}
 
-            <Button
-              content={isSubmitting ? "Proses" : "Upload Berkas"}
-              type="submit"
-              fluid
-              size="medium"
-              color="green"
-              loading={isSubmitting}
-              disabled={isSubmitting}
-            />
+            <Button type="submit" color="blue" disabled={isSubmitting}>
+              {isSubmitting ? "Menyimpan..." : "Simpan"}
+            </Button>
           </Form>
         )}
       </Formik>
