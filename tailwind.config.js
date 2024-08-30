@@ -20,7 +20,9 @@ module.exports = {
         'imageBackground': "url('/src/image/ppdb/backgorund.png')",
         'backgroundSection':"url('/src/image/ppdb/backgroundSection.png)",
         'imageAbstrak':"url('/src/image/ppdb/abstrak.png')",
-        'backgroundFooter':"url('/src/image/ppdb/backgroundFooter.png')"
+        'backgroundFooter':"url('/src/image/ppdb/backgroundFooter.png')",
+        'backgroundBaru':"url('/src/image/ppdb/backgroundbaru.png')",
+        'backgroundbawah':"url('/src/image/ppdb/backgroundbawah.png')"
         // tambahkan lebih banyak gambar sesuai kebutuhan
       },
     },

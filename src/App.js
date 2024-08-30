@@ -7,6 +7,9 @@ import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import "react-quill/dist/quill.snow.css";
 import "katex/dist/katex.min.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 import {
   Jadwal,
@@ -56,6 +59,7 @@ import LandingPage from "./pages/ppdb";
 import LoginPpdb from "./pages/ppdb/login";
 import RegisterPpdb from "./pages/ppdb/register/register";
 import DashboardPpdb from "./pages/ppdb/dashboard/dashboard";
+import LandingPageRpl from "./pages/ppdb/landingpage/index1";
 
 function App() {
   return (
@@ -184,7 +188,10 @@ function App() {
 
         {/* Routes PPDB */}
 
-        <Route path="/ppdb" element={<LandingPage />} />
+        <Route path="/ppdb" element={<LandingPage />} >
+        <Route path="jurusan-rpl" element={<LandingPageRpl />} />
+        </Route>
+        
         <Route path="/ppdb/login" element={<LoginPpdb />} />
         <Route path="/ppdb/register" element={<RegisterPpdb />} />
         <Route path="/ppdb/dashboard" element={<DashboardPpdb />} />

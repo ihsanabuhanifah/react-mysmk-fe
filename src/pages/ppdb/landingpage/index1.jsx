@@ -1,35 +1,36 @@
-import "./App.css";
+// import "./App.css";
+import "../../ppdb/App.css"
 import React from "react";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
-import LogoPpdb from "../../image/ppdb/ppdb.png";
-import Banner from "../../image/ppdb/banner.png";
-import Gambarsatu from "../../image/ppdb/s1.png";
-import GambarTiga from "../../image/ppdb/s3.png";
-import Gedung from "../../image/ppdb/gedung.png";
-import Islam from "../../image/ppdb/islam.png";
-import Dompet from "../../image/ppdb/dompet.png";
-import Piala from "../../image/ppdb/piala.png";
-import Diniyyah from "../../image/ppdb/diniyyah.png";
-import ORANGSAUNG from "../../image/ppdb/orangsaung.png";
-import TKJ from "../../image/ppdb/TKJ.png";
-import TESTI from "../../image/ppdb/testi.png";
-import RPL from "../../image/ppdb/RPL.png";
-import KELAS from "../../image/ppdb/kelas.png";
-import KELAS1 from "../../image/ppdb/kelas1.png";
-import RIFAT from "../../image/ppdb/rifat.png";
-import MAKAN from "../../image/ppdb/makan.png";
-import MASJID from "../../image/ppdb/masjid.png";
-import MAKAN1 from "../../image/ppdb/makan1.png";
-import CISCO from "../../image/ppdb/academy/Group 108.png";
-import LSP from "../../image/ppdb/academy/Group 109.png";
-import MIKRO from "../../image/ppdb/academy/Group 110.png";
-import REDHAT from "../../image/ppdb/academy/Group 111.png";
-import ITC from "../../image/ppdb/academy/Group 112.png";
-import PENS from "../../image/ppdb/academy/Group 113.png";
-import ANABUKI from "../../image/ppdb/academy/Group 114.png";
-import ProgramUnggulan from "../../image/ppdb/Program.png";
-import Nav from "../../components/Nav";
+import LogoPpdb from "../../../image/ppdb/ppdb.png";
+import Banner from "../../../image/ppdb/banner.png";
+import Gambarsatu from "../../../image/ppdb/s1.png";
+import GambarTiga from "../../../image/ppdb/s3.png";
+import Gedung from "../../../image/ppdb/gedung.png";
+import Islam from "../../../image/ppdb/islam.png";
+import Dompet from "../../../image/ppdb/dompet.png";
+import Piala from "../../../image/ppdb/piala.png";
+import Diniyyah from "../../../image/ppdb/diniyyah.png";
+import ORANGSAUNG from "../../../image/ppdb/orangsaung.png";
+import TKJ from "../../../image/ppdb/TKJ.png";
+import TESTI from "../../../image/ppdb/testi.png";
+import RPL from "../../../image/ppdb/RPL.png";
+import KELAS from "../../../image/ppdb/kelas.png";
+import KELAS1 from "../../../image/ppdb/kelas1.png";
+import RIFAT from "../../../image/ppdb/rifat.png";
+import MAKAN from "../../../image/ppdb/makan.png";
+import MASJID from "../../../image/ppdb/masjid.png";
+import MAKAN1 from "../../../image/ppdb/makan1.png";
+import CISCO from "../../../image/ppdb/academy/Group 108.png";
+import LSP from "../../../image/ppdb/academy/Group 109.png";
+import MIKRO from "../../../image/ppdb/academy/Group 110.png";
+import REDHAT from "../../../image/ppdb/academy/Group 111.png";
+import ITC from "../../../image/ppdb/academy/Group 112.png";
+import PENS from "../../../image/ppdb/academy/Group 113.png";
+import ANABUKI from "../../../image/ppdb/academy/Group 114.png";
+import ProgramUnggulan from "../../../image/ppdb/Program.png";
+import Nav from "../../../components/Nav";
 import { useState } from "react";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 
@@ -47,7 +48,7 @@ const sliderSettingsauto = {
   autoplaySpeed: 2000, // Interval for auto-slide in milliseconds (2 seconds)
 };
 
-const LandingPage = () => {
+const LandingPageRpl = () => {
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
@@ -187,7 +188,7 @@ const LandingPage = () => {
         </div>
 
         {/* Academy Partner */}
-        <div className="my-10 py-10 bg-gray-100 cardacademy">
+        <div className="my-10 py-10 bg-gray-100">
           <p className="text-center font-bold text-[48px]">Academy Partner</p>
           <div className="App px-96">
             <Slider {...settings}>
@@ -365,7 +366,7 @@ const LandingPage = () => {
           </div>
           {/* Slider */}
 
-          <div className="App px-96 cardcoment">
+          <div className="App px-96">
             <Slider {...settings}>
               {testi.map((img, idx) => (
                 <div
@@ -670,4 +671,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPageRpl;
