@@ -91,11 +91,15 @@ const LoginPpdb = () => {
             <section className="relative flex flex-wrap justify-between h-full items-center">
               <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24 mt-12">
                 <div className="relative w-full max-w-[609px]">
-                  <p className="text-lg font-medium mt-12">
-                    Silahkan login menggunakan Email / No Handphone anda!
-                  </p>
+                  <div className="flex flex-col">
+                    <p className="text-2xl font-medium mt-12">Masuk Aplikasi</p>
+                    <p className="text-lg">
+                      Silahkan masuk untuk mengikuti rangkaian proses PSB secara
+                      Online
+                    </p>
+                  </div>
 
-                  <div className="lg:mt-20">
+                  <div className="lg:mt-11">
                     <p className="text-lg font-normal">
                       Email atau No Handphone
                     </p>
@@ -165,7 +169,7 @@ const LoginPpdb = () => {
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
                       onClick={() => setShowPassword(!showPassword)}
                     ></span>
-                    <div className="flex flex-col items-center mt-12 relative w-full max-w-[609px]">
+                    <div className="flex flex-col items-center mt-8 relative w-full max-w-[609px]">
                       <div className="w-full flex">
                         <Button
                           content={isSubmitting ? "Proses" : "Masuk"}
@@ -175,7 +179,7 @@ const LoginPpdb = () => {
                           loading={isSubmitting}
                           disabled={isSubmitting}
                           style={{ width: "100%", maxWidth: "609px" }}
-                          className="absolute left-0"
+                          className="absolute left-0 hover:shadow-md"
                         />
                       </div>
                     </div>
@@ -183,17 +187,17 @@ const LoginPpdb = () => {
                       to="/landingpage/register"
                       className="my-16 w-full flex justify-center md:mr-18"
                     >
-                      <p className="text-sm text-gray-500 text-center -ml-16">
-                        Tidak Punya akun?
-                        <a className="underline" href="#">
-                          Daftar
+                      <p className="text-base text-gray-500 text-center -ml-16">
+                        Anda belum terdaftar?
+                        <a className="hover:underline" href="#">
+                          Daftar sekarang
                         </a>
                       </p>
                     </Link>
                   </div>
                 </div>
                 {errors.msg && (
-                  <Message color="red" className="mt-4">
+                  <Message color="red" className="mt-4 w-full max-w-[609px]">
                     {errors.msg}
                   </Message>
                 )}
@@ -202,7 +206,7 @@ const LoginPpdb = () => {
                 <img
                   src={Laptop}
                   alt="Laptop"
-                  className="hidden lg:block absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[600px] h-[400px] object-cover z-20"
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 w-[600px] h-[400px] object-cover z-20 lg:block hidden lg:max-w-[1024px]:hidden"
                 />
               </div>
             </section>

@@ -22,7 +22,9 @@ module.exports = {
         'backgroundSection':"url('/src/image/ppdb/backgroundSection.png)",
         'imageAbstrak':"url('/src/image/ppdb/abstrak.png')",
         'backgroundFooter':"url('/src/image/ppdb/backgroundFooter.png')",
-        'parallax':"url('/src/image/ppdb/parallax.png')"
+        'parallax':"url('/src/image/ppdb/parallax.png')",
+        'backgroundBaru':"url('/src/image/ppdb/backgroundbaru.png')",
+        'backgroundbawah':"url('/src/image/ppdb/backgroundbawah.png')"
         // tambahkan lebih banyak gambar sesuai kebutuhan
       },
       borderRadius: {

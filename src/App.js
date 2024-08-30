@@ -68,6 +68,8 @@ import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
 import BiodataPpdb from "./pages/ppdb/biodata";
 import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
 import BiayaPendaftaran from "./pages/ppdb/biaya-pendaftaran/biaya-pendaftaran";
+import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
+import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
 
 function App() {
   return (
@@ -201,6 +203,8 @@ function App() {
         {/* Routes PPDB */}
 
         <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/landingpage/jurusan-rpl" element={<JurusanRpl />} />
+        <Route path="/landingpage/jurusan-tkj" element={<JurusanTkj />} />
         <Route path="/landingpage/register" element={<RegisterPpdb />} />
         <Route path="/landingpage/login" element={<LoginPpdb />} />
         <Route

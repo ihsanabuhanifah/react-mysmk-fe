@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LayoutPpdb from "../../../module/layoutPpdb";
 import { useProfileCalonSantri } from "../../../api/ppdb/profile";
 import { useEffect } from "react";
-
+import ProfileImage from "../../../image/ppdb/profile.png";
 
 const DashboardPpdb = () => {
   const navigate = useNavigate();
@@ -13,7 +13,6 @@ const DashboardPpdb = () => {
       navigate("/ppdb/pendaftaran");
     }
   }, [isError, error, navigate]);
-
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -73,31 +72,77 @@ const DashboardPpdb = () => {
         <p>Surat Pernyataan: {profileData.surat_pernyataan}</p>
       </div>
 
-      {/* Tambahkan Card utama */}
-      <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
-        <div className="flex flex-col">
-          <h3 className="text-xl font-semibold mb-4">Bukti Transfer</h3>
-          <p>Biaya Pendaftaran</p>
-        </div>
-        <p className="mt-6">
-          Apabila anda sudah transfer biaya pendaftaran, silahkan upload bukti
-          transfernya melalui menu di bawah ini.
-        </p>
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Tambahkan Card utama */}
+        <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
+          <div className="flex flex-col">
+            <h3 className="text-xl font-semibold mb-4">Bukti Transfer</h3>
+            <p>Biaya Pendaftaran</p>
+          </div>
+          <p className="mt-6">
+            Apabila anda sudah transfer biaya pendaftaran, silahkan upload bukti
+            transfernya melalui menu di bawah ini.
+          </p>
 
-        {/* Tambahkan Card di dalam Card utama dengan background hijau */}
-        <div className="mt-12 p-4 bg-red-300 text-black rounded-lg text-xl font-semibold flex items-center justify-between shadow-xl">
-          Rp.350.000
-          <div className="text-black font-medium text-sm">Belum Transfer</div>
+          {/* Tambahkan Card di dalam Card utama dengan background hijau */}
+          <div className="mt-12 p-4 bg-red-300 text-black rounded-lg text-xl font-semibold flex items-center justify-between shadow-xl">
+            Rp.350.000
+            <div className="text-black font-medium text-sm">Belum Transfer</div>
+          </div>
+          <div className="flex justify-center">
+            <Link
+              to="/ppdb/biaya-pendaftaran"
+              className="inline-block mt-12 px-6 py-2 text-white hover:text-white bg-green-500 rounded-lg hover:bg-green-700 transition-colors duration-200"
+            >
+              Upload Bukti Transfer
+            </Link>
+          </div>
         </div>
+        {/* Tambahkan Card Profile */}
+        <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
+          <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg">
+            <img
+              src={ProfileImage}
+              alt="Foto Profil"
+              className="w-24 h-24 rounded-full mb-2 mt-6 border-2 border-black shadow-md" // Border hitam dengan shadow
+            />
+            <h3 className="text-xl font-semibold mb-4">
+              {profileData.nama_siswa}
+            </h3>{" "}
+            {/* Ganti dengan nama yang sesuai */}
+            {/* Status */}
+            <div
+              className={`flex items-center p-4 mb-4 text-md text-black hover:text-white ${
+                hasNullData
+                  ? "bg-red-300 hover:bg-red-500"
+                  : "bg-green-300 hover:bg-green-500"
+              } rounded-lg transition-colors duration-200`}
+              role="alert"
+            >
+              <p>
+                {hasNullData
+                  ? "Belum Verifikasi Biodata"
+                  : "Berhasil Verfikasi Biodata"}
+              </p>
+            </div>
+            {/* Ganti dengan status yang sesuai */}
+          </div>
 
-        <Link
-          to="/ppdb/biaya-pendaftaran"
-          className="inline-block mt-12 px-6 py-2 text-white hover:text-white bg-green-500 rounded-lg hover:bg-green-700 transition-colors duration-200"
-        >
-          Upload Bukti Transfer
-        </Link>
+          <p className="mt-6 text-center">
+            Apabila ada perubahan data profil, silahkan perbarui melalui menu di
+            bawah ini.
+          </p>
+
+          <div className="flex justify-center">
+            <Link
+              to="/ppdb/biodata/update"
+              className="inline-block mt-4 px-6 py-2 text-white hover:text-white bg-green-500 rounded-lg hover:bg-green-700 transition-colors duration-200"
+            >
+              Perbarui Profil
+            </Link>
+          </div>
+        </div>
       </div>
-
     </LayoutPpdb>
   );
 };

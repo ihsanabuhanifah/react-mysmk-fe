@@ -1,193 +1,120 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+// import "./App.css";
+// import "../../ppdb/App.css";
+import "../Landing-page/app.css"
+import React from "react";
 import { Link } from "react-router-dom";
+import Slider from "react-slick";
+import LogoPpdb from "../../../image/ppdb/ppdb.png";
 import Banner from "../../../image/ppdb/banner.png";
 import Gambarsatu from "../../../image/ppdb/s1.png";
 import GambarTiga from "../../../image/ppdb/s3.png";
+import Gedung from "../../../image/ppdb/gedung.png";
+import Islam from "../../../image/ppdb/islam.png";
+import Dompet from "../../../image/ppdb/dompet.png";
+import Piala from "../../../image/ppdb/piala.png";
 import Diniyyah from "../../../image/ppdb/diniyyah.png";
+import ORANGSAUNG from "../../../image/ppdb/orangsaung.png";
 import TKJ from "../../../image/ppdb/TKJ.png";
+import TESTI from "../../../image/ppdb/testi.png";
 import RPL from "../../../image/ppdb/RPL.png";
+import KELAS from "../../../image/ppdb/kelas.png";
+import KELAS1 from "../../../image/ppdb/kelas1.png";
+import RIFAT from "../../../image/ppdb/rifat.png";
+import MAKAN from "../../../image/ppdb/makan.png";
+import MASJID from "../../../image/ppdb/masjid.png";
+import MAKAN1 from "../../../image/ppdb/makan1.png";
+import CISCO from "../../../image/ppdb/academy/Group 108.png";
+import LSP from "../../../image/ppdb/academy/Group 109.png";
+import MIKRO from "../../../image/ppdb/academy/Group 110.png";
+import REDHAT from "../../../image/ppdb/academy/Group 111.png";
+import ITC from "../../../image/ppdb/academy/Group 112.png";
+import PENS from "../../../image/ppdb/academy/Group 113.png";
+import ANABUKI from "../../../image/ppdb/academy/Group 114.png";
 import ProgramUnggulan from "../../../image/ppdb/Program.png";
 import Nav from "../../../components/Nav";
-import { ListTestimoni } from "../../../api/ppdb/testimoni";
-import { ListMitraSekolah } from "../../../api/ppdb/mitraSekolah";
-import { ListGallery } from "../../../api/ppdb/gallery";
-import { ListFasilitas } from "../../../api/ppdb/fasilitas";
+import NavPpdb from "../../../components/NavPpdb";
+import { useState } from "react";
+import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 
-const LandingPage = () => {
-  const [testimoniData, setTestimoniData] = useState([]);
-  const [mitraData, setMitraData] = useState([]);
-  const [galleryData, setGalleryData] = useState([]);
-  const [fasilitasData, setFasilitasData] = useState([]);
+const images = [CISCO, LSP, MIKRO, REDHAT, ITC, PENS, ANABUKI];
+const testi = [TESTI, TESTI, TESTI, TESTI, TESTI, TESTI, TESTI];
 
-  useEffect(() => {
-    // Panggil API ListTestimoni
-    ListTestimoni()
-      .then((response) => {
-        setTestimoniData(response.data.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching testimoni data:", err);
-      });
+// Slider settings
 
-    // Panggil API ListMitraSekolah
-    ListMitraSekolah()
-      .then((response) => {
-        setMitraData(response.data.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching mitra data:", err);
-      });
+const sliderSettingsauto = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  autoplay: true, // Auto-slide
+  autoplaySpeed: 2000, // Interval for auto-slide in milliseconds (2 seconds)
+};
 
-    ListGallery()
-      .then((respone) => {
-        setGalleryData(respone.data.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching mitra data:", err);
-      });
+const LandingPageRpl = () => {
+  const NextArrow = ({ onClick }) => {
+    return (
+      <div className="arrow next" onClick={onClick}>
+        <FaCircleArrowRight />
+      </div>
+    );
+  };
 
-    ListFasilitas()
-      .then((respone) => {
-        setFasilitasData(respone.data.data);
-      })
-      .catch((err) => {
-        console.error("Error fetching mitra data:", err);
-      });
-  }, []);
+  const PrevArrow = ({ onClick }) => {
+    return (
+      <div className="arrow prev" onClick={onClick}>
+        <FaCircleArrowLeft />
+      </div>
+    );
+  };
+
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const settings = {
+    infinite: true,
+    lazyLoad: true,
+    speed: 300,
+    slidesToShow: 5,
+    centerMode: true,
+    centerPadding: 0,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    beforeChange: (current, next) => setImageIndex(next),
+  };
+
+  const settingsrifat = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplaySpeed: 3000,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+  };
+
   return (
     <>
-      <Nav />
-      {/* Navbar */}
-      {/* <header className="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 dark:bg-neutral-800">
-        <nav className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
-          <div className="flex items-center justify-between">
-            <a
-              className="flex-none text-xl font-semibold dark:text-white focus:outline-none focus:opacity-80"
-              href="#"
-              aria-label="Brand"
-            >
-              <span className="inline-flex items-center gap-x-2 text-xl font-semibold dark:text-white">
-                <svg
-                  className="w-10 h-auto"
-                  width="100"
-                  height="100"
-                  viewBox="0 0 100 100"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect width="100" height="100" rx="10" fill="black" />
-                  <path
-                    d="M37.656 68V31.6364H51.5764C54.2043 31.6364 56.3882 32.0507 58.1283 32.8793C59.8802 33.696 61.1882 34.8146 62.0523 36.2351C62.9282 37.6555 63.3662 39.2654 63.3662 41.0646C63.3662 42.5443 63.0821 43.8108 62.5139 44.8643C61.9458 45.906 61.1823 46.7524 60.2235 47.4034C59.2646 48.0544 58.1934 48.522 57.0097 48.8061V49.1612C58.2999 49.2322 59.5369 49.6288 60.7206 50.3509C61.9162 51.0611 62.8927 52.0672 63.6503 53.3693C64.4079 54.6714 64.7867 56.2457 64.7867 58.0923C64.7867 59.9744 64.3309 61.6671 63.4195 63.1705C62.508 64.6619 61.1349 65.8397 59.3002 66.7038C57.4654 67.5679 55.1572 68 52.3754 68H37.656ZM44.2433 62.4957H51.3279C53.719 62.4957 55.4413 62.04 56.4948 61.1286C57.5601 60.2053 58.0928 59.0215 58.0928 57.5774C58.0928 56.5002 57.8264 55.5296 57.2938 54.6655C56.7611 53.7895 56.0035 53.103 55.021 52.6058C54.0386 52.0968 52.8667 51.8423 51.5054 51.8423H44.2433V62.4957ZM44.2433 47.1016H50.7597C51.896 47.1016 52.92 46.8944 53.8314 46.4801C54.7429 46.054 55.459 45.4562 55.9798 44.6868C56.5125 43.9055 56.7789 42.9822 56.7789 41.9169C56.7789 40.5083 56.2817 39.3482 55.2874 38.4368C54.3049 37.5253 52.843 37.0696 50.9017 37.0696H44.2433V47.1016Z"
-                    fill="white"
-                  />
-                </svg>
-                Brand
+      <NavPpdb />
+      <main>
+        <div className="p-4 bg-backgroundBaru bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
+          <div className="flex flex-col items-center justify-center mr-8">
+            <p className="text-white font-bold text-5xl text-center leading-tight mb-6">
+              Penerimaan Santri Baru
+              <br />
+              SMK Madinatul Quran
+              <br />
+              <span className="text-white text-3xl font-extralight text-center leading-tight mb-6">
+                Tahun Ajaran 2025-2026
               </span>
-            </a>
-            <div className="sm:hidden">
-              <button
-                type="button"
-                className="hs-collapse-toggle relative size-7 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
-                id="hs-navbar-example-collapse"
-                aria-expanded="false"
-                aria-controls="hs-navbar-example"
-                aria-label="Toggle navigation"
-                data-hs-collapse="#hs-navbar-example"
-              >
-                <svg
-                  className="hs-collapse-open:hidden shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <line x1="3" x2="21" y1="6" y2="6" />
-                  <line x1="3" x2="21" y1="12" y2="12" />
-                  <line x1="3" x2="21" y1="18" y2="18" />
-                </svg>
-                <svg
-                  className="hs-collapse-open:block hidden shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-                <span className="sr-only">Toggle navigation</span>
-              </button>
-            </div>
-          </div>
-          <div
-            id="hs-navbar-example"
-            className="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block"
-            aria-labelledby="hs-navbar-example-collapse"
-          >
-            <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-              <a
-                className="font-medium text-blue-500 focus:outline-none"
-                href="#"
-                aria-current="page"
-              >
-                Landing
-              </a>
-              <a
-                className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                href="#"
-              >
-                Account
-              </a>
-              <a
-                className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                href="#"
-              >
-                Work
-              </a>
-              <a
-                className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
-                href="#"
-              >
-                Blog
-              </a>
-            </div>
-          </div>
-        </nav>
-      </header> */}
-
-      {/* Akhir Navbar */}
-      <main className="">
-        {/* Bagian Banner */}
-        <div className="p-4 bg-imageBackground bg-cover bg-center h-screen w-full flex items-center justify-between px-8">
-          <div className="flex flex-col justify-start mr-8">
-            <p className="text-white text-5xl text-start leading-tight mb-6">
-              Penerimaan Santri
-              <br />
-              Baru Tahun Ajaran
-              <br />
-              2025-2026
             </p>
-            <div className="flex gap-6 justify-start">
+            <div className="flex gap-6 justify-center">
               <Link to="register">
-                <button className="w-auto h-auto bg-white rounded-md px-8 py-2">
-                  <p className="text-customGreen font-semibold text-lg">
-                    Daftar
-                  </p>
+                <button className="w-auto h-auto bg-green-600 rounded-2xl px-8 py-2">
+                  <p className="text-white font-semibold text-lg">Daftar</p>
                 </button>
               </Link>
               <Link to="login">
-                <button className="w-auto h-auto bg-white rounded-md px-8 py-2">
+                <button className="w-auto h-auto bg-white rounded-2xl px-8 py-2">
                   <p className="text-customGreen font-semibold text-lg">
                     Login
                   </p>
@@ -195,306 +122,386 @@ const LandingPage = () => {
               </Link>
             </div>
           </div>
-          <div>
-            <img
-              src={Banner}
-              alt="Banner"
-              style={{ minHeight: "60%", minWidth: "60%" }}
-            />
-          </div>
         </div>
-        {/* Akhir Banner */}
 
-        {/* I */}
-        <div className="flex my-10 mx-8 items-center space-x-8">
+        <div className="">
+          <Slider {...sliderSettingsauto}>
+            <div className="relative">
+              <img
+                src={KELAS1}
+                alt="Class Room"
+                className="w-full h-auto mx-auto"
+              />
+              <div className="absolute bottom-4 left-4">
+                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-xl text-center">
+                    Class Room
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img
+                src={MAKAN1}
+                alt="Kantin"
+                className="w-full h-auto mx-auto"
+              />
+              <div className="absolute bottom-4 left-4">
+                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-xl text-center">
+                    Kantin
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <img
+                src={MASJID}
+                alt="Masjid"
+                className="w-full h-auto mx-auto"
+              />
+              <div className="absolute bottom-4 left-4">
+                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-xl text-center">
+                    Masjid
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Slider>
+        </div>
+
+        {/* About Section */}
+        <div className="flex my-10 mx-8 items-center w-full justify-center gap-60">
           <div className="flex flex-col gap-8 mb-10">
-            <h3 className="text-customGreen text-4xl">
+            <h3 className="text-customGreen text-[48px]">
               SMK MADINATULQURAN <br /> Boarding School
             </h3>
+            <p className="text-[24px]">
+              Sekolah Menengah Kejuruan MADINATULQURAN atau SMK MQ adalah <br />{" "}
+              salah satu sekolah di Kecamatan Jonggol Kabupaten Bogor, Jawa{" "}
+              <br /> Barat yang beroperasi mulai tahun 2015 dan sudah
+              terakreditasi <br /> dari BANS/M Kemendikbud.
+            </p>
+          </div>
+          <div className="ml-8">
+            <img src={Gambarsatu} alt="Gambar" className="object-contain" />
+          </div>
+        </div>
 
+        {/* Academy Partner */}
+        <div className="my-10 py-10 bg-gray-100">
+          <p className="text-center font-bold text-[48px]">Academy Partner</p>
+          <div className="App px-96">
+            <Slider {...settings}>
+              {images.map((img, idx) => (
+                <div
+                  className={idx === imageIndex ? "slide activeSlide" : "slide"}
+                >
+                  <img src={img} alt={img} />
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </div>
+
+        {/* Mengapa harus Sekolah di SMK Mainatul Quran? */}
+        <div className="my-10 py-10">
+          <div className="text-center text-[48px] font-bold">
             <p>
-              Sekolah Menengah Kejuruan MADINATULQURAN atau SMK MQ adalah salah
-              satu sekolah di Kecamatan Jonggol Kabupaten Bogor, Jawa Barat yang
-              beroperasi mulai tahun 2015 dan sudah terakreditasi dari BANS/M
-              Kemendikbud.
+              Mengapa harus Sekolah di <br /> SMK Mainatul Quran?
             </p>
           </div>
-          <img
-            src={Gambarsatu}
-            alt="Gambar"
-            className="object-contain"
-            style={{ maxHeight: "15%", maxWidth: "15%" }}
-          />
-        </div>
-        {/* Akhir I */}
-
-        {/* 2 */}
-        <div className="mx-8 my-10">
-          <div className="h-3/5 w-auto px-8 py-4 bg-green-600 rounded-md mb-20">
-            <div className="text-center text-white text-xl">
-              <p>Program</p>
-              <p>SMK MADINATULQURAN</p>
-            </div>
-          </div>
-          <div className="w-full md:w-[1021px] h-auto md:h-[380px] px-4 py-4 md:px-8 md:py-4 bg-white drop-shadow-md rounded-xl my-12 md:my-16 md:ml-32 z-10">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-              <div className="pr-0 md:pr-6">
-                <p className="text-customGreen text-xl md:text-2xl font-semibold">
-                  Diniyyah & Umum
-                </p>
-                <p>
-                  Sebagai acuan dasar dalam penyelenggaraan Lembaga Pendidikan
-                  Sekolah, para santri juga dibekali pelajaran:
-                </p>
-                <ul className="list-disc ml-4">
-                  <li>Tahfidz Quran (Target Hafalan 3 juz)</li>
-                  <li>Aqidah</li>
-                  <li>Adab</li>
-                  <li>Sirah Nabi</li>
-                  <li>Hadist</li>
-                  <li>Fiqih Islam</li>
-                  <li>Kurikulum Diknas</li>
-                </ul>
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-20 my-10 py-10 px-24">
+              <div
+                className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
+                style={{ width: "600px", height: "280px" }}
+              >
+                <div className="flex-shrink-0 mr-10">
+                  <img src={Gedung} alt="Sekolah IT Terbaik" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-blue-900">
+                    Sekolah IT Terbaik
+                  </h3>
+                  <p className="text-gray-600 text-base mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
+                    elit. Ut eget nunc faucibus,
+                    <br /> rutrum lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                  </p>
+                </div>
               </div>
-              <img
-                src={Diniyyah}
-                alt="Diniyyah"
-                className="object-contain max-w-full h-auto md:max-h-[40%] md:max-w-[40%]"
-              />
-            </div>
-          </div>
 
-          <div className="w-full md:w-[1021px] h-auto md:h-[380px] px-4 py-4 md:px-8 md:py-4 bg-white drop-shadow-md rounded-xl my-12 md:my-16 md:ml-96 z-10">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-              <div className="pr-0 md:pr-6">
-                <p className="text-customGreen text-xl md:text-2xl font-semibold">
-                  Network Engineer (TKJ)
-                </p>
-                <p>
-                  Santri yang masuk dalam jurusan TKJ (Teknik Komputer dan
-                  Jaringan) akan berfokus mempelajari infastruktur Jaringan
-                  Komputer dan Server. Materi yang akan dipelajari:
-                </p>
-                <ul className="list-disc ml-4">
-                  <li>Network Engineer (Cisco dan Mikrotik)</li>
-                  <li className="text-start">
-                    System Engineer (Linux System Administration, Docker
-                    Container, Ansible, CI/CD Jenkins, Monitoring)
-                  </li>
-                </ul>
+              <div
+                className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
+                style={{ width: "600px", height: "280px" }}
+              >
+                <div className="flex-shrink-0 mr-10">
+                  <img src={Dompet} alt="Full Praktek" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-blue-900">
+                    Full Praktek
+                  </h3>
+                  <p className="text-gray-600 text-base mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
+                    elit. Ut eget nunc faucibus,
+                    <br /> rutrum lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                  </p>
+                </div>
               </div>
-              <img
-                src={TKJ}
-                alt="TKJ"
-                className="object-contain max-w-full h-auto md:max-h-[40%] md:max-w-[40%]"
-              />
-            </div>
-          </div>
 
-          <div className="w-full md:w-[1021px] h-auto md:h-[380px] px-4 py-4 md:px-8 md:py-4 bg-white drop-shadow-md rounded-xl my-12 md:my-16 md:ml-32 z-10">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-              <div className="pr-0 md:pr-6">
-                <p className="text-customGreen text-xl md:text-2xl font-semibold">
-                  Software Engineer (RPL)
-                </p>
-                <p>
-                  Santri RPL (Rekayasa Perangkat Lunak) berfokus mempelajari
-                  bagaimana mengembangkan software yang berbasis Web dan Mobile.
-                  Materi yang akan dipelajari:
-                </p>
-                <ul className="list-disc ml-4">
-                  <li>UI/UX Design (Figma)</li>
-                  <li>Front End Development (ReactJS, NextJS, Tailwindcss)</li>
-                  <li>Back End Development (ExpressJS, NestJS)</li>
-                  <li>Mobile Development (Flutter)</li>
-                </ul>
+              <div
+                className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
+                style={{ width: "600px", height: "280px" }}
+              >
+                <div className="flex-shrink-0 mr-10">
+                  <img src={Piala} alt="Program Unggulan" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-blue-900">
+                    Program Unggulan
+                  </h3>
+                  <p className="text-gray-600 text-base mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
+                    elit. Ut eget nunc faucibus,
+                    <br /> rutrum lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                  </p>
+                </div>
               </div>
-              <img
-                src={RPL}
-                alt="RPL"
-                className="object-contain max-w-full h-auto md:max-h-[40%] md:max-w-[40%]"
-              />
-            </div>
-          </div>
 
-          <div className="w-full md:w-[1021px] h-auto md:h-[380px] px-4 py-4 md:px-8 md:py-4 bg-white drop-shadow-md rounded-xl my-12 md:my-16 md:ml-96 z-10">
-            <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-              <div className="pr-0 md:pr-6">
-                <p className="text-customGreen text-xl md:text-2xl font-semibold">
-                  Program Unggulan
-                </p>
-                <p>
-                  Selain belajar tentang IT, santri akan mengikuti program
-                  unggulan pada 3 bulan pertama sebagai bekal penunjang sebelum
-                  memulai kegiatan belajar mengajar.
-                </p>
-                <ul className="list-disc ml-4">
-                  <li>Tahfidz Camp</li>
-                  <li>English Camp</li>
-                  <li>English Discovery</li>
-                </ul>
+              <div
+                className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
+                style={{ width: "600px", height: "280px" }}
+              >
+                <div className="flex-shrink-0 mr-10">
+                  <img src={Islam} alt="Pesantren Berbasis IT" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-2xl font-bold text-blue-900">
+                    Pesantren Berbasis IT
+                  </h3>
+                  <p className="text-gray-600 text-base mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
+                    elit. Ut eget nunc faucibus,
+                    <br /> rutrum lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                  </p>
+                </div>
               </div>
-              <img
-                src={ProgramUnggulan}
-                alt="ProgramUnggulan"
-                className="object-contain max-w-full h-auto md:max-h-[40%] md:max-w-[40%]"
-              />
-            </div>
-          </div>
-        </div>
-        {/* Akhir 2 */}
-
-        {/* 3 */}
-        <div className="p-4 h-screen w-full flex items-center justify-center gap-28 bg-backgroundFooter">
-          <img
-            src={GambarTiga}
-            alt="Gambar Tiga"
-            className="max-h-[30%] max-w-[30%] object-contain"
-          />
-          <div className="flex flex-col space-y-5 text-xl text-white">
-            <p className="text-lg">Apa yang harus dipersiapkan?</p>
-
-            <div className="text-start">
-              <p className="text-3xl font-semibold">Persyaratan Administrasi</p>
-              <div>
-                <ul className="list-disc ml-8 my-2">
-                  <li>Pas photo 80% wajah, background biru</li>
-                  <li>Akte Kelahiran</li>
-                  <li>KTP Orang Tua</li>
-                  <li>Kartu Keluarga</li>
-                  <li>Surat pernyataan orang tua (format disediakan)</li>
-                  <li>Surat pernyataan santri (format disediakan)</li>
-                  <li>Sertifikat prestasi (jika ada)</li>
-                </ul>
-              </div>
-              <p>Semua berkas di atas disediakan dalam bentuk Soft Copy/Scan</p>
             </div>
           </div>
         </div>
 
-        {/* Akhir 3 */}
-
-        {/* 4 */}
-        <div className="my-8">
-          <div className="text-center mb-8">
-            <p className="text-xl font-medium">Berapa Biayanya?</p>
-            <p className="text-green-700 font-semibold text-3xl">
-              Biaya Pendidikan
-            </p>
-            <p className="text-xl mx-4">
-              Berikut detail biaya pendidikan tahun ajaran 2025-2026
+        {/* Prestasi Murid & Alumni SMK Madinatul Quran */}
+        <div className="my-8 py-8 bg-gray-100">
+          <div className="text-center text-[32px] font-bold mb-6">
+            <p>
+              Prestasi Murid & Alumni <br /> SMK Madinatul Quran
             </p>
           </div>
-
-          <div className="bg-imageAbstrak w-[600px] h-[150px]  rounded-xl shadow-xl flex justify-center items-center my-4 md:mx-auto mx-2">
-            <div className="text-center">
-              <p className="text-3xl text-green-600 font-semibold">
-                Pendaftaran
-              </p>
-              <p className="text-xl font-semibold">Rp 450.000</p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-12">
-            <div className="bg-imageAbstrak w-[350px] h-[150px] rounded-xl shadow-xl flex justify-center items-center my-4">
-              <div className="text-center">
-                <p className="text-3xl text-green-600 font-semibold">
-                  Uang Masuk
-                </p>
-                <p className="text-xl font-semibold">Rp 18.500.000</p>
+          <Slider {...settingsrifat} className="py-40 px-40">
+            <div className="flex flex-row gap-3 justify-center items-center px-2">
+              <div className="rounded-lg flex flex-col items-center justify-center bg-white pb-4">
+                <div className="w-full mb-3">
+                  <img
+                    src={RIFAT}
+                    alt="Sekolah IT Terbaik"
+                    className="object-contain w-full"
+                  />
+                </div>
+                <div className="flex flex-row px-3 mt-2 justify-between items-start w-full">
+                  <div className="flex-grow">
+                    <h3 className="text-2xl font-bold">
+                      Juara Olimpiade desain <br /> grafis nusantara
+                    </h3>
+                  </div>
+                  <div className="ml-2">
+                    <button className="bg-green-500 text-xl text-white w-[160px] h-[60px] rounded-xl px-3 py-1">
+                      Learn More
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="bg-imageAbstrak w-[350px] h-[150px] rounded-xl shadow-xl flex justify-center items-center my-4">
-              <div className="text-center">
-                <p className="text-3xl text-green-600 font-semibold">
-                  Daftar Ulang
-                </p>
-                <p className="text-xl font-semibold">Rp 3.500.000</p>
+            <div className="flex flex-row gap-3 justify-center items-center px-2">
+              <div className="rounded-lg flex flex-col items-center justify-center bg-white pb-4">
+                <div className="w-full mb-3">
+                  <img
+                    src={RIFAT}
+                    alt="Sekolah IT Terbaik"
+                    className="object-contain w-full"
+                  />
+                </div>
+                <div className="flex flex-row px-3 mt-2 justify-between items-start w-full">
+                  <div className="flex-grow">
+                    <h3 className="text-2xl font-bold">
+                      Juara Olimpiade desain <br /> grafis nusantara
+                    </h3>
+                  </div>
+                  <div className="ml-2">
+                    <button className="bg-green-500 text-xl text-white w-[160px] h-[60px] rounded-xl px-3 py-1">
+                      Learn More
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="bg-imageAbstrak w-[350px] h-[150px] rounded-xl shadow-xl flex justify-center items-center my-4">
-              <div className="text-center">
-                <p className="text-3xl text-green-600 font-semibold">
-                  SPP Bulanan
-                </p>
-                <p className="text-xl font-semibold">Rp 2.500.000</p>
-              </div>
-            </div>
-
-            <div className="w-full flex justify-center my-4">
-              <ul className="text-red-500">
-                <li>* Diskon 50% khusus untuk alumni SMP Madinatul Qur'an</li>
-                <li>
-                  * Apabila mengundurkan diri, uang tidak dapat dikembalikan
-                </li>
-              </ul>
-            </div>
-          </div>
+          </Slider>
         </div>
-        {/* Akhir 4 */}
 
-        {/*  5 */}
-
-        <div className="bg-backgroundFooter max-w-screen-lg w-full h-auto rounded-2xl mx-auto my-10 px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 text-white">
-          <div className="text-left mb-6 sm:mb-8">
-            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold mb-4">
-              Keterangan:
+        {/* Testimoni Alumini SMK Madinatul Quran */}
+        <div className="my-10">
+          <div className="text-center text-[48px] font-bold">
+            <p>
+              Testimoni Alumini <br /> SMK Madinatul Quran
             </p>
-            <ul className="list-inside list-decimal text-sm sm:text-base md:text-lg lg:text-xl font-semibold">
-              <li className="mb-4">
-                <strong className="text-white">Uang Pendaftaran:</strong>{" "}
-                digunakan untuk tes potensi (minat dan bakat) siswa, serta
-                potensi akademis dan non-akademis.
-              </li>
-              <li className="pb-4">
-                <strong className="text-white">
-                  Uang Masuk = Rp. 18.500.000,- (Tidak Termasuk SPP Bulan Juli):
-                </strong>
-                <ul className="list-inside list-disc ml-4 sm:ml-6 md:ml-8 lg:ml-10 text-sm sm:text-base md:text-lg lg:text-base font-medium">
-                  <li>
-                    Perlengkapan Tidur, Ranjang, Kasur, Sprei, Bantal dan Tempat
-                    Baju
-                  </li>
-                  <li>Seragam Olahraga dan Baju Praktek</li>
-                  <li>E-modul Pelajaran</li>
-                  <li>
-                    Uang Masuk Tahap 1 = Rp. 10.000.000,- (Dibayar Ketika Santri
-                    Dinyatakan Lulus Test)
-                  </li>
-                  <li>
-                    Uang Masuk Tahap 2 = Rp. 8.500.000,- (Dibayar Sebulan
-                    Sebelum Santri Masuk Pondok)
-                  </li>
-                </ul>
-              </li>
-              <li className="mb-4">
-                <strong className="text-white">
-                  SPP Bulanan = Rp. 2.500.000,-:
-                </strong>
-                <ul className="list-inside list-disc ml-4 sm:ml-6 md:ml-8 lg:ml-10 text-sm sm:text-base md:text-lg lg:text-base font-medium">
-                  <li>Makan</li>
-                  <li>Laundry</li>
-                  <li>Biaya Pendidikan</li>
-                </ul>
-              </li>
-              <li>
-                <strong className="text-white">
-                  Daftar Ulang = Rp. 3.500.000,- (Dibayar Ketika Santri Naik ke
-                  Kelas XI dan XII):
-                </strong>
-                <ul className="list-inside list-disc ml-4 sm:ml-6 md:ml-8 lg:ml-10 text-sm sm:text-base md:text-lg lg:text-base font-medium">
-                  <li>Pemeliharaan dan Perbaikan Sarpras</li>
-                </ul>
-              </li>
-            </ul>
+          </div>
+          {/* Slider */}
+
+          <div className="App px-96">
+            <Slider {...settings}>
+              {testi.map((img, idx) => (
+                <div
+                  className={idx === imageIndex ? "slide activeSlide" : "slide"}
+                >
+                  <img src={img} alt={img} />
+                </div>
+              ))}
+            </Slider>
           </div>
         </div>
 
-        {/*  Akhir 5 */}
+        {/* Gallery SMK Madinatul Quran */}
+        <div className="py-16">
+          <div className="text-center bg-green-700 text-white text-[48px] font-bold">
+            <p>
+              Gallery <br /> SMK Madinatul Quran
+            </p>
+          </div>
+          {/* Slider */}
+          <div className="">
+            <Slider {...sliderSettingsauto}>
+              <div className="mr-5">
+                <img
+                  src={ORANGSAUNG}
+                  alt="Class Room"
+                  className="w-full h-auto mx-auto"
+                />
+              </div>
+              <div className="mr-5">
+                <img
+                  src={ORANGSAUNG}
+                  alt="Kantin"
+                  className="w-full h-auto mx-auto"
+                />
+              </div>
+              <div className="mr-5">
+                <img
+                  src={ORANGSAUNG}
+                  alt="Masjid"
+                  className="w-full h-auto mx-auto"
+                />
+              </div>
+              <div className="mr-5">
+                <img
+                  src={ORANGSAUNG}
+                  alt="Class Room"
+                  className="w-full h-auto mx-auto"
+                />
+              </div>
+              <div className="mr-5">
+                <img
+                  src={ORANGSAUNG}
+                  alt="Kantin"
+                  className="w-full h-auto mx-auto"
+                />
+              </div>
+            </Slider>
+          </div>
+        </div>
 
-        <div className="min-h-[50vh] flex justify-center items-center bg-parallax bg-fixed bg-no-repeat bg-cover bg-center">
+        {/* Berita Terkini */}
+        <div className="my-10 py-10 flex flex-col px-16 justify-center items-center bg-gray-600/10">
+          <div className="text-start text-[48px] font-bold text-center mb-10">
+            <p>Berita Terkini</p>
+          </div>
+          {/* kiri */}
+          <div className="flex flex-row gap-10">
+            <div className="flex flex-col bg-white gap-7">
+              <div className="flex flex-col">
+                <img src={KELAS} alt="Pesantren Berbasis IT" />
+              </div>
+              <div className="flex items-center justify-center">
+                <p className="text-gray-600 text-center text-base mt-2">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+                  eget nunc <br /> faucibus, rutrum lectus id, laoreet nunc.
+                  Nulla commodo dignissim <br /> risus. rutrum lectus id,
+                  laoreet nunc. Nulla commodo dignissim risus.
+                </p>
+              </div>
+            </div>
+            {/* Berita kanan */}
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-row">
+                <div className="flex flex-col mr-10">
+                  <img src={MAKAN} alt="Pesantren Berbasis IT" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-4xl font-bold">Berita Terkini</h3>
+                  <p className="text-gray-600 text-base mt-14">
+                    Lorem ipsum dolor sit amet,
+                    <br /> consectetur adipiscing elit. Ut
+                    <br />
+                    eget nunc faucibus, rutrum
+                    <br /> lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                    <br /> rutrum lectus id, laoreet nunc.
+                    <br />
+                    Nulla commodo dignissim
+                    <br /> risus.
+                  </p>
+                  <p className="text-green-600 text-base mt-7">Read more</p>
+                </div>
+              </div>
+              <div className="flex flex-row">
+                <div className="flex flex-col mr-10">
+                  <img src={MAKAN} alt="Pesantren Berbasis IT" />
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-4xl font-bold">Berita Terkini</h3>
+                  <p className="text-gray-600 text-base mt-14">
+                    Lorem ipsum dolor sit amet,
+                    <br /> consectetur adipiscing elit. Ut
+                    <br />
+                    eget nunc faucibus, rutrum
+                    <br /> lectus id, laoreet nunc. Nulla
+                    <br />
+                    commodo dignissim risus.
+                    <br /> rutrum lectus id, laoreet nunc.
+                    <br />
+                    Nulla commodo dignissim
+                    <br /> risus.
+                  </p>
+                  <p className="text-green-600 text-base mt-7">Read more</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* daftar segera */}
+        <div className="min-h-[50vh] flex justify-center items-center bg-backgroundbawah bg-fixed bg-no-repeat bg-cover bg-center">
           <div className="text-center">
             <h3 className="text-white font-medium text-4xl">
               Segera daftarkan putra anda sekarang
@@ -507,7 +514,7 @@ const LandingPage = () => {
               </p>
             </div>
             <div className="pt-4">
-              <Link to="login">
+              <Link to="register">
                 <button className="w-auto h-auto bg-white rounded-lg px-8 py-2">
                   <p className="text-customGreen font-semibold text-lg">
                     Daftar sekarang
@@ -518,88 +525,7 @@ const LandingPage = () => {
           </div>
         </div>
 
-         {/* Tampilkan List Testimoni
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold mb-4">Testimoni Alumni</h2>
-          {testimoniData.length > 0 ? (
-            testimoniData.map((item) => (
-              <div key={item.id} className="p-4 bg-gray-100 mb-4 rounded-lg">
-                <h3 className="text-md font-semibold">{item.nama}</h3>
-                <p>{item.pekerjaan_sekarang}</p>
-                <p>{item.jurusan}</p>
-                <p className="italic">
-                  "{item.testi || "No testimonial provided."}"
-                </p>
-              </div>
-            ))
-          ) : (
-            <p>No testimonials available.</p>
-          )}
-        </div> */}
-
-        {/* Tampilkan List Mitra Sekolah */}
-        {/* <div className="mt-6">
-          <h2 className="text-lg font-semibold mb-4">Mitra Sekolah</h2>
-          <div className="grid grid-cols-2 gap-4">
-            {mitraData.length > 0 ? (
-              mitraData.map((item) => (
-                <div key={item.id} className="p-4 bg-gray-100 rounded-lg">
-                  <img
-                    src={item.img_url}
-                    alt="Mitra Sekolah"
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No partners available.</p>
-            )}
-          </div>
-        </div> */}
-
-        {/* Render Gallery */}
-        {/* <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
-          <h3 className="text-xl font-semibold mb-4">Gallery</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {galleryData.map((item) => (
-              <img
-                key={item.id}
-                src={item.img_url}
-                alt="Gallery"
-                className="w-full h-auto rounded-lg"
-              />
-            ))}
-          </div>
-        </div> */}
-
-        {/* Render Facilities */}
-        {/* <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
-          <h3 className="text-xl font-semibold mb-4">Fasilitas</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {fasilitasData.map((item) => (
-              <div key={item.id}>
-                <img
-                  src={item.img_url}
-                  alt="Facility"
-                  className="w-full h-auto rounded-lg"
-                />
-                {item.desc && <p className="mt-2">{item.desc}</p>}
-              </div>
-            ))}
-          </div>
-        </div>  */}
-        <div className="flex items-center justify-center gap-8">
-          <Link to="login" className="text-blue-500 hover:text-green-400 ">
-            Login
-          </Link>
-          <Link to="register" className="text-blue-500 hover:text-green-400 ">
-            Register
-          </Link>
-          <Link to="dashboard" className="text-blue-500 hover:text-green-400 ">
-            Dashboard
-          </Link>
-        </div>
-
+        {/* Footer */}
         <footer className="bg-backgroundFooter">
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 lg:py-16 sm:px-6 lg:px-8">
             <div className="mt-8 sm:mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
@@ -721,18 +647,18 @@ const LandingPage = () => {
               </div>
 
               {/* <div className="text-center sm:text-left">
-                <p className="text-2xl font-semibold text-white">Kerjasama</p>
-                <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
-                  <li>
-                    <a
-                      className="text-white transition hover:text-gray-700/75"
-                      href="mailto:partnership@smkmadinatulquran.sch.id"
-                    >
-                      partnership@smkmadinatulquran.sch.id
-                    </a>
-                  </li>
-                </ul>
-              </div> */}
+                  <p className="text-2xl font-semibold text-white">Kerjasama</p>
+                  <ul className="mt-4 sm:mt-8 space-y-2 sm:space-y-4 text-lg">
+                    <li>
+                      <a
+                        className="text-white transition hover:text-gray-700/75"
+                        href="mailto:partnership@smkmadinatulquran.sch.id"
+                      >
+                        partnership@smkmadinatulquran.sch.id
+                      </a>
+                    </li>
+                  </ul>
+                </div> */}
             </div>
 
             <div className="mt-8 border-t border-white pt-4 text-center text-sm text-white sm:flex sm:justify-between">
@@ -747,4 +673,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPageRpl;
