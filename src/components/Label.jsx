@@ -115,6 +115,27 @@ export const LabelKeterangan = ({ status }) => {
   if (status === 1) {
     return <Label size="green" content={"LULUS"} as={"a"} />;
   }
+  if (status === 'Ya') {
+    return <Label size="green" content={"Ya"} as={"a"} />;
+  }
+
+  return <Label size="tiny" content={status} color="red" as={"a"} />;
+};
+
+
+export const LabelTingkat = ({ status }) => {
+  
+  if (status > 0) {
+    return <Label size="green" content={`Ya (${status})`} as={"a"} />;
+  }
+  
+  if (status === "open") {
+    return <Label size="tiny" content="Open" color="green" as={"a"} />;
+  }
+  
+  if (status === "draft") {
+    return <Label size="tiny" content="Draft" color="brown" as={"a"} />;
+  }
 
   return <Label size="tiny" content={status} color="red" as={"a"} />;
 };

@@ -94,8 +94,8 @@ export default function HasilBelajar() {
             <TableLoading
               count={20}
               isLoading={isFetching}
-              data={data?.data}
-              messageEmpty={"Tidak Terdapat Hasil Ujian"}
+              data={data?.data?.rows}
+              messageEmpty={"Data tidak ditemukan"}
             >
               {data &&
                 data?.data?.rows?.map((value, index) => (

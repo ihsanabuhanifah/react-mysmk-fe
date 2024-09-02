@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import htmr from "htmr";
+import { TextArea } from "semantic-ui-react";
+import Editor from "../../../components/Editor";
 
 export default function ES({ soals, jawaban, item, nomor, setPayload }) {
   console.log("jawa", jawaban);
@@ -51,9 +53,11 @@ export default function ES({ soals, jawaban, item, nomor, setPayload }) {
           </div>
         </section>
 
-        <div className=" p-2 rounded-md border text-justify">{htmr(`<div>${soals.soal}</div>`)}</div>
+        <div className=" p-2 rounded-md border text-justify">
+          {htmr(`<div>${soals.soal}</div>`)}
+        </div>
 
-        <div>
+        <div className="border rounded-md p-2">
           <h5>Jawaban :</h5>
           {!!jawabanSiswa?.file === true ? (
             <a target="_blank" rel="noreferrer" href={jawabanSiswa?.file}>
@@ -65,6 +69,27 @@ export default function ES({ soals, jawaban, item, nomor, setPayload }) {
           <div className="mt-5">
             {htmr(`<div>${jawabanSiswa?.jawaban || "-"}</div>`)}
           </div>
+        </div>
+
+        <div className="border rounded-md p-2">
+          <h5>Catatan Penilaian</h5>
+          <Editor
+        
+            value={jawabanSiswa?.catatan}
+            handleChange={(content) => {
+              setPayload((state) => {
+                const filter = state.filter((x) => x.id !== jawabanSiswa.id);
+
+                return [
+                  ...filter,
+                  {
+                    ...jawabanSiswa,
+                    catatan: content,
+                  },
+                ];
+              });
+            }}
+          />
         </div>
       </div>
     </>

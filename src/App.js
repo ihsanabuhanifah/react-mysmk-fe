@@ -68,6 +68,7 @@ import RegisterWali from "./pages/auth/RegisterWali";
 import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
+import Harian from "./pages/guru/jadwal/harian";
 
 
 function App() {
@@ -135,6 +136,7 @@ function App() {
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
           {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
+          <Route path="absensi/harian" element={<Harian/>} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />

@@ -26,14 +26,12 @@ function ModalPenilaian({
   values,
   namaSiswa,
 }) {
-  let [loading, setLoading] = useState(false)
+  let [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState(jawaban);
   const mutate = useUpdateLastExam();
   const { roles } = useList();
 
   const ref = useRef();
-
-  console.log("va", values);
 
   return (
     <Modal
@@ -45,9 +43,9 @@ function ModalPenilaian({
       <ModalHeader>
         <section className="flex items-center justify-end">
           <Button
-          loading={loading}
+            loading={loading}
             onClick={async () => {
-              setLoading(true)
+              setLoading(true);
               handleDownloadPdf(ref, namaSiswa, setLoading);
             }}
           >
@@ -59,8 +57,10 @@ function ModalPenilaian({
       <ModalContent>
         <section ref={ref}>
           <section className="mb-5 flex items-center">
-            <p className="opacity-90">{namaSiswa.nama_siswa}    <p className="opacity-90">{namaSiswa.mapel}</p></p>
-          
+            <p className="opacity-90">
+              {namaSiswa.nama_siswa}{" "}
+              <p className="opacity-90">{namaSiswa.mapel}</p>
+            </p>
           </section>
           {soal &&
             soal?.map((item, index) => {
@@ -161,6 +161,6 @@ const handleDownloadPdf = async (printRef, profile, setLoading) => {
   const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
 
   pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
-  pdf.save(`${profile.nama_siswa} - ${profile.mapel} - ${new Date}`);
-  setLoading(false)
+  pdf.save(`${profile.nama_siswa} - ${profile.mapel} - ${new Date()}`);
+  setLoading(false);
 };

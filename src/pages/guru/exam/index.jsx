@@ -23,7 +23,7 @@ import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 
-import { LabelStatus, LabelTipeUjian } from "../../../components/Label";
+import { LabelKeterangan, LabelStatus, LabelTingkat, LabelTipeUjian } from "../../../components/Label";
 import useList from "../../../hook/useList";
 import { CopyButton } from "../../../components/buttonAksi/editButton";
 
@@ -122,7 +122,7 @@ export default function ListExam() {
                 <Table.HeaderCell>Durasi</Table.HeaderCell>
                 <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
                 <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
-                <Table.HeaderCell>Urutan</Table.HeaderCell>
+                <Table.HeaderCell>Bertingkat</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
                 <Table.HeaderCell>Analisis</Table.HeaderCell>
                 <Table.HeaderCell>Publish</Table.HeaderCell>
@@ -150,7 +150,7 @@ export default function ListExam() {
                       <LabelTipeUjian status={value?.tipe_ujian} />
                     </Table.Cell>
                     <Table.Cell>
-                      <LabelTipeUjian status={value?.status} />
+                      <LabelTingkat status={value?.status} />
                     </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
@@ -159,7 +159,7 @@ export default function ListExam() {
                     <Table.Cell>
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
-                    <Table.Cell>{value?.urutan}</Table.Cell>
+                    <Table.Cell><LabelTingkat status={value?.is_hirarki === 1 ? value?.urutan : "Tidak"}/></Table.Cell>
                     <Table.Cell>
                       <span className="flex items-center">
                         {" "}
