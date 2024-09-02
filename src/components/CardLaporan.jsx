@@ -52,7 +52,7 @@ const Card = ({ item }) => {
           <div className="flex flex-col flex-grow">
             <h2
               className="uppercase line-clamp-1 hover:underline"
-              onClick={() => navigate(`/siswa/laporan-pkl/detail/${item.id}`)}
+              onClick={() => navigate(`/guru/laporan-pkl/detail/${item.id}`)}
             >
               {item.judul_kegiatan}
             </h2>
@@ -70,18 +70,18 @@ const Card = ({ item }) => {
             primary
             disabled={!isSameDay}
             onClick={() =>
-              navigate(`/siswa/laporan-pkl/laporan-diniyyah/${item.id}`)
+              navigate(`/guru/laporan-pkl/laporan-diniyyah/${item.id}`)
             }
           >
             Laporan Diniyyah
           </Button>
-          <Button
+          {/* <Button
             icon
             className="p-2 w-auto"
-            onClick={() => navigate(`/siswa/laporan-pkl/update/${item.id}`)}
+            onClick={() => navigate(`/guru/laporan-pkl/update/${item.id}`)}
           >
             <Icon name="edit" />
-          </Button>
+          </Button> */}
         </div>
       </Segment>
     </ItemGroup>

@@ -38,6 +38,7 @@ import {
   CreateLaporanSiswa,
   UpdateLaporanPkl,
   CreatePkl,
+  DetailLaporanPkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -162,6 +163,7 @@ function App() {
           {/* <Route path="fitur-siswa-pkl/filecoba" element={<FileCoba />} /> */}
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporanPkl />} />
+          <Route path="laporan-pkl/detail/:id" element={<DetailLaporanPkl />} />
         </Route>
 
         <Route
