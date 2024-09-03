@@ -6,32 +6,33 @@ import LogoMySMK from '../image/MySMK.png'
 
 import { MdMenu } from 'react-icons/md'
 import useShowNotif from '../hook/useShowNotif'
-import { IoIosNotifications } from 'react-icons/io'
 import useNotif from '../hook/useNotif'
 import useList from '../hook/useList'
 import { syncToken } from '../api/axiosClient'
 import SidebarSiswa from './Sidebar/sidebarSiswa'
 import { useQuery } from 'react-query'
 import { getProfile } from '../api/siswa/profile'
-import { useDispatch } from 'react-redux'
-import { setProfile } from '../redux/actions'
 import { IoLogOutOutline } from 'react-icons/io5'
 import { LoadingPage, ModalLogout } from '../components'
+import { useZUStore } from '../zustand/zustore'
+import { Menu, Sidebar } from 'semantic-ui-react'
 
 export default function Siswa() {
 	let { pathname } = useLocation()
 	const navigate = useNavigate()
-	const dispatch = useDispatch()
 	React.useEffect(() => {
 		document.title = 'MySMK'
 		// requestToken();
 	})
 
 	syncToken()
+
+	const { setShowNotif, showNotif, setProfile } = useZUStore((state) => state)
+
 	const { identitas: data } = useList()
 	let { isLoading } = useQuery(['/santri/profile'], () => getProfile(), {
 		onSuccess: (response) => {
-			dispatch(setProfile(response))
+			setProfile(response)
 		},
 		refetchOnWindowFocus: false,
 		select: (response) => {
@@ -40,8 +41,6 @@ export default function Siswa() {
 	})
 
 	const [sidebar, setSidebar] = React.useState(false)
-	const [notif, setNotif] = React.useState(false)
-	let [showNotif, setShowNotf] = useShowNotif()
 	let { jumlah } = useNotif()
 
 	const [open, setOpen] = React.useState(false)
@@ -135,20 +134,22 @@ export default function Siswa() {
 					</div>
 
 					{/* notif */}
-					{/* <div
-					className={` w-full h-full bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white    pl-0 xl:pl-2      ${
-						!notif ? 'transform -translate-y-full xl:-translate-y-0' : 'transform -translate-y-0 transition  duration-500 '
-					} h-full z-10 fixed top-0 bottom-0 ${!showNotif ? 'xl:w-[20%]' : 'xl:hidden'} xl:relative  `}
-				>
-					<Notifikasi setNotif={setNotif} />
-				</div> */}
+					{showNotif && (
+						<div
+							onClick={() => {
+								setShowNotif()
+							}}
+							className="absolute w-screen h-screen bg-transparent"
+						></div>
+					)}
+					<div className={`fixed top-0 right-0 w-full h-full bg-white text-gray-700 xl:w-[20%] transform ${showNotif ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-500 z-10`}>
+						<Notifikasi />
+					</div>
 				</main>
 			</div>
 		</>
 	)
 }
-
-// className={`w-full h-full flex z-10 fixed top-0 bottom-0 xl:w-3/12  xl:relative text-white`}
 
 export function LogoutButton({ to, title, logo, onClick }) {
 	let { pathname } = useLocation()

@@ -8,6 +8,11 @@ import { format, parseISO } from 'date-fns'
 import { useUpdateProfile } from '../../../api/siswa/profile'
 import lodash from 'lodash'
 import { LoadingPage } from '../../../components'
+import { IoPencilOutline } from 'react-icons/io5'
+import Editor from '../../../components/Editor'
+import useUploadFile from '../../../hook/useUpload'
+import ImageWithFallback from '../../../components/ImageWithFallback'
+import { useZUStore } from '../../../zustand/zustore'
 
 const profileSchema = Yup.object().shape({
 	nama_siswa: Yup.string().nullable().required('Wajib Diisi'),
@@ -21,17 +26,19 @@ const profileSchema = Yup.object().shape({
 })
 
 export default function ProfileEdit() {
-	const santriProfile = useSelector((state) => state.data.profile)
+	const { profile } = useZUStore((state) => state)
+
+	const { upload, isLoading: isLoadUpload } = useUploadFile();
 
 	const initialState = {
-		nama_siswa: santriProfile.nama_siswa,
-		nik: santriProfile.nik,
-		tempat_lahir: santriProfile.tempat_lahir,
-		alamat: santriProfile.alamat,
-		sekolah_asal: santriProfile.sekolah_asal,
-		jenis_kelamin: santriProfile.jenis_kelamin,
-		anak_ke: santriProfile.anak_ke,
-		tanggal_lahir: santriProfile.tanggal_lahir,
+		nama_siswa: profile.nama_siswa,
+		nik: profile.nik,
+		tempat_lahir: profile.tempat_lahir,
+		alamat: profile.alamat,
+		sekolah_asal: profile.sekolah_asal,
+		jenis_kelamin: profile.jenis_kelamin,
+		anak_ke: profile.anak_ke,
+		tanggal_lahir: profile.tanggal_lahir,
 	}
 
 	const { mutate, isLoading } = useUpdateProfile()
@@ -42,191 +49,191 @@ export default function ProfileEdit() {
 		mutate(values)
 	}
 
-	if (isLoading) {
+	if (isLoading || isLoadUpload) {
 		return <LoadingPage />
 	}
 
 	return (
-		<div className="mt-4  pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
-			<h1 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">Edit Profile</h1>
+		<>
+			<div className="mt-4  pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
+				<h1 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">Edit Profile</h1>
 
-			<div className="flex flex-col w-full items-center ml-5">
-				<div className="w-[85px] border relative h-[85px] rounded-full bg-red-200 mb-4">
-					<img src={BlankProfile} alt="You" className="w-full relative z-0 rounded-full" />
-					<div className="w-[20px] h-[20px] bg-blue-500 absolute z-[5] rounded-full bottom-1 right-1 "></div>
+				<div className="flex flex-col w-full items-center ml-5">
+					<div onClick={() => {
+						upload()
+						// baru berhasil upload belum keganti di db
+					}} className="w-[85px] cursor-pointer border relative h-[85px] rounded-full bg-gray-200 mb-4">
+						<ImageWithFallback src={profile.user.image} alt='You' fallbackSrc='/blankprofile.jpg' />
+					</div>
+
+					<Formik initialValues={initialState} validationSchema={profileSchema} enableReinitialize onSubmit={onSubmit}>
+						{({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting, handleReset, resetForm }) => {
+							const handleCancel = () => {
+								resetForm({ values: initialState })
+							}
+
+							return (
+								<Form onSubmit={handleSubmit} className="w-full">
+									<Form.Field
+										control={Input}
+										label="Nama Lengkap"
+										name="nama_siswa"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.nama_siswa}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.nama_siswa &&
+											touched.nama_siswa && {
+												content: `${errors?.nama_siswa}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+									<Form.Field
+										control={Input}
+										label="Jenis Kelamin"
+										name="jenis_kelamin"
+										onBlur={handleBlur}
+										value={values.jenis_kelamin}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.jenis_kelamin &&
+											touched.jenis_kelamin && {
+												content: `${errors?.jenis_kelamin}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+									<Form.Field
+										control={Input}
+										label="Anak Ke"
+										name="anak_ke"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.anak_ke}
+										disabled={isSubmitting}
+										fluid
+										min={1}
+										error={
+											errors.anak_ke &&
+											touched.anak_ke && {
+												content: `${errors?.anak_ke}`,
+												pointing: 'above',
+											}
+										}
+										type="number"
+									/>
+									<Form.Field
+										control={Input}
+										label="Tanggal Lahir"
+										name="tanggal_lahir"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={format(parseISO(values.tanggal_lahir), 'yyyy-MM-dd')}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.tanggal_lahir &&
+											touched.tanggal_lahir && {
+												content: `${errors?.tanggal_lahir}`,
+												pointing: 'above',
+											}
+										}
+										type="date"
+									/>
+									<Form.Field
+										control={Input}
+										label="Tempat Lahir"
+										name="tempat_lahir"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.tempat_lahir}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.tempat_lahir &&
+											touched.tempat_lahir && {
+												content: `${errors?.tempat_lahir}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+									<Form.Field
+										control={Input}
+										label="NIK"
+										name="nik"
+										// onChange={(data) => {
+										// 	const { value } = data.target
+										// 	if (/^[0-9]*$/.test(value) && value.length <= 16) {
+										// 		setFieldValue('nik', value)
+										// 	}
+										// }}
+										onBlur={handleBlur}
+										value={values.nik}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.nik &&
+											touched.nik && {
+												content: `${errors?.nik}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+
+									<Form.Field
+										control={Input}
+										label="Alamat"
+										name="alamat"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.alamat}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.alamat &&
+											touched.alamat && {
+												content: `${errors?.alamat}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+									<Form.Field
+										control={Input}
+										label="Sekolah Asal"
+										name="sekolah_asal"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.sekolah_asal}
+										disabled={isSubmitting}
+										fluid
+										error={
+											errors.sekolah_asal &&
+											touched.sekolah_asal && {
+												content: `${errors?.sekolah_asal}`,
+												pointing: 'above',
+											}
+										}
+										type="text"
+									/>
+									<section className="space-y-2">
+										<Button content={isSubmitting ? 'Proses' : 'Simpan'} type="submit" fluid size="medium" color="green" loading={isSubmitting} disabled={isSubmitting || lodash.isEqual(initialState, values)} />
+										<Button content="Cancel" type="reset" fluid size="medium" color="blue" onClick={handleCancel} disabled={isSubmitting || lodash.isEqual(initialState, values)} />
+									</section>
+								</Form>
+							)
+						}}
+					</Formik>
 				</div>
-
-				<Formik initialValues={initialState} validationSchema={profileSchema} enableReinitialize onSubmit={onSubmit}>
-					{({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue, isSubmitting, handleReset, resetForm }) => {
-						console.log(values)
-						console.log(santriProfile)
-						console.log('sub', isSubmitting)
-
-						const handleCancel = () => {
-							resetForm({ values: initialState })
-						}
-
-						return (
-							<Form onSubmit={handleSubmit} className="w-full">
-								<Form.Field
-									control={Input}
-									label="Nama Lengkap"
-									name="nama_siswa"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.nama_siswa}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.nama_siswa &&
-										touched.nama_siswa && {
-											content: `${errors?.nama_siswa}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-								<Form.Field
-									control={Input}
-									label="Jenis Kelamin"
-									name="jenis_kelamin"
-									onBlur={handleBlur}
-									value={values.jenis_kelamin}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.jenis_kelamin &&
-										touched.jenis_kelamin && {
-											content: `${errors?.jenis_kelamin}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-								<Form.Field
-									control={Input}
-									label="Anak Ke"
-									name="anak_ke"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.anak_ke}
-									disabled={isSubmitting}
-									fluid
-									min={1}
-									error={
-										errors.anak_ke &&
-										touched.anak_ke && {
-											content: `${errors?.anak_ke}`,
-											pointing: 'above',
-										}
-									}
-									type="number"
-								/>
-								<Form.Field
-									control={Input}
-									label="Tanggal Lahir"
-									name="tanggal_lahir"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={format(parseISO(values.tanggal_lahir), 'yyyy-MM-dd')}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.tanggal_lahir &&
-										touched.tanggal_lahir && {
-											content: `${errors?.tanggal_lahir}`,
-											pointing: 'above',
-										}
-									}
-									type="date"
-								/>
-								<Form.Field
-									control={Input}
-									label="Tempat Lahir"
-									name="tempat_lahir"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.tempat_lahir}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.tempat_lahir &&
-										touched.tempat_lahir && {
-											content: `${errors?.tempat_lahir}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-								<Form.Field
-									control={Input}
-									label="NIK"
-									name="nik"
-									onChange={(data) => {
-										const { value } = data.target
-										if (/^[0-9]*$/.test(value) && value.length <= 16) {
-											setFieldValue('nik', value)
-										}
-									}}
-									onBlur={handleBlur}
-									value={values.nik}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.nik &&
-										touched.nik && {
-											content: `${errors?.nik}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-
-								<Form.Field
-									control={Input}
-									label="Alamat"
-									name="alamat"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.alamat}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.alamat &&
-										touched.alamat && {
-											content: `${errors?.alamat}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-								<Form.Field
-									control={Input}
-									label="Sekolah Asal"
-									name="sekolah_asal"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.sekolah_asal}
-									disabled={isSubmitting}
-									fluid
-									error={
-										errors.sekolah_asal &&
-										touched.sekolah_asal && {
-											content: `${errors?.sekolah_asal}`,
-											pointing: 'above',
-										}
-									}
-									type="text"
-								/>
-								<section className="space-y-2">
-									<Button content={isSubmitting ? 'Proses' : 'Simpan'} type="submit" fluid size="medium" color="green" loading={isSubmitting} disabled={isSubmitting || lodash.isEqual(initialState, values)} />
-									<Button content="Cancel" type="reset" fluid size="medium" color="blue" onClick={handleCancel} disabled={isSubmitting || lodash.isEqual(initialState, values)} />
-								</section>
-							</Form>
-						)
-					}}
-				</Formik>
 			</div>
-		</div>
+		</>
 	)
 }

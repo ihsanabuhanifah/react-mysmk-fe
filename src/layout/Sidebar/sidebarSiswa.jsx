@@ -1,14 +1,15 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { MdClose, MdLaptopMac } from "react-icons/md";
-import { IoCheckmarkDoneOutline, IoPerson, IoStatsChart } from "react-icons/io5";
+import { IoCheckmarkDoneOutline, IoDocumentTextOutline, IoPerson, IoStatsChart } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
-import { FaNewspaper } from "react-icons/fa";
 import { IoNewspaperOutline } from "react-icons/io5";
+import ImageWithFallback from "../../components/ImageWithFallback";
+import { useZUStore } from "../../zustand/zustore";
+
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
-  const santriProfile = useSelector((state) => state.data.profile);
+  const { profile } = useZUStore((state) => state)
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -37,12 +38,14 @@ export default function SidebarSiswa({ setSidebar }) {
 
       {/* laptop */}
       <div className="flex mb-3 items-center bg-[#18a558] mr-2 gap-x-2 rounded-lg p-2">
-        <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+        <div className="w-10 h-10 rounded-full bg-gray-200">
+          <ImageWithFallback src={profile.user.image} alt='You' fallbackSrc='/blankprofile.jpg' />
+        </div>
 
         <div>
           <p className="m-0 text-sm text-white/80 leading-none">Hello</p>
           <p className="mt-1 text-md text-white font-black leading-none">
-            {santriProfile?.nama_siswa?.split(" ")[0]}
+            {profile?.nama_siswa?.split(" ")[0]}
           </p>
         </div>
       </div>
@@ -81,7 +84,7 @@ export default function SidebarSiswa({ setSidebar }) {
           handleSidebar={handleSiderbar}
           to="ujian"
           path="ujian"
-          title={"Exam"}
+          title={"Ujian"}
           logo={
             <MdLaptopMac
               className={`h-6 w-6 ${
@@ -92,13 +95,26 @@ export default function SidebarSiswa({ setSidebar }) {
         />
 		  <NavButton
           handleSidebar={handleSiderbar}
-          to="hasil-belajar"
-          path="hasil-belajar"
-          title={"Hasil Belajar"}
+          to="hasil-ujian"
+          path="hasil-ujian"
+          title={"Hasil Ujian"}
           logo={
             <IoCheckmarkDoneOutline
               className={`h-6 w-6 ${
-                url === "hasil-belajar" ? "text-[#18a558]" : "text-gray-400"
+                url === "hasil-ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+		  <NavButton
+          handleSidebar={handleSiderbar}
+          to="rapor"
+          path="rapor"
+          title={"Rapor"}
+          logo={
+            <IoDocumentTextOutline
+              className={`h-6 w-6 ${
+                url === "rapor" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }

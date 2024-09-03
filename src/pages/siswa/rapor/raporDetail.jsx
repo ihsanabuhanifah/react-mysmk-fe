@@ -6,13 +6,13 @@ import { Table } from 'semantic-ui-react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import { LoadingPage, TableLoading } from '../../../components'
 import { format } from 'date-fns'
-import { LabelStatus } from '../../../components/Label'
+import { LabelKeterangan, LabelStatus } from '../../../components/Label'
 
-export default function HasilBelajarDetail() {
-	const { id_mapel } = useParams()
+export default function RaporDetail() {
+	const { id_mapel, ta_id } = useParams()
 	const navigate = useNavigate()
 
-	const { data, isLoading } = useGetHasilBelajarDetail(id_mapel)
+	const { data, isLoading } = useGetHasilBelajarDetail(id_mapel, ta_id)
 
 	console.log(data)
 
@@ -27,7 +27,7 @@ export default function HasilBelajarDetail() {
 					<IoArrowBackOutline size={20} />
 					<p>Kembali</p>
 				</button>
-				<Table called basic>
+				<Table className='ui celled table'>
 					<Table.Header>
 						<Table.HeaderCell>No</Table.HeaderCell>
 						<Table.HeaderCell>Jenis</Table.HeaderCell>
@@ -36,6 +36,7 @@ export default function HasilBelajarDetail() {
 						<Table.HeaderCell>Jam Selesai</Table.HeaderCell>
 						<Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
 						<Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
+						<Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
 						<Table.HeaderCell>Keterangan</Table.HeaderCell>
 					</Table.Header>
 					<Table.Body>
@@ -49,7 +50,10 @@ export default function HasilBelajarDetail() {
 									<Table.Cell>{format(new Date(value?.jam_selesai), 'HH:mm')}</Table.Cell>
 									<Table.Cell>{value?.exam_result}</Table.Cell>
 									<Table.Cell>{value?.exam ? value?.exam.slice(1, -1) : '-'}</Table.Cell>
-									<Table.Cell>{value?.keterangan ?? '-'}</Table.Cell>
+									<Table.Cell>{value?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
+									<Table.Cell>
+										<LabelKeterangan status={value?.keterangan} />
+									</Table.Cell>
 								</Table.Row>
 							))}
 						</TableLoading>

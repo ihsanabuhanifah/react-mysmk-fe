@@ -9,17 +9,20 @@ import { formatWaktu } from "../../../utils/waktu";
 import { Button, Icon, Label } from "semantic-ui-react";
 
 export default function Card({ item, handleExam }) {
-  console.log(item);
-  return (
-    <div className="border flex flex-col rounded-md text-xs w-full h-[330px] shadow-sm">
-      <div className="bg-gray-400 relative w-full h-[55%] overflow-hidden rounded-t-md">
-        <img
-          className="w-full h-full object-cover"
-          src={IMGTES}
-          alt="exam.jpg"
-        />
+	return (
+		<div className="border flex flex-col rounded-md text-xs w-full h-[330px] shadow-sm">
+			<div className="bg-gray-400 relative w-full h-[55%] overflow-hidden rounded-t-md">
+				<img className="w-full h-full object-cover" src={IMGTES} alt="exam.jpg" />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent"></div>
+
+				<div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent"></div>
+				{
+					item.ujian.is_hirarki && (
+					<div className='absolute bottom-0 top-0 right-0 flex items-center justify-center bg-gradient-to-l from-black/70 to-transparent w-[25%]'>
+						<p className='text-white text-4xl font-black pl-8'>{item.ujian.urutan}</p>
+					</div>
+					)
+				}
 
         <div className="absolute inset-0 flex top-2 left-2 h-auto items-start">
           <Label
@@ -33,16 +36,11 @@ export default function Card({ item, handleExam }) {
         </div>
       </div>
 
-      <section className="w-full flex h-[45%] justify-between flex-col pt-4 pb-2 px-2">
-        <div className="flex flex-col">
-          
-            <p className="font-black font-poppins text-xl leading-none mb-1">
-              {item.ujian.mapel.nama_mapel} - {item.ujian.judul_ujian}
-            </p>
-            <p className="text-sm opacity-70">{item.teacher.nama_guru}</p>
-         
-         
-        </div>
+			<section className="w-full flex h-[45%] justify-between flex-col pt-4 pb-2 px-2">
+				<div className="flex flex-col">
+					<p className="font-black font-poppins text-2xl leading-none mb-0 capitalize">{item.mapel.nama_mapel} <span className='font-medium text-sm'>({item.ujian.judul_ujian})</span> </p>
+					<p className="text-sm opacity-70">{item.teacher.nama_guru}</p>
+				</div>
 
         <div className="flex w-full justify-between gap-1">
           <Waktu title="Ujian Dibuka" waktu={item.ujian.waktu_mulai} />
@@ -65,88 +63,11 @@ export default function Card({ item, handleExam }) {
           icon={() => <Icon name="edit" />}
           size="tiny"
           fluid
-          color={
-            item.status === "open"
-              ? "green"
-              : item.status === "progress"
-              ? "blue"
-              : "bg-gray-200"
-          }
-        />
-      </section>
-      {/* endd */}
-
-      {/* <section className="px-2 my-2">
-        <div
-          style={{
-            lineHeight: "1em",
-            padding: "2px",
-            margin: 0,
-          }}
-          className="flex items-center justify-between"
-        >
-          <div>
-            {" "}
-            <h4 style={{ margin: 0 }}>{item.ujian.mapel.nama_mapel}</h4>{" "}
-            <p style={{ margin: 0 }}>{item.teacher.nama_guru}</p>{" "}
-          </div>
-          <span>
-            <LabelDurasi status={item.ujian.durasi} />
-          </span>
-        </div>
-
-        <section className="border rounded-md p-2">
-          <div className="w-full grid grid-cols-2 ">
-            <span className="font-semibold">Waktu Mulai</span>
-            <span>: {formatWaktu(item.ujian.waktu_mulai)}</span>
-          </div>
-          <div className="w-full grid grid-cols-2 ">
-            <span className="font-semibold">Waktu Selesai</span>
-            <span>: {formatWaktu(item.ujian.waktu_selesai)}</span>
-          </div>
-          <div className="w-full grid grid-cols-2 ">
-            <span className="font-semibold">Jam Mulai</span>
-            <span>: {formatWaktu(item.jam_mulai)}</span>
-          </div>
-          <div className="w-full grid grid-cols-2 ">
-            <span className="font-semibold">Selesai Mulai</span>
-            <span>: {formatWaktu(item.jam_selesai)}</span>
-          </div>
-        </section>
-
-        <section className="flex items-center space-x-2 mt-2">
-          <span>
-            <LabelStatus status={item.status} />
-          </span>
-          <span>
-            <LabelStatus status={item.ujian.jenis_ujian} />
-          </span>
-          <span>
-            <LabelTipeUjian status={item.ujian.tipe_ujian} />
-          </span>
-        </section>
-
-        <div className="mt-5">
-          <Button
-            content={
-              item.status === "open"
-                ? "Kerjakan"
-                : item.status === "progress"
-                ? "Lanjutkan"
-                : "Sudah Selesai"
-            }
-            type="button"
-            fluid
-            disabled={item.status === "finish"}
-            onClick={handleExam}
-            icon={() => <Icon name="edit" />}
-            size="tiny"
-            color="green"
-          />
-        </div>
-      </section> */}
-    </div>
-  );
+					color={item.status === 'open' ? 'green' : item.status === 'progress' ? 'blue' : 'bg-gray-200'}
+				/>
+			</section>
+		</div>
+	)
 }
 
 function Waktu({ title, waktu }) {

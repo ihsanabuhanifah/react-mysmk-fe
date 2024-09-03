@@ -1,13 +1,13 @@
-import { useSelector } from 'react-redux';
 import LayoutSiswa from "../../../module/layoutSiswa";
+import { useZUStore } from '../../../zustand/zustore';
 
 export default function DashboardSiswa() {
-  const santriProfile = useSelector((state) => state.data.profile);
+	const { profile } = useZUStore((state) => state)
 
   return (
     <LayoutSiswa title='Dashboard'>
       ini dashboard
-      <p>data: {santriProfile.nama_siswa}</p>
+      <p>data: {profile.nama_siswa}</p>
     </LayoutSiswa>
   );
 }

@@ -53,16 +53,15 @@ import Profile from "./pages/siswa/profile";
 import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
 import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
-import HasilBelajar from "./pages/siswa/hasil-belajar/hasilBelajar";
-import HasilBelajarDetail from "./pages/siswa/hasil-belajar/hasilBelajarDetail";
+import Rapor from "./pages/siswa/rapor/rapor";
+import RaporDetail from "./pages/siswa/rapor/raporDetail";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
+import HasilUjian from "./pages/siswa/hasil-ujian";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
-
-
 
 function App() {
   return (
@@ -183,13 +182,14 @@ function App() {
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="ujian" element={<UjianSiswa />} />
-          <Route path="ujian/:id" element={<ExamPage />} />
+          <Route path="ujian/:id/" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>
             <Route path="edit" element={<ProfileEdit />} />
             <Route path="security" element={<SecuritySiswa />} />
           </Route>
-          <Route path="hasil-belajar" element={<HasilBelajar />} />
-            <Route path="hasil-belajar/:id_mapel" element={<HasilBelajarDetail />} />
+          <Route path="hasil-ujian" element={<HasilUjian />} />
+          <Route path="rapor" element={<Rapor />} />
+            <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
