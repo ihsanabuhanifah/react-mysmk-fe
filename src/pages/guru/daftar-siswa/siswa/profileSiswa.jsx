@@ -1,13 +1,10 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
-import { Formik, Field, Form } from "formik";
+import React, { useEffect, useState } from "react";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Button, Form as SemanticForm, Icon } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
-import {
-  updateSiswaKelasHandle,
-  getSiswaById,
-} from "../../../../api/guru/siswa";
+import { getSiswaById } from "../../../../api/guru/siswa";
 import { useParams } from "react-router-dom";
 import useToast from "../../../../hook/useToast"; // Import useToast
 import { useUpdateProfile } from "./profile";
@@ -19,7 +16,7 @@ const formatDate = (date) => {
 };
 
 const ProfileComponent = ({ onSuccess, onError }) => {
-  const params = useParams();
+  const { id } = useParams(); // Deklarasikan id dari useParams
   const queryClient = useQueryClient();
   const { successToast, warningToast } = useToast(); // Destructure custom toasts
 
@@ -42,50 +39,78 @@ const ProfileComponent = ({ onSuccess, onError }) => {
     email: "",
   });
 
-  const { data: siswaData, isLoading, error } = useQuery(
-    [`/guru/siswa/detail/${params.id}`, params.id],
-    () => getSiswaById(params.id),
-    {
-      enabled: !!params.id,
-      staleTime: 1000 * 60 * 60 * 24, // 24 jam
-      onError: (err) => {
-        warningToast("Gagal mengambil data siswa");
-      },
-    }
-  );
+  const validationSchema = Yup.object().shape({
+    nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
+    nik: Yup.string().required("NIK wajib diisi"),
+    nis: Yup.string().required("NIS wajib diisi"),
+    nisn: Yup.string().required("NISN wajib diisi"),
+    tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
+    tanggal_lahir: Yup.date().required("Tanggal lahir wajib diisi").nullable(),
+    alamat: Yup.string().required("Alamat wajib diisi"),
+    email: Yup.string().email("Email tidak valid").required("Email wajib diisi"),
+    sekolah_asal: Yup.string().required("Sekolah asal wajib diisi"),
+    tanggal_diterima: Yup.date().required("Tanggal diterima wajib diisi").nullable(),
+    angkatan: Yup.string().required("Angkatan wajib diisi"),
+    tahun_ajaran: Yup.string().required("Tahun ajaran wajib diisi"),
+    status: Yup.string().required("Status wajib diisi"),
+    keterangan: Yup.string().optional(),
+    anak_ke: Yup.string().optional(),
+  });
+
+  const {
+    data: siswaData,
+    isLoading,
+    error,
+  } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
+    enabled: !!id,
+    staleTime: 1000 * 60 * 60 * 24, // 24 jam
+    select: (response) => {
+      if (response && response.data && response.data.siswa) {
+        return response.data.siswa;
+      } else {
+        warningToast("Data siswa tidak ditemukan.");
+        return null;
+      }
+    },
+    onError: () => {
+      warningToast("Gagal mengambil data siswa");
+    },
+  });
 
   useEffect(() => {
-    if (siswaData && siswaData.data && siswaData.data.siswa) {
+    if (siswaData) {
       setInitialValues({
-        user_id: siswaData.data.siswa.user_id || "",
-        nama_siswa: siswaData.data.siswa.nama_siswa || "",
-        nik: siswaData.data.siswa.nik || "",
-        nis: siswaData.data.siswa.nis || "",
-        nisn: siswaData.data.siswa.nisn || "",
-        tempat_lahir: siswaData.data.siswa.tempat_lahir || "",
-        tanggal_lahir: siswaData.data.siswa.tanggal_lahir
-          ? formatDate(siswaData.data.siswa.tanggal_lahir)
+        user_id: siswaData.user_id || "",
+        nama_siswa: siswaData.nama_siswa || "",
+        nik: siswaData.nik || "",
+        nis: siswaData.nis || "",
+        nisn: siswaData.nisn || "",
+        tempat_lahir: siswaData.tempat_lahir || "",
+        tanggal_lahir: siswaData.tanggal_lahir
+          ? formatDate(siswaData.tanggal_lahir)
           : "",
-        alamat: siswaData.data.siswa.alamat || "",
-        sekolah_asal: siswaData.data.siswa.sekolah_asal || "",
-        jenis_kelamin: siswaData.data.siswa.jenis_kelamin || "",
-        anak_ke: siswaData.data.siswa.anak_ke || "",
-        tanggal_diterima: siswaData.data.siswa.tanggal_diterima
-          ? formatDate(siswaData.data.siswa.tanggal_diterima)
+        alamat: siswaData.alamat || "",
+        sekolah_asal: siswaData.sekolah_asal || "",
+        jenis_kelamin: siswaData.jenis_kelamin || "",
+        anak_ke: siswaData.anak_ke || "",
+        tanggal_diterima: siswaData.tanggal_diterima
+          ? formatDate(siswaData.tanggal_diterima)
           : "",
-        angkatan: siswaData.data.siswa.angkatan || "",
-        tahun_ajaran: siswaData.data.siswa.tahun_ajaran || "",
-        status: siswaData.data.siswa.status || "",
-        keterangan: siswaData.data.siswa.keterangan || "",
-        email: siswaData.data.siswa.user.email || "",
+        angkatan: siswaData.angkatan || "",
+        tahun_ajaran: siswaData.tahun_ajaran || "",
+        status: siswaData.status || "",
+        keterangan: siswaData.keterangan || "",
+        email: siswaData.user?.email || "",
       });
     }
-  }, [siswaData]);
+  }, [siswaData, warningToast]);
 
-  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(params.id);
+
+  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(id);
 
   const onSubmit = async (values, { resetForm }) => {
     mutate(values);
+    // console.log(values)
   };
 
   if (isLoading) {
@@ -97,27 +122,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={onSubmit}
-      validationSchema={Yup.object().shape({
-        nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
-        nik: Yup.string().required("NIK wajib diisi"),
-        nis: Yup.string().required("NIS wajib diisi"),
-        nisn: Yup.string().required("NISN wajib diisi"),
-        tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
-        tanggal_lahir: Yup.date().required("Tanggal lahir wajib diisi").nullable(),
-        alamat: Yup.string().required("Alamat wajib diisi"),
-        email: Yup.string()
-          .email("Email tidak valid")
-          .required("Email wajib diisi"),
-        sekolah_asal: Yup.string().required("Sekolah asal wajib diisi"),
-        tanggal_diterima: Yup.date()
-          .required("Tanggal diterima wajib diisi")
-          .nullable(),
-        angkatan: Yup.string().required("Angkatan wajib diisi"),
-        tahun_ajaran: Yup.string().required("Tahun ajaran wajib diisi"),
-        status: Yup.string().required("Status wajib diisi"),
-        keterangan: Yup.string().optional(),
-        anak_ke: Yup.string().optional(),
-      })}
+      validationSchema={validationSchema}
     >
       {({
         values,
@@ -132,9 +137,6 @@ const ProfileComponent = ({ onSuccess, onError }) => {
           <div className="flex flex-col gap-y-2 shadow-md p-5">
             <div className="flex">
               <div className="flex flex-col gap-y-4 w-full pr-4">
-                {/* <div>
-                  <p>content</p>
-                </div> */}
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Data Pribadi</h3>
                   <div className="border-b-2 border-gray-300"></div>
@@ -159,9 +161,9 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                     id="nik"
                     name="nik"
                     onChange={(data) => {
-                      const { value } = data.target
+                      const { value } = data.target;
                       if (/^[0-9]*$/.test(value) && value.length <= 16) {
-                        setFieldValue('nik', value)
+                        setFieldValue('nik', value);
                       }
                     }}
                     style={{ width: "100%" }}
@@ -212,9 +214,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                     value={values.tanggal_lahir}
                     id="tanggal_lahir"
                     name="tanggal_lahir"
-                    onChange={(e) =>
-                      setFieldValue("tanggal_lahir", e.target.value)
-                    }
+                    onChange={(e) => setFieldValue("tanggal_lahir", e.target.value)}
                     style={{ width: "100%" }}
                     error={touched.tanggal_lahir && errors.tanggal_lahir}
                     disabled
@@ -309,9 +309,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                     value={values.tanggal_diterima}
                     id="tanggal_diterima"
                     name="tanggal_diterima"
-                    onChange={(e) =>
-                      setFieldValue("tanggal_diterima", e.target.value)
-                    }
+                    onChange={(e) => setFieldValue("tanggal_diterima", e.target.value)}
                     style={{ width: "100%" }}
                     error={touched.tanggal_diterima && errors.tanggal_diterima}
                     disabled
@@ -346,9 +344,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                     value={values.tahun_ajaran}
                     id="tahun_ajaran"
                     name="tahun_ajaran"
-                    onChange={(e, { value }) =>
-                      setFieldValue("tahun_ajaran", value)
-                    }
+                    onChange={(e, { value }) => setFieldValue("tahun_ajaran", value)}
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.tahun_ajaran && errors.tahun_ajaran}
@@ -387,9 +383,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                     value={values.keterangan}
                     id="keterangan"
                     name="keterangan"
-                    onChange={(e, { value }) =>
-                      setFieldValue("keterangan", value)
-                    }
+                    onChange={(e, { value }) => setFieldValue("keterangan", value)}
                     placeholder="Pilih atau ketik"
                     style={{ width: "100%" }}
                     error={touched.keterangan && errors.keterangan}

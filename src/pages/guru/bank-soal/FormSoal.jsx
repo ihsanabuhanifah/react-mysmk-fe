@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import {
   pgOptions,
@@ -100,6 +100,7 @@ let AbsensiSchema = Yup.object().shape({
 export default function FormSoal() {
   const { dataMapel } = useList();
   const { id } = useParams();
+  const queryClient = useQueryClient();
   let { data, isLoading } = useQuery(
     //query key
     ["/bank-soal/update", id],
@@ -109,19 +110,16 @@ export default function FormSoal() {
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
-      staleTime : 60 * 1000 * 10,
+
       select: (response) => {
+        let data = response.data.soal;
 
-       
-        return response.data.soal;
-      },
-      onSuccess: (data) => {
-        console.log("data", data);
+        console.log('data', data)
         data.soal = JSON.parse(data.soal);
-
         setInitialState({
           payload: [data],
         });
+        return response.data.soal;
       },
     }
   );
@@ -179,6 +177,8 @@ export default function FormSoal() {
       } else {
         response = await updateBankSoal(id, values);
       }
+
+      queryClient.invalidateQueries("/bank-soal/list");
 
       toast.success(response?.data?.msg, {
         position: "top-right",
@@ -240,48 +240,6 @@ export default function FormSoal() {
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
                 <div className="space-y-5 " key={index}>
-                  {console.log("err", errors)}
-                  {id === undefined && (
-                    <section className="flex items-center justify-end">
-                      <AddButton
-                        disabled={false}
-                        onClick={() => {
-                          setFieldValue("payload", [
-                            ...values.payload,
-                            {
-                              materi: "",
-                              mapel_id: null,
-                              soal: {
-                                soal: "",
-                                a: null,
-                                b: null,
-                                c: null,
-                                d: null,
-                                e: null,
-                              },
-                              jawaban: "",
-                              tipe: "PG",
-                              point: 10,
-                            },
-                          ]);
-                        }}
-                        size="small"
-                      />
-                      <DeleteButton
-                        disabled={values.payload.length <= 1}
-                        onClick={() => {
-                          let filtered = values.payload.filter(
-                            (i, itemIndex) => {
-                              return itemIndex !== index;
-                            }
-                          );
-
-                          setFieldValue("payload", filtered);
-                        }}
-                        size="small"
-                      />
-                    </section>
-                  )}
                   <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
                     <div>
                       <Form.Field
