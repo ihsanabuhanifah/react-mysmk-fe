@@ -1,20 +1,24 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Button } from "../../../../components";
+import { Button } from "../../../../../components";
 import { useNavigate, useParams } from 'react-router-dom'
-import { TableWrapper } from "../../../../components/TableWrap";
+import { TableWrapper } from "../../../../../components/TableWrap";
 import { Table } from "semantic-ui-react";
 import { format } from 'date-fns'
-import { LabelStatus } from "../../../../components/Label";
+import { LabelStatus } from "../../../../../components/Label";
+import { IoArrowBackOutline } from 'react-icons/io5'
 const NilaiDetailComponent = ({ nilaiDetailData, onBackClick }) => {
   const navigate = useNavigate()
 
   return (
     <div>
-      <Button onClick={onBackClick}>Kembali</Button>
-
+      {/* <Button onClick={onBackClick}>Kembali</Button> */}
+      <button onClick={onBackClick} className='flex items-center gap-2 hover:text-[#18a558] mb-6'>
+					<IoArrowBackOutline size={20} />
+					<p>Kembali</p>
+				</button>
       <TableWrapper>
-        <Table>
+        <Table> 
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>No</Table.HeaderCell>
@@ -24,6 +28,7 @@ const NilaiDetailComponent = ({ nilaiDetailData, onBackClick }) => {
               <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
               <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
+              <Table.HeaderCell>Guru Pengampu</Table.HeaderCell>
               <Table.HeaderCell>Keterangan</Table.HeaderCell>{" "}
             </Table.Row>
           </Table.Header>
@@ -41,6 +46,7 @@ const NilaiDetailComponent = ({ nilaiDetailData, onBackClick }) => {
                 </Table.Cell>
                 <Table.Cell>{detail.exam_result ?? "-"}</Table.Cell>
                 <Table.Cell>{detail.exam ? detail.exam.slice(1, -1) : "-"}</Table.Cell>
+                <Table.Cell>{detail.guru5}</Table.Cell>
                 <Table.Cell>{detail.keterangan ?? "-"}</Table.Cell>
               </Table.Row>
             ))}

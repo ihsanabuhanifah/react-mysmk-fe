@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { Button, Form as SemanticForm, Icon } from "semantic-ui-react";
@@ -13,11 +13,13 @@ import useToast from "../../../../hook/useToast"; // Import useToast
 import { useUpdateProfile } from "./profile";
 import { LoadingPage } from "../../../../components";
 
-const FormikComponent = ({ onSuccess, onError }) => {
-  const params = useParams();
+const formatDate = (date) => {
+  const d = new Date(date);
+  return d.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+};
 
-  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(params.id);
-  const { id } = useParams();
+const ProfileComponent = ({ onSuccess, onError }) => {
+  const params = useParams();
   const queryClient = useQueryClient();
   const { successToast, warningToast } = useToast(); // Destructure custom toasts
 
@@ -40,80 +42,50 @@ const FormikComponent = ({ onSuccess, onError }) => {
     email: "",
   });
 
-  const validationSchema = Yup.object().shape({
-    nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
-    nik: Yup.string().required("NIK wajib diisi"),
-    nis: Yup.string().required("NIS wajib diisi"),
-    nisn: Yup.string().required("NISN wajib diisi"),
-    tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
-    tanggal_lahir: Yup.date().required("Tanggal lahir wajib diisi").nullable(),
-    alamat: Yup.string().required("Alamat wajib diisi"),
-    email: Yup.string()
-      .email("Email tidak valid")
-      .required("Email wajib diisi"),
-    sekolah_asal: Yup.string().required("Sekolah asal wajib diisi"),
-    tanggal_diterima: Yup.date()
-      .required("Tanggal diterima wajib diisi")
-      .nullable(),
-    angkatan: Yup.string().required("Angkatan wajib diisi"),
-    tahun_ajaran: Yup.string().required("Tahun ajaran wajib diisi"),
-    status: Yup.string().required("Status wajib diisi"),
-    keterangan: Yup.string().optional(),
-    anak_ke: Yup.string().optional(),
-  });
+  const { data: siswaData, isLoading, error } = useQuery(
+    [`/guru/siswa/detail/${params.id}`, params.id],
+    () => getSiswaById(params.id),
+    {
+      enabled: !!params.id,
+      staleTime: 1000 * 60 * 60 * 24, // 24 jam
+      onError: (err) => {
+        warningToast("Gagal mengambil data siswa");
+      },
+    }
+  );
 
-  const {
-    data: siswaData,
-    isLoading,
-    error,
-  } = useQuery([`/guru/siswa/detail/${id}`, id], () => getSiswaById(id), {
-    enabled: !!id,
-    staleTime : 1000 * 60 * 60 * 24, //24 jam
-    select: (response) => {
-      if (response && response.data && response.data.siswa) {
-        setInitialValues({
-          user_id: response.data.siswa.user_id || "",
-          nama_siswa: response.data.siswa.nama_siswa || "",
-          nik: response.data.siswa.nik || "",
-          nis: response.data.siswa.nis || "",
-          nisn: response.data.siswa.nisn || "",
-          tempat_lahir: response.data.siswa.tempat_lahir || "",
-          tanggal_lahir: response.data.siswa.tanggal_lahir
-            ? formatDate(response.data.siswa.tanggal_lahir)
-            : "",
-          alamat: response.data.siswa.alamat || "",
-          sekolah_asal: response.data.siswa.sekolah_asal || "",
-          jenis_kelamin: response.data.siswa.jenis_kelamin || "",
-          anak_ke: response.data.siswa.anak_ke || "",
-          tanggal_diterima: response.data.siswa.tanggal_diterima
-            ? formatDate(response.data.siswa.tanggal_diterima)
-            : "",
-          angkatan: response.data.siswa.angkatan || "",
-          tahun_ajaran: response.data.siswa.tahun_ajaran || "",
-          status: response.data.siswa.status || "",
-          keterangan: response.data.siswa.keterangan || "",
-          email: response.data.siswa.user.email || "",
-        });
-      } else {
-        warningToast("Data siswa tidak ditemukan.");
-      }
+  useEffect(() => {
+    if (siswaData && siswaData.data && siswaData.data.siswa) {
+      setInitialValues({
+        user_id: siswaData.data.siswa.user_id || "",
+        nama_siswa: siswaData.data.siswa.nama_siswa || "",
+        nik: siswaData.data.siswa.nik || "",
+        nis: siswaData.data.siswa.nis || "",
+        nisn: siswaData.data.siswa.nisn || "",
+        tempat_lahir: siswaData.data.siswa.tempat_lahir || "",
+        tanggal_lahir: siswaData.data.siswa.tanggal_lahir
+          ? formatDate(siswaData.data.siswa.tanggal_lahir)
+          : "",
+        alamat: siswaData.data.siswa.alamat || "",
+        sekolah_asal: siswaData.data.siswa.sekolah_asal || "",
+        jenis_kelamin: siswaData.data.siswa.jenis_kelamin || "",
+        anak_ke: siswaData.data.siswa.anak_ke || "",
+        tanggal_diterima: siswaData.data.siswa.tanggal_diterima
+          ? formatDate(siswaData.data.siswa.tanggal_diterima)
+          : "",
+        angkatan: siswaData.data.siswa.angkatan || "",
+        tahun_ajaran: siswaData.data.siswa.tahun_ajaran || "",
+        status: siswaData.data.siswa.status || "",
+        keterangan: siswaData.data.siswa.keterangan || "",
+        email: siswaData.data.siswa.user.email || "",
+      });
+    }
+  }, [siswaData]);
 
-
-      return response.data
-    },
-    onError: (err) => {
-      warningToast("Gagal mengambil data siswa");
-    },
-  });
-
-  const formatDate = (date) => {
-    const d = new Date(date);
-    return d.toISOString().split("T")[0]; // Format: YYYY-MM-DD
-  };
+  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(params.id);
 
   const onSubmit = async (values, { resetForm }) => {
     mutate(values);
-    // console.log(values)
   };
 
   if (isLoading) {
@@ -125,7 +97,27 @@ const FormikComponent = ({ onSuccess, onError }) => {
       initialValues={initialValues}
       enableReinitialize
       onSubmit={onSubmit}
-      validationSchema={validationSchema}
+      validationSchema={Yup.object().shape({
+        nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
+        nik: Yup.string().required("NIK wajib diisi"),
+        nis: Yup.string().required("NIS wajib diisi"),
+        nisn: Yup.string().required("NISN wajib diisi"),
+        tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
+        tanggal_lahir: Yup.date().required("Tanggal lahir wajib diisi").nullable(),
+        alamat: Yup.string().required("Alamat wajib diisi"),
+        email: Yup.string()
+          .email("Email tidak valid")
+          .required("Email wajib diisi"),
+        sekolah_asal: Yup.string().required("Sekolah asal wajib diisi"),
+        tanggal_diterima: Yup.date()
+          .required("Tanggal diterima wajib diisi")
+          .nullable(),
+        angkatan: Yup.string().required("Angkatan wajib diisi"),
+        tahun_ajaran: Yup.string().required("Tahun ajaran wajib diisi"),
+        status: Yup.string().required("Status wajib diisi"),
+        keterangan: Yup.string().optional(),
+        anak_ke: Yup.string().optional(),
+      })}
     >
       {({
         values,
@@ -157,7 +149,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     onChange={handleChange}
                     style={{ width: "100%" }}
                     error={touched.nama_siswa && errors.nama_siswa}
-                    disabled
+                    // disabled
                   />
                 </section>
                 <section>
@@ -166,10 +158,15 @@ const FormikComponent = ({ onSuccess, onError }) => {
                     value={values.nik}
                     id="nik"
                     name="nik"
-                    onChange={handleChange}
+                    onChange={(data) => {
+                      const { value } = data.target
+                      if (/^[0-9]*$/.test(value) && value.length <= 16) {
+                        setFieldValue('nik', value)
+                      }
+                    }}
                     style={{ width: "100%" }}
                     error={touched.nik && errors.nik}
-                    disabled
+                    // disabled
                   />
                 </section>
                 <section>
@@ -401,7 +398,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 </section>
               </div>
             </div>
-            {/* <div className="mt-5">
+            <div className="mt-5">
               <Button
                 content={"Update Siswa"}
                 type="submit"
@@ -412,7 +409,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 size="medium"
                 color="teal"
               />
-            </div> */}
+            </div>
           </div>
         </Form>
       )}
@@ -420,4 +417,4 @@ const FormikComponent = ({ onSuccess, onError }) => {
   );
 };
 
-export default FormikComponent;
+export default ProfileComponent;

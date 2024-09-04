@@ -54,6 +54,10 @@ export function listKelas() {
   return axios.get("/list/kelas");
 }
 
+export function listPelanggaran() {
+  return axios.get("/list/pelanggaran");
+}
+
 export function listRoles() {
   return axios.get("/list/roles");
 }
