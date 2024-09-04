@@ -1,4 +1,4 @@
-import { Tab, Table, Label, Form } from "semantic-ui-react";
+import { Tab, Table, Label, Form, Button, Icon } from "semantic-ui-react";
 import { useAbsensiHarian } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
 import { Input, TableLoading } from "../../../components";
@@ -12,29 +12,45 @@ export default function Harian() {
   console.log("data", data);
   return (
     <LayoutPage title={"Rekap Harian"}>
-      <div>
-        <Form>
-          <Form.Field
-            control={Input}
-            label="Tanggal"
-            name="email"
-            onChange={(e) => {
-              setParams((v) => {
-                return {
-                  ...v,
-                  tanggal: e.target.value,
-                };
-              });
+      <div className="grid grid-cols-5 gap-5 ">
+        <div className="col-span-2">
+          {" "}
+          <Form>
+            <Form.Field
+              control={Input}
+              label="Tanggal"
+              name="email"
+              onChange={(e) => {
+                setParams((v) => {
+                  return {
+                    ...v,
+                    tanggal: e.target.value,
+                  };
+                });
+              }}
+              value={params.tanggal}
+              type="date"
+            />
+          </Form>
+        </div>
+        <div className="flex items-end">
+          <Button
+            content={"Refresh Data"}
+            type="button"
+            fluid
+            icon={() => <Icon name="refresh" />}
+            size="medium"
+            color="blue"
+            onClick={() => {
+              return refetch();
             }}
-            value={params.tanggal}
-            type="date"
           />
-        </Form>
+        </div>
       </div>
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+            <Table.HeaderCell>Rombel</Table.HeaderCell>
             <Table.HeaderCell>Jam Ke-1</Table.HeaderCell>
             <Table.HeaderCell>Jam Ke-2</Table.HeaderCell>
             <Table.HeaderCell>Jam Ke-3</Table.HeaderCell>
@@ -48,7 +64,7 @@ export default function Harian() {
         <Table.Body>
           <TableLoading
             count={8}
-            isLoading={isLoading}
+            isLoading={isFetching}
             data={data?.agenda}
             messageEmpty={
               "Tidak Terdapat Riwayat Absensi pada tanggal yang dipilih"
@@ -58,395 +74,62 @@ export default function Harian() {
               data?.agenda?.map((item, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>{item.nama_kelas}</Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 1
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
+                  {[1, 2, 3, 4, 5, 6, 7, 8]?.map((i) => (
+                    <Table.Cell>
+                      <div className="grid grid-cols-1 gap-1">
+                        <Label
+                          size="tiny"
+                          content={
+                            item?.agendas?.filter(
+                              (x) => x.agenda.jam_ke === i
+                            )?.[0]?.agenda?.materi || "-"
+                          }
+                          color="teal"
+                          as={"a"}
+                        />
 
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 1
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 1
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
+                        <Label
+                          size="tiny"
+                          content={`${
+                            item?.agendas?.filter(
+                              (x) => x.agenda.jam_ke === i
+                            )?.[0]?.agenda?.mapel?.nama_mapel
+                          } - ${
+                            item?.agendas?.filter(
+                              (x) => x.agenda.jam_ke === i
+                            )?.[0]?.agenda?.teacher?.nama_guru
+                          }`}
+                          color="blue"
+                          as={"a"}
+                        />
 
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 1
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        color="green"
-                        content={item?.agendas
-                          ?.filter((x) => x.agenda.jam_ke === 1)?.[0]
-                          ?.siswa?.map((y) => (
-                            <i>
-                              {y.siswa.nama_siswa} ({" "}
-                              {
-                                izinOptions.filter(
-                                  (v) => v.value == y.status_kehadiran
-                                )?.[0]?.["text"]
-                              }
-                              ),
-                            </i>
-                          ))}
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 2
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 2
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 2
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                       <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 2
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        color="green"
-                        content={item?.agendas
-                          ?.filter((x) => x.agenda.jam_ke === 2)?.[0]
-                          ?.siswa?.map((y) => (
-                            <i>
-                              {y.siswa.nama_siswa} ({" "}
-                              {
-                                izinOptions.filter(
-                                  (v) => v.value == y.status_kehadiran
-                                )?.[0]?.["text"]
-                              }
-                              ),
-                            </i>
-                          ))}
-                        
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 3
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 3
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 3
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                       <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 3
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        color="green"
-                        content={item?.agendas
-                          ?.filter((x) => x.agenda.jam_ke === 3)?.[0]
-                          ?.siswa?.map((y) => (
-                            <i>
-                              {y.siswa.nama_siswa} ({" "}
-                              {
-                                izinOptions.filter(
-                                  (v) => v.value == y.status_kehadiran
-                                )?.[0]?.["text"]
-                              }
-                              ),
-                            </i>
-                          ))}
-                        
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 4
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 4
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 4
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 5
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 5
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 5
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 6
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 6
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 6
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        color="green"
-                        content={item?.agendas
-                          ?.filter((x) => x.agenda.jam_ke === 6)?.[0]
-                          ?.siswa?.map((y) => (
-                            <i>
-                              {y.siswa.nama_siswa} ({" "}
-                              {
-                                izinOptions.filter(
-                                  (v) => v.value == y.status_kehadiran
-                                )?.[0]?.["text"]
-                              }
-                              ),
-                            </i>
-                          ))}
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 7
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 7
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 7
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className="grid grid-cols-1 gap-1">
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 8
-                          )?.[0]?.agenda?.materi || "-"
-                        }
-                        color="teal"
-                        as={"a"}
-                      />
-
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 8
-                          )?.[0]?.agenda?.mapel?.nama_mapel || "-"
-                        }
-                        color="blue"
-                        as={"a"}
-                      />
-                      <Label
-                        size="tiny"
-                        content={
-                          item?.agendas?.filter(
-                            (x) => x.agenda.jam_ke === 8
-                          )?.[0]?.agenda?.teacher?.nama_guru || "-"
-                        }
-                        color="olive"
-                        as={"a"}
-                      />
-                    </div>
-                  </Table.Cell>
+                        <Label
+                          size="tiny"
+                          color="purple"
+                          content={
+                            item?.agendas?.filter(
+                              (x) => x.agenda.jam_ke === i
+                            )?.[0]?.siswa.length === 0
+                              ? "-"
+                              : item?.agendas
+                                  ?.filter((x) => x.agenda.jam_ke === i)?.[0]
+                                  ?.siswa?.map((y) => (
+                                    <i>
+                                      {y.siswa.nama_siswa} ({" "}
+                                      {
+                                        izinOptions.filter(
+                                          (v) => v.value == y.status_kehadiran
+                                        )?.[0]?.["text"]
+                                      }
+                                      ),
+                                    </i>
+                                  ))
+                          }
+                          as={"a"}
+                        />
+                      </div>
+                    </Table.Cell>
+                  ))}
                 </Table.Row>
               ))}
           </TableLoading>

@@ -85,6 +85,21 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
+          {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="monitor/harian"
+            path="monitor/harian"
+            title={"Monitor KBM"}
+            logo={
+              <MdLaptopChromebook
+                className={`h-8 w-8 ${
+                  url === "monitor" ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
         <NavButton
           handleSidebar={handleSiderbar}
           to="daftar-siswa"
@@ -139,21 +154,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-         {checkRole(roles, "Guru") && (
-          <NavButton
-            handleSidebar={handleSiderbar}
-            to="absensi/harian"
-            path="absensi/harian"
-            title={"Rekap KBM"}
-            logo={
-              <MdLaptopMac
-                className={`h-8 w-8 ${
-                  url === "absensi" ? "text-white-400" : "text-gray-600"
-                }`}
-              />
-            }
-          />
-        )}
+       
 
         <NavButton
           handleSidebar={handleSiderbar}

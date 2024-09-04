@@ -136,7 +136,7 @@ function App() {
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
           {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
-          <Route path="absensi/harian" element={<Harian/>} />
+          <Route path="monitor/harian" element={<Harian/>} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
