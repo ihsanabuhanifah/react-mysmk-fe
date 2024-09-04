@@ -6,6 +6,7 @@ import useToast from "../../hook/useToast";
 import usePage from "../../hook/usePage";
 import { usePagination } from "../../hook/usePagination";
 import { useNavigate } from "react-router-dom";
+import { saveAs } from "file-saver";
 export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/santri/laporan-harian-pkl/list", { params });
@@ -214,5 +215,34 @@ export const useUpdateLaporanDiniyyah = (id) => {
       },
     }
   );
+  return { mutate, isLoading };
+};
+
+export const useDownloadPdf = () => {
+  const { successToast, warningToast } = useToast();
+
+  const { mutate, isLoading } = useMutation(
+    () =>
+      axios.get(`/santri/laporan-harian-pkl/downdload-pdf?bulan=8&tahun=2024`, {
+        responseType: "blob", // tambahkan ini untuk memastikan response berbentuk blob
+      }),
+    {
+      onSuccess: (response) => {
+        const contentDisposition = response.headers["content-disposition"];
+        const filename = contentDisposition
+          ? contentDisposition.split("filename=")[1].replace(/"/g, "")
+          : "Laporan_PKL.pdf"; 
+
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        saveAs(blob, filename); 
+        successToast("PDF berhasil didownload!");
+      },
+      onError: (err) => {
+        console.error("Error saat mendownload PDF:", err);
+        warningToast("Gagal mendownload PDF.");
+      },
+    }
+  );
+
   return { mutate, isLoading };
 };

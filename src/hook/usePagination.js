@@ -14,16 +14,7 @@ export const usePagination = (defaultParams) => {
       };
     });
   };
-  const handleTagFilter = (tag) => {
-    setFilterParams({ ...params, page: 1, tagId: tag });
-    setParams((prev) => {
-      return {
-        ...prev,
-        page: 1,
-        tagId: tag,
-      };
-    });
-  };
+ 
 
   const handleKeyword = (keyword) => {
     setFilterParams({ ...params, keyword: keyword, page: 1 });

@@ -11,7 +11,10 @@ import {
   Input,
   Select,
 } from "semantic-ui-react";
-import { useLaporanPklList } from "../../../api/siswa/laporan-pkl";
+import {
+  useDownloadPdf,
+  useLaporanPklList,
+} from "../../../api/siswa/laporan-pkl";
 import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
@@ -24,7 +27,7 @@ const Statusoptions = [
 
 const LaporanPkl = () => {
   const [visible, setVisible] = useState(false);
-
+  const { mutate, isLoading: downloadPdfIsLoading } = useDownloadPdf();
   const {
     data,
     isFetching,
@@ -79,9 +82,7 @@ const LaporanPkl = () => {
   };
 
   return (
-    <LayoutSiswa title="Laporan Pkl">
-      <Sidebar.Pushable style={{ minHeight: "100vh", overflow: "hidden" }}>
-        {/* Sidebar */}
+    <LayoutSiswa title="Jurnal Pkl">
         <Sidebar
           as={Menu}
           animation="overlay"
@@ -138,14 +139,14 @@ const LaporanPkl = () => {
               </Button>
             </Form.Field>
             <Form.Field>
-              <Button className="w-full" secondary onClick={handleClear}>
+              <Button className="w-full" color="green" onClick={handleClear}>
                 Clear Filters
               </Button>
             </Form.Field>
           </Form>
         </Sidebar>
 
-        <Sidebar.Pusher dimmed={visible}>
+        <div >
           <div className="flex flex-col gap-y-4 pb-10 w-full h-full pl-2 pr-5">
             <div className="w-full flex justify-between bg-transparent">
               <Button
@@ -159,6 +160,9 @@ const LaporanPkl = () => {
               <Button size="medium" color="red" onClick={handleSidebar}>
                 <Icon name="filter" />
                 Filter
+              </Button>
+              <Button size="medium" color="red" loading={downloadPdfIsLoading} onClick={() => mutate()}>
+                donwload tes pdf
               </Button>
             </div>
             <div
@@ -213,8 +217,7 @@ const LaporanPkl = () => {
               />
             </div>
           </div>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+        </div>
     </LayoutSiswa>
   );
 };

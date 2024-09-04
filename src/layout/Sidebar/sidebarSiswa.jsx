@@ -94,7 +94,7 @@ export default function SidebarSiswa({ setSidebar }) {
           handleSidebar={handleSiderbar}
           to="laporan-pkl"
           path="laporan-pkl"
-          title={"Laporan Pkl"}
+          title={"Jurnal Harian"}
           logo={
             <IoNewspaperOutline
               className={`h-6 w-6 ${
