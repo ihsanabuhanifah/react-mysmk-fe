@@ -74,7 +74,7 @@ const Nav = () => {
               {/* Dropdown Menu for "Jurusan" */}
               {index === 1 && dropdownOpen && (
                 <ul className="absolute top-full left-0 shadow-lg py-2 bg-white">
-                  <Link to="ppdb/jurusan-rpl">
+                  <Link to="jurusan-rpl">
                     <li className="px-4 py-2 hover:bg-gray-100">
                       <a className="text-green-500">RPL</a>
                     </li>

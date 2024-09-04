@@ -92,14 +92,13 @@ const LandingPageRpl = () => {
 
   return (
     <>
-      <Nav />
+      {/* <Nav /> */}
       <main>
-        <div className="p-4 bg-backgroundBaru bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
+        <div className="p-4 bg-backgroundRPL bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
           <div className="flex flex-col items-center justify-center mr-8">
             <p className="text-white font-bold text-5xl text-center leading-tight mb-6">
               Penerimaan Santri Baru
               <br />
-              SMK Madinatul Quran
               <br />
               <span className="text-white text-3xl font-extralight text-center leading-tight mb-6">
                 Tahun Ajaran 2025-2026
