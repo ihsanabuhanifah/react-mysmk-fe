@@ -7,11 +7,12 @@ import LayoutPage from "../../../module/layoutPage";
 import useDebounce from "../../../hook/useDebounce";
 import useDelete from "../../../hook/useDelete";
 import ActivityCard from "../../../components/ActivityCardPkl";
-import { Button, Header, Icon, Label, Menu, Sidebar } from "semantic-ui-react";
+import { Button, Header, Icon, Label, Loader, Menu, Sidebar } from "semantic-ui-react";
 import { DeleteButton, EditButton, TableLoading } from "../../../components";
 import Card from "../../../components/CardLaporan";
 import FilterLaporanPkl from "./filter";
 import { encodeURlFormat } from "../../../utils";
+
 
 
 export default function LaporanPkl() {
@@ -33,7 +34,7 @@ export default function LaporanPkl() {
 
     const params = {
         page, pageSize,
-        status: 1,
+        // status: 1,
         ...filter,
         nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
 
@@ -101,9 +102,8 @@ export default function LaporanPkl() {
 
             </section>
 
-            <div className="flex flex-col gap-6 items-center w-full px-5 py-4 ">
+            {/* <div className="flex flex-col gap-6 items-center w-full px-5 py-4 " >
 
-                <TableLoading data={data?.data?.row} messageEmpty={'Data Tidak Ditemukan'}>
                     {data?.data?.map((value, index) => (
 
                         <React.Fragment key={index}>
@@ -118,10 +118,32 @@ export default function LaporanPkl() {
 
                     ))}
 
-                </TableLoading>
+                
 
 
+            </div> */}
+
+            <div className="flex flex-col gap-6 items-center w-full px-5 py-4">
+                {/* Display loader while fetching or loading data */}
+                {(isLoading || isFetching) && (
+                    <Loader active inline="centered" content="Loading..." />
+                )}
+
+                {/* Check if there's no data and show a message */}
+                {data?.data?.length === 0 && !isLoading && !isFetching && (
+                    <div className="w-full bg-yellow-50 text-center p-5 rounded">
+                        <p className="text-brown-700 font-bold">Tidak Ditemukan Rekap pada filter yang dipilih</p>
+                    </div>
+                )}
+
+                {/* Render cards if data is available */}
+                {data?.data?.map((value, index) => (
+                    <React.Fragment key={index}>
+                        <Card isFetching={isFetching} isLoading={isLoading} item={value} />
+                    </React.Fragment>
+                ))}
             </div>
+            
 
 
 
