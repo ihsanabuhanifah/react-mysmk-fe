@@ -65,8 +65,8 @@ export const useLaporanPklList = () => {
   } = usePagination(defParams);
 
   const { isLoading, data, isFetching } = useQuery(
-    ["/santri/laporan-harian-pkl/list", params],
-    () => getLaporanPkl(params),
+    ["/santri/laporan-harian-pkl/list", filterParams],
+    () => getLaporanPkl(filterParams),
     {
       keepPreviousData: true,
       select: (response) => response.data,
