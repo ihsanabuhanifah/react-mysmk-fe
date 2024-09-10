@@ -10,9 +10,9 @@ const axiosClient = axios.create({
   // baseURL: "https://mysmk-be.smkmadinatulquran.sch.id/",
   // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
- // baseURL: "http://localhost:8085/",
-//baseURL : "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
-baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
+ baseURL: "http://localhost:8085/",
+// baseURL : "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
+// baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
 
 
 

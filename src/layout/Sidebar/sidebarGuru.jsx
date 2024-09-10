@@ -311,6 +311,23 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+        {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="notice"
+            path="notice"
+            title={"notice"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${
+                  url === "notice"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}

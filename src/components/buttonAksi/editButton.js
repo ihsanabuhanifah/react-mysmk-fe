@@ -52,6 +52,19 @@ export function DeleteButton({ onClick, disabled, size = "small" }) {
     </button>
   );
 }
+export function DownloadButton({ onClick, disabled, size = "small" }) {
+  return (
+    <button
+      compact
+      className={`bg-none ${disabled ? "cursor-not-allowed" : ""}`}
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon size={size} disabled={disabled} name="download" color={disabled ? "grey" : "green"} />
+    </button>
+  );
+}
 
 export function ViewButton({ onClick, disabled, size = "small" }) {
   return (

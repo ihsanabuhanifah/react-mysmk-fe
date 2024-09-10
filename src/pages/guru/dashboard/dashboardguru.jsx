@@ -42,7 +42,7 @@ export default function DashboardGuru() {
             </div>
           </div>
           <div className="p-5 shadow rounded-xl mt-3 ">
-            <p className="text-xl font-bold">testing chart</p>
+            <p className="text-xl font-bold">Frequen Absen</p>
             <div className="h-96">
               <CnthChart />
             </div>

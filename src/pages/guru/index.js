@@ -27,6 +27,7 @@ import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
 import { EditSiswa } from "./daftar-siswa/edit-siswa";
+import AddNotice from "./info/addNorice";
 // import { ProfileSiswa } from "./daftar-siswa/siswa/profile";
 export {
   Absensi,
@@ -58,5 +59,6 @@ export {
   ListExam,
   CreateSiswa,
   EditSiswa,
+  AddNotice
   // ProfileSiswa
 };

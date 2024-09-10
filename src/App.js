@@ -37,6 +37,7 @@ import {
   FormExam,
   CreateSiswa,
   EditSiswa,
+  AddNotice
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -61,6 +62,8 @@ import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
+import Info from "./pages/guru/info";
+import EditNotice from "./pages/guru/info/editNotice";
 
 
 
@@ -168,6 +171,18 @@ function App() {
           <Route
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
+          />
+          <Route
+            path="notice"
+            element={<Info />}
+          />
+          <Route
+            path="notice/tambah"
+            element={<AddNotice />}
+          />
+          <Route
+            path="notice/edit/:id"
+            element={<EditNotice />}
           />
         </Route>
 
