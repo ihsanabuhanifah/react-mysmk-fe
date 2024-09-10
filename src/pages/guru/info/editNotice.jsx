@@ -342,7 +342,7 @@ function EditNotice() {
                   error={errors?.judul_notice}
                 />
               </div>
-              <div className="col-span-2 mt-2">
+              {/* <div className="col-span-2 mt-2">
                 <Form.Field
                   control={TextArea}
                   label="Isi Notice"
@@ -356,7 +356,18 @@ function EditNotice() {
                   error={errors?.isi_notice}
                   className="h-full"
                 />
-              </div>
+              </div> */}
+              <div className="mb-5 col-span-2">
+                      <FormLabel>Isi Notice</FormLabel>
+                      <Editor
+                        error={errors?.isi_notice}
+                        value={values.isi_notice}
+                        handleChange={(content) => {
+                          setFieldValue(`isi_notice`, content);
+                          console.log(content);
+                        }}
+                      />
+                    </div>
             </div>
             {/* <Segment basic textAlign="center">
                   {mode === "add" && (
