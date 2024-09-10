@@ -14,7 +14,7 @@
   // const UjianContent = () => <div>Konten Ujian</div>;
   // const PelanggaranContent = () => <div>Konten Pelanggaran</div>;
 
-  export function EditSiswa() {
+  export function EditSiswa({dataTa}) {
     const [visible, setVisible] = React.useState(false);
     const navigate = useNavigate();
     const { nama } = useParams();
@@ -34,7 +34,7 @@
         menuItem: 'Nilai',
         render: () => (
           <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
-            <NilaiComponent/>
+            <NilaiComponent dataTa={dataTa}/>
           </Tab.Pane>
         ),
       },
@@ -47,6 +47,15 @@
           </Tab.Pane>
         ),
       },
+      // {
+      //   menuItem: 'Prestasi',
+      //   render: () => (
+      //     <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
+      //       {/* <PelanggaranContent /> */}
+      //       <PelanggaranComponent/>
+      //     </Tab.Pane>
+      //   ),
+      // },
     ];
 
     return (

@@ -151,6 +151,8 @@ export function usePelanggaranSiswa(id) {
     ['list_tahun_ajaran'],
     () => listtahunajaran(),
     {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 60 * 24, // 24 jam
       select: (res) => res.data.data
     }
   )
@@ -159,11 +161,15 @@ export function usePelanggaranSiswa(id) {
     ['list_pelanggaran'],
     () => listPelanggaran(),
     {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 60 * 24, // 24 jam
       select: (res) => res.data.data
     }
   )
   
   let { data, isFetching } = useQuery(['/guru/pelanggaran/detail', [params, id]], () => axios.get(`/guru/pelanggaran/list/${id}`, {params}).then(res => res.data), {
+    enabled: !!id,
+    staleTime: 1000 * 60 * 60 * 24, // 24 jam
     onSuccess: (res) => {
     },
     onError: (res) => {

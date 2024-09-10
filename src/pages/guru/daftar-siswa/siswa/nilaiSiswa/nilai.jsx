@@ -4,11 +4,14 @@ import Select from "react-select";
 import { useParams } from "react-router-dom";
 import { useNilaiDetail, useNilaiSiswa } from "../profile"; 
 import LoadingPage from "../../../../../components/LoadingPage";
+import { TableLoading } from "../../../../../components";
 import { TableWrapper } from "../../../../../components/TableWrap";
 import NilaiDetailComponent from "./detailNilai";
+import useList from "../../../../../hook/useList";
 
 const NilaiComponent = () => {
   const { id } = useParams();
+  const { dataTa } = useList();
   const [selectedDetail, setSelectedDetail] = useState(null);
   const [filters, setFilters] = useState({
     mapel_id: null,
@@ -97,23 +100,28 @@ const NilaiComponent = () => {
           </Form>
 
           <TableWrapper>
-            {filteredNilaiData && filteredNilaiData.length > 0 ? (
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>No</Table.HeaderCell>
-                    <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-                    <Table.HeaderCell>Tugas</Table.HeaderCell>
-                    <Table.HeaderCell>Harian</Table.HeaderCell>
-                    <Table.HeaderCell>PTS</Table.HeaderCell>
-                    <Table.HeaderCell>PAS</Table.HeaderCell>
-                    <Table.HeaderCell>US</Table.HeaderCell>
-                    <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-                    <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-                    <Table.HeaderCell>Aksi</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
+            <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>No</Table.HeaderCell>
+                  <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                  <Table.HeaderCell>Tugas</Table.HeaderCell>
+                  <Table.HeaderCell>Harian</Table.HeaderCell>
+                  <Table.HeaderCell>PTS</Table.HeaderCell>
+                  <Table.HeaderCell>PAS</Table.HeaderCell>
+                  <Table.HeaderCell>US</Table.HeaderCell>
+                  <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
+                  <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
+                  <Table.HeaderCell>Aksi</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <TableLoading
+                  count={10} // Number of rows to show while loading
+                  isLoading={isLoadingNilai}
+                  data={filteredNilaiData}
+                  messageEmpty="Tidak ada data nilai"
+                >
                   {filteredNilaiData?.map((nilai, index) => (
                     <Table.Row key={nilai.id}>
                       <Table.Cell>{index + 1}</Table.Cell>
@@ -134,11 +142,9 @@ const NilaiComponent = () => {
                       </Table.Cell>
                     </Table.Row>
                   ))}
-                </Table.Body>
-              </Table>
-            ) : (
-              <div>Tidak ada data</div>
-            )}
+                </TableLoading>
+              </Table.Body>
+            </Table>
           </TableWrapper>
         </div>
       ) : (
