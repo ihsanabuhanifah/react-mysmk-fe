@@ -4,7 +4,7 @@ export default function LoadingPage() {
     <div className="h-screen w-screen flex items-center justify-center">
      
         <Dimmer active inverted>
-          <Loader size="large">Loading</Loader>
+          <Loader size="large" className="z-[999999]">Loading</Loader>
         </Dimmer>
 
        

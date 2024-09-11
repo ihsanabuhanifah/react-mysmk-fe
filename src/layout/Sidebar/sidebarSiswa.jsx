@@ -1,15 +1,22 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdClose, MdLaptopMac } from "react-icons/md";
-import { IoCheckmarkDoneOutline, IoDocumentTextOutline, IoPerson, IoStatsChart } from "react-icons/io5";
+import {
+  IoCheckmarkDoneOutline,
+  IoDocumentTextOutline,
+  IoLogOutOutline,
+  IoPerson,
+  IoStatsChart,
+} from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import { IoNewspaperOutline } from "react-icons/io5";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
+import { LogoutButton } from "../siswa";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
-  const { profile } = useZUStore((state) => state)
+  const { profile } = useZUStore((state) => state);
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -21,8 +28,8 @@ export default function SidebarSiswa({ setSidebar }) {
   return (
     <>
       {/* tablet */}
-      <div className="xl:hidden flex shadow-lg border-b-2 items-center justify-between h-20  w-full px-5 relative overflow-y-auto ">
-        <div className="h-24 w-24  flex-col mt-12 items-center">
+      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1 xl:hidden">
+        <div className="mt-12 h-24 w-24 flex-col items-center">
           <img
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
@@ -31,20 +38,24 @@ export default function SidebarSiswa({ setSidebar }) {
           />
         </div>
 
-        <button className="" onClick={handleSiderbar}>
-          <MdClose className="w-10 h-10" />
+        <button className="text-gray-700" onClick={handleSiderbar}>
+          <MdClose className="h-10 w-10" />
         </button>
       </div>
 
       {/* laptop */}
-      <div className="flex mb-3 items-center bg-[#18a558] mr-2 gap-x-2 rounded-lg p-2">
-        <div className="w-10 h-10 rounded-full bg-gray-200">
-          <ImageWithFallback src={profile.user.image} alt='You' fallbackSrc='/blankprofile.jpg' />
+      <div className="mb-3 mr-2 flex items-center gap-x-2 rounded-lg bg-[#18a558] p-2">
+        <div className="h-10 w-10 rounded-full bg-gray-200">
+          <ImageWithFallback
+            src={profile.user.image}
+            alt="You"
+            fallbackSrc="/blankprofile.jpg"
+          />
         </div>
 
         <div>
-          <p className="m-0 text-sm text-white/80 leading-none">Hello</p>
-          <p className="mt-1 text-md text-white font-black leading-none">
+          <p className="m-0 text-sm leading-none text-white/80">Hello</p>
+          <p className="text-md mt-1 font-black leading-none text-white">
             {profile?.nama_siswa?.split(" ")[0]}
           </p>
         </div>
@@ -52,7 +63,7 @@ export default function SidebarSiswa({ setSidebar }) {
 
       <nav
         id="scrollbar"
-        className="flex flex-col space-y-2 p-0  xl:p-0 h-[80%] pt-5 overflow-auto pb-12"
+        className="flex h-[80%] flex-col space-y-2 overflow-auto p-0 pb-12 pt-5 xl:p-0"
       >
         <NavButton
           handleSidebar={handleSiderbar}
@@ -80,7 +91,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-		  <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="ujian"
           path="ujian"
@@ -93,7 +104,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-		  <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="hasil-ujian"
           path="hasil-ujian"
@@ -106,7 +117,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-		  <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
@@ -119,7 +130,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-		  <NavButton
+        <NavButton
           handleSidebar={handleSiderbar}
           to="laporan-pkl"
           path="laporan-pkl"
@@ -133,6 +144,19 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
       </nav>
+      <div className="mb-4 ml-2 mt-5 block xl:hidden">
+        <LogoutButton
+          onClick={() => {
+            return setSidebar(true);
+          }}
+          title={"Logout"}
+          logo={
+            <IoLogOutOutline
+              className={`h-6 w-6 text-gray-700 group-hover:text-[#18a558]`}
+            />
+          }
+        />
+      </div>
     </>
   );
 }
@@ -148,24 +172,22 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
         handleSidebar();
         return navigate(to);
       }}
-      className={`flex justify-between group pl-2 items-center h-10`}
+      className={`group flex h-10 items-center justify-between pl-2`}
     >
       <div className="flex items-center">
         <div>{logo}</div>
         <p
-          className={`ml-3 text-xs whitespace-nowrap font-poppins text-left 
-       ${
-         url === path
-           ? "text-[#18a558] font-black text-[0.85rem]"
-           : "text-gray-400"
-       } group-hover:text-gray-600 group-hover:font-black
-         `}
+          className={`ml-3 whitespace-nowrap text-left font-poppins text-xs ${
+            url === path
+              ? "text-[0.85rem] font-black text-[#18a558]"
+              : "text-gray-400"
+          } group-hover:font-black group-hover:text-gray-600`}
         >
           {title}
         </p>
       </div>
       {url === path && (
-        <div className="h-full w-1 bg-[#18a558] rounded-l-md"></div>
+        <div className="h-full w-1 rounded-l-md bg-[#18a558]"></div>
       )}
     </button>
   );
