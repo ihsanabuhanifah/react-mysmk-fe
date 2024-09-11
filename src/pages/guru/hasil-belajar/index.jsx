@@ -1,7 +1,7 @@
 import LayoutPage from "../../../module/layoutPage";
 import React from "react";
 import { Button, Form, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
-import { TableLoading } from "../../../components";
+import { PaginationTable, TableLoading } from "../../../components";
 import { TableWrapper } from "../../../components/TableWrap";
 
 import { useListReport } from "../../../api/guru/report";
@@ -9,8 +9,21 @@ import Filter from "./filter";
 
 export default function HasilBelajar() {
   let [visible, setVisible] = React.useState(false);
-  const { data, isFetching, payload, handlePayload, handleParams } =
-    useListReport();
+  const {
+    isLoading,
+    data,
+    isFetching,
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
+    handlePayload
+  } = useListReport();
 
   return (
     <LayoutPage title={"Hasil Belajar"}>
@@ -26,15 +39,15 @@ export default function HasilBelajar() {
         width="wide"
       >
         <Filter
-          payload={payload}
+          payload={params}
           handlePayload={handlePayload}
           setVisible={setVisible}
-          onClick={handleParams}
+          onClick={handleFilter}
         />
       </Sidebar>
       <Form>
         <section className=" grid grid-cols-6 gap-5 mb-5">
-          <div >
+          <div>
             <Button
               content={"Filter"}
               type="button"
@@ -56,7 +69,7 @@ export default function HasilBelajar() {
               <Table.HeaderCell rowSpan={2}>No</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}> Mata Pelajaran</Table.HeaderCell>
-              <Table.HeaderCell rowSpan={2}>Guru</Table.HeaderCell>
+
               <Table.HeaderCell rowSpan={2}>Kelas</Table.HeaderCell>
               <Table.HeaderCell rowSpan={2}>Tahun Ajaran</Table.HeaderCell>
               <Table.HeaderCell textAlign="center" colSpan={7}>
@@ -81,16 +94,16 @@ export default function HasilBelajar() {
             <TableLoading
               count={20}
               isLoading={isFetching}
-              data={data?.data}
-              messageEmpty={"Tidak Terdapat Hasil Ujian"}
+              data={data?.data?.rows}
+              messageEmpty={"Data tidak ditemukan"}
             >
               {data &&
-                data?.data?.map((value, index) => (
+                data?.data?.rows?.map((value, index) => (
                   <Table.Row key={index}>
                     <Table.Cell>{index + 1}</Table.Cell>
                     <Table.Cell>{value.siswa?.nama_siswa}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
-                    <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
+
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>
                       {value?.tahun_ajaran?.nama_tahun_ajaran}
@@ -113,6 +126,14 @@ export default function HasilBelajar() {
           </Table.Body>
         </Table>
       </TableWrapper>
+
+      <PaginationTable
+          page={params.page}
+          pageSize={params.pageSize}
+          setPageSize={handlePageSize}
+          setPage={handlePage}
+          totalPages={data?.data?.count}
+        />
     </LayoutPage>
   );
 }

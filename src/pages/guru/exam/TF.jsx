@@ -37,7 +37,7 @@ export default function TF({ soals, jawaban, item, nomor }) {
             </div>
         </section>
 
-        <div className=" p-2 rounded-md">
+        <div className=" p-2 rounded-md border text-justify">
           {htmr(`<div>${soals.soal}</div>`)}
         </div>
 

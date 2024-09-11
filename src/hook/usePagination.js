@@ -53,6 +53,16 @@ export const usePagination = (defaultParams) => {
     setFilterParams((params) => ({ ...params, page: page }));
   };
 
+
+  const handlePayload = (nama, value) => {
+    setParams((pay) => {
+      return {
+        ...pay,
+        [nama]: value,
+      };
+    });
+  };
+
   return {
     params,
     keyword,
@@ -63,5 +73,6 @@ export const usePagination = (defaultParams) => {
     handlePage,
     filterParams,
     handleSearch,
+    handlePayload
   };
 };

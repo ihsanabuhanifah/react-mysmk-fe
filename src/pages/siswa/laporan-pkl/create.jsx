@@ -241,9 +241,9 @@ const CreateLaporanPkl = () => {
                   <div className="flex flex-col w-max">
                     <Button
                       loading={isLoadingCreate}
-                      type="submit"
+                      type="submit"   
                       color="green"
-                      disabled={!isWithinRange} // Disable jika di luar jangkauan
+                      // disabled={!isWithinRange} // Disable jika di luar jangkauan
                     >
                       Submit
                     </Button>

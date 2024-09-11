@@ -1,19 +1,34 @@
 import { useQuery } from "react-query";
 import { syncToken } from "../axiosClient";
 import axios from '../axiosClient'
+import { useState } from "react";
+import { listtahunajaran } from "../list";
 
 export function useGetHasilBelajar() {
-  console.log('hehe dipanggil')
-  syncToken();
+  let [params, setParams] = useState({
+    nama_mapel: '',
+    ta_id: '',
+    tanggal: '',
+  })
   
-  let { data, isFetching } = useQuery(['/santri/hasil-belajar'], () => axios.get('/santri/hasil-belajar').then(res => res.data), {
+  syncToken();
+
+  let { data: dataTa } = useQuery(
+    ['list_tahun_ajaran'],
+    () => listtahunajaran(),
+    {
+      select: (res) => res.data.data
+    }
+  )
+  
+  let { data, isFetching } = useQuery(['/santri/hasil-belajar', params], () => axios.get('/santri/hasil-belajar', {params}).then(res => res.data), {
     onSuccess: (res) => {
     },
     onError: (res) => {
     }
   })
 
-  return { data, isFetching }
+  return { data, isFetching, setParams, dataTa, params }
 }
 
 export function useGetHasilBelajarDetail(id) {

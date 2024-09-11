@@ -29,19 +29,52 @@ const TableSoal = ({
       <section className="flex items-center justify-between">
         <h1 className="text-xl capitalize  font-bold font-poppins">{title}</h1>
 
-       {!isSoal &&  <Input
-        placeholder='Cari'
-          value={materi}
-          icon="search"
-          onChange={(e) => {
-            setMateri(e.target.value);
-          }}
-        />}
+        {!isSoal && (
+          <>
+            {" "}
+            <Input
+              placeholder="Cari"
+              value={materi}
+              icon="search"
+              onChange={(e) => {
+                setMateri(e.target.value);
+              }}
+            />
+          </>
+        )}
       </section>
       <Table celled selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell>
+              {" "}
+              {/* <Checkbox
+
+                onChange={(e) => {
+                  
+
+                  if (value.soal.some((item2) => item2.id === item.id)) {
+                    let filtered = value.soal.filter(
+                      (item3) => item3.id !== item.id
+                    );
+
+                    return setFieldValue(`payload[${index}]soal`, filtered);
+                  }
+
+                  let soal = [...value?.soal];
+                  soal.push({
+                    id: item.id,
+                    jawaban: item.jawaban,
+                    materi: item.materi,
+                    point: item.point,
+                    soal: item.soal,
+                    tipe: item.tipe,
+                  });
+
+                  setFieldValue(`payload[${index}]soal`, soal);
+                }}
+              /> */}
+            </Table.HeaderCell>
             <Table.HeaderCell>No</Table.HeaderCell>
             {/* <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell> */}
             {/* <Table.HeaderCell>Guru Pembuat</Table.HeaderCell> */}

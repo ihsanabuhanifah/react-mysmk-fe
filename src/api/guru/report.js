@@ -6,12 +6,13 @@ import { syncToken } from "../axiosClient";
 
 import useToast from "../../hook/useToast";
 import { useState } from "react";
+import { usePagination } from "../../hook/usePagination";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
 }
 
 export const useGenerateReport = () => {
-  let queryClient = useQueryClient()
+  let queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
@@ -19,7 +20,7 @@ export const useGenerateReport = () => {
     },
     {
       onSuccess: (response) => {
-        queryClient.invalidateQueries("/guru/nilai/list/teacher")
+        queryClient.invalidateQueries("/guru/nilai/list/teacher");
         successToast(response);
       },
 
@@ -37,42 +38,48 @@ export function listReport(params) {
 }
 
 export const useListReport = () => {
-  let [params, setParams] = useState({
+  const {
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handlePayload,
+    handleSearch,
+  } = usePagination({
     nama_siswa: "",
     kelas_id: "",
     mapel_id: "",
     ta_id: "",
+    page: 1,
+    pageSize: 10,
   });
 
-  const [payload, setPayload] = useState({
-    student_id: "",
-    kelas_id: "",
-    mapel_id: "",
-    ta_id: "",
-  });
+  // const handlePayload = (nama, value) => {
+  //   setPayload((pay) => {
+  //     return {
+  //       ...pay,
+  //       [nama]: value,
+  //     };
+  //   });
+  // };
 
-  const handlePayload = (nama, value) => {
-    setPayload((pay) => {
-      return {
-        ...pay,
-        [nama]: value,
-      };
-    });
-  };
+  // const handleParams = () => {
+  //   setParams((params) => {
+  //     return {
 
-  const handleParams = () => {
-    setParams((params) => {
-      return {
-       
-        ...payload,
-       
-      };
-    });
-  };
+  //       ...payload,
+
+  //     };
+  //   });
+  // };
 
   const { isLoading, data, isFetching } = useQuery(
-    ["/guru/nilai/list/teacher", [params]],
-    () => listReport(params),
+    ["/guru/nilai/list/teacher", [filterParams]],
+    () => listReport(filterParams),
     {
       keepPreviousData: true,
       select: (response) => response.data,
@@ -84,10 +91,15 @@ export const useListReport = () => {
     isLoading,
     data,
     isFetching,
-    setParams,
-    payload,
     params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
     handlePayload,
-    handleParams,
   };
 };

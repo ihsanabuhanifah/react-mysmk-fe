@@ -1,9 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../components/buttonAksi/editButton";
+import { LoadingPage } from "../components";
 
-export default function LayoutPage({ title, children }) {
+export default function LayoutPage({ title, children, isLoading }) {
   const navigate = useNavigate();
+
+
+  if(isLoading){
+    return <LoadingPage/>
+  }
   return (
     <React.Fragment>
       <section className="  mb-5 h-full   ">

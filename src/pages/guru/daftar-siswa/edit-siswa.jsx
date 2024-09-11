@@ -6,6 +6,7 @@ import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getSiswaById } from '../../../api/guru/siswa';
 import FormikComponent from './siswa/profileSiswa';
+import NilaiComponent from './siswa/nilai';
 import { toast } from 'react-toastify';
 
 const NilaiContent = () => <div>Konten Nilai</div>;
@@ -32,18 +33,19 @@ export function EditSiswa() {
       menuItem: 'Nilai',
       render: () => (
         <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
-          <NilaiContent />
+          {/* <NilaiContent /> */}
+          <NilaiComponent/>
         </Tab.Pane>
       ),
     },
-    {
-      menuItem: 'Ujian',
-      render: () => (
-        <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
-          <UjianContent />
-        </Tab.Pane>
-      ),
-    },
+    // {
+    //   menuItem: 'Ujian',
+    //   render: () => (
+    //     <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
+    //       <UjianContent />
+    //     </Tab.Pane>
+    //   ),
+    // },
     {
       menuItem: 'Pelanggaran',
       render: () => (
@@ -56,7 +58,7 @@ export function EditSiswa() {
 
   return (
     <LayoutPage
-      title={'Edit Siswa'}
+      title={'Profile Siswa'}
       visible={visible}
       setVisible={setVisible}
     >

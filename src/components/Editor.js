@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "./component.css";
 import { uploadFile } from "../api/guru/upload";
@@ -50,6 +50,15 @@ export default function Editor({ value, handleChange, error, ...props }) {
     };
   }, []);
 
+  useEffect(() => {
+    const editor = reactQuillRef.current.getEditor();
+    editor.root.addEventListener("DOMSubtreeModified", () => {
+      katex.render(editor.root.innerHTML, editor.root, {
+        throwOnError: false,
+      });
+    });
+  }, []);
+
   return (
     <>
       {isLoading && (
@@ -83,7 +92,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
         ref={reactQuillRef}
         theme="snow"
         className={clsx(`quill-editor`, {
-          ' border  border-[#E0B4B4]': error
+          " border  border-[#E0B4B4]": error,
         })}
         placeholder="Start writing..."
         modules={{
@@ -140,6 +149,11 @@ export default function Editor({ value, handleChange, error, ...props }) {
         {...props}
         onChange={(content) => {
           handleChange(content);
+          const mathJaxElements =
+            document.getElementsByClassName("ql-editor")[0];
+          if (window.MathJax) {
+            window.MathJax.typesetPromise([mathJaxElements]);
+          }
         }}
       />
 
@@ -152,7 +166,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
   );
 }
 
-const resizeFile = async (file, rotate) => {
+export const resizeFile = async (file, rotate) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,

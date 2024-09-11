@@ -20,12 +20,15 @@ import Checkbox from "../../../components/Checkbox";
 import { TableWrapper } from "../../../components/TableWrap";
 import ModalPenilaian from "./ModalPenilaian";
 import { FormikProvider, useFormik } from "formik";
+import useList from "../../../hook/useList";
 
 function PenilaianPage() {
   const { id, mapel } = useParams();
-  const { isLoading, data } = usePenilaian({
+  let [namaSiswa, setNamaSiswa] = useState({});
+  const { isFetching, data, refetch } = usePenilaian({
     ujian_id: id,
   });
+  let { roles } = useList();
   const mutateExam = useExamResult();
 
   const [open, setOpen] = useState(false);
@@ -52,6 +55,7 @@ function PenilaianPage() {
             id: item.id,
             exam_result: item.exam_result,
             last_result: item.last_result,
+            is_lulus: item.is_lulus,
           };
         } else {
           return {};
@@ -66,6 +70,8 @@ function PenilaianPage() {
 
   const { handleSubmit, setFieldValue, values } = formik;
 
+  console.log("va", values);
+
   return (
     <LayoutPage title={"Penilaian"}>
       {open && (
@@ -76,6 +82,8 @@ function PenilaianPage() {
           setOpen={setOpen}
           soal={dataSoal?.soal}
           jawaban={jawaban}
+          values={values}
+          namaSiswa={namaSiswa}
         />
       )}
       <section
@@ -119,6 +127,20 @@ function PenilaianPage() {
             });
           }}
         />
+
+        <Button
+          content={"Refresh"}
+          type="button"
+          fluid
+          loading={isFetching}
+          disabled={isFetching}
+          icon={() => <Icon name="refresh" />}
+          size="medium"
+          color="blue"
+          onClick={() => {
+            return refetch();
+          }}
+        />
       </section>
       <section
         style={{
@@ -144,13 +166,14 @@ function PenilaianPage() {
 
                     <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
                     <Table.HeaderCell>Keterangan</Table.HeaderCell>
+                    <Table.HeaderCell>Lulus</Table.HeaderCell>
                     <Table.HeaderCell>Penilaian</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   <TableLoading
                     count={12}
-                    isLoading={isLoading}
+                    isLoading={isFetching}
                     data={data?.data}
                     messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
                   >
@@ -200,12 +223,18 @@ function PenilaianPage() {
                                 );
 
                                 if (value === 0) {
-                                  value = "";
+                                  value = 0;
                                 }
                                 setFieldValue(
                                   `data[${index}]exam_result`,
                                   value
                                 );
+
+                                if (value > 74) {
+                                  setFieldValue(`data[${index}]is_lulus`, 1);
+                                } else {
+                                  setFieldValue(`data[${index}]is_lulus`, 0);
+                                }
 
                                 setFieldValue(
                                   `data[${index}]last_result`,
@@ -220,6 +249,7 @@ function PenilaianPage() {
                             />
                           }
                         </Table.Cell>
+
                         <Table.Cell>
                           <span className="text-xs">
                             {" "}
@@ -227,11 +257,18 @@ function PenilaianPage() {
                           </span>
                         </Table.Cell>
                         <Table.Cell>
+                          <LabelKeterangan status={item.is_lulus || "-"} />
+                        </Table.Cell>
+                        <Table.Cell>
                           <Button
                             color="linkedin"
                             type="button"
                             onClick={() => {
                               setOpen(true);
+                              setNamaSiswa({
+                                nama_siswa: item.siswa.nama_siswa,
+                                mapel: mapel,
+                              });
 
                               console.log("item", item);
                               setItem(item);
@@ -253,15 +290,17 @@ function PenilaianPage() {
                 </Table.Body>
               </Table>
               <section className="mt-5">
-                <Button
-                  color="teal"
-                  fluid
-                  loading={mutateExam.isLoading}
-                  disabled={mutateExam.isLoading || isLoading}
-                  type="submit"
-                >
-                  <Icon name="check" /> Perbaharui Nilai
-                </Button>
+                {values?.data?.[0]?.teacher_id === roles?.teacher_id && (
+                  <Button
+                    color="teal"
+                    fluid
+                    loading={mutateExam.isLoading}
+                    disabled={mutateExam.isLoading || isFetching}
+                    type="submit"
+                  >
+                    <Icon name="check" /> Perbaharui Nilai
+                  </Button>
+                )}
               </section>
             </TableWrapper>
           </Form>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
+import { Table, Button, Form, Select, Icon, Tab } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
@@ -23,8 +23,9 @@ import { deleteUjian, listUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 
-import { LabelStatus, LabelTipeUjian } from "../../../components/Label";
+import { LabelKeterangan, LabelStatus, LabelTingkat, LabelTipeUjian } from "../../../components/Label";
 import useList from "../../../hook/useList";
+import { CopyButton } from "../../../components/buttonAksi/editButton";
 
 export default function ListExam() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export default function ListExam() {
   }
 
   return (
-    <LayoutPage title="List Ujian">
+    <LayoutPage title="List Ujian" isLoading={isLoading}>
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
@@ -114,19 +115,22 @@ export default function ListExam() {
                 <Table.HeaderCell>Nama Guru</Table.HeaderCell>
                 <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
                 <Table.HeaderCell>Kelas</Table.HeaderCell>
+                <Table.HeaderCell>Judul Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Jenis Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Tipe Ujian</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Durasi</Table.HeaderCell>
-                <Table.HeaderCell>Waktu Mulai</Table.HeaderCell>
-                <Table.HeaderCell>Waktu Selesai</Table.HeaderCell>
+                <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
+                <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
+                <Table.HeaderCell>Bertingkat</Table.HeaderCell>
                 <Table.HeaderCell>Aksi</Table.HeaderCell>
+                <Table.HeaderCell>Analisis</Table.HeaderCell>
                 <Table.HeaderCell>Publish</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               <TableLoading
-                count={12}
+                count={20}
                 isLoading={isLoading}
                 data={data?.data?.rows}
                 messageEmpty={"Data Tidak Ditemukan"}
@@ -138,6 +142,7 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
+                    <Table.Cell>{value?.judul_ujian}</Table.Cell>
                     <Table.Cell>
                       {<LabelStatus status={value?.jenis_ujian} />}
                     </Table.Cell>
@@ -145,7 +150,7 @@ export default function ListExam() {
                       <LabelTipeUjian status={value?.tipe_ujian} />
                     </Table.Cell>
                     <Table.Cell>
-                      <LabelTipeUjian status={value?.status} />
+                      <LabelTingkat status={value?.status} />
                     </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
@@ -154,6 +159,7 @@ export default function ListExam() {
                     <Table.Cell>
                       {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
+                    <Table.Cell><LabelTingkat status={value?.is_hirarki === 1 ? value?.urutan : "Tidak"}/></Table.Cell>
                     <Table.Cell>
                       <span className="flex items-center">
                         {" "}
@@ -165,7 +171,7 @@ export default function ListExam() {
                           }}
                         />
                         <DeleteButton
-                         disabled={
+                          disabled={
                             value?.status !== "draft" ||
                             value.teacher_id !== roles?.teacher_id
                           }
@@ -173,7 +179,29 @@ export default function ListExam() {
                             confirmDelete(value?.id);
                           }}
                         />
+                        <CopyButton
+                          onClick={() => {
+                            navigate(`copy/${value.id}`, {
+                              replace: true,
+                            });
+                          }}
+                        />
                       </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                    <Button
+                          type="button"
+                          color="twitter"
+                          icon={() => <Icon name="chart line" />}
+                          onClick={() => {
+                            navigate(
+                              `analisis/${value.id}/${value?.mapel?.nama_mapel}`,
+                              {
+                                replace: true,
+                              }
+                            );
+                          }}
+                        />
                     </Table.Cell>
                     <Table.Cell>
                       {value?.status !== "draft" ? (

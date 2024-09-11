@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { MdClose, MdLaptopMac } from "react-icons/md";
-import { IoPerson, IoStatsChart } from "react-icons/io5";
+import { IoCheckmarkDoneOutline, IoPerson, IoStatsChart } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import { FaNewspaper } from "react-icons/fa";
 import { IoNewspaperOutline } from "react-icons/io5";
@@ -86,6 +86,19 @@ export default function SidebarSiswa({ setSidebar }) {
             <MdLaptopMac
               className={`h-6 w-6 ${
                 url === "ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+		  <NavButton
+          handleSidebar={handleSiderbar}
+          to="hasil-belajar"
+          path="hasil-belajar"
+          title={"Hasil Belajar"}
+          logo={
+            <IoCheckmarkDoneOutline
+              className={`h-6 w-6 ${
+                url === "hasil-belajar" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }

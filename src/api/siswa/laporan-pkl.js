@@ -220,21 +220,74 @@ export const useUpdateLaporanDiniyyah = (id) => {
 
 export const useDownloadPdf = () => {
   const { successToast, warningToast } = useToast();
-
+  const defParams = {
+    bulan: null,
+    tahun: 2024,
+  };
+  const { params, setParams, handleFilter, handleClear, filterParams } =
+    usePagination(defParams);
   const { mutate, isLoading } = useMutation(
     () =>
-      axios.get(`/santri/laporan-harian-pkl/downdload-pdf?bulan=8&tahun=2024`, {
-        responseType: "blob", // tambahkan ini untuk memastikan response berbentuk blob
+      axios.get(`/santri/laporan-harian-pkl/downdload-pdf`, {
+        params: params,
+        responseType: "blob",
       }),
     {
       onSuccess: (response) => {
+        console.log("dada", response.headers)
+        console.log("ddd", response)
+        const contentDisposition = response.headers["Content-Disposition"];
+        let filename = "Laporan_JURNAL_PKL.pdf";
+        console.log(contentDisposition, "ini");
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+          if (filenameMatch.length > 1) {
+            filename = filenameMatch[1];
+          }
+        }
+
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        saveAs(blob, filename);
+        successToast("PDF berhasil didownload!");
+      },
+      onError: (err) => {
+        console.error("Error saat mendownload PDF:", err);
+        warningToast("Gagal mendownload PDF.");
+      },
+    }
+  );
+
+  return {
+    mutate,
+    isLoading,
+    params,
+    setParams,
+    handleFilter,
+    handleClear,
+    filterParams,
+  };
+};
+export const useDownloadPdfBulanan = () => {
+  const { successToast, warningToast } = useToast();
+
+  const { mutate, isLoading } = useMutation(
+    () =>
+      axios.get(`/santri/laporan-harian-pkl/downdload-pdf-bulanan`, {
+        responseType: "blob",
+      }),
+    {
+      onSuccess: (response) => {
+        console.log(response.data);
         const contentDisposition = response.headers["content-disposition"];
         const filename = contentDisposition
           ? contentDisposition.split("filename=")[1].replace(/"/g, "")
-          : "Laporan_PKL.pdf"; 
+          : "Laporan_JURNAL_PKL.pdf";
 
+        // Create a Blob from the PDF bytes
         const blob = new Blob([response.data], { type: "application/pdf" });
-        saveAs(blob, filename); 
+
+        // Use file-saver to save the file
+        saveAs(blob, filename);
         successToast("PDF berhasil didownload!");
       },
       onError: (err) => {

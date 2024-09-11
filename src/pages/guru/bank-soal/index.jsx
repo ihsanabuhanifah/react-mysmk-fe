@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Icon } from "semantic-ui-react";
+import { Table, Button, Form, Select, Icon, Input } from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
@@ -17,34 +17,33 @@ import {
 import useList from "../../../hook/useList";
 import usePage from "../../../hook/usePage";
 import { PaginationTable } from "../../../components";
-import { deleteBankSoal, listBankSoal } from "../../../api/guru/bank_soal";
+import {
+  deleteBankSoal,
+  listBankSoal,
+  useListBankSoal,
+} from "../../../api/guru/bank_soal";
 import { useQueryClient } from "react-query";
 import { LabelStatus } from "../../../components/Label";
+import { getOptions } from "../../../utils/format";
 export default function ListBankSoal() {
+  const { dataMapel, dataKelas, dataTa } = useList();
   const navigate = useNavigate();
 
-  let { page, pageSize, setPage, setPageSize } = usePage();
-
-  let params = {
-    page,
-    pageSize,
-
-    is_all: 1,
-  };
-  let { data, isLoading } = useQuery(
-    //query key
-    ["/bank-soal/list", params],
-    //axios function,triggered when page/pageSize change
-    () => listBankSoal(params),
-    //configuration
-    {
-      staleTime : 1000 * 60 * 5,
-      // refetchInterval: 1000 * 60 * 60,
-      select: (response) => {
-        return response.data;
-      },
-    }
-  );
+  let {
+    isLoading,
+    data,
+    isFetching,
+    setParams,
+    payload,
+    params,
+    handlePayload,
+    handleParams,
+    handlePage,
+    handlePageSize,
+    handleParamsHit,
+    handleSearch,
+    keyword,
+  } = useListBankSoal();
   let queryClient = useQueryClient();
   let {
     showAlertDelete,
@@ -70,7 +69,7 @@ export default function ListBankSoal() {
       />
       <div className=" space-y-5">
         <section className="grid grid-cols-5 gap-5">
-          <div className="col-span-4 lg:col-span-1">
+          <div className="col-span-1 lg:col-span-1">
             <Button
               type="button"
               color="teal"
@@ -82,6 +81,47 @@ export default function ListBankSoal() {
               }}
               content="Tambah "
             />
+          </div>
+          <div className="col-span-4 flex items-center justify-end space-x-2">
+          
+              <Form.Field
+                control={Input}
+                placeholder="Cari ..."
+                onChange={handleSearch}
+                value={keyword}
+              />
+          
+
+            <Form.Field
+              clear
+              control={Select}
+              value={params?.mapel_id}
+              options={getOptions(dataMapel?.data, "nama_mapel")}
+              onChange={(event, data) => {
+                handleParamsHit("mapel_id", data?.value);
+              }}
+              placeholder="Filter Mata Pelajaran"
+              search
+            />
+
+            {/* <Form.Field
+              clear
+              control={Select}
+              placeholder="Pilih"
+              value={params?.is_all}
+              options={[
+                {
+                  key: "1",
+                  value: 1,
+                  label: "Semua Guru",
+                },
+                { key: "2", value: 0 label: "Soal Saya" },
+              ]}
+              onChange={(event, data) => {
+                handleParamsHit("is_all", data?.value);
+              }}
+              search
+            /> */}
           </div>
         </section>
         <section>
@@ -95,15 +135,15 @@ export default function ListBankSoal() {
                 <Table.HeaderCell>Bab</Table.HeaderCell>
                 <Table.HeaderCell>Tipe</Table.HeaderCell>
                 <Table.HeaderCell>Point</Table.HeaderCell>
- 
-                <Table.HeaderCell >Aksi</Table.HeaderCell>
+
+                <Table.HeaderCell>Aksi</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               <TableLoading
                 count={8}
-                isLoading={isLoading}
-                data={data?.data}
+                isLoading={isFetching}
+                data={data?.data?.rows}
                 messageEmpty={"Data Tidak Ditemukan"}
               >
                 {data?.data?.rows?.map((value, index) => (
@@ -113,7 +153,9 @@ export default function ListBankSoal() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.materi}</Table.Cell>
-                    <Table.Cell><LabelStatus status={value?.tipe}/></Table.Cell>
+                    <Table.Cell>
+                      <LabelStatus status={value?.tipe} />
+                    </Table.Cell>
                     <Table.Cell>{value?.point}</Table.Cell>
 
                     <Table.Cell>
@@ -140,10 +182,10 @@ export default function ListBankSoal() {
             </Table.Body>
           </Table>
           <PaginationTable
-            page={page}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            setPage={setPage}
+            page={params.page}
+            pageSize={params.pageSize}
+            setPageSize={handlePageSize}
+            setPage={handlePage}
             totalPages={data?.data?.count}
           />
         </section>

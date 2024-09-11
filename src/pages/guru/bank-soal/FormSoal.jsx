@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import {
   pgOptions,
@@ -100,31 +100,33 @@ let AbsensiSchema = Yup.object().shape({
 export default function FormSoal() {
   const { dataMapel } = useList();
   const { id } = useParams();
-  let { data, isLoading } = useQuery(
+  const queryClient = useQueryClient();
+  let { data, isFetching, refetch } = useQuery(
     //query key
-    ["/bank-soal/update", id],
+    ["/bank-soal/update", [id]],
     //axios function,triggered when page/pageSize change
     () => detailBankSoal(id),
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
-      staleTime : 60 * 1000 * 10,
+      staleTime: 1000 * 60 * 10,
       select: (response) => {
+        let data = response.data.soal;
 
-       
-        return response.data.soal;
-      },
-      onSuccess: (data) => {
         console.log("data", data);
         data.soal = JSON.parse(data.soal);
-
         setInitialState({
           payload: [data],
         });
+        return response.data.soal;
       },
     }
   );
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
 
   const [initialState, setInitialState] = useState({
     payload: [
@@ -180,6 +182,8 @@ export default function FormSoal() {
         response = await updateBankSoal(id, values);
       }
 
+      queryClient.invalidateQueries("/bank-soal/list");
+
       toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -218,6 +222,7 @@ export default function FormSoal() {
   };
   return (
     <LayoutPage
+      isLoading={isFetching}
       title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
       <div className="p-0  ">
@@ -240,39 +245,14 @@ export default function FormSoal() {
             <Form onSubmit={handleSubmit}>
               {values?.payload?.map((value, index) => (
                 <div className="space-y-5 " key={index}>
-                  {console.log("err", errors)}
-                  {id === undefined && (
-                    <section className="flex items-center justify-end">
-                      <AddButton
-                        disabled={false}
-                        onClick={() => {
-                          setFieldValue("payload", [
-                            ...values.payload,
-                            {
-                              materi: "",
-                              mapel_id: null,
-                              soal: {
-                                soal: "",
-                                a: null,
-                                b: null,
-                                c: null,
-                                d: null,
-                                e: null,
-                              },
-                              jawaban: "",
-                              tipe: "PG",
-                              point: 10,
-                            },
-                          ]);
-                        }}
-                        size="small"
-                      />
+                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5 border rounded-lg mt-10 p-5">
+                    {id === undefined && <div className="col-span-3 flex justify-end ">
                       <DeleteButton
                         disabled={values.payload.length <= 1}
                         onClick={() => {
                           let filtered = values.payload.filter(
                             (i, itemIndex) => {
-                              return itemIndex !== index;
+                              return itemIndex != index;
                             }
                           );
 
@@ -280,9 +260,7 @@ export default function FormSoal() {
                         }}
                         size="small"
                       />
-                    </section>
-                  )}
-                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    </div>}
                     <div>
                       <Form.Field
                         control={Select}
@@ -528,6 +506,41 @@ export default function FormSoal() {
                   </section>
                 </div>
               ))}
+
+              <div className="mt-5">
+              {id === undefined &&   <Button
+                  basic
+                  fluid
+                  type="button"
+                  onClick={() => {
+                    setFieldValue("payload", [
+                      ...values.payload,
+                      {
+                        materi:
+                          values.payload[values.payload.length - 1].materi,
+                        mapel_id:
+                          values.payload[values.payload.length - 1].mapel_id,
+                        soal: {
+                          soal: "",
+                          tipe: "",
+                          a: null,
+                          b: null,
+                          c: null,
+                          d: null,
+                          e: null,
+                        },
+                        jawaban: "",
+                        tipe: values.payload[values.payload.length - 1].tipe,
+                        point: values.payload[values.payload.length - 1].point,
+                      },
+                    ]);
+                  }}
+                  color="teal"
+                  content="Tambah"
+                  icon="add"
+                  labelPosition="left"
+                />}
+              </div>
 
               <div className="mt-5">
                 <Button

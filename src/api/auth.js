@@ -1,6 +1,7 @@
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import axios from "./axiosClient";
 import { syncToken } from "./axiosClient";
+import useToast from "../hook/useToast";
 export function register(values) {
   return axios.post("/register", values);
 }
@@ -36,20 +37,57 @@ export function saveToken(token) {
   });
 }
 
-
-export const useAuthMe =() => {
+export const useAuthMe = () => {
   let { data: dataMe } = useQuery(
     //query key
-    ["authme", ],
+    ["authme"],
     //axios function,triggered when page/pageSize change
     () => authme(),
     //configuration
     {
       staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-      select: (response) => response.data
-     
+      select: (response) => response.data,
     }
   );
 
-  return {dataMe}
-}
+  return { dataMe };
+};
+
+export const useRegisterWali = () => {
+  let queryClient = useQueryClient();
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`/register/wali`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};
+
+export const useNISNCek = () => {
+  const { successToast, warningToast } = useToast();
+  const mutate = useMutation(
+    (payload) => {
+      return axios.post(`/nisn/cek`, payload);
+    },
+    {
+      onSuccess: (response) => {
+        successToast(response);
+      },
+
+      onError: (error) => {
+        warningToast(error);
+      },
+    }
+  );
+  return mutate;
+};

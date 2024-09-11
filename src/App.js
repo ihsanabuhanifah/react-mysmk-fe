@@ -59,9 +59,17 @@ import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
 import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
+import AnalisisPage from "./pages/guru/exam/AnalisisPage";
+import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
+import RegisterWali from "./pages/auth/RegisterWali";
+
+
+
 import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
+import Harian from "./pages/guru/jadwal/harian";
+
 
 function App() {
   return (
@@ -84,6 +92,14 @@ function App() {
           element={
             <ProtectLogin>
               <Login />
+            </ProtectLogin>
+          }
+        />
+         <Route
+          path="/register/wali"
+          element={
+            <ProtectLogin>
+              <RegisterWali/>
             </ProtectLogin>
           }
         />
@@ -120,10 +136,12 @@ function App() {
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
           {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
+          <Route path="monitor/harian" element={<Harian/>} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
           <Route path="absensi/jadwal/tambah" element={<CreateJadwal />} />
+          <Route path="absensi/jadwal/update/:id" element={<UpdateJadwal />} />
           <Route path="perizinan-kunjungan" element={<Kunjungan />} />
           <Route path="perizinan-pulang" element={<Pulang />} />
           <Route path="pelanggaran" element={<Pelanggaran />} />
@@ -143,6 +161,8 @@ function App() {
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
+          <Route path="exam/copy/:id" element={<FormExam />} />
+          <Route path="exam/analisis/:id/:mapel" element={<AnalisisPage />} />
 
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route
