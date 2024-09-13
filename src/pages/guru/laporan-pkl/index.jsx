@@ -2,13 +2,13 @@ import { useNavigate } from "react-router-dom";
 import usePage from "../../../hook/usePage";
 import { useQuery, useQueryClient } from "react-query";
 import React, { useState } from "react";
-import { listLaporanPkl } from "../../../api/guru/laporanharianpkl";
+import { deleteLaporanPkl, listLaporanPkl, useDownloadPdf } from "../../../api/guru/laporanharianpkl";
 import LayoutPage from "../../../module/layoutPage";
 import useDebounce from "../../../hook/useDebounce";
 import useDelete from "../../../hook/useDelete";
 import ActivityCard from "../../../components/ActivityCardPkl";
 import { Button, Header, Icon, Label, Loader, Menu, Sidebar } from "semantic-ui-react";
-import { DeleteButton, EditButton, TableLoading } from "../../../components";
+import { DeleteButton, EditButton, PaginationTable, TableLoading } from "../../../components";
 import Card from "../../../components/CardLaporan";
 import FilterLaporanPkl from "./filter";
 import { encodeURlFormat } from "../../../utils";
@@ -24,6 +24,7 @@ export default function LaporanPkl() {
     let debouncedKeyword = useDebounce(keyword, 500);
     let [visible, setVisible] = useState(false);
     const [filter, setFilter] = useState({});
+    const { mutate, isLoading: downloadPdfIsLoading } = useDownloadPdf();
 
     const statusColors = {
         'hadir': 'green',
@@ -58,7 +59,7 @@ export default function LaporanPkl() {
         onConfirmDelete,
     } = useDelete({
         afterDeleted: () => queryClient.invalidateQueries("/laporan-harian-pkl/list"),
-        onDelete: (id) => deleteSiswaPkl(id),
+        onDelete: (id) => deleteLaporanPkl(id),
     });
 
     return (
@@ -100,6 +101,8 @@ export default function LaporanPkl() {
                     />
                 </div>
 
+
+
             </section>
 
             {/* <div className="flex flex-col gap-6 items-center w-full px-5 py-4 " >
@@ -123,7 +126,7 @@ export default function LaporanPkl() {
 
             </div> */}
 
-            <div className="flex flex-col gap-6 items-center w-full px-5 py-4">
+            <div className="flex flex-col  items-center w-full px-5 py-3 " count={8}>
                 {/* Display loader while fetching or loading data */}
                 {(isLoading || isFetching) && (
                     <Loader active inline="centered" content="Loading..." />
@@ -132,6 +135,7 @@ export default function LaporanPkl() {
                 {/* Check if there's no data and show a message */}
                 {data?.data?.length === 0 && !isLoading && !isFetching && (
                     <div className="w-full bg-yellow-50 text-center p-5 rounded">
+                        <img src="image/data_not_found.png" alt="" />
                         <p className="text-brown-700 font-bold">Tidak Ditemukan Rekap pada filter yang dipilih</p>
                     </div>
                 )}
@@ -143,7 +147,13 @@ export default function LaporanPkl() {
                     </React.Fragment>
                 ))}
             </div>
-            
+            <PaginationTable
+                page={page}
+                pageSize={pageSize}
+                setPageSize={setPageSize}
+                setPage={setPage}
+                totalPages={data?.data?.count}
+            />
 
 
 

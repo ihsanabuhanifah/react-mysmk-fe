@@ -9,19 +9,24 @@ import {
   Segment,
   List,
   Table,
+  Button,
 } from "semantic-ui-react";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
 import { useNavigate, useParams } from "react-router-dom";
 import { DetailLaporanPkl } from "..";
 import LayoutPage from "../../../module/layoutPage";
 import { useQuery, useQueryClient } from "react-query";
-import { detailLaporanPkl } from "../../../api/guru/laporanharianpkl";
+import { detailLaporanPkl, downloadPdf, useDownloadPdf, useDownloadPdfBulanan } from "../../../api/guru/laporanharianpkl";
 
 export default function DetailLaporan() {
   const { id } = useParams();
+  
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  const { mutate: downloadPdfBulananIsMutate, isLoading: downloadPdfBulananIsLoading } = useDownloadPdfBulanan(id);
+  const { mutate: downloadPdfIsMutate, isLoading: downloadPdfIsLoading } = useDownloadPdf(id);
   let { data, isFetching, isLoading } = useQuery(
     //query key
     ["/tempat-pkl/update", id],
@@ -93,7 +98,7 @@ export default function DetailLaporan() {
             <Icon
               name="arrow left"
               size="large"
-              
+
               className="cursor-pointer"
             />
             <p className="text-xl  font-semibold text-black cursor-pointer">Kembali</p>
@@ -141,8 +146,32 @@ export default function DetailLaporan() {
                 {data?.isi_laporan || "Belum ada isi laporan"}
               </p>
             </div>
+            <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+              <Button size="medium" color="red" onClick={() => downloadPdfIsMutate(id)} disabled={downloadPdfIsLoading} >
+                {
+                  downloadPdfIsLoading ? 'Loading' : (
+                    <>
+                      <Icon name="download" /> donwload PDF
+                    </>
+                  )
+                }
+              </Button>
+              
+            </div>
+            <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+              <Button size="medium" color="blue" onClick={() => downloadPdfBulananIsMutate(id)} disabled={downloadPdfBulananIsLoading} >
+                {
+                  downloadPdfBulananIsLoading ? 'Loading' : (
+                    <>
+                      <Icon name="download" /> donwload PDF bulanan
+                    </>
+                  )
+                }
+              </Button>
+              
+            </div>
           </Segment>
-          {/* <Segment>
+          <Segment>
             <div className="text-left mb-4">
               <h3 className="text-2xl font-semibold">Laporan Diniyyah</h3>
               {laporanDiniyyah ? (
@@ -200,7 +229,7 @@ export default function DetailLaporan() {
                 <p className="text-xl text-red-500">Belum dikerjakan</p>
               )}
             </div>
-          </Segment> */}
+          </Segment>
 
         </div>
       </div>

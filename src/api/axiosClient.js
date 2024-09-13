@@ -60,7 +60,10 @@ const headers = {
 };
 
 const axiosClient = axios.create({
-  baseURL: "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
+  // baseURL: "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
+  // baseURL: "http://172.16.40.142:8085",
+  baseURL: "http://localhost:8085/",
+  // baseURL: "https://bemysmkdev.devopsgeming.online/",
   timeout: 1000 * 60 * 3,
   paramsSerializer: function (params) {
     return qs.stringify(params, { encode: false, skipNulls: true });

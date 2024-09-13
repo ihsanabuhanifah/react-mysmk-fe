@@ -64,7 +64,7 @@ const Card = ({ item }) => {
             </p>
           </div>
         </div>
-        <div className="flex gap-2 mt-4 md:mt-0 items-center justify-end w-full md:w-auto">
+        {/* <div className="flex gap-2 mt-4 md:mt-0 items-center justify-end w-full md:w-auto">
           <Button
             className="w-auto"
             primary
@@ -75,14 +75,15 @@ const Card = ({ item }) => {
           >
             Laporan Diniyyah
           </Button>
-          {/* <Button
+          
+          <Button
             icon
             className="p-2 w-auto"
             onClick={() => navigate(`/guru/laporan-pkl/update/${item.id}`)}
           >
             <Icon name="edit" />
-          </Button> */}
-        </div>
+          </Button>
+        </div> */}
       </Segment>
     </ItemGroup>
   );
