@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdClose, MdLaptopMac } from "react-icons/md";
 import {
   IoCheckmarkDoneOutline,
   IoDocumentTextOutline,
   IoLogOutOutline,
+  IoPencilOutline,
   IoPerson,
+  IoShieldOutline,
   IoStatsChart,
 } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
@@ -16,6 +18,7 @@ import { LogoutButton } from "../siswa";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
+  const [isSelect, setIsSelect] = useState(false);
   const { profile } = useZUStore((state) => state);
 
   const handleSiderbar = () => {
@@ -79,6 +82,52 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          cls="list xl:hidden"
+          handleSidebar={handleSiderbar}
+          to="profile"
+          path="profile"
+          title={"Profile"}
+          logo={
+            <IoPerson
+              className={`h-6 w-6 ${
+                url === "profile" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        <div className="ml-5 border-l border-gray-400 pl-3">
+          <NavButton
+            cls="list xl:hidden"
+            handleSidebar={handleSiderbar}
+            to="profile"
+            path="profile"
+            title={"Edit Profile"}
+            logo={
+              <IoPencilOutline
+                className={`h-6 w-6 ${
+                  url === "profile" ? "text-[#18a558]" : "text-gray-400"
+                }`}
+              />
+            }
+          />
+          <NavButton
+            cls="list xl:hidden"
+            handleSidebar={handleSiderbar}
+            to="profile"
+            path="profile"
+            title={"Password & Security"}
+            logo={
+              <IoShieldOutline
+                className={`h-6 w-6 ${
+                  url === "profile" ? "text-[#18a558]" : "text-gray-400"
+                }`}
+              />
+            }
+          />
+        </div>
+
+        <NavButton
+          cls="xl:flex hidden"
           handleSidebar={handleSiderbar}
           to="profile"
           path="profile"
@@ -161,7 +210,7 @@ export default function SidebarSiswa({ setSidebar }) {
   );
 }
 
-function NavButton({ to, path, title, logo, handleSidebar }) {
+function NavButton({ to, path, title, logo, handleSidebar, cls }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
   const navigate = useNavigate();
@@ -169,10 +218,16 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
   return (
     <button
       onClick={() => {
-        handleSidebar();
-        return navigate(to);
+        if (cls) {
+          if (cls.split(" ")[0] === "list") {
+            // setIsSelect(true)
+          }
+        } else {
+          handleSidebar();
+          return navigate(to);
+        }
       }}
-      className={`group flex h-10 items-center justify-between pl-2`}
+      className={`group flex h-10 items-center justify-between pl-2 ${cls}`}
     >
       <div className="flex items-center">
         <div>{logo}</div>

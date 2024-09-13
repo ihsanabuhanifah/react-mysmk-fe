@@ -44,7 +44,7 @@ export default function ExamPage({ examActive, setExamActive }) {
 			interval = setInterval(() => {
 				setCutDown((c) => c - 1)
 			}, 1000)
-		} else if (cutDown === 0) {
+		} else if (cutDown === 0 && data?.data?.tipe_ujian === 'closed') {
 			window.location.reload() // Reload page when countdown reaches 0
 		} else {
 			clearInterval(interval)
