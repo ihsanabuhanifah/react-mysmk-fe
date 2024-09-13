@@ -4,5 +4,5 @@ import { syncToken } from "../axiosClient";
 
 export function ListTestimoni() {
   syncToken();
-  return axios.get('/ppdb/testimoni/list');
+  return axios.get('/landingPage/testimoni/list');
 }

@@ -4,5 +4,5 @@ import { syncToken } from "../axiosClient";
 
 export function ListMitraSekolah() {
   syncToken();
-  return axios.get('/ppdb/mitra-sekolah/list');
+  return axios.get('/landingPage/mitra-sekolah/list');
 }

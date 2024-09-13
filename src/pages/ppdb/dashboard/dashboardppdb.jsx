@@ -1,9 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import LayoutPpdb from "../../../module/layoutPpdb";
 import { useProfileCalonSantri } from "../../../api/ppdb/profile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ProfileImage from "../../../image/ppdb/profile.png";
-
+import {
+  ListLampiranBuktiTransfer,
+  ListPembayaran,
+} from "../../../api/ppdb/pembayaran";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faListCheck, faCheck } from "@fortawesome/free-solid-svg-icons";
 const DashboardPpdb = () => {
   const navigate = useNavigate();
   const { profileData, isLoading, isError, error } = useProfileCalonSantri();
@@ -11,6 +16,11 @@ const DashboardPpdb = () => {
   useEffect(() => {
     if (isError && error?.response?.status === 404) {
       navigate("/ppdb/pendaftaran");
+    }
+
+    if (isError && error?.response?.status === 403) {
+      alert("Anda Tidak Memiliki Akses ke Halaman Dashboard");
+      navigate("/landingpage/login");
     }
   }, [isError, error, navigate]);
 
@@ -47,9 +57,8 @@ const DashboardPpdb = () => {
             : "Biodata Kamu sudah Lengkap, Terima kasih"}
         </p>
       </Link>
-      <p>Ini halaman dashboard PPDB</p>
 
-      <div className="p-4 border-b border-gray-300">
+      {/* <div className="p-4 border-b border-gray-300">
         <h2 className="text-lg font-semibold mb-4">Data Profil Calon Santri</h2>
         <p>Nama Calon Santri: {profileData.nama_siswa}</p>
         <p>Jenis Kelamin: {profileData.jenis_kelamin}</p>
@@ -70,6 +79,279 @@ const DashboardPpdb = () => {
         <p>Ijazah Sekolah: {profileData.ijazah}</p>
         <p>Akte Kelahiran: {profileData.akte}</p>
         <p>Surat Pernyataan: {profileData.surat_pernyataan}</p>
+      </div> */}
+
+      <div className="p-4 border-b border-gray-300">
+        <div className="space-y-6">
+          {/* Alur PSB Online */}
+          <div className="flex items-center">
+            <FontAwesomeIcon
+              icon={faListCheck}
+              className="text-green-500 mr-3"
+              size="2x"
+            />
+            <h2 className="text-xl font-semibold pb-7">Alur PSB Online</h2>
+          </div>
+
+          {/* Alur */}
+          <div className="space-y-4">
+            {/* Step 1 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  }  font-semibold`}
+                >
+                  01
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">
+                    Registrasi Akun
+                  </h3>
+                  <p>
+                    {hasNullData
+                      ? "Silahkan Lengkapi Biodata Diri Anda Terlebih Dahulu!"
+                      : "Alhamdulillah, anda telah resmi menjadi calon santri"}
+                  </p>
+                  {/* <p>Alhamdulillah, anda telah resmi menjadi calon santri</p> */}
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+
+            {/* Step 2 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-center">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  }  font-semibold`}
+                >
+                  02
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">
+                    Transfer Biaya Pendaftaran
+                  </h3>
+                  <p>
+                    Anda bisa upload bukti transfer disini{" "}
+                    <Link
+                      to="/ppdb/biaya-pendaftaran"
+                      className="text-green-500 font-semibold hover:underline"
+                    >
+                      Upload
+                    </Link>
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+
+            {/* Step 3 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  } font-semibold`}
+                >
+                  03
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">
+                    Lengkapi Biodata
+                  </h3>
+                  <p>
+                    {hasNullData
+                      ? "Silakan lengkapi biodata Anda untuk melanjutkan."
+                      : "Biodata Anda telah lengkap."}{" "}
+                   <Link
+                      to="/ppdb/biodata/update"
+                      className="text-green-500 font-semibold hover:underline"
+                    >
+                      Cek Biodata
+                    </Link>
+                  </p>  
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+
+            {/* Step 4 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  } font-semibold`}
+                >
+                  04
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">
+                    Lengkapi Berkas
+                  </h3>
+                  <p>
+                    {hasNullData
+                      ? "Silakan lengkapi berkas Anda untuk melanjutkan."
+                      : "Anda telah melengkapi semua berkas yang diperlukan."}{" "}
+                      <Link
+                      to="/ppdb/biodata/berkas"
+                      className="text-green-500 font-semibold hover:underline"
+                    >
+                      Upload Berkas
+                    </Link>
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+
+            {/* Step 5 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  } font-semibold`}
+                >
+                  05
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">Tes Masuk</h3>
+                  <p>
+                    {hasNullData
+                      ? "Anda harus melunasi Biaya Pendaftaran dan melengkapi Biodata serta Berkas untuk mengikuti Tes Masuk."
+                      : "Anda siap mengikuti Tes Masuk setelah melengkapi semua syarat."}
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+            {/* Step 6 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  } font-semibold`}
+                >
+                  06
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">
+                    Pengumuman Hasil Tes
+                  </h3>
+                  <p>
+                    {hasNullData
+                      ? "Anda harus menyelesaikan seluruh rangkaian tes untuk bisa melihat pengumuman hasil tes."
+                      : "Tes telah selesai. Silakan cek pengumuman hasil tes."}
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+            {/* Step 7 */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-start">
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
+                    hasNullData
+                      ? "border-gray-500 text-gray-500"
+                      : "border-green-500 text-green-500"
+                  } font-semibold`}
+                >
+                  07
+                </div>
+                <div className="ml-4">
+                  <h3 className="text-lg font-semibold mb-1">Daftar Ulang</h3>
+                  <p>
+                    {hasNullData
+                      ? "Menunggu pengumuman hasil tes."
+                      : "Anda telah berhasil melakukan daftar ulang."}
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p
+                  className={`${
+                    hasNullData ? "text-gray-600" : "text-green-600"
+                  }`}
+                >
+                  {hasNullData ? "Belum" : "Selesai"}
+                </p>
+              </div>
+            </div>
+            <div className="border-l-2 border-gray-300 ml-6"></div>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">

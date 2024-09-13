@@ -67,9 +67,10 @@ import Ppdb from "./layout/ppdb";
 import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
 import BiodataPpdb from "./pages/ppdb/biodata";
 import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
-import BiayaPendaftaran from "./pages/ppdb/biaya-pendaftaran/biaya-pendaftaran";
 import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
 import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
+import Transfer from "./pages/ppdb/transfer/transfer";
+import DetailPembayaran from "./pages/ppdb/detail-pembayaran/detail-pembayaran";
 
 function App() {
   return (
@@ -220,7 +221,8 @@ function App() {
             <Route path="update" element={<BiodataUpdatePPdb />} />
             <Route path="berkas" element={<BerkasPpdb />} />
           </Route>
-          <Route path="biaya-pendaftaran" element={<BiayaPendaftaran />} />
+          <Route path="transfer" element={<Transfer />} />
+          <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
         </Route>
 

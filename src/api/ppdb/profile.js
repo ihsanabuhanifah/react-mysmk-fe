@@ -6,8 +6,6 @@ import { useState } from "react";
 
 export function getProfileCalonSantri() {
   syncToken();
-  // const response = axios.get(`/ppdb/detail`);
-  // return response.data
   return axios.get(`ppdb/detail`).then((response) => {
     console.log("Response Data:", response.data);
     return response.data;

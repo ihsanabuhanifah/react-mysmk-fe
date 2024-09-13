@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Form, Button, Icon } from "semantic-ui-react";
 import { Formik } from "formik";
@@ -14,14 +15,13 @@ import DropzoneFile from "../../../components/Dropzone";
 const BerkasPpdbSchema = yup.object().shape({
   foto: yup.string().nullable(),
   kk: yup.string().nullable(),
-  ijazah: yup.string().nullable().required("File harus diunggah!"),
-  akte: yup.string().nullable().required("File harus diunggah!"),
-  skb: yup.string().nullable().required("File harus diunggah!"),
-  surat_pernyataan: yup.string().nullable().required("File harus diunggah!"),
+  ijazah: yup.string().nullable(),
+  akte: yup.string().nullable(),
+  skb: yup.string().nullable(),
+  surat_pernyataan: yup.string().nullable(),
 });
 
 export default function BerkasPpdb() {
-  const [file, setFile] = useState("");
   const navigate = useNavigate();
   const { profileData } = useProfileCalonSantri();
   const { updateProfile, mutate } = useUpdateProfileCalonSantri(
@@ -46,10 +46,26 @@ export default function BerkasPpdb() {
       <h3 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">
         Unggah Berkas Calon Santri
       </h3>
-      <p className="pl-5 pb-12 font-poppins">
-        Silahkan unggah berkas yang diperlukan untuk pendaftaran calon santri.
-        Pastikan file yang diunggah sesuai dengan format yang diminta.
-      </p>
+      <div className="pl-5 pb-5">
+        <p className="font-poppins italic">
+          Perhatian! Ukuran masing-masing file{" "}
+          <a className="text-red-500 font-medium text-lg"> Maksimal 3 MB</a>
+        </p>
+        <p>
+          apabila ukuran file anda terlalu besar,anda bisa mengecilkan ukuran
+          file{" "}
+          <a
+            href="https://tinyjpg.com/"
+            className="underline hover:text-blue-400"
+          >
+            Disini
+          </a>
+        </p>
+        <p className="pb-6 font-poppins">
+          Silahkan unggah berkas yang diperlukan untuk pendaftaran calon santri.
+          Pastikan file yang diunggah sesuai dengan format yang diminta.
+        </p>
+      </div>
 
       <Formik
         initialValues={initialState}
@@ -66,44 +82,48 @@ export default function BerkasPpdb() {
           setFieldValue,
           isSubmitting,
         }) => (
-          <Form onSubmit={handleSubmit} className="w-full">
+          <Form onSubmit={handleSubmit} className="w-full pl-5">
+            {/* {JSON.stringify(values)} */}
             <Form.Field className="mb-4">
               <label>Kartu Keluarga</label>
               {!values.kk ? (
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    setFieldValue("kk", acceptedFiles[0]);
+                <DropzoneFile
+                  handleDrop={(cont) => {
+                    if (cont && cont[0]) { // Jika cont adalah array
+                      const file = cont[0];
+                      if (file.size > 10 * 1024) {
+                        alert("File anda terlalu besar! Maksimal 10 KB.");
+                        return; // Hentikan proses jika file terlalu besar
+                      }
+                    }
+                    setFieldValue("kk", cont);
+                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop file Kartu Keluarga di sini, atau klik
-                        untuk memilih file
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                />
               ) : (
                 <div className="flex items-center space-x-2">
+                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("kk", null);
+                      console.log("File deleted");
                     }}
                   />
-                  {values.kk instanceof File && (
+                  {/* Link Tautan */}
+                  {values.kk && (
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href={URL.createObjectURL(values.kk)}
+                      href={
+                        typeof values.kk === "string"
+                          ? values.kk
+                          : URL.createObjectURL(values.kk)
+                      }
+                      className="text-blue-500 underline"
                     >
-                      {values.kk.name}
+                      {values.kk.name || "Lihat Dokumen"}
                     </a>
                   )}
                 </div>
@@ -116,39 +136,41 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Ijazah Sekolah</label>
               {!values.ijazah ? (
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    setFieldValue("ijazah", acceptedFiles[0]);
+                <DropzoneFile
+                  handleDrop={(cont) => {
+                     // Cek apakah file melebihi 500 KB
+                     if (cont.size > 10 * 1024) {
+                      alert("File anda terlalu besar! Maksimal 10 KB.");
+                      return; // Hentikan proses jika file terlalu besar
+                    }
+                    setFieldValue("ijazah", cont);
+                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop file Ijazah di sini, atau klik untuk memilih file
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                />
               ) : (
                 <div className="flex items-center space-x-2">
+                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("ijazah", null);
+                      console.log("File deleted");
                     }}
                   />
-                  {values.ijazah instanceof File && (
+                  {/* Link Tautan */}
+                  {values.ijazah && (
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href={URL.createObjectURL(values.ijazah)}
+                      href={
+                        typeof values.ijazah === "string"
+                          ? values.ijazah
+                          : URL.createObjectURL(values.ijazah)
+                      }
+                      className="text-blue-500 underline"
                     >
-                      {values.ijazah.name}
+                      {values.ijazah.name || "Lihat Dokumen"}
                     </a>
                   )}
                 </div>
@@ -161,39 +183,41 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Akte Kelahiran</label>
               {!values.akte ? (
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    setFieldValue("akte", acceptedFiles[0]);
+                <DropzoneFile
+                  handleDrop={(cont) => {
+                      // Cek apakah file melebihi 500 KB
+                      if (cont.size > 10 * 1024) {
+                        alert("File anda terlalu besar! Maksimal 10 KB.");
+                        return; // Hentikan proses jika file terlalu besar
+                      }
+                    setFieldValue("akte", cont);
+                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop file Akte di sini, atau klik untuk memilih file
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                />
               ) : (
                 <div className="flex items-center space-x-2">
+                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("akte", null);
+                      console.log("File deleted");
                     }}
                   />
-                  {values.akte instanceof File && (
+                  {/* Link Tautan */}
+                  {values.akte && (
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href={URL.createObjectURL(values.akte)}
+                      href={
+                        typeof values.akte === "string"
+                          ? values.akte
+                          : URL.createObjectURL(values.akte)
+                      }
+                      className="text-blue-500 underline"
                     >
-                      {values.akte.name}
+                      {values.akte.name || "Lihat Dokumen"}
                     </a>
                   )}
                 </div>
@@ -202,44 +226,44 @@ export default function BerkasPpdb() {
                 <div className="text-red-500 text-sm mt-1">{errors.akte}</div>
               )}
             </Form.Field>
-
             <Form.Field className="mb-4">
               <label>Surat Keterangan Baik</label>
               {!values.skb ? (
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    setFieldValue("skb", acceptedFiles[0]);
+                <DropzoneFile
+                  handleDrop={(cont) => {
+                     // Cek apakah file melebihi 500 KB
+                     if (cont.size > 10 * 1024) {
+                      alert("File anda terlalu besar! Maksimal 10 KB.");
+                      return; // Hentikan proses jika file terlalu besar
+                    }
+                    setFieldValue("skb", cont);
+                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop file Surat Keterangan Baik di sini, atau
-                        klik untuk memilih file
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                />
               ) : (
                 <div className="flex items-center space-x-2">
+                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("skb", null);
+                      console.log("File deleted");
                     }}
                   />
-                  {values.skb instanceof File && (
+                  {/* Link Tautan */}
+                  {values.skb && (
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href={URL.createObjectURL(values.skb)}
+                      href={
+                        typeof values.skb === "string"
+                          ? values.skb
+                          : URL.createObjectURL(values.skb)
+                      }
+                      className="text-blue-500 underline"
                     >
-                      {values.skb.name}
+                      {values.skb.name || "Lihat Dokumen"}
                     </a>
                   )}
                 </div>
@@ -252,39 +276,41 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Surat Pernyataan</label>
               {!values.surat_pernyataan ? (
-                <Dropzone
-                  onDrop={(acceptedFiles) => {
-                    setFieldValue("surat_pernyataan", acceptedFiles[0]);
+                <DropzoneFile
+                  handleDrop={(cont) => {
+                    // Cek apakah file melebihi 500 KB
+                    if (cont.size > 10 * 1024) {
+                      alert("File anda terlalu besar! Maksimal 10 KB.");
+                      return; // Hentikan proses jika file terlalu besar
+                    }
+                    setFieldValue("surat_pernyataan", cont);
+                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <div
-                      {...getRootProps()}
-                      className="border-dashed border-2 border-gray-300 p-4 cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag 'n' drop file Surat Pernyataan di sini, atau klik untuk memilih file
-                      </p>
-                    </div>
-                  )}
-                </Dropzone>
+                />
               ) : (
                 <div className="flex items-center space-x-2">
+                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("surat_pernyataan", null);
+                      console.log("File deleted");
                     }}
                   />
-                  {values.surat_pernyataan instanceof File && (
+                  {/* Link Tautan */}
+                  {values.surat_pernyataan && (
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href={URL.createObjectURL(values.surat_pernyataan)}
+                      href={
+                        typeof values.surat_pernyataan === "string"
+                          ? values.surat_pernyataan
+                          : URL.createObjectURL(values.surat_pernyataan)
+                      }
+                      className="text-blue-500 underline"
                     >
-                      {values.surat_pernyataan.name}
+                      {values.surat_pernyataan.name || "Lihat Dokumen"}
                     </a>
                   )}
                 </div>

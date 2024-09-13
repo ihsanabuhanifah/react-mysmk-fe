@@ -2,10 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { MdClose } from "react-icons/md";
-import {
-  IoPerson,
-  IoStatsChart,
-} from "react-icons/io5";
+import { IoPerson, IoStatsChart } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import ProfileImage from "../../image/ppdb/profile.png";
 import {
@@ -20,7 +17,7 @@ export default function SidebarPpdb({ setSidebar }) {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   // const CalonSantriProfile = useSelector((state) => state.data.CalonSantriProfile);
-  const { profileData} = useProfileCalonSantri();
+  const { profileData } = useProfileCalonSantri();
 
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
@@ -114,13 +111,13 @@ export default function SidebarPpdb({ setSidebar }) {
         />
         <NavButton
           handleSidebar={handleSiderbar}
-          to="biaya-pendaftaran"
-          path="biaya-pendaftaran"
+          to="transfer"
+          path="transfer"
           title={"Biaya Pendaftaran"}
           logo={
             <HiUpload
               className={`h-6 w-6 ${
-                url === "biaya-pendaftaran" ? "text-[#18a558]" : "text-gray-400"
+                url === "transfer" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
