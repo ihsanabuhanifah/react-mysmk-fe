@@ -1,5 +1,11 @@
 import axios from "./axiosClient";
 
+// PPDB
+
+export function listPembayaranPpdb() {
+  return axios.get("/ppdb/pembayaran-ppdb/list")
+}
+
 export function listMapel() {
   return axios.get("/list/mata-pelajaran");
 }

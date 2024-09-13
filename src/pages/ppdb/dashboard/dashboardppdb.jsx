@@ -150,7 +150,7 @@ const DashboardPpdb = () => {
                   <p>
                     Anda bisa upload bukti transfer disini{" "}
                     <Link
-                      to="/ppdb/biaya-pendaftaran"
+                      to="/ppdb/transfer"
                       className="text-green-500 font-semibold hover:underline"
                     >
                       Upload

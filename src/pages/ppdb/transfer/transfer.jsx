@@ -9,6 +9,7 @@ import {
   getDetailPembayaranById,
   ListPembayaran,
   useDetailPembayaran,
+  useGetHasilPembayaran,
 } from "../../../api/ppdb/pembayaran";
 import { Formik } from "formik";
 import { Button, Form, Input, Label } from "semantic-ui-react";
@@ -38,7 +39,7 @@ const formatRupiah = (value) => {
   return rupiah;
 };
 
-const Transfer = () => {
+const Transfer = ({ item }) => {
   const navigate = useNavigate();
   const { profileData } = useProfileCalonSantri();
   const [pembayaranData, setPembayaranData] = useState([]);
@@ -47,38 +48,21 @@ const Transfer = () => {
   );
   const [loadingPembayaran, setLoadingPembayaran] = useState(true);
   const [statusPembayaran, setStatusPembayaran] = useState("Belum Bayar"); // Tambahkan state untuk status pembayaran
-  const [uploadedIds, setUploadedIds] = useState([]);
 
-  useEffect(() => {
-    const fetchPembayaran = async () => {
-      try {
-        const response = await ListPembayaran();
-        setPembayaranData(response.data.data.rows);
-        setLoadingPembayaran(false);
-      } catch (error) {
-        console.error("Error fetching pembayaran data:", error);
-        setLoadingPembayaran(false);
-      }
-    };
-
-    fetchPembayaran();
-  }, []);
+  const {
+    data, // Data hasil pembayaran dengan parameter
+    isFetching, // Status fetching data pembayaran dengan parameter
+    setParams, // Fungsi untuk mengubah parameter
+    dataPb, // Data list pembayaran
+    isFetchingList, // Status fetching list pembayaran
+  } = useGetHasilPembayaran();
 
   // useEffect(() => {
   //   const fetchPembayaran = async () => {
   //     try {
   //       const response = await ListPembayaran();
-  //       const dataPembayaran = response.data.data.rows;
-  //       setPembayaranData(dataPembayaran);
+  //       setPembayaranData(response.data.data.rows);
   //       setLoadingPembayaran(false);
-
-  //       // Periksa apakah profileData.id ada pada user_id di ListPembayaran
-  //       const userPembayaran = dataPembayaran.find(
-  //         (item) => item.user_id === profileData.id
-  //       );
-  //       if (userPembayaran) {
-  //         setStatusPembayaran("Sudah Bayar");
-  //       }
   //     } catch (error) {
   //       console.error("Error fetching pembayaran data:", error);
   //       setLoadingPembayaran(false);
@@ -86,30 +70,30 @@ const Transfer = () => {
   //   };
 
   //   fetchPembayaran();
-  // }, [profileData.id]);
+  // }, []);
 
-  // useEffect(() => {
-  //   const fetchDetailPembayaran = async () => {
-  //     try {
-  //       if (profileData.id) {
-  //         const response = await getDetailPembayaranById(profileData.id);
-  //         const pembayaran = response.data.data;
-  //         console.log("Data Pembayaran:", pembayaran);
+  useEffect(() => {
+    const fetchDetailPembayaran = async () => {
+      try {
+        if (profileData.id) {
+          const response = await getDetailPembayaranById(profileData.id);
+          const pembayaran = response.data.data;
+          console.log("Data Pembayaran:", pembayaran);
 
-  //         if (pembayaran.user_id === profileData.id) {
-  //           setPembayaranDataDetail(pembayaran);
-  //           setStatusPembayaran("Sudah Bayar");
-  //         } else {
-  //           setStatusPembayaran("Belum Bayar");
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching payment details:", error);
-  //     }
-  //   };
+          if (pembayaran.user_id === profileData.id) {
+            setPembayaranDataDetail(pembayaran);
+            setStatusPembayaran("Sudah Bayar");
+          } else {
+            setStatusPembayaran("Belum Bayar");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching payment details:", error);
+      }
+    };
 
-  //   fetchDetailPembayaran();
-  // }, [profileData.id]);
+    fetchDetailPembayaran();
+  }, [profileData.id]);
 
   const [initialValues, setInitialValues] = useState({
     bukti_tf: "",
@@ -117,41 +101,14 @@ const Transfer = () => {
     teacher_id: "",
   });
 
-  //const {
-  //   data: dataPembayaran,
-  //   isLoading,
-  //   error,
-  // } = useQuery(
-  //   ["/ppdb/pembayaran-ppdb/detail", id],
-  //   () => getDetailPembayaranById(id),
-  //   {
-  //     onSuccess: (data) => {
-  //       setInitialValues({
-  //         bukti_tf: data.data.bukti_tf || "",
-  //         keterangan: data.data.keterangan || "",
-  //         teacher_id: data.data.teacher_id || "",
-  //       });
-  //     },
-  //     onError: (err) => {
-  //       console.error("Failed to fetch detail pembayaran data:", err);
-  //       toast.error("Gagal mengambil data detail pembayaran", {
-  //         position: "top-right",
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "colored",
-  //       });
-  //     },
-  //   }
-  // );
-
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      // Simulate uploading and getting the uploaded ID
       const response = await CreateLampiranBuktiTransfer(values);
+
+      console.log(response); // Lihat seluruh respons dari API
+
+      const paymentId = response.data?.data?.id; // Pastikan jalur ini sesuai
+      console.log("Payment ID:", paymentId); // Cek apakah ID benar terambil
 
       toast.success(response?.data?.msg || "Data berhasil disimpan!", {
         position: "top-right",
@@ -165,11 +122,11 @@ const Transfer = () => {
       });
 
       resetForm();
-
       setTimeout(() => {
-        navigate("/ppdb/detail-pembayaran");
+        navigate(`/ppdb/detail-pembayaran/${paymentId}`);
       }, 2000);
     } catch (error) {
+      // Error handling
       if (error?.response?.status === 422) {
         toast.warn(error?.response?.data?.msg || "Validasi gagal!", {
           position: "top-right",
@@ -238,21 +195,6 @@ const Transfer = () => {
                     </span>
                   </p>
                 </div>
-
-                {/* <div className="my-4">
-                  <h3 className="text-xl font-semibold">
-                    Status Pembayaran:{" "}
-                    <span
-                      className={
-                        statusPembayaran === "Sudah Bayar"
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }
-                    >
-                      {statusPembayaran}
-                    </span>
-                  </h3>
-                </div> */}
 
                 <div className="flex flex-col items-start mt-4">
                   <p className="text-lg font-semibold">
@@ -399,15 +341,11 @@ const Transfer = () => {
                   disabled={isSubmitting}
                   loading={isSubmitting}
                 >
-                  {statusPembayaran === "Belum Bayar"
-                    ? "Upload Bukti Transfer"
-                    : "Bukti Transfer Telah Diupload"}
-                  {/* {isSubmitting ? "Menyimpan..." : "Simpan"} */}
+                  {isSubmitting ? "Menyimpan..." : "Upload Bukti Transfer"}
                 </Button>
               </div>
-
+              {/* 
               <div className="mt-4">
-                {/* Bagian Luar Card */}
                 <div className="mt-4">
                   <p className="text-2xl">Bagian Luar Card</p>
 
@@ -462,7 +400,7 @@ const Transfer = () => {
                     </ul>
                   )}
                 </div>
-              </div>
+              </div> */}
             </Form>
           </>
         )}
