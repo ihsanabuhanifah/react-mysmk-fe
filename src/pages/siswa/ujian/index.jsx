@@ -1,25 +1,22 @@
-import { useSelector } from "react-redux";
 import LayoutSiswa from "../../../module/layoutSiswa";
 import { useExam } from "../../../api/siswa/exam";
 import Card from "./Card";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ExamPage from "./ExamPage";
 import {
   Input,
   Button,
-  Dropdown,
   Icon,
   Loader,
   Menu,
   Sidebar,
 } from "semantic-ui-react";
-import { LoadingPage } from "../../../components";
 import useToast from "../../../hook/useToast";
 import FilterUjian from "./filterUjian";
 
 export default function UjianSiswa() {
   const [examActive, setExamActive] = useState(null);
-  const { data, setParams, isFetching, dataMapel, params, loadMapel } =
+  const { data, setParams, isFetching, dataMapel, params } =
     useExam(examActive);
   const { customToast } = useToast();
   let [visible, setVisible] = React.useState(false);
@@ -79,7 +76,7 @@ export default function UjianSiswa() {
         </section>
       </div>
       <section className="mt-4 grid h-screen w-full grid-cols-1 gap-4 overflow-y-auto px-5 pb-[280px] md:grid-cols-2 xl:grid-cols-3 xl:pb-[180px]">
-        {isFetching || loadMapel ? (
+        {isFetching ? (
           <div className="mt-[30px]">
             <Loader active inline="left" />
           </div>
@@ -129,9 +126,3 @@ export default function UjianSiswa() {
     </LayoutSiswa>
   );
 }
-
-// [
-//   {urutan: 1, status: 'finish'},
-//   {urutan: 2, status: 'open'},
-//   {urutan: 3, status: 'open'},
-// ]
