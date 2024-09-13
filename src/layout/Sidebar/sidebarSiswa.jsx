@@ -82,6 +82,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+        setIsSelect={setIsSelect}
           cls="list xl:hidden"
           handleSidebar={handleSiderbar}
           to="profile"
@@ -95,6 +96,9 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
+        {
+          isSelect && (
+
         <div className="ml-5 border-l border-gray-400 pl-3">
           <NavButton
             cls="list xl:hidden"
@@ -125,6 +129,8 @@ export default function SidebarSiswa({ setSidebar }) {
             }
           />
         </div>
+          )
+        }
 
         <NavButton
           cls="xl:flex hidden"
@@ -210,7 +216,7 @@ export default function SidebarSiswa({ setSidebar }) {
   );
 }
 
-function NavButton({ to, path, title, logo, handleSidebar, cls }) {
+function NavButton({ to, path, title, logo, handleSidebar, cls, setIsSelect }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
   const navigate = useNavigate();
@@ -220,7 +226,7 @@ function NavButton({ to, path, title, logo, handleSidebar, cls }) {
       onClick={() => {
         if (cls) {
           if (cls.split(" ")[0] === "list") {
-            // setIsSelect(true)
+            setIsSelect(true)
           }
         } else {
           handleSidebar();
