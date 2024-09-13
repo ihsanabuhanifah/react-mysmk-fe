@@ -37,7 +37,7 @@ export default function Card({ item, handleExam }) {
         <div className="flex flex-col">
           
             <p className="font-black font-poppins text-xl leading-none mb-1">
-              {item.ujian.mapel.nama_mapel} - {item.ujian.judul_ujian}
+              {item.ujian?.mapel?.nama_mapel} - {item.ujian.judul_ujian}
             </p>
             <p className="text-sm opacity-70">{item.teacher.nama_guru}</p>
          
