@@ -29,7 +29,7 @@ export default function DashboardSiswa() {
           </div>
         ) : (
           <div
-            className="mt-4 grid h-full w-full grid-cols-12 grid-rows-6 gap-4 overflow-y-auto px-5"
+            className="mt-4 grid w-full grid-cols-12 grid-rows-6 gap-4 px-5"
             style={{ gridTemplateRows: "70px auto 1fr" }}
           >
             <div className="col-span-12 row-span-1 grid grid-cols-4 gap-2 md:col-span-9">

@@ -15,7 +15,7 @@ export default function HasilUjian() {
           <Loader active inline="left" />
         </div>
       ) : (
-        <div className="mt-4 h-full w-full overflow-y-auto px-5">
+        <div className="mt-4 w-full px-5">
           <Table className="ui celled structured table">
             <Table.Header>
               <Table.HeaderCell>No</Table.HeaderCell>
@@ -29,7 +29,7 @@ export default function HasilUjian() {
             </Table.Header>
             <Table.Body>
               <TableLoading
-                count={5}
+                count={8}
                 isLoading={isFetching}
                 data={data?.data}
                 messageEmpty="Data tidak ditemukan"
@@ -78,6 +78,7 @@ export default function HasilUjian() {
               });
             }}
             totalPages={data?.totalPage}
+            count={data.count}
           />
           <p className="text-red-400">*Nilai Akhir diberikan oleh guru</p>
         </div>

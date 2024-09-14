@@ -62,66 +62,59 @@ export default function Siswa() {
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="h-screen overflow-hidden text-gray-700 antialiased">
-        {/* tablet */}
-        <header className="grid h-[8%] w-full grid-cols-10 items-center gap-x-5 border lg:h-1/12 xl:hidden xl:h-1/12">
-          <div className="relative col-span-4 flex h-full w-full items-center pl-5">
-            <img
-              className="absolute"
-              style={{ maxWidth: "60%", maxHeight: "60%" }}
-              src={LogoMySMK}
-              alt={LogoMySMK}
-            />
-          </div>
+      <header className="fixed left-0 top-0 z-[99] grid h-[70px] w-full grid-cols-10 items-center gap-x-5 border-b bg-white xl:hidden">
+        <div className="relative col-span-4 flex h-full w-full items-center pl-5">
+          <img
+            className="absolute"
+            style={{ maxWidth: "60%", maxHeight: "60%" }}
+            src={LogoMySMK}
+            alt={LogoMySMK}
+          />
+        </div>
 
-          <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-4 pr-5 xl:col-span-2">
+        <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-4 pr-5 xl:col-span-2">
+          <button
+            onClick={() => {
+              setShowNotif();
+            }}
+            className="relative block xl:hidden"
+          >
+            <IoNotifications size={26} className="" />
+            {isFetched && (
+              <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
+                {dataNotif?.list?.count}
+              </span>
+            )}
+          </button>
+
+          <div className="flex items-center justify-center xl:hidden">
             <button
               onClick={() => {
-                setShowNotif();
+                setSidebar(!sidebar);
               }}
-              className="relative block xl:hidden"
             >
-              <IoNotifications size={26} className="" />
-              {isFetched && (
-                <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
-                  {dataNotif?.list?.count}
-                </span>
-              )}
+              <MdMenu size={35} />
             </button>
-
-            <div className="flex items-center justify-center xl:hidden">
-              <button
-                onClick={() => {
-                  setSidebar(!sidebar);
-                }}
-              >
-                <MdMenu size={35} />
-              </button>
-            </div>
           </div>
-        </header>
-        {/* tablet */}
+        </div>
+      </header>
 
-        <main className="h-full xl:flex xl:h-full">
+      <main className="xl:flex">
           <div
             className={`h-screen w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
               !sidebar
                 ? "-z-50 -translate-x-full transform xl:-translate-x-0"
                 : "z-10 -translate-x-0 transform transition duration-500"
-            } fixed bottom-0 top-0  z-[9999] flex h-full flex-col xl:relative xl:w-[200px]`}
+            } fixed bottom-0 top-0  z-[9999] flex h-full flex-col xl:fixed xl:w-[200px]`}
           >
-            {/* laptop */}
             <div className="mb-8 mt-4 hidden pl-3 xl:block">
-              {/* <img style={{ maxWidth: '60%', maxHeight: '60%' }} src={LogoMySMK} alt={LogoMySMK} /> */}
               <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />
             </div>
-            {/* laptop */}
 
             <div className="flex h-full flex-col xl:flex-1 xl:overflow-y-auto">
               <SidebarSiswa setSidebar={setSidebar} />
             </div>
 
-            {/* laptop */}
             <div className="mb-4 ml-2 mt-5 hidden xl:block">
               <LogoutButton
                 onClick={() => {
@@ -135,26 +128,23 @@ export default function Siswa() {
                 }
               />
             </div>
-            {/* laptop */}
           </div>
 
-          <div id="sidebar" className="w-full h-full">
+          <div id="sidebar" className="xl:ml-[200px] w-full">
             <Outlet data={data} />
           </div>
         </main>
-        {/* notif */}
-      </div>
 
       {showNotif && (
         <div
           onClick={() => {
             setShowNotif();
           }}
-          className="fixed top-0 right-0 left-0 bottom-0 bg-transparent"
+          className="fixed bottom-0 left-0 right-0 top-0 z-[998] bg-transparent"
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 h-full transform bg-white text-gray-700 w-full sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-10 transition-transform duration-500`}
+        className={`fixed right-0 top-0 h-full w-full transform bg-white text-gray-700 sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-[999] transition-transform duration-500`}
       >
         <Notifikasi />
       </div>

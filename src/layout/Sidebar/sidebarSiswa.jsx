@@ -30,10 +30,10 @@ export default function SidebarSiswa({ setSidebar }) {
   let url2 = pathname.split("/")[3];
 
   useEffect(() => {
-    if (url === 'profile') {
-      setIsSelect(true)
+    if (url === "profile") {
+      setIsSelect(true);
     }
-  }, [url])
+  }, [url]);
 
   return (
     <>
@@ -77,15 +77,15 @@ export default function SidebarSiswa({ setSidebar }) {
       >
         <NavButton
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="dashboard"
           path="dashboard"
           title={["Dashboard"]}
           logo={
             <IoStatsChart
-              className={`h-6 w-6 ${url === "dashboard" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "dashboard" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
@@ -99,113 +99,117 @@ export default function SidebarSiswa({ setSidebar }) {
           title={"Profile"}
           logo={
             <IoPerson
-              className={`h-6 w-6 ${url === "profile" || isSelect ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "profile" || isSelect
+                  ? "text-[#18a558]"
+                  : "text-gray-400"
+              }`}
             />
           }
         />
-        {
-          isSelect && (
-
-            <div className="ml-5 border-l border-gray-400 pl-3">
-              <NavButton
-                cls="list xl:hidden"
-                handleSidebar={handleSiderbar}
-                to="profile"
-                path="edit"
-                title={"Edit Profile"}
-                logo={
-                  <IoPencilOutline
-                    className={`h-6 w-6 ${url2 === "edit" ? "text-[#18a558]" : "text-gray-400"
-                      }`}
-                  />
-                }
-              />
-              <NavButton
-                cls="list xl:hidden"
-                handleSidebar={handleSiderbar}
-                to="profile/security"
-                path="security"
-                title={"Password & Security"}
-                logo={
-                  <IoShieldOutline
-                    className={`h-6 w-6 ${url2 === "security" ? "text-[#18a558]" : "text-gray-400"
-                      }`}
-                  />
-                }
-              />
-            </div>
-          )
-        }
+        {isSelect && (
+          <div className="ml-5 border-l border-gray-400 pl-3 xl:hidden">
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile"
+              path="edit"
+              title={"Edit Profile"}
+              logo={
+                <IoPencilOutline
+                  className={`h-6 w-6 ${
+                    url2 === "edit" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'edit'? "text-[#18a558]" : "text-gray-400"}
+            />
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile/security"
+              path="security"
+              title={"Password & Security"}
+              logo={
+                <IoShieldOutline
+                  className={`h-6 w-6 ${
+                    url2 === "security" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'security'? "text-[#18a558]" : "text-gray-400"}
+            />
+          </div>
+        )}
 
         <NavButton
           cls="xl:flex hidden"
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="profile"
           path="profile"
           title={"Profile"}
           logo={
             <IoPerson
-              className={`h-6 w-6 ${url === "profile" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "profile" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
         <NavButton
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="ujian"
           path="ujian"
           title={"Ujian"}
           logo={
             <MdLaptopMac
-              className={`h-6 w-6 ${url === "ujian" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
         <NavButton
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="hasil-ujian"
           path="hasil-ujian"
           title={"Hasil Ujian"}
           logo={
             <IoCheckmarkDoneOutline
-              className={`h-6 w-6 ${url === "hasil-ujian" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "hasil-ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
         <NavButton
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
           title={"Rapor"}
           logo={
             <IoDocumentTextOutline
-              className={`h-6 w-6 ${url === "rapor" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "rapor" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
         <NavButton
           setIsSelect={setIsSelect}
-
           handleSidebar={handleSiderbar}
           to="laporan-pkl"
           path="laporan-pkl"
           title={"Laporan Pkl"}
           logo={
             <IoNewspaperOutline
-              className={`h-6 w-6 ${url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
-                }`}
+              className={`h-6 w-6 ${
+                url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
+              }`}
             />
           }
         />
@@ -227,7 +231,17 @@ export default function SidebarSiswa({ setSidebar }) {
   );
 }
 
-function NavButton({ to, path, title, logo, handleSidebar, cls, setIsSelect, isSelect = false }) {
+function NavButton({
+  to,
+  path,
+  title,
+  logo,
+  handleSidebar,
+  cls,
+  setIsSelect,
+  isSelect = false,
+  active
+}) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
   let url2 = pathname.split("/")[3];
@@ -241,15 +255,19 @@ function NavButton({ to, path, title, logo, handleSidebar, cls, setIsSelect, isS
             if (setIsSelect && isSelect === false) {
               handleSidebar();
 
-              setIsSelect(true)
+              setIsSelect(true);
               return navigate(to);
             } else {
               handleSidebar();
               return navigate(to);
             }
+          } else {
+            setIsSelect(false);
+            handleSidebar();
+            return navigate(to);
           }
         } else {
-          setIsSelect(false)
+          setIsSelect(false);
           handleSidebar();
           return navigate(to);
         }
@@ -259,25 +277,25 @@ function NavButton({ to, path, title, logo, handleSidebar, cls, setIsSelect, isS
       <div className="flex items-center">
         <div>{logo}</div>
         <p
-          className={`ml-3 whitespace-nowrap text-left font-poppins text-xs ${cls ? url2 === path ? 'text-[0.85rem] font-black text-[#18a558]' : 'text-gray-400' :
-              url === path
-                ? "text-[0.85rem] font-black text-[#18a558]"
-                : "text-gray-400"
-            } group-hover:font-black group-hover:text-gray-600`}
+          className={`ml-3  whitespace-nowrap text-left font-poppins text-xs ${
+            url === path
+              ? "text-[0.85rem] font-black text-[#18a558]"
+              : active? active : "text-gray-400"
+          } group-hover:font-black group-hover:text-gray-600`}
         >
           {title}
         </p>
       </div>
-      {
-        cls ? url2 === path && (
-          <div className="h-full w-1 rounded-l-md bg-[#18a558]"></div>
-        ) : url === path && (
-          <div className="h-full w-1 rounded-l-md bg-[#18a558]"></div>
-        )
-      }
-      {/* {url === path && (
-        <div className="h-full w-1 rounded-l-md bg-[#18a558]"></div>
-      )} */}
+      {cls
+        ? url2 === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )
+        : url === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )}
+      {url === path && (
+        <div className="h-full hidden xl:block w-1 rounded-l-md bg-[#18a558]"></div>
+      )}
     </button>
   );
 }

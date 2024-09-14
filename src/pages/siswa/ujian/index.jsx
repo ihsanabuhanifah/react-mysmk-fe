@@ -3,14 +3,7 @@ import { useExam } from "../../../api/siswa/exam";
 import Card from "./Card";
 import React, { useState } from "react";
 import ExamPage from "./ExamPage";
-import {
-  Input,
-  Button,
-  Icon,
-  Loader,
-  Menu,
-  Sidebar,
-} from "semantic-ui-react";
+import { Input, Button, Icon, Loader, Menu, Sidebar } from "semantic-ui-react";
 import useToast from "../../../hook/useToast";
 import FilterUjian from "./filterUjian";
 
@@ -41,7 +34,7 @@ export default function UjianSiswa() {
           dataMapel={dataMapel}
         />
       </Sidebar>
-      <div className="px-5 mt-4 w-full">
+      <div className="mt-4 w-full px-5">
         <section className="grid grid-cols-4 gap-4">
           <div className="col-span-4 md:col-span-3">
             <Input
@@ -75,7 +68,7 @@ export default function UjianSiswa() {
           </div>
         </section>
       </div>
-      <section className="mt-4 grid h-screen w-full grid-cols-1 gap-4 overflow-y-auto px-5 pb-[280px] md:grid-cols-2 xl:grid-cols-3 xl:pb-[180px]">
+      <section className="mt-4 grid w-full grid-cols-1 gap-4 px-5 md:grid-cols-2 xl:grid-cols-3">
         {isFetching ? (
           <div className="mt-[30px]">
             <Loader active inline="left" />

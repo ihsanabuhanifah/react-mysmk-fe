@@ -51,7 +51,7 @@ export default function Rapor() {
                 dataKelas={dataKelas}
               />
             </Sidebar>
-            <div className="mt-4 h-full w-full px-5">
+            <div className="mt-4 w-full px-5">
               <section className="grid grid-cols-4 gap-4">
                 <div className="col-span-4 md:col-span-3">
                   <Input

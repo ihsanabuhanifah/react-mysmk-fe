@@ -56,7 +56,7 @@ export default function ProfileEdit() {
           <Loader active inline="left" />
         </div>
       ) : (
-        <div className="mt-4 h-screen w-full overflow-x-hidden overflow-y-auto pb-[180px] xl:pb-[120px] xl:pr-[40%]">
+        <div className="mt-4 w-full xl:pr-[40%] border-l border-black/5">
           <h1 className="mb-8 pl-5 font-poppins text-2xl font-black capitalize lg:pl-16 xl:pl-5">
             Edit Profile
           </h1>

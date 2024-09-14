@@ -9,7 +9,7 @@ export default function LayoutSiswa({ title, children }) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <div className="flex w-full items-center justify-between border-b border-black/5 pl-5 pr-12">
+      <div className="flex fixed top-[70px] xl:top-0 left-0 xl:left-[200px] right-0 bg-white z-[99] items-center justify-between border-b border-black/5 pl-5 pr-12">
         <div className="flex h-[73px] w-full items-center bg-white">
           <h1 className="mb-10 font-poppins text-2xl font-black capitalize">
             {title}
@@ -31,7 +31,7 @@ export default function LayoutSiswa({ title, children }) {
         </button>
       </div>
 
-      <div className="w-full flex-1 bg-white ">
+      <div className="w-full flex-1 bg-white mt-[143px] xl:mt-[73px] pb-8">
         {children}
       </div>
     </div>
