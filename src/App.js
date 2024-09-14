@@ -71,6 +71,7 @@ import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
 import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
 import Transfer from "./pages/ppdb/transfer/transfer";
 import DetailPembayaran from "./pages/ppdb/detail-pembayaran/detail-pembayaran";
+import Ujian from "./pages/ppdb/exam/exam";
 
 function App() {
   return (
@@ -224,6 +225,9 @@ function App() {
           <Route path="transfer" element={<Transfer />} />
           <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
+          <Route path="exam" element={<Ujian/>}>
+
+          </Route>
         </Route>
 
         {/* <Route

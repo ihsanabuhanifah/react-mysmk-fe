@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { MdClose } from "react-icons/md";
+import { MdAssignment, MdClose, MdLaptopMac } from "react-icons/md";
 import { IoPerson, IoStatsChart } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import ProfileImage from "../../image/ppdb/profile.png";
@@ -119,6 +119,17 @@ export default function SidebarPpdb({ setSidebar }) {
               className={`h-6 w-6 ${
                 url === "transfer" ? "text-[#18a558]" : "text-gray-400"
               }`}
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="exam"
+          path="exam"
+          title={"Ujian"}
+          logo={
+            <MdAssignment
+              className={`h-6 w-6 ${url === "exam" ? "text-[#18a558]" : "text-gray-400"}`}
             />
           }
         />
