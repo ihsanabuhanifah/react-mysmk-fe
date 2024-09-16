@@ -180,9 +180,9 @@ const LaporanPkl = () => {
               size="medium"
               color="blue"
               loading={downloadPdfIsLoading || downloadPdfBulananLoading}
-              disabled={downloadPdfParams.bulan == null}
+              disabled={downloadPdfParams?.bulan == null}
               onClick={() => {
-                if (downloadPdfParams.bulan === "Semua Bulan") {
+                if (downloadPdfParams && downloadPdfParams?.bulan === "Semua Bulan") {
                   console.log("jalan");
                   downloadPdfBulanan();
                 } else {

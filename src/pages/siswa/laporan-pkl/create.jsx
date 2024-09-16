@@ -247,11 +247,11 @@ const CreateLaporanPkl = () => {
                     >
                       Submit
                     </Button>
-                    {!isWithinRange && (
+                    {/* {!isWithinRange && (
                       <div className="ui pointing red basic label w-auto">
                         Anda Harus Berada dalam Jarak 1km dari Perusahaan Anda
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </Segment>
               </Form>

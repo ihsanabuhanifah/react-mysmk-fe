@@ -7,6 +7,10 @@ import usePage from "../../hook/usePage";
 import { usePagination } from "../../hook/usePagination";
 import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
+import html2pdf from "html2pdf.js";
+import dayjs from "dayjs";
+import "dayjs/locale/id";
+import { formatTanggalIndo } from "../../utils/formatTanggal";
 export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/santri/laporan-harian-pkl/list", { params });
@@ -94,6 +98,7 @@ export const useLaporanPklDetail = (id) => {
     {
       enabled: id !== undefined,
       select: (response) => response.data.data,
+      keepPreviousData: true
     }
   );
   return { data, isLoading, isFetching };
@@ -224,30 +229,92 @@ export const useDownloadPdf = () => {
     bulan: null,
     tahun: 2024,
   };
-  const { params, setParams, handleFilter, handleClear, filterParams } =
-    usePagination(defParams);
+
+  const { filterParams, setParams, params } = usePagination(defParams);
   const { mutate, isLoading } = useMutation(
     () =>
       axios.get(`/santri/laporan-harian-pkl/downdload-pdf`, {
         params: params,
-        responseType: "blob",
+        responseType: "json",
       }),
     {
       onSuccess: (response) => {
-        console.log("dada", response.headers)
-        console.log("ddd", response)
-        const contentDisposition = response.headers["Content-Disposition"];
-        let filename = "Laporan_JURNAL_PKL.pdf";
-        console.log(contentDisposition, "ini");
-        if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-          if (filenameMatch.length > 1) {
-            filename = filenameMatch[1];
-          }
-        }
+        const data = response.data.data;
+        console.log(data);
+        // Generate HTML for PDF with inline CSS
+        const generateHtml = () => {
+          return `
+            <div style="font-family: Arial, sans-serif; font-size: 14px;">
+              <h1 style="text-align: center; font-size: 24px;">Laporan PKL ${
+                data[0].siswa.nama_siswa
+              }</h1>
+              <p style="text-align: center; font-size: 16px;">Data laporan Bulan ${dayjs(
+                data[0].tanggal
+              ).format("MMMM")}
+              <style>
+                .table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 14px;
+                }
+                .table th, .table td {
+                  padding: 10px;
+                  border: 1px solid #ddd;
+                  text-align: left;
+                }
+                .table thead {
+                  background-color: #f2f2f2;
+                }
+                .table thead th {
+                  font-weight: bold;
+                }
+                .foto {
+                  width: 100px;
+                  height: auto;
+                }
+              </style>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Judul Kegiatan</th>
+                    <th>Isi Laporan</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data
+                    .map(
+                      (laporan, index) => `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${laporan.judul_kegiatan}</td>
+                        <td>${laporan.isi_laporan}</td>
+                        <td>${laporan.tanggal}</td>
+                        <td>${laporan.status}</td>
+                      </tr>
+                    `
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          `;
+        };
 
-        const blob = new Blob([response.data], { type: "application/pdf" });
-        saveAs(blob, filename);
+        const content = generateHtml(data);
+
+        const opt = {
+          margin: 1,
+          filename: `Laporan_PKL_${data[0].siswa.nama_siswa}-${dayjs(
+            data[0].tanggal
+          ).format("MMMM")}.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        };
+
+        html2pdf().from(content).set(opt).save();
         successToast("PDF berhasil didownload!");
       },
       onError: (err) => {
@@ -257,37 +324,90 @@ export const useDownloadPdf = () => {
     }
   );
 
-  return {
-    mutate,
-    isLoading,
-    params,
-    setParams,
-    handleFilter,
-    handleClear,
-    filterParams,
-  };
+  return { mutate, isLoading, filterParams, setParams, params };
 };
+
+
+
 export const useDownloadPdfBulanan = () => {
   const { successToast, warningToast } = useToast();
 
   const { mutate, isLoading } = useMutation(
     () =>
-      axios.get(`/santri/laporan-harian-pkl/downdload-pdf-bulanan`, {
-        responseType: "blob",
+      axios.get(`/santri/laporan-harian-pkl/downdload-data-bulanan`, {
+        responseType: "json",
       }),
     {
       onSuccess: (response) => {
         console.log(response.data);
-        const contentDisposition = response.headers["content-disposition"];
-        const filename = contentDisposition
-          ? contentDisposition.split("filename=")[1].replace(/"/g, "")
-          : "Laporan_JURNAL_PKL.pdf";
 
-        // Create a Blob from the PDF bytes
-        const blob = new Blob([response.data], { type: "application/pdf" });
+        // Generate HTML for PDF with inline CSS
+        const generateHtml = (data) => {
+          let data1 = data.data;
+          return `
+            <div style="font-family: Arial, sans-serif; font-size: 14px;">
+              <h1 style="text-align: center; font-size: 24px;">Laporan PKL ${
+                data1.nama_siswa
+              }</h1>
+              <p style="text-align: center; font-size: 16px;">Dari tanggal ${
+                data1.tanggal_mulai
+              } sampai dengan ${data1.tanggal_selesai}</p>
+              <style>
+                .table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 14px;
+                }
+                .table th, .table td {
+                  padding: 10px;
+                  border: 1px solid #ddd;
+                  text-align: left;
+                }
+                .table thead {
+                  background-color: #f2f2f2;
+                }
+                .table thead th {
+                  font-weight: bold;
+                }
+              </style>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Judul Laporan</th>
+                    <th>Isi Laporan</th>
+                    <th>Tanggal Dibuat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data1.laporan
+                    .map(
+                      (laporan, index) => `
+                      <tr>
+                        <td>${index + 1}</td>
+                        <td>${laporan.judul_kegiatan}</td>
+                        <td>${laporan.isi_laporan}</td>
+                        <td>${laporan.tanggal_dibuat}</td>
+                      </tr>
+                    `
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          `;
+        };
 
-        // Use file-saver to save the file
-        saveAs(blob, filename);
+        const content = generateHtml(response.data);
+
+        const opt = {
+          margin: 1,
+          filename: `Laporan_PKL_${response.data.data.nama_siswa}-${response.data.data.tanggal_mulai}/${response.data.data.tanggal_selesai}.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+        };
+
+        html2pdf().from(content).set(opt).save();
         successToast("PDF berhasil didownload!");
       },
       onError: (err) => {
