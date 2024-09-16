@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import dayjs from "dayjs";
 import { useMemo, useRef, useState } from "react";
-import { createNotice, detailNotice } from "../../../api/guru/notice";
+import { createNotice, detailNotice, updateNotice } from "../../../api/guru/notice";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
@@ -43,14 +43,15 @@ function EditNotice() {
       },
       onSuccess: (response) => {
         setPreviewImage(response?.data?.gambar_notice)
-      }
+      },
+      refetchOnWindowFocus: false
     }
   );
 
   const initialValue = {
-    tanggal_pengumuman: dayjs(new Date()).format("YYYY-MM-DD"),
+    tanggal_pengumuman: dayjs(new Date(data?.data?.tanggal_pengumuman)).format("YYYY-MM-DD"),
     judul_notice: data?.data?.judul_notice || "",
-    isi_notice: "",
+    isi_notice: data?.data?.isi_notice || "",
   };
 
   const [isUploading, setIsUploading] = useState(false);
@@ -62,6 +63,9 @@ function EditNotice() {
     const file = event.target.files?.[0];
     if (file) {
       setImage(file);
+      let alamat = URL.createObjectURL(file);
+      console.log(alamat);
+      setPreviewImage(alamat)
     }
   };
   // const previewImage = useMemo(() => {
@@ -87,25 +91,28 @@ function EditNotice() {
     setIsUploading(true);
     const compiled = new FormData();
 
-    if (image == null) {
-      return toast.error("Harap masukkan image", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    // if (image == null) {
+    //   return toast.error("Harap masukkan image", {
+    //     position: "top-right",
+    //     autoClose: 1000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "colored",
+    //   });
+    // }
+    if (image !== null) {
+
+      compiled.append("gambar_notice", image);
     }
-    compiled.append("gambar_notice", image);
     compiled.append("judul_notice", values.judul_notice);
     compiled.append("tanggal_pengumuman", values.tanggal_pengumuman);
     compiled.append("isi_notice", values.isi_notice);
 
     try {
-      let response = await createNotice(compiled);
+      let response = await updateNotice(id,compiled);
       console.log(response);
       queryClient.invalidateQueries("list_notice");
 
@@ -142,10 +149,11 @@ function EditNotice() {
   
 
   return (
-    <LayoutPage title={"Edit Notice"}>
+    <LayoutPage title={"Edit Notice"} isLoading={isLoading}>
       <Formik
         initialValues={initialValue}
         validationSchema={noticeSchema}
+
         enableReinitialize
         onSubmit={onSubmit}
       >

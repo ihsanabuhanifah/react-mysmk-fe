@@ -18,6 +18,14 @@ export function createNotice(form) {
     }
   });
 }
+export function updateNotice(id,form) {
+  syncToken()
+  return axios.put(`/guru/notice/update/${id}`, form, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  });
+}
 
 export function deleteNotice(id) {
   syncToken()

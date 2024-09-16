@@ -14,7 +14,7 @@ import {
 import { useQuery } from "react-query";
 // import FormPelanggaran from "./FormSholat";
 import useDelete from "../../../hook/useDelete";
-
+import htmr from "htmr";
 import {
   listSholat,
   createSholat,
@@ -240,7 +240,9 @@ export default function Info() {
 
                         <Table.HeaderCell w={4}>Gambar</Table.HeaderCell>
                         <Table.HeaderCell>Judul</Table.HeaderCell>
-                        <Table.HeaderCell w={8}>Isi Notice</Table.HeaderCell>
+                        <Table.HeaderCell w={8}>Status</Table.HeaderCell>
+                        <Table.HeaderCell w={8}>Published By</Table.HeaderCell>
+                        <Table.HeaderCell w={8}>Published At</Table.HeaderCell>
                         
 
                         <Table.HeaderCell singleLine>Aksi</Table.HeaderCell>
@@ -275,12 +277,12 @@ export default function Info() {
                               </span>
                             </Table.Cell>
 
-                            <Table.Cell textAlign="left">
-                              <span className="capitalize">
-                                {" "}
-                                {/* {formatAlasanTidakShoalt(value?.keterangan)} */}
-                                {value?.isi_notice}
-                              </span>
+                            <Table.Cell textAlign="left" colSpan={value?.status === 'draft' ? 3 : 1}>
+                              {value?.status === 'draft' ? (
+                                <div className="bg-blue-500 p-2 text-white font-bold rounded-lg">Draft</div>
+                              ) : (
+                                <div className="bg-green-600 p-2 text-white font-bold rounded-lg">published</div>
+                              )}
                             </Table.Cell>
                             {/* <Table.Cell textAlign="left">
                               {handleViewNull(value?.alasan)}
@@ -293,6 +295,20 @@ export default function Info() {
                                 paihsan
                               </span>
                             </Table.Cell> */}
+                            {
+                              value?.status === 'publish' && (
+                                <Table.Cell>
+                                  <span className="">{value?.publisher?.name}</span>
+                                </Table.Cell>
+                              )
+                            }
+                            {
+                              value?.status === 'publish' && (
+                                <Table.Cell>
+                                  {formatDate(value?.published_at)}
+                                </Table.Cell>
+                              )
+                            }
 
                             <Table.Cell textAlign="left">
                               <div className="flex items-center">
