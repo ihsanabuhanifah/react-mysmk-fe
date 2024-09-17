@@ -109,6 +109,50 @@ export default function Editor({ value, handleChange, error, ...props }) {
     };
   }, [renderMath]);
 
+
+  // Handle paste event for image
+  const handlePaste = useCallback((event) => {
+    const clipboard = event.clipboardData || window.clipboardData;
+    const items = clipboard.items;
+
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.indexOf("image") !== -1) {
+          const file = item.getAsFile();
+          setIsLoading(true);
+          resizeFile(file).then(async (resizedImage) => {
+            try {
+              const res = await uploadFile(resizedImage);
+              const url = res.data.url;
+              const quill = reactQuillRef.current;
+              if (quill) {
+                const range = quill.getEditorSelection();
+                range && quill.getEditor().insertEmbed(range.index, "image", url);
+              }
+            } catch (error) {
+              alert("Upload gagal");
+            } finally {
+              setIsLoading(false);
+            }
+          });
+          event.preventDefault();
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const editor = reactQuillRef.current.getEditor();
+
+    // Listen for paste events
+    editor.root.addEventListener("paste", handlePaste);
+
+    // Cleanup on component unmount
+    return () => {
+      editor.root.removeEventListener("paste", handlePaste);
+    };
+  }, [handlePaste]);
   return (
     <>
       {isLoading && (

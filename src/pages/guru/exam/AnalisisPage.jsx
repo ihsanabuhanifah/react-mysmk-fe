@@ -150,11 +150,13 @@ export default function AnalisisPage() {
                     </div>
                   </section>
                 )}
+
+                {console.log('item', item?.soal)}
                 {item.tipe === "ES" && (
                   <section className="mb-5 border shadow-lg rounded-lg p-5">
                     <ES
                       nomor={index + 1}
-                      soals={JSON.parse(item.soal)}
+                      soals={JSON.parse(item?.soal)}
                       jawaban={[
                         {
                           id: item.id,
