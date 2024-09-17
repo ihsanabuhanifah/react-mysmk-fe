@@ -1,10 +1,10 @@
 import htmr from "htmr";
 import { useEffect, useState } from "react";
-import Editor from "../../../components/Editor";
-import Dropzone from "react-dropzone";
+
 import { uploadFile, useDeleteFile } from "../../../api/guru/upload";
 import DropzoneFile from "../../../components/Dropzone";
 import { DeleteButton } from "../../../components";
+import EditorNotLatex from "../../../components/EditorNotLatex";
 export default function ES({ soals, item, setPayload, payload, tipe }) {
   let [jawaban, setJawaban] = useState("");
   let [file, setFile] = useState("");
@@ -77,7 +77,7 @@ export default function ES({ soals, item, setPayload, payload, tipe }) {
           </section>
         )}
 
-        <Editor
+        <EditorNotLatex
           value={jawaban}
           handleChange={(content) => {
             const detail = handleSoal(payload, item);

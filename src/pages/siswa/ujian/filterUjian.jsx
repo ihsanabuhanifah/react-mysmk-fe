@@ -1,27 +1,47 @@
 import { Formik } from 'formik'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Icon, Select, Form, Input } from 'semantic-ui-react'
 import { getOptionsText } from '../../../utils/format'
 
-const FilterHasilBelajar = ({ params, setParams, setVisible, dataTa }) => {
-	let [th, setTh] = useState('')
-	let [tg, setTg] = useState('')
+const FilterUjian = ({ params, setParams, setVisible, dataMapel }) => {
+	let [mp, setMp] = useState('')
+	let [st, setSt] = useState('Semua')
+  let [stValue, setStValue] = useState('')
+
+  useEffect(() => {
+		if (st === 'Sedang Dikerjakan') {
+			setStValue('progress')
+		} else if (st === 'Belum Dikerjakan') {
+			setStValue('open')
+		} else if (st === 'Selesai Dikerjakan') {
+			setStValue('finish')
+		} else if (st === 'Semua') {
+			setStValue(null)
+		}
+	}, [st])
 
 	const onSubmit = (values, { resetForm }) => {
 		setParams((prev) => {
 			return {
 				...prev,
-				ta_id: th,
-        tanggal: tg
+        status: stValue,
+        nama_mapel: mp
 			}
 		})
 		setVisible(false)
 		resetForm()
 	}
 
+  const statusOptions = [
+    { key: 'semua', text: 'Semua'},
+    { key: 'progress', text: 'Sedang Dikerjakan'},
+    { key: 'open', text: 'Belum Dikerjakan'},
+    { key: 'finish', text: 'Selesai Dikerjakan'},
+  ]
+
 	return (
 		<Formik initialValues={params} enableReinitialize onSubmit={onSubmit}>
-			{({ values, setValues, resetForm, handleSubmit, setFieldValue }) => (
+			{({ handleSubmit, setFieldValue }) => (
 				<Form onSubmit={handleSubmit}>
 					<section className="p-5 bg-gray-50 border shadow-2xl h-screen space-y-5 relative">
 						<div className="flex items-center justify-between">
@@ -37,14 +57,13 @@ const FilterHasilBelajar = ({ params, setParams, setVisible, dataTa }) => {
 							<button
 								type="button"
 								onClick={() => {
-									resetForm()
 									setParams({
 										nama_mapel: null,
 										ta_id: null,
 										tanggal: null,
 									})
-									setTh('')
-									setTg('')
+									setMp('')
+									setSt('Semua')
 									setVisible(false)
 								}}
 								className="text-lg"
@@ -56,28 +75,34 @@ const FilterHasilBelajar = ({ params, setParams, setVisible, dataTa }) => {
 						<div className="text-left">
 							<Form.Field
 								control={Select}
-								options={getOptionsText(dataTa, 'nama_tahun_ajaran')}
+								options={getOptionsText(dataMapel, 'nama_mapel')}
 								label={{
-									children: 'Tahun Pelajaran',
+									children: 'Mata Pelajaran',
 								}}
 								onChange={(event, data) => {
-									setTh(data?.value)
+									setMp(data?.value)
 								}}
-								placeholder="Tahun Pelajaran"
+								placeholder="Mata Pelajaran"
 								search
-								value={th}
+								value={mp}
 								clearable
 							/>
 						</div>
-
-						<div className='text-left'>
-							<Form.Field 
-                type='date'
-                control={Input}
-                label="Tanggal"
-                name="tanggal"
-                onChange={(e) => setTg(e.target.value)}
-              />
+						<div className="text-left">
+							<Form.Field
+								control={Select}
+								options={getOptionsText(statusOptions, 'text')}
+								label={{
+									children: 'Status',
+								}}
+								onChange={(event, data) => {
+									setSt(data?.value)
+								}}
+								placeholder="Status"
+								search
+								value={st}
+								clearable
+							/>
 						</div>
 						<div className="absolute bottom-2 xl:bottom-12 right-2 left-2">
 							<Button icon={() => <Icon name="filter" />} type="submit" content="Terapkan" fluid color="teal" />
@@ -89,4 +114,4 @@ const FilterHasilBelajar = ({ params, setParams, setVisible, dataTa }) => {
 	)
 }
 
-export default FilterHasilBelajar
+export default FilterUjian

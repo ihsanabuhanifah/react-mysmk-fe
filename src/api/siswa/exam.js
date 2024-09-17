@@ -4,6 +4,7 @@ import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
 import { useState } from "react";
+import { listMapel } from "../list";
 
 export function getExam(params) {
   syncToken();
@@ -16,7 +17,7 @@ export function takeExam(id) {
 }
 
 export const useExam = (id) => {
-  let [params, setParams] = useState({ page: 1, pageSize: 10, status: 'progress' });
+  let [params, setParams] = useState({ page: 1, pageSize: 10, status: null, judul_ujian: '', nama_mapel: '' });
   const { isLoading, data, isFetching } = useQuery(
     ["/santri/exam/list", params],
     () => getExam(params),
@@ -28,7 +29,15 @@ export const useExam = (id) => {
     }
   );
 
-  return { isLoading, data, isFetching, params, setParams };
+  const { data: dataMapel, isFetching: loadMapel } = useQuery(
+    ['/list/mapel'],
+    () => listMapel(),
+    {
+      select: (res) => res.data.data
+    }
+  )
+
+  return { isLoading, data, isFetching, params, setParams, dataMapel, loadMapel };
 };
 
 export const useTakeExam = () => {
@@ -95,3 +104,12 @@ export const useSubmitExam = () => {
   );
   return mutate;
 };
+
+export const useListNotif = () => {
+  const { data, isFetched } = useQuery(
+		['/exam/notif'],
+		() => axios.get('/santri/exam/notif').then((res) => res.data)
+	)
+
+  return { data, isFetched }
+}

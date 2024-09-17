@@ -6,8 +6,8 @@ const headers = {
   Accept: "application/json",
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
-const axiosClient = axios.create({
-  baseURL: "https://bemysmk.devopsgeming.online/",
+const axiosClientStorage = axios.create({
+  baseURL: "https://storage.devopsgeming.online/",
   // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
 // baseURL: "http://localhost:3888/",
@@ -22,7 +22,7 @@ const axiosClient = axios.create({
   },
   headers,
 });
-axiosClient.interceptors.response.use(
+axiosClientStorage.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -41,14 +41,14 @@ axiosClient.interceptors.response.use(
 );
 
 export const syncToken = () => {
-  axiosClient.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
+  axiosClientStorage.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
     "mysmk_token"
   )}`;
 };
 
 export const clearToken = () => {
-  delete axiosClient.defaults.headers["mysmk_token"];
+  delete axiosClientStorage.defaults.headers["mysmk_token"];
 };
-export default axiosClient;
+export default axiosClientStorage;
 
 // https://mysmk.herokuapp.com

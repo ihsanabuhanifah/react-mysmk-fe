@@ -56,6 +56,7 @@ function PenilaianPage() {
             exam_result: item.exam_result,
             last_result: item.last_result,
             is_lulus: item.is_lulus,
+            status : 'finish'
           };
         } else {
           return {};

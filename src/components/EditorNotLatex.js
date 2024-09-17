@@ -4,11 +4,10 @@ import "./component.css";
 import { uploadFile } from "../api/guru/upload";
 import Resizer from "react-image-file-resizer";
 import { Dimmer, Loader, Message, MessageHeader } from "semantic-ui-react";
-import "katex/dist/katex.min.css";
-import katex from "katex";
+
 import clsx from "clsx";
 import { debounce } from "lodash";
-window.katex = katex;
+
 
 // import uploadToCloudinary from "./upload";
 // import uploadToCloudinary from "./upload";
@@ -61,53 +60,9 @@ export default function Editor({ value, handleChange, error, ...props }) {
   //   });
   // }, []);
 
-  const renderMath = useCallback(
-    debounce(() => {
-      const editor = reactQuillRef.current.getEditor();
-      const editorContent = editor.root.innerHTML;
-      
-      // Render KaTeX math
-      // katex.render(editorContent, editor.root, {
-      //   throwOnError: false,
-      // });
+  
 
-      const latexRegex = /\$(.*?)\$/g;
-    const latexMatches = editorContent.match(latexRegex);
 
-    if (latexMatches) {
-      latexMatches.forEach((latex) => {
-        try {
-          const rendered = katex.renderToString(latex.replace(/\$/g, ''), {
-            throwOnError: false,
-          });
-
-          // Replace LaTeX dengan versi yang dirender
-          editor.root.innerHTML = editor.root.innerHTML.replace(
-            latex,
-            rendered
-          );
-        } catch (error) {
-          console.error("KaTeX render error:", error);
-        }
-      });
-    }
-    }, 500), // Delay 500ms to avoid rendering on every small change
-    []
-  );
-
-  useEffect(() => {
-    const editor = reactQuillRef.current.getEditor();
-
-    // Listen for content changes in Quill editor
-    editor.on("text-change", () => {
-      renderMath(); // Call debounced function to render math
-    });
-
-    // Cleanup: remove event listener when component unmounts
-    return () => {
-      editor.off("text-change");
-    };
-  }, [renderMath]);
 
   return (
     <>

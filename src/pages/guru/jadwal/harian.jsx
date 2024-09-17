@@ -4,6 +4,7 @@ import LayoutPage from "../../../module/layoutPage";
 import { Input, TableLoading } from "../../../components";
 import { izinOptions } from "../../../utils/options";
 import { enIE } from "date-fns/locale";
+import clsx from "clsx";
 
 export default function Harian() {
   const { isLoading, data, isFetching, setParams, params, refetch } =
@@ -72,25 +73,21 @@ export default function Harian() {
           >
             {data &&
               data?.agenda?.map((item, index) => (
-                <Table.Row key={index}>
+                <Table.Row className={clsx({'bg-gray-200' : index % 2 === 0})} key={index}>
                   <Table.Cell>{item.nama_kelas}</Table.Cell>
                   {[1, 2, 3, 4, 5, 6, 7, 8]?.map((i) => (
-                    <Table.Cell>
-                      <div className="grid grid-cols-1 gap-1">
-                        <Label
-                          size="tiny"
-                          content={
+                    <Table.Cell >
+                      <div className={clsx(`grid grid-cols-1 gap-1`, {
+                        
+                      })}>
+                       <span  className="text-xs">{
                             item?.agendas?.filter(
                               (x) => x.agenda.jam_ke === i
                             )?.[0]?.agenda?.materi || "-"
-                          }
-                          color="teal"
-                          as={"a"}
-                        />
+                          }</span>
 
-                        <Label
-                          size="tiny"
-                          content={`${
+                        <span className="text-xs font-bold">
+                        {`${
                             item?.agendas?.filter(
                               (x) => x.agenda.jam_ke === i
                             )?.[0]?.agenda?.mapel?.nama_mapel
@@ -99,15 +96,9 @@ export default function Harian() {
                               (x) => x.agenda.jam_ke === i
                             )?.[0]?.agenda?.teacher?.nama_guru
                           }`}
-                          color="blue"
-                          as={"a"}
-                        />
+                        </span>
 
-                        <Label
-                          size="tiny"
-                          color="purple"
-                          content={
-                            item?.agendas?.filter(
+                        <span>{ item?.agendas?.filter(
                               (x) => x.agenda.jam_ke === i
                             )?.[0]?.siswa.length === 0
                               ? "-"
@@ -123,10 +114,7 @@ export default function Harian() {
                                       }
                                       ),
                                     </i>
-                                  ))
-                          }
-                          as={"a"}
-                        />
+                                  ))}</span>
                       </div>
                     </Table.Cell>
                   ))}

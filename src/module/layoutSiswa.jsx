@@ -1,15 +1,39 @@
-import React from 'react'
+import React from "react";
+import { IoNotifications } from "react-icons/io5";
+import { useListNotif } from "../api/siswa/exam";
+import { useZUStore } from "../zustand/zustore";
 
 export default function LayoutSiswa({ title, children }) {
-	return (
-		<div className="w-full h-screen flex flex-col">
-			<div className="w-full border-b border-black/5 h-[73px] bg-white flex items-center">
-				<h1 className="text-2xl ml-5 capitalize mb-10 font-black font-poppins">{title}</h1>
-			</div>
+  const { data, isFetched } = useListNotif();
+  const { setShowNotif, showNotif } = useZUStore((state) => state);
 
-      <div className="flex-1 px-3 pt-5 overflow-hidden h-full w-full bg-white">
+  return (
+    <div className="flex h-full w-full flex-col">
+      <div className="flex w-full items-center justify-between border-b border-black/5 pl-5 pr-12">
+        <div className="flex h-[73px] w-full items-center bg-white">
+          <h1 className="mb-10 font-poppins text-2xl font-black capitalize">
+            {title}
+          </h1>
+        </div>
+
+        <button
+          onClick={() => {
+            setShowNotif();
+          }}
+          className="relative hidden xl:block"
+        >
+          <IoNotifications size={30} className="" />
+          {isFetched && (
+            <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
+              {data?.list?.count}
+            </span>
+          )}
+        </button>
+      </div>
+
+      <div className="w-full flex-1 bg-white ">
         {children}
       </div>
-		</div>
-	)
+    </div>
+  );
 }
