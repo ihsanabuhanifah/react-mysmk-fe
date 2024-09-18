@@ -50,7 +50,7 @@ export default function ExamPage({ examActive, setExamActive }) {
 			clearInterval(interval)
 		}
 		return () => clearInterval(interval)
-	}, [mouse, cutDown])
+	}, [mouse, cutDown, data])
 
   // submit otomatis
 	useEffect(() => {

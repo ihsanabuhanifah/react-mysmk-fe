@@ -199,20 +199,6 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-        <NavButton
-          setIsSelect={setIsSelect}
-          handleSidebar={handleSiderbar}
-          to="laporan-pkl"
-          path="laporan-pkl"
-          title={"Laporan Pkl"}
-          logo={
-            <IoNewspaperOutline
-              className={`h-6 w-6 ${
-                url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
-              }`}
-            />
-          }
-        />
       </nav>
       <div className="mb-4 ml-2 mt-5 block xl:hidden">
         <LogoutButton
