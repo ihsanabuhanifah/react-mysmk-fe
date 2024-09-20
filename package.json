@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@craco/craco": "^6.4.0",
+    "@craco/craco": "^7.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -14,7 +14,7 @@
     "@testing-library/user-event": "^12.8.3",
     "@wojtekmaj/react-daterange-picker": "^3.4.0",
     "aos": "^2.3.4",
-    "axios": "^0.24.0",
+    "axios": "^1.7.7",
     "clsx": "^1.1.1",
     "date-fns": "^2.29.1",
     "dayjs": "^1.10.7",
@@ -42,7 +42,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.1",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.2.2",
     "react-select-async-paginate": "^0.6.1",
     "react-simple-animate": "^3.5.0",
@@ -86,9 +86,10 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^9.8.8",
+    "autoprefixer": "^10.4.20",
+    "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
-    "postcss": "^7.0.39",
+    "postcss": "^8.4.47",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }
 }
