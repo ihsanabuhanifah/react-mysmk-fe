@@ -56,6 +56,7 @@ const Ujian = () => {
 
   return (
     <LayoutPpdb title="Tes Penerimaan Calon Santri">
+      <p>Ini adalah halaman tes penerimaan calon santri</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {dataUjian.map((item, index) => (
           <Card key={index} item={item} handleExam={handleExam} />
