@@ -62,6 +62,8 @@ import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import HasilUjian from "./pages/siswa/hasil-ujian";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
+import ChatSiswa from "./pages/siswa/chatsiswa/chatsiswa";
+import ChatGuru from "./pages/guru/chatguru/chatguru";
 
 function App() {
   return (
@@ -168,6 +170,10 @@ function App() {
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
+          <Route
+            path="chat"
+            element={<ChatGuru />}
+          />
         </Route>
 
         <Route
@@ -189,7 +195,8 @@ function App() {
           </Route>
           <Route path="hasil-ujian" element={<HasilUjian />} />
           <Route path="rapor" element={<Rapor />} />
-            <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
+          <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
+          <Route path="chat" element={<ChatSiswa />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

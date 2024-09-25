@@ -10,7 +10,11 @@ import clsx from "clsx";
 import { debounce } from "lodash";
 window.katex = katex;
 
+// import uploadToCloudinary from "./upload";
+// import uploadToCloudinary from "./upload";
+
 export default function Editor({ value, handleChange, error, ...props }) {
+
   const reactQuillRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,52 +52,107 @@ export default function Editor({ value, handleChange, error, ...props }) {
     };
   }, []);
 
+  // useEffect(() => {
+  //   const editor = reactQuillRef.current.getEditor();
+  //   editor.root.addEventListener("DOMSubtreeModified", () => {
+  //     katex.render(editor.root.innerHTML, editor.root, {
+  //       throwOnError: false,
+  //     });
+  //   });
+  // }, []);
+
   const renderMath = useCallback(
     debounce(() => {
       const editor = reactQuillRef.current.getEditor();
       const editorContent = editor.root.innerHTML;
-
+      
       // Render KaTeX math
       // katex.render(editorContent, editor.root, {
       //   throwOnError: false,
       // });
 
       const latexRegex = /\$(.*?)\$/g;
-      const latexMatches = editorContent.match(latexRegex);
+    const latexMatches = editorContent.match(latexRegex);
 
-      if (latexMatches) {
-        latexMatches.forEach((latex) => {
-          try {
-            const rendered = katex.renderToString(latex.replace(/\$/g, ""), {
-              throwOnError: false,
-            });
+    if (latexMatches) {
+      latexMatches.forEach((latex) => {
+        try {
+          const rendered = katex.renderToString(latex.replace(/\$/g, ''), {
+            throwOnError: false,
+          });
 
-            // Replace LaTeX dengan versi yang dirender
-            editor.root.innerHTML = editor.root.innerHTML.replace(
-              latex,
-              rendered,
-            );
-          } catch (error) {
-            console.error("KaTeX render error:", error);
-          }
-        });
-      }
+          // Replace LaTeX dengan versi yang dirender
+          editor.root.innerHTML = editor.root.innerHTML.replace(
+            latex,
+            rendered
+          );
+        } catch (error) {
+          console.error("KaTeX render error:", error);
+        }
+      });
+    }
     }, 500), // Delay 500ms to avoid rendering on every small change
-    [],
+    []
   );
 
   useEffect(() => {
     const editor = reactQuillRef.current.getEditor();
 
+    // Listen for content changes in Quill editor
     editor.on("text-change", () => {
       renderMath(); // Call debounced function to render math
     });
 
+    // Cleanup: remove event listener when component unmounts
     return () => {
       editor.off("text-change");
     };
   }, [renderMath]);
 
+
+  // Handle paste event for image
+  const handlePaste = useCallback((event) => {
+    const clipboard = event.clipboardData || window.clipboardData;
+    const items = clipboard.items;
+
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.indexOf("image") !== -1) {
+          const file = item.getAsFile();
+          setIsLoading(true);
+          resizeFile(file).then(async (resizedImage) => {
+            try {
+              const res = await uploadFile(resizedImage);
+              const url = res.data.url;
+              const quill = reactQuillRef.current;
+              if (quill) {
+                const range = quill.getEditorSelection();
+                range && quill.getEditor().insertEmbed(range.index, "image", url);
+              }
+            } catch (error) {
+              alert("Upload gagal");
+            } finally {
+              setIsLoading(false);
+            }
+          });
+          event.preventDefault();
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const editor = reactQuillRef.current.getEditor();
+
+    // Listen for paste events
+    editor.root.addEventListener("paste", handlePaste);
+
+    // Cleanup on component unmount
+    return () => {
+      editor.root.removeEventListener("paste", handlePaste);
+    };
+  }, [handlePaste]);
   return (
     <>
       {isLoading && (
@@ -107,7 +166,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
 
             zIndex: 50,
           }}
-          className="fixed flex items-center justify-center"
+          className="fixed flex items-center justify-center "
         >
           <div>
             <Dimmer
@@ -127,7 +186,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
         ref={reactQuillRef}
         theme="snow"
         className={clsx(`quill-editor`, {
-          "border border-[#E0B4B4]": error,
+          " border  border-[#E0B4B4]": error,
         })}
         placeholder="Start writing..."
         modules={{
@@ -209,7 +268,7 @@ export const resizeFile = async (file, rotate) => {
       (uri) => {
         resolve(uri);
       },
-      "file",
+      "file"
     );
   });
 };

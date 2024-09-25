@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdClose, MdLaptopMac } from "react-icons/md";
 import {
+  IoChatbubbleOutline,
+  IoChatbubblesOutline,
   IoCheckmarkDoneOutline,
   IoDocumentTextOutline,
-  IoLogOutOutline,
   IoPencilOutline,
   IoPerson,
   IoShieldOutline,
   IoStatsChart,
 } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
-import { IoNewspaperOutline } from "react-icons/io5";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
 import { LogoutButton } from "../siswa";
@@ -199,6 +199,20 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
+        <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
+          to="chat"
+          path="chat"
+          title={"Chat"}
+          logo={
+            <IoChatbubblesOutline
+              className={`h-6 w-6 ${
+                url === "chat" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
       </nav>
       <div className="mb-4 ml-2 mt-5 block xl:hidden">
         <LogoutButton
@@ -207,7 +221,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }}
           title={"Logout"}
           logo={
-            <IoLogOutOutline
+            <IoChatbubbleOutline
               className={`h-6 w-6 text-gray-700 group-hover:text-[#18a558]`}
             />
           }

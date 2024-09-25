@@ -2,12 +2,14 @@ import { useQuery } from "react-query";
 import { syncToken } from "../axiosClient";
 import axios from '../axiosClient'
 import { useState } from "react";
+import { listKelas, listMapel } from "../list";
 
 
 export function useListHasilUjian() {
   let [params, setParams] = useState({
     nama_mapel: '',
     judul_ujian: '',
+    kelas: '',
     page: 1,
     pageSize: 10,
   })
@@ -20,5 +22,21 @@ export function useListHasilUjian() {
     }
   })
 
-  return { data, isFetching, params, setParams }
+  const { data: dataMapel, isFetching: loadMapel } = useQuery(
+    ['/list/mapel'],
+    () => listMapel(),
+    {
+      select: (res) => res.data.data
+    }
+  )
+ 
+  const { data: dataKelas, isFetching: loadKelas } = useQuery(
+    ['/list/kelas'],
+    () => listKelas(),
+    {
+      select: (res) => res.data.data
+    }
+  )
+
+  return { data, isFetching, params, setParams, dataMapel, loadMapel, dataKelas, loadKelas }
 }

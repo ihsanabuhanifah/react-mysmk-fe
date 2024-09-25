@@ -20,6 +20,7 @@ import {
   MdPhoneInTalk,
   MdCreate,
   MdLaptopChromebook,
+  MdChatBubble,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -304,6 +305,23 @@ export default function SidebarGuru({ setSidebar }) {
               <MdCreate
                 className={`h-8 w-8 ${
                   url === "laporan-guru-piket"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="chat"
+            path="chat"
+            title={"Chat"}
+            logo={
+              <MdChatBubble
+                className={`h-8 w-8 ${
+                  url === "chat"
                     ? "text-white-400"
                     : "text-gray-600"
                 }`}

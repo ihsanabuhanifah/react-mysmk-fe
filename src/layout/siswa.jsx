@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import Notifikasi from "../module/notifikasi";
@@ -17,6 +17,7 @@ import { LoadingPage, ModalLogout } from "../components";
 import { useZUStore } from "../zustand/zustore";
 import { Menu, Sidebar } from "semantic-ui-react";
 import { useListNotif } from "../api/siswa/exam";
+import { SocketContext, SocketProvider } from "../pages/siswa/SocketContext";
 
 export default function Siswa() {
   let { pathname } = useLocation();
@@ -54,12 +55,26 @@ export default function Siswa() {
     }
   }, [pathname, navigate]);
 
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!socket) return; // Hanya lanjutkan jika socket sudah ada
+  
+    socket.on("message", (msg) => {
+      console.log(msg); // Ubah sesuai kebutuhan
+    });
+  
+    return () => {
+      socket.off("message");
+    };
+  }, [socket]);
+
   if (isLoading) {
     return <LoadingPage />;
   }
 
   return (
-    <>
+    <SocketProvider>
       <ModalLogout open={open} setOpen={setOpen} />
 
       <header className="fixed left-0 top-0 z-[99] grid h-[70px] w-full grid-cols-10 items-center gap-x-5 border-b bg-white xl:hidden">
@@ -131,7 +146,7 @@ export default function Siswa() {
           </div>
 
           <div id="sidebar" className="xl:ml-[200px] w-full">
-            <Outlet data={data} />
+              <Outlet data={data} />
           </div>
         </main>
 
@@ -148,7 +163,7 @@ export default function Siswa() {
       >
         <Notifikasi />
       </div>
-    </>
+    </SocketProvider>
   );
 }
 
