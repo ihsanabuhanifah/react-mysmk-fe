@@ -48,7 +48,7 @@ export default function HasilUjian() {
                       {value.tahun_ajaran.nama_tahun_ajaran}
                     </Table.Cell>
                     <Table.Cell>
-                      {value.exam
+                      { !!value.exam === false ? "-" : value.exam
                         .replace(/[\[\]]/g, "")
                         .replace(/,\s*/g, " - ")}
                     </Table.Cell>

@@ -7,7 +7,7 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClientStorage = axios.create({
-  baseURL: "https://storage.devopsgeming.online/",
+  baseURL: "https://bemysmk.devopsgeming.online/",
   // baseURL: "https://mysmk.herokuapp.com",
   // baseURL : "https://mysmk-be-production.herokuapp.com/",
 // baseURL: "http://localhost:3888/",
