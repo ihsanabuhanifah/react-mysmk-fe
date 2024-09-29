@@ -33,7 +33,6 @@ const LoginPpdb = () => {
     no_hp: "",
     password: "",
   };
-  
 
   const onSubmit = async (values, { setErrors }) => {
     try {
@@ -42,17 +41,34 @@ const LoginPpdb = () => {
         no_hp: values.no_hp || undefined,
         password: values.password,
       });
-
+  
+      console.log("Respons dari API:", result.data); // Logging seluruh data respons
+  
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
-
-      navigate("/ppdb/dashboard");
+  
+      // Validasi jika role tidak ditemukan
+      if (!result.data.user.role) {
+        setErrors({ msg: "Role tidak ditemukan dalam respons. Periksa akun Anda!" });
+        return;
+      }
+  
+      // Validasi hanya role 'Calon Santri' yang bisa masuk
+      if (result.data.user.role.toLowerCase() !== "calon santri") {
+        setErrors({ msg: "Hanya Calon Santri yang dapat masuk!" });
+        return;
+      }
+  
+      // Jika role adalah 'Calon Santri', navigasikan ke dashboard PPDB
+      return navigate("/ppdb/dashboard");
+  
     } catch (err) {
       setErrors(err.response?.data || { msg: "Periksa koneksi internet Anda" });
       console.log("Periksa koneksi internet Anda");
     }
   };
+  
 
   return (
     <Formik
@@ -185,7 +201,7 @@ const LoginPpdb = () => {
                       </div>
                     </div>
                     <Link
-                      to="/landingpage/register"
+                      to="/ppdb/register"
                       className="my-16 w-full flex justify-center md:mr-18"
                     >
                       <p className="text-base text-gray-500 text-center -ml-16">

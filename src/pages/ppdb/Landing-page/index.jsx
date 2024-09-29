@@ -191,6 +191,7 @@ const LandingPageRpl = () => {
     <>
       <NavPpdb />
       <main>
+        
         <div className="p-4 bg-backgroundBaru bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
           <div className="flex flex-col items-center justify-center mr-8">
             <p className="text-white font-bold text-5xl text-center leading-tight mb-6">

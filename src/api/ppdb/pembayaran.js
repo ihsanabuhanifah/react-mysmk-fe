@@ -56,7 +56,7 @@ export function ListPembayaran() {
   export function useGetHasilPembayaranDetail(id) {
     syncToken();
   
-    const { data, isLoading, isError } = useQuery(
+    const { data, isLoading, isError, refetch } = useQuery(
       ['/ppdb/pembayaran-ppdb/detail', id],
       () => axios.get(`/ppdb/pembayaran-ppdb/detail/${id}`).then(res => res.data),
       {
@@ -67,7 +67,7 @@ export function ListPembayaran() {
       }
     );
   
-    return { data, isLoading, isError };
+    return { data, isLoading, isError, refetch };
   }
 
   // export function useGetHasilPembayaranDetail(id) {
@@ -83,3 +83,30 @@ export function ListPembayaran() {
   
   //   return { data, isLoading }
   // }
+
+
+  // Fungsi untuk mengambil detail pembayaran berdasarkan ID
+export function fetchPaymentDetails(id) {
+  syncToken();
+  return axios.get(`/ppdb/pembayaran-ppdb/detail/${id}`).then(res => res.data);
+}
+
+// Custom hook untuk mengambil detail pembayaran berdasarkan ID dengan react-query
+export function useFetchPaymentDetails(id) {
+  syncToken();
+
+  // Menggunakan useQuery untuk mengambil data detail pembayaran
+  const { data, isLoading, isError, refetch } = useQuery(
+    ['/ppdb/pembayaran-ppdb/detail', id],
+    () => fetchPaymentDetails(id), // Memanggil fungsi fetchPaymentDetails
+    {
+      select: (response) => response?.data, // Pilih data dari response
+      onError: (error) => {
+        console.error('Error fetching payment details:', error);
+      },
+    }
+  );
+
+  // Mengembalikan data, isLoading, isError, dan fungsi refetch
+  return { data, isLoading, isError, refetch };
+}

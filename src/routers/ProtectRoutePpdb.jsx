@@ -23,7 +23,7 @@ export default function ProtectRoutePpdb({ children, userRole }) {
       
         if (!userRole.includes(role)) {
           Cookies.remove("mysmk_token");
-          return <Navigate to="/landingpage/login" />;
+          return <Navigate to="/ppdb/login" />;
         }
       },
       onSuccess: () => {
@@ -34,6 +34,6 @@ export default function ProtectRoutePpdb({ children, userRole }) {
   if (isLoading) {
     return <LoadingPage></LoadingPage>;
   }
-  return auth !== undefined ? children : <Navigate to="/landingpage/login" />;
+  return auth !== undefined ? children : <Navigate to="/ppdb/login" />;
 }
 //

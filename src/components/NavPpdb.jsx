@@ -113,7 +113,7 @@ const NavPpdb = () => {
 
           {/* Add Login/Register Buttons */}
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link to="/landingpage/login">
+            <Link to="/ppdb/login">
               <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 duration-300">
                 Login
               </button>

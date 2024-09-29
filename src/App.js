@@ -204,11 +204,11 @@ function App() {
 
         {/* Routes PPDB */}
 
-        <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/ppdb" element={<LandingPage />} />
         <Route path="/landingpage/jurusan-rpl" element={<JurusanRpl />} />
         <Route path="/landingpage/jurusan-tkj" element={<JurusanTkj />} />
-        <Route path="/landingpage/register" element={<RegisterPpdb />} />
-        <Route path="/landingpage/login" element={<LoginPpdb />} />
+        <Route path="/ppdb/register" element={<RegisterPpdb />} />
+        <Route path="/ppdb/login" element={<LoginPpdb />} />
         <Route
           path="/ppdb"
           element={
@@ -251,7 +251,7 @@ const Home = () => {
       <p>Home</p>
       <Link to="/login">login</Link>
       <br></br>
-      <Link to="/landingpage">ppdb</Link>
+      <Link to="/ppdb">ppdb</Link>
     </div>
   );
 };

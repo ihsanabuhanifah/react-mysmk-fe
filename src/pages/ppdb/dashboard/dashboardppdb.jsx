@@ -6,13 +6,18 @@ import ProfileImage from "../../../image/ppdb/profile.png";
 import {
   ListLampiranBuktiTransfer,
   ListPembayaran,
+  useGetHasilPembayaran,
 } from "../../../api/ppdb/pembayaran";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListCheck, faCheck } from "@fortawesome/free-solid-svg-icons";
 const DashboardPpdb = () => {
   const navigate = useNavigate();
   const { profileData, isLoading, isError, error } = useProfileCalonSantri();
+  const { dataPb, isFetching } = useGetHasilPembayaran(); // Ambil data pembayaran
 
+  // Cek apakah dataPb ada dan merupakan array, kemudian cek apakah user sudah pernah meng-upload bukti transfer
+  const isPembayaranSelesai =
+    Array.isArray(dataPb) && dataPb.some((pembayaran) => pembayaran.bukti_tf);
   useEffect(() => {
     if (isError && error?.response?.status === 404) {
       navigate("/ppdb/pendaftaran");
@@ -40,23 +45,42 @@ const DashboardPpdb = () => {
     (value) => value === null
   );
 
+  const isBerkasLengkap = (profileData) => {
+    return (
+      profileData.kk &&
+      profileData.skb &&
+      profileData.ijazah &&
+      profileData.akte &&
+      profileData.surat_pernyataan
+    );
+  };
+
   return (
     <LayoutPpdb title="Halaman Utama">
       <Link
         to="/ppdb/biodata/update"
         className={`flex items-center p-4 mb-4 text-md text-black hover:text-white ${
-          hasNullData
-            ? "bg-red-300 hover:bg-red-500"
+          hasNullData & isBerkasLengkap
+            ? "bg-red-300 hover:bg-red-400"
             : "bg-green-300 hover:bg-green-500"
         } rounded-lg transition-colors duration-200`}
         role="alert"
       >
         <p>
-          {hasNullData
+          {hasNullData & isBerkasLengkap
             ? "Silahkan Lengkapi Biodata Diri Anda Terlebih Dahulu!"
             : "Biodata Kamu sudah Lengkap, Terima kasih"}
         </p>
       </Link>
+      <div>
+        <h2>Status Berkas:</h2>
+        {/* Cek apakah berkas lengkap atau tidak */}
+        {isBerkasLengkap(profileData) ? (
+          <p>Status: Selesai</p>
+        ) : (
+          <p>Status: Belum</p>
+        )}
+      </div>
 
       {/* <div className="p-4 border-b border-gray-300">
         <h2 className="text-lg font-semibold mb-4">Data Profil Calon Santri</h2>
@@ -100,7 +124,7 @@ const DashboardPpdb = () => {
               <div className="flex items-start">
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
-                    hasNullData
+                    hasNullData & isBerkasLengkap
                       ? "border-gray-500 text-gray-500"
                       : "border-green-500 text-green-500"
                   }  font-semibold`}
@@ -112,7 +136,7 @@ const DashboardPpdb = () => {
                     Registrasi Akun
                   </h3>
                   <p>
-                    {hasNullData
+                    {hasNullData & isBerkasLengkap
                       ? "Silahkan Lengkapi Biodata Diri Anda Terlebih Dahulu!"
                       : "Alhamdulillah, anda telah resmi menjadi calon santri"}
                   </p>
@@ -122,10 +146,12 @@ const DashboardPpdb = () => {
               <div className="">
                 <p
                   className={`${
-                    hasNullData ? "text-gray-600" : "text-green-600"
+                    hasNullData & isBerkasLengkap
+                      ? "text-gray-600"
+                      : "text-green-600"
                   }`}
                 >
-                  {hasNullData ? "Belum" : "Selesai"}
+                  {hasNullData & isBerkasLengkap ? "Belum" : "Selesai"}
                 </p>
               </div>
             </div>
@@ -133,27 +159,29 @@ const DashboardPpdb = () => {
 
             {/* Step 2 */}
             <div className="flex items-start justify-between">
-              <div className="flex items-center">
+              <div className="flex items-start">
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
-                    hasNullData
-                      ? "border-gray-500 text-gray-500"
-                      : "border-green-500 text-green-500"
-                  }  font-semibold`}
+                    isPembayaranSelesai
+                      ? "border-green-500 text-green-500"
+                      : "border-gray-500 text-gray-500"
+                  } font-semibold`}
                 >
-                  02
+                  04
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-semibold mb-1">
-                    Transfer Biaya Pendaftaran
+                    Pembayaran PPDB
                   </h3>
                   <p>
-                    Anda bisa upload bukti transfer disini{" "}
+                    {isPembayaranSelesai
+                      ? "Anda telah mengunggah bukti pembayaran."
+                      : "Silakan unggah bukti pembayaran Anda untuk melanjutkan."}{" "}
                     <Link
                       to="/ppdb/transfer"
                       className="text-green-500 font-semibold hover:underline"
                     >
-                      Upload
+                      Upload Bukti Pembayaran
                     </Link>
                   </p>
                 </div>
@@ -161,10 +189,10 @@ const DashboardPpdb = () => {
               <div className="">
                 <p
                   className={`${
-                    hasNullData ? "text-gray-600" : "text-green-600"
+                    isPembayaranSelesai ? "text-green-600" : "text-gray-600"
                   }`}
                 >
-                  {hasNullData ? "Belum" : "Selesai"}
+                  {isPembayaranSelesai ? "Selesai" : "Belum"}
                 </p>
               </div>
             </div>
@@ -175,7 +203,7 @@ const DashboardPpdb = () => {
               <div className="flex items-start">
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
-                    hasNullData
+                    hasNullData & isBerkasLengkap
                       ? "border-gray-500 text-gray-500"
                       : "border-green-500 text-green-500"
                   } font-semibold`}
@@ -187,25 +215,27 @@ const DashboardPpdb = () => {
                     Lengkapi Biodata
                   </h3>
                   <p>
-                    {hasNullData
+                    {hasNullData & isBerkasLengkap
                       ? "Silakan lengkapi biodata Anda untuk melanjutkan."
                       : "Biodata Anda telah lengkap."}{" "}
-                   <Link
+                    <Link
                       to="/ppdb/biodata/update"
                       className="text-green-500 font-semibold hover:underline"
                     >
                       Cek Biodata
                     </Link>
-                  </p>  
+                  </p>
                 </div>
               </div>
               <div className="">
                 <p
                   className={`${
-                    hasNullData ? "text-gray-600" : "text-green-600"
+                    hasNullData & isBerkasLengkap
+                      ? "text-gray-600"
+                      : "text-green-600"
                   }`}
                 >
-                  {hasNullData ? "Belum" : "Selesai"}
+                  {hasNullData & isBerkasLengkap ? "Belum" : "Selesai"}
                 </p>
               </div>
             </div>
@@ -216,9 +246,9 @@ const DashboardPpdb = () => {
               <div className="flex items-start">
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full border-2 ${
-                    hasNullData
-                      ? "border-gray-500 text-gray-500"
-                      : "border-green-500 text-green-500"
+                    isBerkasLengkap(profileData)
+                      ? "border-green-500 text-green-500"
+                      : "border-gray-500 text-gray-500"
                   } font-semibold`}
                 >
                   04
@@ -228,10 +258,10 @@ const DashboardPpdb = () => {
                     Lengkapi Berkas
                   </h3>
                   <p>
-                    {hasNullData
-                      ? "Silakan lengkapi berkas Anda untuk melanjutkan."
-                      : "Anda telah melengkapi semua berkas yang diperlukan."}{" "}
-                      <Link
+                    {isBerkasLengkap(profileData)
+                      ? "Anda telah melengkapi semua berkas yang diperlukan."
+                      : "Silakan lengkapi berkas Anda untuk melanjutkan."}{" "}
+                    <Link
                       to="/ppdb/biodata/berkas"
                       className="text-green-500 font-semibold hover:underline"
                     >
@@ -243,13 +273,16 @@ const DashboardPpdb = () => {
               <div className="">
                 <p
                   className={`${
-                    hasNullData ? "text-gray-600" : "text-green-600"
+                    isBerkasLengkap(profileData)
+                      ? "text-green-600"
+                      : "text-gray-600"
                   }`}
                 >
-                  {hasNullData ? "Belum" : "Selesai"}
+                  {isBerkasLengkap(profileData) ? "Selesai" : "Belum"}
                 </p>
               </div>
             </div>
+
             <div className="border-l-2 border-gray-300 ml-6"></div>
 
             {/* Step 5 */}
@@ -355,7 +388,7 @@ const DashboardPpdb = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Tambahkan Card utama */}
+        {/* Card Utama */}
         <div className="mt-6 p-4 bg-white shadow-md rounded-lg w-[450px] border-2">
           <div className="flex flex-col">
             <h3 className="text-xl font-semibold mb-4">Bukti Transfer</h3>
@@ -366,14 +399,20 @@ const DashboardPpdb = () => {
             transfernya melalui menu di bawah ini.
           </p>
 
-          {/* Tambahkan Card di dalam Card utama dengan background hijau */}
-          <div className="mt-12 p-4 bg-red-300 text-black rounded-lg text-xl font-semibold flex items-center justify-between shadow-xl">
-            Rp.350.000
-            <div className="text-black font-medium text-sm">Belum Transfer</div>
+          {/* Tambahkan Card di dalam Card utama dengan status pembayaran */}
+          <div
+            className={`mt-12 p-4 ${
+              isPembayaranSelesai ? "bg-green-300" : "bg-red-300"
+            } text-black rounded-lg text-xl font-semibold flex items-center justify-between shadow-xl`}
+          >
+            Rp.450.000
+            <div className="text-black font-medium text-sm">
+              {isPembayaranSelesai ? "Selesai" : "Belum Transfer"}
+            </div>
           </div>
           <div className="flex justify-center">
             <Link
-              to="/ppdb/biaya-pendaftaran"
+              to="/ppdb/transfer"
               className="inline-block mt-12 px-6 py-2 text-white hover:text-white bg-green-500 rounded-lg hover:bg-green-700 transition-colors duration-200"
             >
               Upload Bukti Transfer

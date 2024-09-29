@@ -59,7 +59,7 @@ const RegisterPpdb = () => {
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);
-        navigate("/landingpage/login");
+        navigate("/ppdb/login");
       }, 3000);
     } catch (err) {
       setErrors(err.response?.data || { msg: "Periksa koneksi internet Anda" });
@@ -79,7 +79,7 @@ const RegisterPpdb = () => {
         <Button
           onClick={() => {
             setShowPopup(false);
-            navigate("/landingpage/login");
+            navigate("/ppdb/login");
           }}
           color="green"
         >
@@ -252,7 +252,7 @@ const RegisterPpdb = () => {
                         disabled={isSubmitting}
                       />
 
-                      <Link to="/landingpage/login" className="my-4">
+                      <Link to="/ppdb/login" className="my-4">
                         <p className="text-sm text-gray-500">
                           Kembali Ke -{" "}
                           <a className="hover:underline" href="#">
