@@ -22,7 +22,7 @@ const Card = ({ item }) => {
     <ItemGroup divided className="hover:shadow-md w-full">
       <Segment
         raised
-        className="w-full flex flex-col md:flex-row justify-between items-center h-full cursor-pointer"
+        className="w-full flex flex-col md:flex-row  items-center h-full cursor-pointer"
       >
         <div className="flex gap-5 items-center w-full">
           {/* Shimmer effect while image is loading */}

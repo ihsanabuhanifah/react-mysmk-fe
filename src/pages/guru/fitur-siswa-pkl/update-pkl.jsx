@@ -36,6 +36,7 @@ export default function UpdatePkl() {
   // const navigate = useNavigate();
   const { id } = useParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
 
 
   let { data, isFetching } = useQuery(
@@ -212,6 +213,15 @@ export default function UpdatePkl() {
         <Header>
           {"Form Update Tempat PKL santri"}
         </Header>
+        <div className="flex flex-row justify-start items-center" onClick={() => navigate('/guru/fitur-siswa-pkl')}>
+            <Icon
+              name="arrow left"
+              size="large"
+
+              className="cursor-pointer"
+            />
+            <p className="text-xl  font-semibold text-black cursor-pointer">Kembali</p>
+          </div>
         <Formik initialValues={initialState} enableReinitialize onSubmit={onSubmit} validationSchema={siswapklSchema}>
           {({
             values,
@@ -228,7 +238,7 @@ export default function UpdatePkl() {
             <Form onSubmit={handleSubmit}>
               {console.log('err fatih', errors)}
               {console.log('err touched', touched)}
-              {JSON.stringify(values)}
+              {/* {JSON.stringify(values)} */}
               <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
                 <div className="col-span-3 lg:col-span-1">
                   <FormLabel

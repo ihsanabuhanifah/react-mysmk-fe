@@ -1,4 +1,3 @@
-
 import {
     Input,
     Select,
@@ -10,21 +9,14 @@ import {
     Container,
     Segment
 } from "semantic-ui-react";
-import InputRangeDate from "../../../components/inputDateRange";
 import { Formik } from "formik";
-import { getOptionsText } from "../../../utils/format";
-import { izinOptions } from "../../../utils/options";
 import { ReactSelectAsync, FormLabel } from "../../../components";
 import { listSiswaOptions } from "../../../api/list";
-
-import useList from "../../../hook/useList";
-import { endOfMonth, format, startOfMonth } from "date-fns";
-import { useState } from "react";
-
-const KehadiranOptions = [
-    { key: "1", value: 'hadir', text: "hadir" },
-    { key: "2", value: 'izin', text: "izin" },
-]
+import debounce from "lodash.debounce";
+import { useCallback, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useDownloadPdf } from "../../../api/guru/laporanharianpkl";
+import { startOfMonth, endOfMonth, format } from "date-fns";
 
 // Pilihan untuk dropdown bulan
 const monthOptions = [
@@ -50,32 +42,38 @@ const yearOptions = [
 ];
 
 export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
-    const { dataGuru, dataKelas, dataMapel, dataTa } = useList();
+    const { id } = useParams();
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
-    const [selectedDate, setSelectedDate] = useState('');
+    const [studentId, setStudentId] = useState(null);
+    const { mutate: downloadPdfIsMutate, isLoading: downloadPdfIsLoading } = useDownloadPdf(id);
 
-    const onSubmit = (values, { resetForm }) => {
+    const handleDownloadPdf = useCallback((values) => {
+        const { bulan, tahun } = values;
+        if (!studentId) {
+        console.log('ID siswa belum dipilih');
+        return;
+    }
+        if (studentId && bulan && tahun) {
+            const url = `/guru/laporan-harian-pkl/download-pdf/${studentId}`;
+            const params = { bulan, tahun };
+            downloadPdfIsMutate({ url, params });
+            console.log('URL:', url, 'Params:', params);
+        } else {
+            console.log('ID siswa, bulan, atau tahun belum dipilih');
+        }
+    }, [studentId, downloadPdfIsMutate]);
+    // console.log('handlepdf',handleDownloadPdf)
+
+    const handleSubmit = (values, { resetForm }) => {
         setFilter(values);
+        setStudentId(values?.nama_siswa?.value);
         setVisible(false);
-        resetForm();
+        console.log('Form Values:', values);
     };
-
-    const getMonthStartAndEnd = (selectedYear, selectedMonth) => {
-        if (!selectedYear || !selectedMonth) return;
-        const date = new Date(selectedYear, selectedMonth - 1, 1);
-        const start = startOfMonth(date);
-        const end = endOfMonth(date);
-        setDateRange({
-            start: format(start, 'yyyy-MM-dd'),
-            end: format(end, 'yyyy-MM-dd'),
-        });
-    };
-
-    
 
     const handleDateSelection = (selectedYear, selectedMonth, setFieldValue) => {
         if (!selectedYear || !selectedMonth) return;
-        
+
         const start = startOfMonth(new Date(selectedYear, selectedMonth - 1));
         const end = endOfMonth(start);
 
@@ -90,24 +88,20 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
     };
 
     return (
-        
         <Formik
             initialValues={filter}
             enableReinitialize
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
         >
             {({ values, setValues, resetForm, handleSubmit, setFieldValue }) => (
                 <Form onSubmit={handleSubmit}>
                     <section className="p-5 bg-gray-50 border shadow-2xl h-screen relative">
                         <div className="flex items-center justify-between">
                             <Button
-                                type="button"
                                 primary
                                 color="blue"
                                 content={'Tutup'}
-                                onClick={() => {
-                                    setVisible(false);
-                                }}
+                                onClick={() => setVisible(false)}
                             />
                             <button
                                 type="reset"
@@ -117,10 +111,8 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                     setValues({
                                         status_kehadiran: '',
                                         nama_siswa: '',
-                                        start:'',
-                                        end:'',
-                                        year: '',
-                                        month: ''
+                                        bulan: '',
+                                        tahun: ''
                                     });
                                 }}
                                 className="text-lg text-red-500 font-bold"
@@ -132,37 +124,22 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                         <Container className="text-left">
                             {dateRange.start && dateRange.end && (
                                 <Segment style={{ marginTop: '10px' }}>
-                                    <Header as="h3">Date Range</Header>
-                                    <p>
-                                        <strong>Start Date:</strong> {dateRange.start}
-                                    </p>
-                                    <p>
-                                        <strong>End Date:</strong> {dateRange.end}
-                                    </p>
-
+                                    <Header as="h3">Tanggal Dipilih</Header>
+                                    <p><strong>Mulai:</strong> {dateRange.start}</p>
+                                    <p><strong>Selesai:</strong> {dateRange.end}</p>
                                 </Segment>
                             )}
-                            {/* {selectedDate && (
-                            <Segment style={{ marginTop: '10px' }}>
-                                <Header as="h3">Selected Date</Header>
-                                <p>
-                                    <strong>Date:</strong> {selectedDate}
-                                </p>
-                            </Segment>
-                        )} */}
 
                             <FormLabel label={"Pilih Bulan"}>
                                 <Dropdown
                                     placeholder="Pilih Bulan"
                                     fluid
                                     selection
-                                    value={values?.month}
+                                    value={values?.bulan}
                                     options={monthOptions}
                                     onChange={(e, { value }) => {
-                                        setFieldValue('month', value);
-                                        
-                                        // getMonthStartAndEnd(values.year, value);
-                                        handleDateSelection(values.year, value,setFieldValue);
+                                        setFieldValue('bulan', value);
+                                        handleDateSelection(values.tahun, value, setFieldValue);
                                     }}
                                 />
                             </FormLabel>
@@ -172,52 +149,15 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                     placeholder="Pilih Tahun"
                                     fluid
                                     selection
-                                    value={values?.year}
+                                    value={values?.tahun}
                                     options={yearOptions}
                                     onChange={(e, { value }) => {
-                                        setFieldValue('year', value);
-                                        // getMonthStartAndEnd(value, values.month);
-                                        handleDateSelection(value, values.month,setFieldValue);
-                                        
+                                        setFieldValue('tahun', value);
+                                        handleDateSelection(value, values.bulan, setFieldValue);
                                     }}
                                 />
                             </FormLabel>
-                        </Container>
-                        {/* <div className="text-left">
-                            <Form.Field
-                                control={Input}
-                                label={{
-                                    children: "Mulai Tanggal",
-                                    color: "red",
-                                    className: "text-red-500",
-                                    size: "medium",
-                                }}
-                                onChange={(e) => {
-                                    setFieldValue("dariTanggal", e.target.value);
-                                }}
-                                value={values?.dariTanggal}
-                                type="date"
-                            />
-                        </div>
-                        {console.log('value filter', values)}
-                        <div className="text-left">
-                            <Form.Field
-                                control={Input}
-                                label={{
-                                    children: "Sampai Tanggal ",
-                                    color: "red",
-                                    className: "text-red-500",
-                                    size: "medium",
-                                }}
-                                onChange={(e) => {
-                                    setFieldValue("sampaiTanggal", e.target.value);
-                                }}
-                                value={values?.sampaiTanggal}
-                                type="date"
-                            />
-                        </div> */}
 
-                        <div className="text-left">
                             <FormLabel label={"Nama Siswa"}>
                                 <ReactSelectAsync
                                     debounceTimeout={300}
@@ -226,42 +166,44 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                     isClearable
                                     onChange={(data) => {
                                         setFieldValue(`nama_siswa`, data);
+                                        setStudentId(data?.value);
                                     }}
                                     placeholder="Nama Siswa"
-                                    additional={{
-                                        page: 1,
-                                    }}
                                 />
                             </FormLabel>
-                        </div>
 
-                        <div className="text-left">
                             <Form.Field
                                 control={Select}
-                                options={KehadiranOptions}
-                                label={{
-                                    children: "Status Kehadiran",
-                                }}
-                                onChange={(event, data) => {
-                                    setFieldValue(`status_kehadiran`, data?.value);
-                                }}
-                                fluid
+                                options={[
+                                    { key: "1", value: 'hadir', text: "Hadir" },
+                                    { key: "2", value: 'izin', text: "Izin" }
+                                ]}
+                                label="Status Kehadiran"
+                                onChange={(e, { value }) => setFieldValue('status_kehadiran', value)}
                                 value={values?.status_kehadiran}
-                                placeholder="Status Kehadiran"
-                                search
+                                fluid
                                 clearable
                             />
-                        </div>
 
-                        <div className="absolute bottom-2 xl:bottom-12 right-2 left-2">
-                            <Button
-                                icon={() => <Icon name="filter" />}
-                                type="submit"
-                                content="Terapkan"
-                                fluid
-                                color="teal"
-                            />
-                        </div>
+                            <div className="absolute bottom-2 right-2 left-2">
+                                <Button type="submit" content="Terapkan" fluid color="teal" />
+                                <br />
+                                <Button
+                                    fluid
+                                    color="red"
+                                    onClick={() => handleDownloadPdf(values)}
+                                    
+                                    disabled={downloadPdfIsLoading || !studentId || !values.bulan || !values.tahun}
+                                >
+                                    
+                                    {downloadPdfIsLoading ? 'Loading' : (
+                                        <>
+                                            <Icon name="download" /> Download PDF
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        </Container>
                     </section>
                 </Form>
             )}

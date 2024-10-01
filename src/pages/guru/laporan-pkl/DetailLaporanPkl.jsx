@@ -146,18 +146,7 @@ export default function DetailLaporan() {
                 {data?.isi_laporan || "Belum ada isi laporan"}
               </p>
             </div>
-            <div className="col-span-6 lg:col-span-1 xl:col-span-1">
-              <Button size="medium" color="red" onClick={() => downloadPdfIsMutate(id)} disabled={downloadPdfIsLoading} >
-                {
-                  downloadPdfIsLoading ? 'Loading' : (
-                    <>
-                      <Icon name="download" /> donwload PDF
-                    </>
-                  )
-                }
-              </Button>
-              
-            </div>
+            
             <div className="col-span-6 lg:col-span-1 xl:col-span-1">
               <Button size="medium" color="blue" onClick={() => downloadPdfBulananIsMutate(id)} disabled={downloadPdfBulananIsLoading} >
                 {

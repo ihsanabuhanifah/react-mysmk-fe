@@ -165,6 +165,15 @@ export default function CreatePkl() {
         <Header>
           {"Form Tambah Tempat PKL santri"}
         </Header>
+        <div className="flex flex-row justify-start items-center" onClick={() => navigate('/guru/fitur-siswa-pkl')}>
+            <Icon
+              name="arrow left"
+              size="large"
+
+              className="cursor-pointer"
+            />
+            <p className="text-xl  font-semibold text-black cursor-pointer">Kembali</p>
+          </div>
         <Formik initialValues={initialState} enableReinitialize onSubmit={onSubmit} validationSchema={siswapklSchema}>
           {({
             values,

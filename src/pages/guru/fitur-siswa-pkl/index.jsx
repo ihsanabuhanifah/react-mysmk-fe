@@ -162,9 +162,9 @@ export default function FiturPkl() {
 
                     </div>
 
-                    <div className="col-span-6 lg:col-span-1 xl:col-span-1 transform transition-all duration-300">
+                    {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1 transform transition-all duration-300">
                         <UploadExcel />
-                    </div>
+                    </div> */}
                     <div className="col-span-6 lg:col-span-1 xl:col-span-1">
                         <Button
                             content={"Filter"}
@@ -172,7 +172,7 @@ export default function FiturPkl() {
                             fluid
                             icon={() => <Icon name="filter" />}
                             size="medium"
-                            color="teal"
+                            color="blue"
                             onClick={() => {
                                 setVisible(!visible);
                             }}

@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
 import { useQuery, useQueryClient } from "react-query";
 import React, { useState } from "react";
-import { deleteLaporanPkl, listLaporanPkl, useDownloadPdf } from "../../../api/guru/laporanharianpkl";
+import { deleteLaporanPkl, listLaporanPkl, useDownloadPdf, useLaporanPklList } from "../../../api/guru/laporanharianpkl";
 import LayoutPage from "../../../module/layoutPage";
 import useDebounce from "../../../hook/useDebounce";
 import useDelete from "../../../hook/useDelete";
@@ -12,10 +12,12 @@ import { DeleteButton, EditButton, PaginationTable, TableLoading } from "../../.
 import Card from "../../../components/CardLaporan";
 import FilterLaporanPkl from "./filter";
 import { encodeURlFormat } from "../../../utils";
+import Pagination from "../../../components/pagination";
 
 
 
 export default function LaporanPkl() {
+    const { id } = useParams();
     const navigate = useNavigate();
     let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
@@ -24,7 +26,33 @@ export default function LaporanPkl() {
     let debouncedKeyword = useDebounce(keyword, 500);
     let [visible, setVisible] = useState(false);
     const [filter, setFilter] = useState({});
-    const { mutate, isLoading: downloadPdfIsLoading } = useDownloadPdf();
+    // const { mutate, isLoading: downloadPdfIsLoading } = useDownloadPdf(id);
+    const {
+        mutate,
+        isLoading: downloadPdfIsLoading,
+        filterParams: downloadPdfFilterParams,
+        handleClear: clearDownloadPdfFilter,
+        handleFilter: applyDownloadPdfFilter,
+        params: downloadPdfParams,
+        setParams: setDownloadPdfParams,
+      } = useDownloadPdf();
+      console.log(downloadPdfParams);
+      console.log(downloadPdfFilterParams);
+
+      const {
+        data,
+        isFetching,
+        isLoading,
+        setParams,
+        handleFilter,
+        handleClear,
+        handlePageSize,
+        handlePage,
+        filterParams,
+        params,
+      } = useLaporanPklList();
+      console.log(data);
+    
 
     const statusColors = {
         'hadir': 'green',
@@ -33,24 +61,27 @@ export default function LaporanPkl() {
         // Add more status-color mappings as needed
     };
 
-    const params = {
-        page, pageSize,
-        // status: 1,
-        ...filter,
-        nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
+    //asli
+    // const params = {
+    //     page, pageSize,
+    //     // status: 1,
+    //     ...filter,
+    //     nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
+    //     id_siswa: encodeURlFormat(filter?.nama_siswa?.value),
 
-    };
-    const { data, isLoading, isFetching } = useQuery(
-        ["/laporan-harian-pkl", params],
-        () => listLaporanPkl(params),
-        {
-            refetchOnWindowFocus: false,
-            select: (response) => {
-                console.log(response.data)
-                return response.data;
-            }
-        }
-    );
+    // };
+    // const { data, isLoading, isFetching } = useQuery(
+    //     ["/laporan-harian-pkl", params],
+    //     () => listLaporanPkl(params),
+    //     {
+    //         refetchOnWindowFocus: false,
+    //         select: (response) => {
+    //             console.log(response.data)
+    //             return response.data;
+    //         }
+    //     }
+    // );
+
     const {
         showAlertDelete,
         setShowAlertDelete,
@@ -87,7 +118,7 @@ export default function LaporanPkl() {
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
             <section className="grid grid-cols-6 gap-5 px-5 ">
-                <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+                <div className="col-span-6 lg:col-span-1 xl:col-span-1 py-4">
                     <Button
                         content={"Filter"}
                         type="button"
@@ -126,7 +157,7 @@ export default function LaporanPkl() {
 
             </div> */}
 
-            <div className="flex flex-col  items-center w-full px-5 py-3 " count={8}>
+            <div className="flex flex-col items-center w-full px-5 py-3 space-y-5 " count={8}>
                 {/* Display loader while fetching or loading data */}
                 {(isLoading || isFetching) && (
                     <Loader active inline="centered" content="Loading..." />
@@ -147,15 +178,15 @@ export default function LaporanPkl() {
                     </React.Fragment>
                 ))}
             </div>
-            <PaginationTable
-                page={page}
-                pageSize={pageSize}
-                setPageSize={setPageSize}
-                setPage={setPage}
-                totalPages={data?.data?.count}
+            <div className="w-full justify-center mt-4">
+            <Pagination
+              handlePage={handlePage}
+              handlePageSize={handlePageSize}
+              page={params.page}
+              pageSize={params.pageSize}
+              pagination={data?.pagination}
             />
-
-
+          </div>
 
 
         </LayoutPage>
