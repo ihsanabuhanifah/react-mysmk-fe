@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Table, Button, Icon, Menu, Sidebar, Loader } from "semantic-ui-react";
 import { useParams } from "react-router-dom";

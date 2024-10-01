@@ -84,7 +84,7 @@ export function usePelanggaranSiswa(id) {
     ["list_pelanggaran"],
     () => listPelanggaran(),
     {
-      enabled: !!id,
+      enabled: !!id,  
       staleTime: 1000 * 60 * 60 * 24, // 24 jam
       select: (res) => res.data.data,
     }

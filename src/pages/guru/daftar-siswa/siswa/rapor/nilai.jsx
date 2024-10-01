@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Table, Button, Form, Loader } from "semantic-ui-react";
 import Select from "react-select";

@@ -2,12 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { Button, Form as SemanticForm, Icon, Loader, TextArea } from "semantic-ui-react";
+import {
+  Button,
+  Form as SemanticForm,
+  Icon,
+  Loader,
+  TextArea,
+} from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
 import { getSiswaById } from "../../../../api/guru/siswa";
 import { useParams } from "react-router-dom";
 import useToast from "../../../../hook/useToast"; // Import useToast
-import { useUpdateProfile } from "./profile";
+import { useTa, useUpdateProfile } from "./profile";
 import { LoadingPage } from "../../../../components";
 import ImageWithFallback from "../../../../components/ImageWithFallBack";
 
@@ -113,7 +119,7 @@ const ProfileComponent = ({ onSuccess, onError }) => {
       });
     }
   }, [siswaData, warningToast]);
-// console.log(siswaData);
+  // console.log(siswaData);
   const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(id);
 
   const onSubmit = async (values, { resetForm }) => {
@@ -299,33 +305,13 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                         onChange={handleChange}
                         style={{ width: "100%" }}
                         error={touched.alamat && errors.alamat}
-                        // disabled
+                        disabled
                       />
-                      {/* <Form.Field
-                      control={TextArea}
-                      label="Alamat"
-                      name="alamat"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.alamat}
-                      disabled={isSubmitting}
-                      fluid
-                      error={
-                        errors.alamat &&
-                        touched.alamat && {
-                          content: `${errors?.alamat}`,
-                          pointing: "above",
-                        }
-                      }
-                      type="textarea"
-                    /> */}
                     </section>
                   </div>
                   <div className="border-l-2 border-gray-300 mx-4"></div>
 
                   <div className="flex flex-col gap-y-4 w-full pl-4">
-                    {/* <section> */}
-                    {/* <div className="w-52 h-52 border-2 border-gray-300 rounded-full bg-gray-50"></div> */}
                     <div>
                       <h3 className="text-lg font-semibold mb-2">
                         Data Pelengkap
@@ -428,7 +414,6 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                         disabled
                       />
                     </section>
-
                     <section>
                       <label htmlFor="status">Status</label>
                       <SemanticForm.Select
@@ -483,8 +468,6 @@ const ProfileComponent = ({ onSuccess, onError }) => {
                         disabled
                       />
                     </section>
-
-                    {/* </section> */}
                   </div>
                 </div>
                 {/* <div className="mt-5">
