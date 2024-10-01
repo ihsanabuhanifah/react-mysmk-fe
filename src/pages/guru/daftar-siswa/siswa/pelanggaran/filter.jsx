@@ -116,11 +116,13 @@ export default function Filter({
                 // options={getOptionsText(dataPg, "kategori").filter(
                 //   (option) => option.text === "Sedang" || option.text === "Berat"
                 // )}
+                options={getKategoriOptions()} // Panggil fungsi untuk mengambil opsi kategori pelanggaran
+
                 // options={getOptionsText(dataPg, "kategori")}
-                options={[
-                  { value: 1, label: "sedang" },
-                  { value: 2, label: "berat" },
-                ]}
+                // options={[
+                //   { value: 1, label: "sedang" },
+                //   { value: 2, label: "berat" },
+                // ]}
                 label="Kategori Pelanggaran"
                 onChange={(event, data) => setKt(data.value)}
                 placeholder="Pilih Kategori Pelanggaran"
@@ -144,3 +146,10 @@ export default function Filter({
     </Formik>
   );
 }
+
+const getKategoriOptions = () => {
+  return [
+    { value: 'sedang', text: 'Sedang' },
+    { value: 'berat', text: 'Berat' },
+  ];
+};

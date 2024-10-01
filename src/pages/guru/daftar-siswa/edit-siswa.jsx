@@ -6,9 +6,10 @@
   import { useNavigate, useParams } from 'react-router-dom';
   import { getSiswaById } from '../../../api/guru/siswa';
   import ProfileComponent from './siswa/profileSiswa';
-  import NilaiComponent from './siswa/nilaiSiswa/nilai';
+  import NilaiComponent from './siswa/rapor/nilai';
   import { toast } from 'react-toastify'; 
   import PelanggaranComponent from './siswa/pelanggaran/pelanggaran';
+  import HasilUjian from './siswa/hasilUjian';
 
   // const NilaiContent = () => <div>Konten Nilai</div>;
   // const UjianContent = () => <div>Konten Ujian</div>;
@@ -31,10 +32,19 @@
         ),
       },
       {
-        menuItem: 'Nilai',
+        menuItem: 'Rapor',
         render: () => (
           <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
             <NilaiComponent dataTa={dataTa}/>
+          </Tab.Pane>
+        ),
+      },
+      {
+        menuItem: 'Hasil Ujian',
+        render: () => (
+          <Tab.Pane style={{ border: 'none', boxShadow: 'none' }}>
+            {/* <PelanggaranContent /> */}
+            <HasilUjian/>
           </Tab.Pane>
         ),
       },

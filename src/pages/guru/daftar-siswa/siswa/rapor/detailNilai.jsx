@@ -28,7 +28,7 @@ const NilaiDetailComponent = ({ nilaiDetailData, onBackClick }) => {
               <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
               <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
-              <Table.HeaderCell>Guru Pengampu</Table.HeaderCell>
+              {/* <Table.HeaderCell>Guru Pengampu</Table.HeaderCell> */}
               <Table.HeaderCell>Keterangan</Table.HeaderCell>{" "}
             </Table.Row>
           </Table.Header>
@@ -46,7 +46,7 @@ const NilaiDetailComponent = ({ nilaiDetailData, onBackClick }) => {
                 </Table.Cell>
                 <Table.Cell>{detail.exam_result ?? "-"}</Table.Cell>
                 <Table.Cell>{detail.exam ? detail.exam.slice(1, -1) : "-"}</Table.Cell>
-                <Table.Cell>{detail.guru5}</Table.Cell>
+                {/* <Table.Cell>{detail.guru}</Table.Cell> */}
                 <Table.Cell>{detail.keterangan ?? "-"}</Table.Cell>
               </Table.Row>
             ))}
