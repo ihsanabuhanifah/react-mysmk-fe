@@ -7,7 +7,7 @@ import {
   tfOptions,
   tipeSoalOptions,
 } from "../../../utils/options";
-import { Input, Form, Select, Button, Icon } from "semantic-ui-react";
+import { Input, Form, Select, Button, Icon, TextArea } from "semantic-ui-react";
 import { DeleteButton, AddButton, FormLabel } from "../../../components";
 import { toast } from "react-toastify";
 import { getOptions } from "../../../utils/format";
@@ -261,7 +261,7 @@ export default function FormSoal() {
                         size="small"
                       />
                     </div>}
-                    <div>
+                    <div className="col-span-3">
                       <Form.Field
                         control={Select}
                         value={value?.mapel_id}
@@ -289,11 +289,11 @@ export default function FormSoal() {
                         }
                       />
                     </div>
-                    <div>
+                    <div className="col-span-3">
                       <Form.Field
-                        control={Input}
-                        label={`Materi`}
-                        placeholder="Materi"
+                        control={TextArea}
+                        label={`Tujuan Pembelajaran (TP)`}
+                        placeholder="Tujuan Pembelajaran"
                         name={`payload[${index}]materi`}
                         onChange={(e, data) => {
                           console.log("e", e);

@@ -5,9 +5,65 @@ import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
+import { usePagination } from "../../hook/usePagination";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
 }
+
+export const useListUjian = () => {
+  const {
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handlePayload,
+    handleSearch,
+  } = usePagination({
+    teacher_id: "",
+    kelas_id: "",
+    mapel_id: "",
+    ta_id: "",
+    page: 1,
+    pageSize: 10,
+    is_all: 1,
+    jenis_ujian : ""
+  });
+
+  let { data, isLoading, isFetching } = useQuery(
+    //query key
+    ["/ujian/list", [filterParams]],
+    //axios function,triggered when page/pageSize change
+    () => listUjian(filterParams),
+    //configuration
+    {
+      // refetchInterval: 1000 * 60 * 60,
+      staleTime: 100 * 60 * 5,
+      select: (response) => {
+        return response.data;
+      },
+    },
+  );
+
+  return {
+    isLoading,
+    data,
+    isFetching,
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
+    handlePayload,
+  };
+};
 
 export function createUjian(payload) {
   return axios.post("/guru/ujian/create", payload);
@@ -46,8 +102,8 @@ export const useCreatePenilaian = () => {
         durasi: payload.durasi,
         jenis_ujian: payload.jenis_ujian,
         ta_id: payload?.ta_id,
-        urutan : payload?.urutan,
-        is_hirarki : payload.is_hirarki
+        urutan: payload?.urutan,
+        is_hirarki: payload.is_hirarki,
       });
     },
     {
@@ -59,7 +115,7 @@ export const useCreatePenilaian = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -77,7 +133,7 @@ export const usePenilaian = (payload) => {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
 
   return { isLoading, data, isFetching, refetch };
@@ -99,7 +155,7 @@ export const useSoal = (id) => {
 
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
 
   return { isLoading, data, isFetching };
@@ -125,7 +181,7 @@ export const useRemidial = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -148,7 +204,7 @@ export const useRefreshCount = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -169,7 +225,7 @@ export const useUpdateLastExam = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -191,7 +247,7 @@ export const useExamResult = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -211,13 +267,11 @@ export const useAnalisisUjian = (id) => {
 
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
 
   return { isLoading, data, isFetching };
 };
-
-
 
 export const useCekUrutan = () => {
   const { successToast, warningToast } = useToast();
@@ -233,7 +287,7 @@ export const useCekUrutan = () => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };

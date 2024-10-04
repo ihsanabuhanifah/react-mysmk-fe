@@ -16,6 +16,7 @@ import {
   Message,
   MessageHeader,
   Checkbox,
+  TextArea,
 } from "semantic-ui-react";
 
 import { toast } from "react-toastify";
@@ -327,11 +328,11 @@ export default function FormExam() {
                   key={index}
                 >
                   <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    <div>
+                    <div className="col-span-3">
                       <Form.Field
-                        control={Input}
+                        control={TextArea}
                         label={{
-                          children: "Judul Ujian",
+                          children: "Tujuan Pembalajaran (TP)",
                           htmlFor: `payload[${index}]judul_ujian`,
                           name: `payload[${index}]judul_ujian`,
                         }}

@@ -205,7 +205,7 @@ export default function SidebarGuru({ setSidebar }) {
             handleSidebar={handleSiderbar}
             to={`exam`}
             path={"exam"}
-            title={["Exam"]}
+            title={["Assesmen"]}
             logo={
               <MdKeyboard
                 className={`h-8 w-8 ${
