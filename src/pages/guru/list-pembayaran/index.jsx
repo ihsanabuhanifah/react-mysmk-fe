@@ -5,6 +5,7 @@ import {
   DeleteButton,
   EditButton,
   Input,
+  ModalAlert,
   PaginationTable,
   TableLoading,
 } from "../../../components";
@@ -16,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { listPembayaran } from "../../../api/guru/pembayaran";
 import { formatDate } from "../../../utils";
 import useDelete from "../../../hook/useDelete";
-import { deleteSiswaKelasHandle } from "../../../api/guru/siswa";
+import { deletePembayaranHandle } from "../../../api/guru/pembayaran";
 
 export default function ListPembayaran() {
   let [visible, setVisible] = React.useState(false);
@@ -60,7 +61,7 @@ export default function ListPembayaran() {
   } = useDelete({
     afterDeleted: () => queryClient.invalidateQueries("/list"),
     onDelete: (id) => {
-      return deleteSiswaKelasHandle(id);
+      return deletePembayaranHandle(id);
     },
   });
 
@@ -70,6 +71,13 @@ export default function ListPembayaran() {
       visible={visible}
       setVisible={setVisible}
     >
+      <ModalAlert
+        open={showAlertDelete}
+        setOpen={setShowAlertDelete}
+        loading={deleteLoading}
+        onConfirm={onConfirmDelete}
+        title={"Apakah yakin akan menghapus pembayaran ini ?"}
+      />
       <section onKeyPress={handleEvent} className="pb-10">
         <section className="grid grid-cols-6 gap-5">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
@@ -128,10 +136,12 @@ export default function ListPembayaran() {
                   </Table.Cell>{" "}
                   <Table.Cell>
                     <EditButton
-                      onClick={() => navigate(`konfirmasi-pembayaran/${value.id}`)} // Perbaiki referensi ke id
+                      onClick={() =>
+                        navigate(`konfirmasi-pembayaran/${value.id}`)
+                      } // Perbaiki referensi ke id
                     />
                     <DeleteButton
-                      onClick={() => confirmDelete(value.id)} // Pastikan menggunakan id yang benar
+                      onClick={() => confirmDelete(value?.id)} // Pastikan menggunakan id yang benar
                       className="button-spacing"
                     />
                   </Table.Cell>

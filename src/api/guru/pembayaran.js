@@ -34,3 +34,8 @@ export function useFetchPaymentDetails(id) {
   return { data, isLoading, isError, refetch };
   
 }
+
+export function deletePembayaranHandle(id){
+  syncToken();
+  return axios.delete(`guru/pembayaran-ppdb/delete/${id}`);
+}

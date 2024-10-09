@@ -453,12 +453,13 @@ const DashboardPpdb = () => {
             <img
               src={ProfileImage}
               alt="Foto Profil"
-              className="w-24 h-24 rounded-full mb-2 mt-6 border-2 border-black shadow-md" // Border hitam dengan shadow
+              className="w-24 h-24 rounded-full mb-2 mt-6 border-2 border-black shadow-md"
             />
             <h3 className="text-xl font-semibold mb-4">
               {profileData.nama_siswa}
             </h3>{" "}
             {/* Ganti dengan nama yang sesuai */}
+            
             {/* Status */}
             <div
               className={`flex items-center p-4 mb-4 text-md text-black hover:text-white ${
