@@ -16,7 +16,7 @@ function ModalLogoutPpdb({ open, setOpen }) {
     >
       <Header icon>
         <Icon name="sign-out" />
-        Apalah Anda Yakin Akan Logout?
+        Apakah Anda Yakin Akan Logout?
       </Header>
 
       <Modal.Content className="text-center" content>

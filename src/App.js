@@ -55,7 +55,7 @@ import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
 import UjianSiswa from "./pages/siswa/ujian";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajar from "./pages/guru/hasil-belajar";
-
+import DaftarCalonSiswa from "./pages/guru/daftar-calonsantri";
 // PPDB
 import LandingPage from "./pages/ppdb/Landing-page/";
 import LoginPpdb from "./pages/ppdb/login";
@@ -69,9 +69,14 @@ import BiodataPpdb from "./pages/ppdb/biodata";
 import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
 import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
 import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
-import Transfer from "./pages/ppdb/transfer/transfer";
 import DetailPembayaran from "./pages/ppdb/detail-pembayaran/detail-pembayaran";
 import Ujian from "./pages/ppdb/exam/exam";
+import Bukti_Transfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
+import Transfer from "./pages/ppdb/transfer/transfer";
+import BuktiTransfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
+import ListPembayaran from "./pages/guru/list-pembayaran";
+import EditPembayaran from "./pages/guru/list-pembayaran/edit-pembayaran";
+
 
 function App() {
   return (
@@ -130,6 +135,9 @@ function App() {
           <Route path="dashboard" element={<DashboardGuru />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
+          <Route path="daftar-calonsantri" element={<DaftarCalonSiswa />} />
+          <Route path="list-pembayaran" element={<ListPembayaran />} />
+          <Route path="list-pembayaran/konfirmasi-pembayaran/:id" element={<EditPembayaran />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
@@ -222,7 +230,9 @@ function App() {
             <Route path="update" element={<BiodataUpdatePPdb />} />
             <Route path="berkas" element={<BerkasPpdb />} />
           </Route>
+
           <Route path="transfer" element={<Transfer />} />
+          <Route path="bukti-transfer" element={<BuktiTransfer />} />
           <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
           <Route path="exam" element={<Ujian/>}>

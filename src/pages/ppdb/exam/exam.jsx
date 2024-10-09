@@ -1,3 +1,4 @@
+import { useDetailPembayaran } from "../../../api/ppdb/pembayaran";
 import { useProfileCalonSantri } from "../../../api/ppdb/profile";
 import LayoutPpdb from "../../../module/layoutPpdb";
 import Card from "./card";
@@ -6,6 +7,7 @@ import { FaSearch } from "react-icons/fa"; // Importing the search icon
 
 const Ujian = () => {
   const { profileData, isLoading, isError, error } = useProfileCalonSantri();
+  const { dataPembayaran } = useDetailPembayaran();
 
   // Sample data for exams
   const [dataUjian, setDataUjian] = useState([
@@ -57,7 +59,7 @@ const Ujian = () => {
   const [filter, setFilter] = useState("");
 
   // Filtered data based on the input
-  const filteredDataUjian = dataUjian.filter(item =>
+  const filteredDataUjian = dataUjian.filter((item) =>
     item.ujian.mapel.nama_mapel.toLowerCase().includes(filter.toLowerCase())
   );
 
@@ -67,17 +69,18 @@ const Ujian = () => {
   };
 
   // Check if profileData is incomplete
-  const isProfileIncomplete = profileData
-    ? Object.values(profileData).some((value) => value === null)
+  const isPembayaranIncomplete = dataPembayaran
+    ? Object.values(dataPembayaran).some((value) => value === null)
     : true;
+
+  // Check payment status
+  const paymentStatus = dataPembayaran?.status;
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>{error.message}</p>;
 
   return (
     <LayoutPpdb title="Tes Penerimaan Calon Santri">
-      <p>Ini adalah halaman tes penerimaan calon santri</p>
-
       {/* Enhanced Filter Input with React Icons */}
       <div className="mb-4 relative">
         <input
@@ -90,19 +93,25 @@ const Ujian = () => {
         <FaSearch className="absolute left-3 top-3 text-gray-400" />
       </div>
 
-      {isProfileIncomplete ? (
-        <div className="card bg-yellow-100 p-4 rounded-md shadow-md">
+      {isPembayaranIncomplete ? (
+        <div className="card bg-red-100 p-4 rounded-md shadow-md">
           <p className="text-red-600 font-semibold">
-            Silahkan lengkapi biodata diri terlebih dahulu!
+            Silahkan lakukan Pembayaran terlebih dahulu!
           </p>
         </div>
-      ) : (
+      ) : paymentStatus === 0 ? (
+        <div className="card bg-yellow-100 p-4 rounded-md shadow-md">
+          <p className="text-yellow-600 font-semibold">
+            Menunggu Verifikasi Admin!
+          </p>
+        </div>
+      ) : paymentStatus === 1 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {filteredDataUjian.map((item, index) => (
             <Card key={index} item={item} handleExam={handleExam} />
           ))}
         </div>
-      )}
+      ) : null}
     </LayoutPpdb>
   );
 };

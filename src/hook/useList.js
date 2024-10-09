@@ -11,7 +11,9 @@ import { authme } from "../api/auth";
 import jwt_decode from "jwt-decode";
 
 import Cookies from "js-cookie";
-import { getProfileCalonSantri } from "../api/ppdb/profile";
+import { listCalonSiswa } from "../api/guru/calonSiswa";
+import { listPembayaran } from "../api/guru/pembayaran";
+
 
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"));
@@ -32,6 +34,35 @@ export default function useList() {
       },
     }
   );
+
+  let { data: dataPembayaran } = useQuery(
+    //query key
+    ["list_pembayaran"],
+    //axios function,triggered when page/pageSize change
+    () => listPembayaran(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
+      select: (response) => response.data,
+    }
+  );
+
+  let { data: dataCalon } = useQuery(
+    //query key
+    ["list_calsan"],
+    //axios function,triggered when page/pageSize change
+    () => listCalonSiswa(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
+      select: (response) => response.data,
+    }
+  );
+
 
   let { data: dataKelas } = useQuery(
     //query key

@@ -6,7 +6,7 @@ export default function DashboardGuru() {
 
   return (
     <LayoutPage title='Dashboard'>
-      ini dashboard
+      ini dashboard guru
     </LayoutPage>
   );
 }

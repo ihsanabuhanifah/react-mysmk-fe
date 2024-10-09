@@ -111,13 +111,13 @@ export default function SidebarPpdb({ setSidebar }) {
         />
         <NavButton
           handleSidebar={handleSiderbar}
-          to="transfer"
-          path="transfer"
+          to="bukti-transfer"
+          path="bukti-transfer"
           title={"Biaya Pendaftaran"}
           logo={
             <HiUpload
               className={`h-6 w-6 ${
-                url === "transfer" ? "text-[#18a558]" : "text-gray-400"
+                url === "bukti-transfer" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }

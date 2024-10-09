@@ -3,13 +3,23 @@ import Dropzone from "react-dropzone";
 import { uploadFile } from "../api/guru/upload";
 import { Loader, Dimmer } from "semantic-ui-react";
 
-const DropzoneFile = ({ handleDrop }) => {
+const DropzoneFilePpdb = ({ handleDrop }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Dropzone
       onDrop={async (acceptedFiles) => {
+        // Ambil file pertama dari array acceptedFiles
+        const file = acceptedFiles[0];
+
+        // Validasi ukuran file
+        if (file.size > 1 * 1024 * 1024) {
+          // 10 KB
+          alert("File anda terlalu besar! Maksimal 1 MB.");
+          return; // Hentikan proses jika file terlalu besar
+        }
         setIsLoading(true);
+
         try {
           console.log("acceptedFiles[0]", acceptedFiles[0]);
           const res = await uploadFile(acceptedFiles[0]);
@@ -18,7 +28,7 @@ const DropzoneFile = ({ handleDrop }) => {
         } catch (error) {
           console.error("Upload failed:", error);
         } finally {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
       }}
     >
@@ -50,4 +60,4 @@ const DropzoneFile = ({ handleDrop }) => {
   );
 };
 
-export default DropzoneFile;
+export default DropzoneFilePpdb;

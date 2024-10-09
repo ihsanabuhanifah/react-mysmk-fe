@@ -18,10 +18,25 @@ export function ListPembayaran() {
 
 
 
-  export function getDetailPembayaranById(id) {
+  export function getDetailPembayaran() {
     syncToken();
-    return axios.get(`/ppdb/pembayaran-ppdb/detail/${id}`)
+    return axios.get(`/ppdb/pembayaran-ppdb/detail`).then((response) => {
+      console.log("Response Pembayaran :",response.data);
+      return response.data
+    });
   }
+
+  export function useDetailPembayaran() {
+    const { data, isLoading, isError, error } = useQuery(
+      "getDetailPembayaran",
+      getDetailPembayaran
+    );
+  
+    const dataPembayaran = data?.data;
+  
+    return { dataPembayaran, isLoading, isError, error };
+  }
+  
 
   export function useGetHasilPembayaran() {
     let [params, setParams] = useState({
@@ -109,4 +124,7 @@ export function useFetchPaymentDetails(id) {
 
   // Mengembalikan data, isLoading, isError, dan fungsi refetch
   return { data, isLoading, isError, refetch };
+  
 }
+
+

@@ -10,7 +10,7 @@ import {
 } from "../../../api/ppdb/profile";
 import Dropzone from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import DropzoneFile from "../../../components/Dropzone";
+import DropzoneFilePpdb from "../../../components/Dropzone";
 
 const BerkasPpdbSchema = yup.object().shape({
   foto: yup.string().nullable(),
@@ -29,11 +29,11 @@ export default function BerkasPpdb() {
   );
 
   const initialState = {
-    kk: profileData.kk,
-    ijazah: profileData.ijazah,
-    akte: profileData.akte,
-    skb: profileData.skb,
-    surat_pernyataan: profileData.surat_pernyataan,
+    kk: profileData?.kk || "",
+    ijazah: profileData?.ijazah || "",
+    akte: profileData?.akte || "",
+    skb: profileData?.skb || "",
+    surat_pernyataan: profileData?.surat_pernyataan || "",
   };
 
   const onSubmit = async (values, { setErrors }) => {
@@ -87,7 +87,7 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Kartu Keluarga</label>
               {!values.kk ? (
-                <DropzoneFile
+                <DropzoneFilePpdb
                   handleDrop={(cont) => {
                     if (cont && cont[0]) { // Jika cont adalah array
                       const file = cont[0];
@@ -136,7 +136,7 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Ijazah Sekolah</label>
               {!values.ijazah ? (
-                <DropzoneFile
+                <DropzoneFilePpdb
                   handleDrop={(cont) => {
                      // Cek apakah file melebihi 500 KB
                      if (cont.size > 10 * 1024) {
@@ -183,7 +183,7 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Akte Kelahiran</label>
               {!values.akte ? (
-                <DropzoneFile
+                <DropzoneFilePpdb
                   handleDrop={(cont) => {
                       // Cek apakah file melebihi 500 KB
                       if (cont.size > 10 * 1024) {
@@ -229,7 +229,7 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Surat Keterangan Baik</label>
               {!values.skb ? (
-                <DropzoneFile
+                <DropzoneFilePpdb
                   handleDrop={(cont) => {
                      // Cek apakah file melebihi 500 KB
                      if (cont.size > 10 * 1024) {
@@ -276,7 +276,7 @@ export default function BerkasPpdb() {
             <Form.Field className="mb-4">
               <label>Surat Pernyataan</label>
               {!values.surat_pernyataan ? (
-                <DropzoneFile
+                <DropzoneFilePpdb
                   handleDrop={(cont) => {
                     // Cek apakah file melebihi 500 KB
                     if (cont.size > 10 * 1024) {

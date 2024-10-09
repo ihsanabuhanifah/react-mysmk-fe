@@ -7,7 +7,7 @@ import {
   IoShieldOutline,
   IoMenu,
 } from "react-icons/io5";
-
+import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
 export default function BiodataPpdb() {
   let { pathname } = useLocation();
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function BiodataPpdb() {
         {/* Sidebar */}
         <div
           className={`${
-            isSidebarVisible ? 'block' : 'hidden'
+            isSidebarVisible ? "block" : "hidden"
           } sm:flex flex-col bg-white border-r border-black/5 h-full w-[185px] ml-2`}
         >
           <ButtonLink
@@ -58,18 +58,23 @@ export default function BiodataPpdb() {
           />
         </div>
 
+        <button
+          className={`sm:hidden fixed top-[135px] ${
+            !isSidebarVisible ? "left-4" : "left-[210px]"
+          } text-black`}
+          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+        >
+          {isSidebarVisible ? (
+            <IoIosArrowBack size={24} /> // Jika sidebar terlihat, tampilkan arrow left
+          ) : (
+            <IoIosArrowForward size={24} /> // Jika sidebar tidak terlihat, tampilkan arrow right
+          )}
+        </button>
+
         {/* Content Area */}
         <div className="flex-1 h-full bg-white">
           <Outlet />
         </div>
-
-        {/* Toggle Button */}
-        <button
-          className="sm:hidden fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-        >
-          <IoMenu size={24} />
-        </button>
       </div>
     </LayoutPpdb>
   );
