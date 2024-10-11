@@ -8,10 +8,18 @@ const DropzoneFile = ({ handleDrop }) => {
 
   return (
     <Dropzone
-      onDrop={async (acceptedFiles) => {
+      accept={{ "application/pdf": [".pdf"] }} // Membatasi hanya file PDF
+      maxSize={1024 * 1024} // Membatasi ukuran maksimum 1 MB
+      onDrop={async (acceptedFiles, rejectedFiles) => {
+        if (rejectedFiles.length > 0) {
+          alert("Hanya file PDF dengan ukuran maksimal 1 MB yang diizinkan.");
+          return;
+        }
+
         setIsLoading(true);
         try {
           console.log("acceptedFiles[0]", acceptedFiles[0]);
+          
           const res = await uploadFile(acceptedFiles[0]);
           console.log("res", res);
           handleDrop(res.data.url);
@@ -42,7 +50,8 @@ const DropzoneFile = ({ handleDrop }) => {
               <Loader size="small">Uploading...</Loader>
             </Dimmer>
           ) : (
-            <p>Upload File</p>
+            <><p className="text-gray-300">Upload File </p>
+            <p className="italic text-sm text-gray-300">(hanya pdf dan ukuran kurang dari 1 mb)</p></>
           )}
         </div>
       )}

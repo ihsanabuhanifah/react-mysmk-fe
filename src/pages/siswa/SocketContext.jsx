@@ -11,7 +11,7 @@ export const SocketProvider = ({ children }) => {
   console.log(profile)
 
   useEffect(() => {
-    const newSocket = io('http://localhost:8085', {
+    const newSocket = io('https://bemysmk.devopsgeming.online', {
       query: {
         idDB: profile.user_id,
         roleDB: profile.user.role

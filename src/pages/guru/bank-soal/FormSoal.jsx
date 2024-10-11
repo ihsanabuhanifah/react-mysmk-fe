@@ -291,9 +291,9 @@ export default function FormSoal() {
                     </div>
                     <div className="col-span-3">
                       <Form.Field
-                        control={TextArea}
-                        label={`Tujuan Pembelajaran (TP)`}
-                        placeholder="Tujuan Pembelajaran"
+                        control={Input}
+                        label={`Materi`}
+                        placeholder="Materi"
                         name={`payload[${index}]materi`}
                         onChange={(e, data) => {
                           console.log("e", e);

@@ -44,13 +44,13 @@ export default function ExamPage({ examActive, setExamActive }) {
 			interval = setInterval(() => {
 				setCutDown((c) => c - 1)
 			}, 1000)
-		} else if (cutDown === 0 && data?.data?.tipe_ujian == "closed" ) {
+		} else if (cutDown === 0 && data?.data?.tipe_ujian === 'closed') {
 			window.location.reload() // Reload page when countdown reaches 0
 		} else {
 			clearInterval(interval)
 		}
 		return () => clearInterval(interval)
-	}, [mouse, cutDown])
+	}, [mouse, cutDown, data])
 
   // submit otomatis
 	useEffect(() => {
@@ -135,8 +135,11 @@ export default function ExamPage({ examActive, setExamActive }) {
 				setMouse(false); // Stop countdown on mouse enter, but don't reset it
 			}
 		}}
+		style={{
+			zIndex:10000
+		}}
 
-			className="fixed top-0 left-0 right-0 bottom-0 border pb-30 bg-white z-50 overflow-hidden"
+			className="fixed top-0 left-0 right-0 bottom-0  border pb-30 bg-white z-50 overflow-hidden"
 		>
 			<ModalKonfirmasi
 				open={open}

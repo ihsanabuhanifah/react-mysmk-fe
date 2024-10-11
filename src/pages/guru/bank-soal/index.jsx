@@ -132,7 +132,7 @@ export default function ListBankSoal() {
 
                 <Table.HeaderCell>Nama Guru</Table.HeaderCell>
                 <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
-                <Table.HeaderCell>Bab</Table.HeaderCell>
+                <Table.HeaderCell>Materi</Table.HeaderCell>
                 <Table.HeaderCell>Tipe</Table.HeaderCell>
                 <Table.HeaderCell>Point</Table.HeaderCell>
 
