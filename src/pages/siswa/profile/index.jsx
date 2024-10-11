@@ -20,7 +20,7 @@ export default function Profile() {
   return (
     <LayoutSiswa title="My Profile">
       <div className="h-full w-full xl:flex">
-        <div className="ml-2 hidden h-full w-[185px] flex-col overflow-y-auto border-r border-black/5 bg-white pb-3 xl:flex">
+        <div className="ml-2 hidden h-full w-[185px] flex-col overflow-y-auto bg-white pb-3 xl:flex">
           <ButtonLink
             title="Edit Profile"
             logo={

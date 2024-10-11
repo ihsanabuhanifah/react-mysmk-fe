@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdClose, MdLaptopMac } from "react-icons/md";
 import {
+  IoChatbubbleOutline,
+  IoChatbubblesOutline,
   IoCheckmarkDoneOutline,
   IoDocumentTextOutline,
-  IoLogOutOutline,
+  IoPencilOutline,
   IoPerson,
+  IoShieldOutline,
   IoStatsChart,
 } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
-import { IoNewspaperOutline } from "react-icons/io5";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
 import { LogoutButton } from "../siswa";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
+  const [isSelect, setIsSelect] = useState(false);
   const { profile } = useZUStore((state) => state);
 
   const handleSiderbar = () => {
@@ -24,6 +27,13 @@ export default function SidebarSiswa({ setSidebar }) {
 
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
+  let url2 = pathname.split("/")[3];
+
+  useEffect(() => {
+    if (url === "profile") {
+      setIsSelect(true);
+    }
+  }, [url]);
 
   return (
     <>
@@ -66,6 +76,7 @@ export default function SidebarSiswa({ setSidebar }) {
         className="flex h-[80%] flex-col space-y-2 overflow-auto p-0 pb-12 pt-5 xl:p-0"
       >
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="dashboard"
           path="dashboard"
@@ -79,6 +90,61 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          isSelect={isSelect}
+          setIsSelect={setIsSelect}
+          cls="list xl:hidden"
+          handleSidebar={handleSiderbar}
+          to="profile"
+          path="profile"
+          title={"Profile"}
+          logo={
+            <IoPerson
+              className={`h-6 w-6 ${
+                url === "profile" || isSelect
+                  ? "text-[#18a558]"
+                  : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        {isSelect && (
+          <div className="ml-5 border-l border-gray-400 pl-3 xl:hidden">
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile"
+              path="edit"
+              title={"Edit Profile"}
+              logo={
+                <IoPencilOutline
+                  className={`h-6 w-6 ${
+                    url2 === "edit" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'edit'? "text-[#18a558]" : "text-gray-400"}
+            />
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile/security"
+              path="security"
+              title={"Password & Security"}
+              logo={
+                <IoShieldOutline
+                  className={`h-6 w-6 ${
+                    url2 === "security" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'security'? "text-[#18a558]" : "text-gray-400"}
+            />
+          </div>
+        )}
+
+        <NavButton
+          cls="xl:flex hidden"
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="profile"
           path="profile"
@@ -92,6 +158,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="ujian"
           path="ujian"
@@ -105,6 +172,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="hasil-ujian"
           path="hasil-ujian"
@@ -118,6 +186,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
@@ -131,14 +200,15 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         />
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
-          to="laporan-pkl"
-          path="laporan-pkl"
-          title={"Laporan Pkl"}
+          to="chat"
+          path="chat"
+          title={"Chat"}
           logo={
-            <IoNewspaperOutline
+            <IoChatbubblesOutline
               className={`h-6 w-6 ${
-                url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
+                url === "chat" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
@@ -151,7 +221,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }}
           title={"Logout"}
           logo={
-            <IoLogOutOutline
+            <IoChatbubbleOutline
               className={`h-6 w-6 text-gray-700 group-hover:text-[#18a558]`}
             />
           }
@@ -161,33 +231,70 @@ export default function SidebarSiswa({ setSidebar }) {
   );
 }
 
-function NavButton({ to, path, title, logo, handleSidebar }) {
+function NavButton({
+  to,
+  path,
+  title,
+  logo,
+  handleSidebar,
+  cls,
+  setIsSelect,
+  isSelect = false,
+  active
+}) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
+  let url2 = pathname.split("/")[3];
   const navigate = useNavigate();
 
   return (
     <button
       onClick={() => {
-        handleSidebar();
-        return navigate(to);
+        if (cls) {
+          if (cls.split(" ")[0] === "list") {
+            if (setIsSelect && isSelect === false) {
+              handleSidebar();
+
+              setIsSelect(true);
+              return navigate(to);
+            } else {
+              handleSidebar();
+              return navigate(to);
+            }
+          } else {
+            setIsSelect(false);
+            handleSidebar();
+            return navigate(to);
+          }
+        } else {
+          setIsSelect(false);
+          handleSidebar();
+          return navigate(to);
+        }
       }}
-      className={`group flex h-10 items-center justify-between pl-2`}
+      className={`group flex h-10 items-center justify-between pl-2 ${cls} w-full`}
     >
       <div className="flex items-center">
         <div>{logo}</div>
         <p
-          className={`ml-3 whitespace-nowrap text-left font-poppins text-xs ${
+          className={`ml-3  whitespace-nowrap text-left font-poppins text-xs ${
             url === path
               ? "text-[0.85rem] font-black text-[#18a558]"
-              : "text-gray-400"
+              : active? active : "text-gray-400"
           } group-hover:font-black group-hover:text-gray-600`}
         >
           {title}
         </p>
       </div>
+      {cls
+        ? url2 === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )
+        : url === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )}
       {url === path && (
-        <div className="h-full w-1 rounded-l-md bg-[#18a558]"></div>
+        <div className="h-full hidden xl:block w-1 rounded-l-md bg-[#18a558]"></div>
       )}
     </button>
   );

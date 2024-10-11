@@ -62,18 +62,15 @@ import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import HasilUjian from "./pages/siswa/hasil-ujian";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
-import RegisterWali from "./pages/auth/RegisterWali";
-
-
-
-
-import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
-import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
-import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
-import Harian from "./pages/guru/jadwal/harian";
-import HasilBelajar from "./pages/guru/hasil-belajar";
 import Materi from "./pages/materi/page";
-
+import RegisterWali from "./pages/auth/RegisterWali";
+import Harian from "./pages/guru/jadwal/harian";
+import ChatGuru from "./pages/guru/chatguru/chatguru";
+import ScanKehadiran from "./pages/guru/scan-kehadiran";
+import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
+import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
+import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
+import HasilBelajar from "./pages/guru/hasil-belajar";
 
 function App() {
   return (
@@ -190,6 +187,14 @@ function App() {
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
+          <Route
+            path="chat"
+            element={<ChatGuru />}
+          />
+          <Route
+            path="face"
+            element={<ScanKehadiran />}
+          />
         </Route>
 
         <Route
@@ -222,7 +227,6 @@ function App() {
           <Route path="hasil-ujian" element={<HasilUjian />} />
           <Route path="rapor" element={<Rapor />} />
             <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
-
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

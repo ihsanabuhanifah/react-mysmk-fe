@@ -51,7 +51,7 @@ export default function Rapor() {
                 dataKelas={dataKelas}
               />
             </Sidebar>
-            <div className="mt-4 h-full w-full px-5">
+            <div className="mt-4 w-full px-5">
               <section className="grid grid-cols-4 gap-4">
                 <div className="col-span-4 md:col-span-3">
                   <Input
@@ -87,26 +87,26 @@ export default function Rapor() {
               <Table className="ui celled structured table">
                 <Table.Header>
                   <TableRow>
-                    <Table.HeaderCell rowspan={2}>No</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Mapel</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Kelas</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>No</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Mapel</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Kelas</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>
                       Tahun Ajaran
                     </Table.HeaderCell>
-                    <Table.HeaderCell colspan={5}>
+                    <Table.HeaderCell textAlign="center" colspan={5}>
                       Rata-Rata Nilai
                     </Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Nilai Akhir</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Deskripsi</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Tanggal</Table.HeaderCell>
-                    <Table.HeaderCell rowspan={2}>Aksi</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Nilai Akhir</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Deskripsi</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Tanggal</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center" rowspan={2}>Aksi</Table.HeaderCell>
                   </TableRow>
                   <TableRow>
-                    <Table.HeaderCell>Tugas</Table.HeaderCell>
-                    <Table.HeaderCell>Harian</Table.HeaderCell>
-                    <Table.HeaderCell>PTS</Table.HeaderCell>
-                    <Table.HeaderCell>PAS</Table.HeaderCell>
-                    <Table.HeaderCell>US</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Tugas</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">Harian</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">PTS</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">PAS</Table.HeaderCell>
+                    <Table.HeaderCell textAlign="center">US</Table.HeaderCell>
                   </TableRow>
                 </Table.Header>
                 <Table.Body>
