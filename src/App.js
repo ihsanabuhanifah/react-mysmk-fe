@@ -96,11 +96,11 @@ function App() {
             </ProtectLogin>
           }
         />
-         <Route
+        <Route
           path="/register/wali"
           element={
             <ProtectLogin>
-              <RegisterWali/>
+              <RegisterWali />
             </ProtectLogin>
           }
         />
@@ -138,7 +138,7 @@ function App() {
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
           {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
-          <Route path="monitor/harian" element={<Harian/>} />
+          <Route path="monitor/harian" element={<Harian />} />
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
@@ -152,20 +152,17 @@ function App() {
           <Route
             path="pengampu/halaqoh/absensi"
             element={<PengampuHalaqoh />}
-          />
+          />{" "}
           <Route path="bank-soal" element={<ListBankSoal />} />
-
           <Route path="bank-soal/tambah" element={<FormSoal />} />
           <Route path="bank-soal/update/:id" element={<FormSoal />} />
           <Route path="exam" element={<ListExam />} />
           <Route path="hasil-belajar" element={<HasilBelajarGuru />} />
-
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
           <Route path="exam/copy/:id" element={<FormExam />} />
           <Route path="exam/analisis/:id/:mapel" element={<AnalisisPage />} />
-
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route
             path="pengampu/halaqoh/absensi"
@@ -187,14 +184,8 @@ function App() {
             path="absensi/:kelas_id/:mapel_id/:tanggal"
             element={<Absensi />}
           />
-          <Route
-            path="chat"
-            element={<ChatGuru />}
-          />
-          <Route
-            path="face"
-            element={<ScanKehadiran />}
-          />
+          <Route path="chat" element={<ChatGuru />} />
+          <Route path="face" element={<ScanKehadiran />} />
         </Route>
 
         <Route
@@ -210,7 +201,10 @@ function App() {
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
-          <Route path="laporan-pkl/laporan-diniyyah/:id" element={<LaporanDiniyyah />} />
+          <Route
+            path="laporan-pkl/laporan-diniyyah/:id"
+            element={<LaporanDiniyyah />}
+          />
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id/" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>
@@ -226,7 +220,7 @@ function App() {
 
           <Route path="hasil-ujian" element={<HasilUjian />} />
           <Route path="rapor" element={<Rapor />} />
-            <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
+          <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

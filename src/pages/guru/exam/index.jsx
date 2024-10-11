@@ -31,7 +31,7 @@ import { useQueryClient } from "react-query";
 import { deleteUjian, listUjian, useListUjian } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
-
+import ModalPage from "../../../components/ModalPage";
 import {
   LabelKeterangan,
   LabelStatus,
@@ -41,14 +41,18 @@ import {
 import useList from "../../../hook/useList";
 import { CopyButton } from "../../../components/buttonAksi/editButton";
 import Filter from "./filter";
+import AnalisisPage from "./AnalisisPage";
+import PenilaianModal from "./PenilaianModal";
 
 export default function ListExam() {
   const navigate = useNavigate();
   let [visible, setVisible] = React.useState(false);
   let [open, setOpen] = useState(false);
   let { roles } = useList();
-
+  let [analisiOpen, setAnalisisOpen] = useState(false);
+  let [penilaianOpen, setPenilaianOpen] = useState(false);
   let [payload, setPayload] = useState({});
+  let [view, setView] = useState({ id: null });
 
   const {
     isLoading,
@@ -86,7 +90,17 @@ export default function ListExam() {
 
   return (
     <LayoutPage title="List Assesmen" isLoading={isFetching}>
-      {JSON.stringify(params)}
+      {analisiOpen && (
+        <ModalPage open={analisiOpen} setOpen={setAnalisisOpen}>
+          <AnalisisPage view={view} />
+        </ModalPage>
+      )}
+
+      {penilaianOpen && (
+        <ModalPage open={penilaianOpen} setOpen={setPenilaianOpen}>
+          <PenilaianModal view={view} />
+        </ModalPage>
+      )}
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -222,7 +236,7 @@ export default function ListExam() {
                         />
                         <DeleteButton
                           disabled={
-                            value?.status !== "draft" ||
+                           
                             value.teacher_id !== roles?.teacher_id
                           }
                           onClick={() => {
@@ -244,12 +258,13 @@ export default function ListExam() {
                         color="twitter"
                         icon={() => <Icon name="chart line" />}
                         onClick={() => {
-                          navigate(
-                            `analisis/${value.id}/${value?.mapel?.nama_mapel}`,
-                            {
-                              replace: true,
-                            },
-                          );
+                          setView((s) => {
+                            return {
+                              ...s,
+                              id: value.id,
+                            };
+                          });
+                          setAnalisisOpen(true);
                         }}
                       />
                     </Table.Cell>
@@ -260,12 +275,16 @@ export default function ListExam() {
                           color="facebook"
                           icon={() => <Icon name="laptop" />}
                           onClick={() => {
-                            navigate(
-                              `penilaian/${value.id}/${value?.mapel?.nama_mapel}`,
-                              {
-                                replace: true,
-                              },
-                            );
+                            setView((s) => {
+                              return {
+                                ...s,
+                                id: value.id,
+                                mapel: value?.kelas?.nama_kelas,
+                              };
+                            });
+
+                            console.log('pem', penilaianOpen)
+                            setPenilaianOpen(true);
                           }}
                         />
                       ) : (

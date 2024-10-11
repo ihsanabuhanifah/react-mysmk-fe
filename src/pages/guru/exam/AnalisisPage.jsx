@@ -9,18 +9,25 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from "react";
 import { Button } from "semantic-ui-react";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
+import { LoadingPage } from "../../../components";
 
-
-export default function AnalisisPage() {
-  const { id, mapel } = useParams();
-  const { isLoading, data } = useAnalisisUjian(id);
+export default function AnalisisPage({view}) {
+  
+ 
+  const { isLoading, data } = useAnalisisUjian(view.id);
   const ref = useRef();
 
- 
+
+
+  console.log('data', data)
+
+  if(isLoading){
+    return <LoadingPage/>
+  }
   return (
-    <LayoutPage title={"Analisa Ujian "} isLoading={isLoading}>
-      <section className="flex items-center justify-end mb-5">
+    <>
+      <section className="mb-5 flex items-center justify-end">
         <Button
           onClick={async () => {
             handleDownloadPdf(ref);
@@ -35,8 +42,8 @@ export default function AnalisisPage() {
             return (
               <section key={index} className="space-y-5">
                 {item.tipe === "PG" && (
-                  <section className="mb-5 border grid grid-cols-5 gap-5 shadow-lg rounded-lg  p-5">
-                    <div className=" rounded-xl col-span-2 p-4 shadow-sm  ">
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg border p-5 shadow-lg">
+                    <div className="col-span-2 rounded-xl p-4 shadow-sm">
                       <Pg
                         nomor={index + 1}
                         soals={JSON.parse(item.soal)}
@@ -50,8 +57,8 @@ export default function AnalisisPage() {
                         item={item}
                       />
                     </div>
-                    <div className="col-span-3 space-y-2  ">
-                      <div className=" rounded-xl  shadow-sm border ">
+                    <div className="col-span-3 space-y-2">
+                      <div className="rounded-xl border shadow-sm">
                         <DonutChart
                           title="Analisis Jawaban "
                           data={[
@@ -69,21 +76,8 @@ export default function AnalisisPage() {
                             },
                           ]}
                         />
-                        {/* <p>
-                          Siswa Menjawab Benar : {data.analisis[index].benar} ({" "}
-                          {data.analisis[index].persentaseBenar} %)
-                        </p>
-                        <p>
-                          Siswa Menjawab Salah : {data.analisis[index].salah} ({" "}
-                          {data.analisis[index].persentaseSalah} %)
-                        </p>
-                        <p>
-                          Siswa Tidak Manjawab :{" "}
-                          {data.analisis[index].tidakMenjawab} ({" "}
-                          {data.analisis[index].persentaseTidakMenjawab} %)
-                        </p> */}
                       </div>
-                      <div className=" rounded-xl  shadow-sm border  ">
+                      <div className="rounded-xl border shadow-sm">
                         <DonutChart
                           title="Analisis Pilihan "
                           data={[
@@ -114,7 +108,7 @@ export default function AnalisisPage() {
                   </section>
                 )}
                 {item.tipe === "TF" && (
-                  <section className="mb-5 border shadow-lg rounded-lg p-5 grid grid-cols-5 gap-5 ">
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg border p-5 shadow-lg">
                     <div className="col-span-2">
                       <TF
                         nomor={index + 1}
@@ -129,7 +123,7 @@ export default function AnalisisPage() {
                         item={item}
                       />
                     </div>
-                    <div className="col-span-3 ">
+                    <div className="col-span-3">
                       <DonutChart
                         title="Analisis Jawaban "
                         data={[
@@ -151,9 +145,9 @@ export default function AnalisisPage() {
                   </section>
                 )}
 
-                {console.log('item', item?.soal)}
+                {console.log("item", item?.soal)}
                 {item.tipe === "ES" && (
-                  <section className="mb-5 border shadow-lg rounded-lg p-5">
+                  <section className="mb-5 rounded-lg border p-5 shadow-lg">
                     <ES
                       nomor={index + 1}
                       soals={JSON.parse(item?.soal)}
@@ -172,11 +166,9 @@ export default function AnalisisPage() {
             );
           })}
       </section>
-    </LayoutPage>
+    </>
   );
 }
-
-
 
 const handleDownloadPdf = async (printRef) => {
   try {
@@ -206,27 +198,20 @@ const handleDownloadPdf = async (printRef) => {
 
     // Add pages
     while (heightLeft > 0) {
-      pdf.addImage(imgData, 'JPEG', 0, position, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, pdfWidth, pdfHeight);
       heightLeft -= pdfHeight;
       position -= pdfHeight;
-      
+
       if (heightLeft > 0) {
         pdf.addPage();
       }
     }
 
     // Save the PDF
-    const fileName = `Analisis-Jawaban-${new Date().toISOString().split('T')[0]}.pdf`;
+    const fileName = `Analisis-Jawaban-${new Date().toISOString().split("T")[0]}.pdf`;
     pdf.save(fileName);
   } catch (error) {
     console.error("Error generating PDF:", error);
   }
 };
 
-// Function to compress the PDF Blob to a specified size limit
-const compressPdfBlob = async (blob, maxSize) => {
-  // This function would require a PDF compression library or server-side compression
-  // Implement compression logic here (for example using a library or API)
-  // For now, just return the original blob for demonstration purposes
-  return blob;
-};

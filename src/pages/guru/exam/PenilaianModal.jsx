@@ -22,12 +22,18 @@ import ModalPenilaian from "./ModalPenilaian";
 import { FormikProvider, useFormik } from "formik";
 import useList from "../../../hook/useList";
 
-function PenilaianPage() {
-  const { id, mapel } = useParams();
+function PenilaianModal({ view }) {
+  let { id, mapel } = useParams();
+  if (view) {
+    id = view.id;
+    mapel= view.mapel;
+  }
+
   let [namaSiswa, setNamaSiswa] = useState({});
   const { isFetching, data, refetch } = usePenilaian({
     ujian_id: id,
   });
+
   let { roles } = useList();
   const mutateExam = useExamResult();
 
@@ -56,6 +62,7 @@ function PenilaianPage() {
             exam_result: item.exam_result,
             last_result: item.last_result,
             is_lulus: item.is_lulus,
+            status: "finish",
           };
         } else {
           return {};
@@ -73,7 +80,7 @@ function PenilaianPage() {
   console.log("va", values);
 
   return (
-    <LayoutPage title={"Penilaian"}>
+    <>
       {open && (
         <ModalPenilaian
           item={item}
@@ -86,11 +93,12 @@ function PenilaianPage() {
           namaSiswa={namaSiswa}
         />
       )}
+
       <section
         style={{
           zoom: "80%",
         }}
-        className="grid grid-cols-6 gap-5 mb-5"
+        className="mb-5 grid grid-cols-6 gap-5"
       >
         <Button
           content={"Remidial"}
@@ -218,8 +226,8 @@ function PenilaianPage() {
                                   0,
                                   Math.min(
                                     100,
-                                    Number(e.target.value.replace(",", "."))
-                                  )
+                                    Number(e.target.value.replace(",", ".")),
+                                  ),
                                 );
 
                                 if (value === 0) {
@@ -227,7 +235,7 @@ function PenilaianPage() {
                                 }
                                 setFieldValue(
                                   `data[${index}]exam_result`,
-                                  value
+                                  value,
                                 );
 
                                 if (value > 74) {
@@ -238,7 +246,7 @@ function PenilaianPage() {
 
                                 setFieldValue(
                                   `data[${index}]last_result`,
-                                  data?.data[index].exam_result
+                                  data?.data[index].exam_result,
                                 );
                                 setFieldValue(`data[${index}]is_change`, true);
                               }}
@@ -306,8 +314,8 @@ function PenilaianPage() {
           </Form>
         </FormikProvider>
       </section>
-    </LayoutPage>
+    </>
   );
 }
 
-export default PenilaianPage;
+export default PenilaianModal;
