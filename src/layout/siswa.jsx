@@ -116,7 +116,7 @@ export default function Siswa() {
 
       <main className="xl:flex">
           <div
-            className={`h-screen w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
+            className={`h-screen relative z-[999] w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
               !sidebar
                 ? "-z-50 -translate-x-full transform xl:-translate-x-0"
                 : "z-10 -translate-x-0 transform transition duration-500"

@@ -64,6 +64,7 @@ import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
 import ChatSiswa from "./pages/siswa/chatsiswa/chatsiswa";
 import ChatGuru from "./pages/guru/chatguru/chatguru";
+import ScanKehadiran from "./pages/guru/scan-kehadiran";
 
 function App() {
   return (
@@ -173,6 +174,10 @@ function App() {
           <Route
             path="chat"
             element={<ChatGuru />}
+          />
+          <Route
+            path="face"
+            element={<ScanKehadiran />}
           />
         </Route>
 
