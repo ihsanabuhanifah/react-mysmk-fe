@@ -40,14 +40,12 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
-  
-
   return (
     <>
       <ModalLogout open={open} setOpen={setOpen} />
 
-      <div className="xl:hidden flex shadow-lg border-b-2 items-center justify-between h-20  w-full px-5 relative overflow-y-auto ">
-        <div className="h-24 w-24   flex-col mt-12 items-center">
+      <div className="relative flex h-20 w-full items-center justify-between overflow-y-auto border-b-2 px-5 shadow-lg xl:hidden">
+        <div className="mt-12 h-24 w-24 flex-col items-center">
           <img
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
@@ -57,10 +55,10 @@ export default function SidebarGuru({ setSidebar }) {
         </div>
 
         <button className="" onClick={handleSiderbar}>
-          <MdClose className="w-10 h-10" />
+          <MdClose className="h-10 w-10" />
         </button>
       </div>
-      <div className="h-16 w-12  bg-white hidden xl:flex mb-5 p-5">
+      <div className="mb-5 hidden h-16 w-12 bg-white p-5 xl:flex">
         <img
           className="absolute"
           style={{ maxWidth: "50%", maxHeight: "50%" }}
@@ -70,7 +68,7 @@ export default function SidebarGuru({ setSidebar }) {
       </div>
       <nav
         id="scrollbar"
-        className="flex flex-col space-y-2 p-0  xl:p-0 h-[80%] pt-5 overflow-auto pb-12"
+        className="flex h-[80%] flex-col space-y-2 overflow-auto p-0 pb-12 pt-5 xl:p-0"
       >
         <NavButton
           handleSidebar={handleSiderbar}
@@ -85,7 +83,7 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
-          {checkRole(roles, "Guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="monitor/harian"
@@ -154,7 +152,6 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-       
 
         <NavButton
           handleSidebar={handleSiderbar}
@@ -200,6 +197,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+
         {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
@@ -215,7 +213,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-         {checkRole(roles, "Guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`hasil-belajar`}
@@ -225,6 +223,22 @@ export default function SidebarGuru({ setSidebar }) {
               <MdKeyboard
                 className={`h-8 w-8 ${
                   url === `hasil-belajar` ? "text-white-400" : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+
+{checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to={`materi`}
+            path={"materi"}
+            title={["Materi"]}
+            logo={
+              <MdFormatAlignCenter
+                className={`h-8 w-8 ${
+                  url === `materi` ? "text-white-400" : "text-gray-600"
                 }`}
               />
             }
@@ -363,19 +377,22 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
         handleSidebar();
         return navigate(to);
       }}
-      className={`flex items-center px-5  h-10 ${
+      className={`flex h-10 items-center px-5 ${
         url === path
-          ? "bg-[#00b5ad] rounded-lg text-white font-black"
+          ? "rounded-lg bg-[#00b5ad] font-black text-white"
           : "text-black"
       }`}
     >
-      <div style={{
-        zomm : '80%'
-      }} className="w-8 h-8 ">{logo}</div>
+      <div
+        style={{
+          zomm: "80%",
+        }}
+        className="h-8 w-8"
+      >
+        {logo}
+      </div>
       <p
-        className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
-       ${url === path ? "text-white font-black" : "text-black"}
-         `}
+        className={`ml-5 whitespace-nowrap text-left font-poppins text-xs ${url === path ? "font-black text-white" : "text-black"} `}
       >
         {title}
       </p>
@@ -390,12 +407,12 @@ function LogoutButton({ to, title, logo, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center font-extrabold  h-10  pl-2 "
+      className="flex h-10 items-center pl-2 font-extrabold"
     >
-      <div className="w-8 h-8 ">{logo}</div>
+      <div className="h-8 w-8">{logo}</div>
       <p
-        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
-          url === to ? "text-white-400 " : "text-gray-600 "
+        className={`ml-5 text-left font-poppins text-xs font-extrabold ${
+          url === to ? "text-white-400" : "text-gray-600"
         } font-bold hover:text-green-400`}
       >
         {title}

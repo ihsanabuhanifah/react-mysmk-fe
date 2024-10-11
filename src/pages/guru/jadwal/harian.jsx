@@ -13,7 +13,7 @@ export default function Harian() {
   console.log("data", data);
   return (
     <LayoutPage title={"Rekap Harian"}>
-      <div className="grid grid-cols-5 gap-5 ">
+      <div className="grid grid-cols-5 gap-5">
         <div className="col-span-2">
           {" "}
           <Form>
@@ -73,48 +73,51 @@ export default function Harian() {
           >
             {data &&
               data?.agenda?.map((item, index) => (
-                <Table.Row className={clsx({'bg-gray-200' : index % 2 === 0})} key={index}>
+                <Table.Row
+                  className={clsx({ "bg-gray-200": index % 2 === 0 })}
+                  key={index}
+                >
                   <Table.Cell>{item.nama_kelas}</Table.Cell>
                   {[1, 2, 3, 4, 5, 6, 7, 8]?.map((i) => (
-                    <Table.Cell >
-                      <div className={clsx(`grid grid-cols-1 gap-1`, {
-                        
-                      })}>
-                       <span  className="text-xs">{
-                            item?.agendas?.filter(
-                              (x) => x.agenda.jam_ke === i
-                            )?.[0]?.agenda?.materi || "-"
-                          }</span>
+                    <Table.Cell>
+                      <div className={clsx(`grid grid-cols-1 gap-1`, {})}>
+                        <span className="text-xs font-bold text-blue-500">
+                          {item?.agendas?.filter(
+                            (x) => x.agenda.jam_ke === i,
+                          )?.[0]?.agenda?.materi || "-"}
+                        </span>
 
                         <span className="text-xs font-bold">
-                        {`${
+                          {`${
                             item?.agendas?.filter(
-                              (x) => x.agenda.jam_ke === i
+                              (x) => x.agenda.jam_ke === i,
                             )?.[0]?.agenda?.mapel?.nama_mapel
-                          } - ${
+                          || ""} - ${
                             item?.agendas?.filter(
-                              (x) => x.agenda.jam_ke === i
-                            )?.[0]?.agenda?.teacher?.nama_guru
+                              (x) => x.agenda.jam_ke === i,
+                            )?.[0]?.agenda?.teacher?.nama_guru || ""
                           }`}
                         </span>
 
-                        <span>{ item?.agendas?.filter(
-                              (x) => x.agenda.jam_ke === i
-                            )?.[0]?.siswa.length === 0
-                              ? "-"
-                              : item?.agendas
-                                  ?.filter((x) => x.agenda.jam_ke === i)?.[0]
-                                  ?.siswa?.map((y) => (
-                                    <i>
-                                      {y.siswa.nama_siswa} ({" "}
-                                      {
-                                        izinOptions.filter(
-                                          (v) => v.value == y.status_kehadiran
-                                        )?.[0]?.["text"]
-                                      }
-                                      ),
-                                    </i>
-                                  ))}</span>
+                        <span className="text-xs font-bold text-green-500">
+                          {item?.agendas?.filter(
+                            (x) => x.agenda.jam_ke === i,
+                          )?.[0]?.siswa.length === 0
+                            ? "-"
+                            : item?.agendas
+                                ?.filter((x) => x.agenda.jam_ke === i)?.[0]
+                                ?.siswa?.map((y) => (
+                                  <i>
+                                    {y.siswa.nama_siswa} ({" "}
+                                    {
+                                      izinOptions.filter(
+                                        (v) => v.value == y.status_kehadiran,
+                                      )?.[0]?.["text"]
+                                    }
+                                    ),
+                                  </i>
+                                ))}
+                        </span>
                       </div>
                     </Table.Cell>
                   ))}

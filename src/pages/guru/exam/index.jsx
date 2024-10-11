@@ -1,7 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import { Table, Button, Form, Select, Icon, Tab, Sidebar, Menu } from "semantic-ui-react";
+import {
+  Table,
+  Button,
+  Form,
+  Select,
+  Icon,
+  Tab,
+  Sidebar,
+  Menu,
+} from "semantic-ui-react";
 import { useQuery } from "react-query";
 import { TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
@@ -40,7 +49,6 @@ export default function ListExam() {
   let { roles } = useList();
 
   let [payload, setPayload] = useState({});
-  let { page, pageSize, setPage, setPageSize } = usePage();
 
   const {
     isLoading,
@@ -77,8 +85,9 @@ export default function ListExam() {
   }
 
   return (
-    <LayoutPage title="List Assesmen" isLoading={isLoading}>
-     <Sidebar
+    <LayoutPage title="List Assesmen" isLoading={isFetching}>
+      {JSON.stringify(params)}
+      <Sidebar
         as={Menu}
         animation="overlay"
         icon="labeled"
@@ -114,7 +123,7 @@ export default function ListExam() {
 
       <div className="space-y-5">
         <section className="flex items-center justify-between">
-          <div >
+          <div>
             <Button
               type="button"
               color="teal"
@@ -132,7 +141,6 @@ export default function ListExam() {
             <Button
               content={"Filter"}
               type="button"
-              
               icon={() => <Icon name="filter" />}
               size="medium"
               color="teal"
@@ -285,10 +293,10 @@ export default function ListExam() {
             </Table.Body>
           </Table>
           <PaginationTable
-            page={page}
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            setPage={setPage}
+            page={params.page}
+            pageSize={params.pageSize}
+            setPage={handlePage}
+            setPageSize={handlePageSize}
             totalPages={data?.data?.count}
           />
         </section>

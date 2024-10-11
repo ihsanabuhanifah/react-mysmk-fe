@@ -72,6 +72,7 @@ import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import Harian from "./pages/guru/jadwal/harian";
 import HasilBelajar from "./pages/guru/hasil-belajar";
+import Materi from "./pages/materi/page";
 
 
 function App() {
@@ -132,6 +133,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardGuru />} />
+          <Route path="materi" element={<Materi />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
