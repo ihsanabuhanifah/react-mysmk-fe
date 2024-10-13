@@ -13,10 +13,13 @@ import Card from "../../../components/CardLaporan";
 import FilterLaporanPkl from "./filter";
 import { encodeURlFormat } from "../../../utils";
 import Pagination from "../../../components/pagination";
-
+import { useRef } from 'react';
+import html2pdf from 'html2pdf.js';
 
 
 export default function LaporanPkl() {
+
+    const componentARef = useRef();
     const { id } = useParams();
     const navigate = useNavigate();
     let { page, pageSize, setPage, setPageSize } = usePage();
@@ -27,60 +30,65 @@ export default function LaporanPkl() {
     let [visible, setVisible] = useState(false);
     const [filter, setFilter] = useState({});
     // const { mutate, isLoading: downloadPdfIsLoading } = useDownloadPdf(id);
-    const {
-        mutate,
-        isLoading: downloadPdfIsLoading,
-        filterParams: downloadPdfFilterParams,
-        handleClear: clearDownloadPdfFilter,
-        handleFilter: applyDownloadPdfFilter,
-        params: downloadPdfParams,
-        setParams: setDownloadPdfParams,
-      } = useDownloadPdf();
-      console.log(downloadPdfParams);
-      console.log(downloadPdfFilterParams);
+    // const {
+    //     mutate,
+    //     isLoading: downloadPdfIsLoading,
+    //     filterParams: downloadPdfFilterParams,
+    //     handleClear: clearDownloadPdfFilter,
+    //     handleFilter: applyDownloadPdfFilter,
+    //     params: downloadPdfParams,
+    //     setParams: setDownloadPdfParams,
+    // } = useDownloadPdf();
+    // console.log(downloadPdfParams);
+    // console.log(downloadPdfFilterParams);
 
-      const {
-        data,
-        isFetching,
-        isLoading,
-        setParams,
-        handleFilter,
-        handleClear,
-        handlePageSize,
-        handlePage,
-        filterParams,
-        params,
-      } = useLaporanPklList();
-      console.log(data);
-    
+    //   const {
+    //     data,
+    //     isFetching,
+    //     isLoading,
+    //     setParams,
+    //     handleFilter,
+    //     handleClear,
+    //     handlePageSize,
+    //     handlePage,
+    //     filterParams,
+    //     params,
+    //   } = useLaporanPklList();
+    //   console.log(data);
 
-    const statusColors = {
-        'hadir': 'green',
-        'izin': 'orange',
-        'sakit': 'red',
-        // Add more status-color mappings as needed
-    };
+
+    // const statusColors = {
+    //     'hadir': 'green',
+    //     'izin': 'orange',
+    //     'sakit': 'red',
+    //     // Add more status-color mappings as needed
+    // };
 
     //asli
-    // const params = {
-    //     page, pageSize,
-    //     // status: 1,
-    //     ...filter,
-    //     nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
-    //     id_siswa: encodeURlFormat(filter?.nama_siswa?.value),
+    const params = {
+        page, pageSize,
 
-    // };
-    // const { data, isLoading, isFetching } = useQuery(
-    //     ["/laporan-harian-pkl", params],
-    //     () => listLaporanPkl(params),
-    //     {
-    //         refetchOnWindowFocus: false,
-    //         select: (response) => {
-    //             console.log(response.data)
-    //             return response.data;
-    //         }
-    //     }
-    // );
+        // status: 1,
+        // nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
+        // studentId: encodeURlFormat(filter?.studentId?.value),
+        nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
+        // siswaId: encodeURlFormat(filter?.nama_siswa?.value),
+        ...filter,
+
+    };
+    console.log('params asli',params);
+    
+    const { data, isLoading, isFetching } = useQuery(
+        ["/laporan-harian-pkl", params],
+        () => listLaporanPkl(params),
+        {
+            refetchOnWindowFocus: false,
+            select: (response) => {
+                console.log(response.data)
+                return response.data;
+            }
+        }
+    );
 
     const {
         showAlertDelete,
@@ -95,14 +103,7 @@ export default function LaporanPkl() {
 
     return (
         <LayoutPage title={"Laporan Pkl"} >
-            {/* <Header>
-                {"List Tempat PKL santri"}
-            </Header> */}
-            {/* <div className="grid grid-cols-6 gap-5 px-5 py-4 ">
-                <div className="col-span-6 lg:col-span-1 xl:col-span-1 ">
-                    <Button type="button" color="teal" icon={<Icon name="add" />} onClick={() => navigate("tambah", { replace: true })} content="Tambah" size="medium" fluid />
-                </div>
-            </div> */}
+            
             <Sidebar
                 as={Menu}
                 animation="overlay"
@@ -115,8 +116,9 @@ export default function LaporanPkl() {
                 width="wide"
             >
 
-                <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
+                <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} targetRef={componentARef}></FilterLaporanPkl>
             </Sidebar>
+
             <section className="grid grid-cols-6 gap-5 px-5 ">
                 <div className="col-span-6 lg:col-span-1 xl:col-span-1 py-4">
                     <Button
@@ -157,7 +159,7 @@ export default function LaporanPkl() {
 
             </div> */}
 
-            <div className="flex flex-col items-center w-full px-5 py-3 space-y-5 " count={8}>
+            <div className="flex flex-col items-center w-full px-5 py-3 space-y-5 " ref={componentARef} count={8}>
                 {/* Display loader while fetching or loading data */}
                 {(isLoading || isFetching) && (
                     <Loader active inline="centered" content="Loading..." />
@@ -172,21 +174,26 @@ export default function LaporanPkl() {
                 )}
 
                 {/* Render cards if data is available */}
+
+
                 {data?.data?.map((value, index) => (
-                    <React.Fragment key={index}>
+
+                    <React.Fragment key={index} >
                         <Card isFetching={isFetching} isLoading={isLoading} item={value} />
                     </React.Fragment>
                 ))}
+
+
             </div>
             <div className="w-full justify-center mt-4">
-            <Pagination
-              handlePage={handlePage}
-              handlePageSize={handlePageSize}
-              page={params.page}
-              pageSize={params.pageSize}
-              pagination={data?.pagination}
-            />
-          </div>
+                <PaginationTable
+                    handlePage={setPage}
+                    handlePageSize={setPageSize}
+                    page={params.page}
+                    pageSize={params.pageSize}
+                    pagination={data?.pagination}
+                />
+            </div>
 
 
         </LayoutPage>

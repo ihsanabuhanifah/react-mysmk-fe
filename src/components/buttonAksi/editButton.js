@@ -1,5 +1,5 @@
 import { Button, Icon } from "semantic-ui-react";
-export function EditButton({ onClick, disabled, size = 'small' }) {
+export function EditButton({ onClick, disabled, size = 'md' }) {
   return (
     <button
       className="bg-none"
@@ -12,7 +12,7 @@ export function EditButton({ onClick, disabled, size = 'small' }) {
     </button>
   );
 }
-export function AddButton({ onClick, disabled, size = 'small' }) {
+export function AddButton({ onClick, disabled, size = 'md' }) {
   return (
     <button
       className="bg-none"
@@ -26,7 +26,7 @@ export function AddButton({ onClick, disabled, size = 'small' }) {
   );
 }
 
-export function DeleteButton({ onClick, disabled, size = 'small' }) {
+export function DeleteButton({ onClick, disabled, size = 'md' }) {
   return (
     <button
       compact
@@ -43,7 +43,7 @@ export function DeleteButton({ onClick, disabled, size = 'small' }) {
 }
 
 
-export function ViewButton({ onClick, disabled,size = 'small' }) {
+export function ViewButton({ onClick, disabled,size = 'md' }) {
     return (
       <button
         compact

@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import axiosClient, { syncToken } from "../axiosClient";
 import useToast from "../../hook/useToast";
@@ -19,6 +18,7 @@ export const useLaporanPklList = () => {
     dariTanggal: null,
     sampaiTanggal: null,
     status_kehadiran: null,
+    keyword: "",
   };
   const {
     params,
@@ -29,9 +29,10 @@ export const useLaporanPklList = () => {
     handlePage,
     filterParams,
   } = usePagination(defParams);
+  console.log(filterParams);
 
   const { isLoading, data, isFetching } = useQuery(
-    ["/santri/laporan-harian-pkl/list", filterParams],
+    ["/guru/laporan-harian-pkl/list", filterParams],
     () => listLaporanPkl(filterParams),
     {
       keepPreviousData: true,
@@ -56,13 +57,13 @@ export const useLaporanPklList = () => {
 export function createLaporanPkl(payload) {
   syncToken();
   console.log(payload);
-  
+
   return axiosClient.post("/guru/laporan-harian-pkl/create", payload);
 }
 export function updateLaporanPkl(id, values) {
   syncToken();
   // let payload = values.payload[0];
-  console.log('update pkl tes', values)
+  console.log("update pkl tes", values);
   return axiosClient.put(`guru/laporan-harian-pkl/update/${id}`, values);
 }
 
@@ -71,26 +72,26 @@ export function deleteLaporanPkl(id) {
   return axiosClient.delete(`guru/laporan-harian-pkl/delete/${id}`);
 }
 
-export function detailLaporanPkl(id)  {
+export function detailLaporanPkl(id) {
   syncToken();
   console.log("api detail");
   return axiosClient.get(`guru/laporan-harian-pkl/detail/${id}`);
 }
 
-
-export const useDownloadPdf = (id) => {
-  console.log(id)
+export const useDownloadPdf = () => {
   const { successToast, warningToast } = useToast();
   const defParams = {
     bulan: null,
     tahun: 2024,
+    studentId: null,
   };
+  // console.log(student_id);
 
   const { filterParams, setParams, params } = usePagination(defParams);
-  const { mutate, isLoading } = useMutation(  
-    console.log('param',params),
+  const { mutate, isLoading } = useMutation(
+    console.log("param", params),
     () =>
-      axios.get(`/guru/laporan-harian-pkl/downdload-pdf/${id}`, {
+      axios.get(`/guru/laporan-harian-pkl/download-pdf`, {
         params: params,
         responseType: "json",
       }),
@@ -188,7 +189,7 @@ export const useDownloadPdf = (id) => {
 //   const { successToast, warningToast } = useToast();
 
 //   const { mutate, isLoading } = useMutation(
-//     ({ id, params }) => 
+//     ({ id, params }) =>
 //       axios.get(`/guru/laporan-harian-pkl/downdload-pdf/${id}`, {
 //         params: { bulan: params.bulan, tahun: params.tahun },
 //         responseType: "json",
@@ -287,9 +288,9 @@ export const useDownloadPdf = (id) => {
 //   const { successToast, warningToast } = useToast();
 //   console.log(studentId)
 //   console.log(bulan)
-  
+
 //   const { mutate, isLoading } = useMutation(
-//     () => 
+//     () =>
 //       axios.get(`/guru/laporan-harian-pkl/download-pdf/${studentId}`, {
 //         params: { bulan, tahun },
 //         responseType: "json",
@@ -366,13 +367,12 @@ export const useDownloadPdf = (id) => {
 //   return { mutate, isLoading };
 // };
 
-
 export const useDownloadPdfBulanan = (id) => {
   const { successToast, warningToast } = useToast();
 
   const { mutate, isLoading } = useMutation(
     () =>
-      axios.get(`/guru/laporan-harian-pkl/downdload-data-bulanan/${id}`, {
+      axios.get(`/guru/laporan-harian-pkl/downdload-pdf-bulanan/${id}`, {
         responseType: "json",
       }),
     {

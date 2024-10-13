@@ -33,6 +33,7 @@ import  UpdatePkl  from "./fitur-siswa-pkl/update-pkl";
 import  CreateLaporanPkl  from "./laporan-pkl";
 import  UpdateLaporanPkl  from "./laporan-pkl/UpdateLaporanPkl";
 import  DetailLaporanPkl  from "./laporan-pkl/DetailLaporanPkl";
+import  TugasLaporanPkl  from "./tugas-laporan-pkl/index";
 // import  CreateLaporanPkl  from "./fitur-siswa-pkl/createlaporanpkl";
 // import { JurnalSantri } from "./fitur-siswa-pkl/jurnal";
 
@@ -71,7 +72,8 @@ export {
   CreateLaporanPkl, 
   UpdateLaporanPkl, 
   DetailLaporanPkl, 
-  
+  TugasLaporanPkl
+
   // JurnalSantri,
   // FormFiturPkl,
  

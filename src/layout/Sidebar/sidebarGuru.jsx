@@ -320,6 +320,22 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
+        {checkRole(roles, "guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="tugas-laporan-pkl"
+            path="tugas-laporan-pkl"
+            title={"Tugas Laporan  PKL"}
+            logo={
+              <MdOutlineLibraryBooks
+                className={`h-8 w-8 ${url === "tugas-laporan-pkl"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
+              />
+            }
+          />
+        )}
 
         {/* {checkRole(roles, "guru") && (
           

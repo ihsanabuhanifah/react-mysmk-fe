@@ -43,7 +43,7 @@ export default function FiturPkl() {
     };
 
 
-    const { data, isLoading } = useQuery(
+    const { data, isLoading ,isFetching} = useQuery(
         ["/tempat-pkl/list", params],
         () => listSiswaPkl(params),
         {

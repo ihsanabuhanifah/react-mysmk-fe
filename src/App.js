@@ -39,6 +39,7 @@ import {
   UpdateLaporanPkl,
   CreatePkl,
   DetailLaporanPkl,
+  TugasLaporanPkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -53,6 +54,8 @@ import FileCoba from "./components/fileupload";
 import TestFatih from "./pages/guru/dashboard/test";
 import LaporanPkl from "./pages/guru/laporan-pkl";
 import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
+import CreateTugasPkl from "./pages/guru/tugas-laporan-pkl/createTugas";
+import UpdateTugasPkl from "./pages/guru/tugas-laporan-pkl/updateTugasPkl";
 
 function App() {
   return (
@@ -164,6 +167,9 @@ function App() {
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporanPkl />} />
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporanPkl />} />
+          <Route path="tugas-laporan-pkl" element={<TugasLaporanPkl />} />
+          <Route path="tugas-laporan-pkl/tambah" element={<CreateTugasPkl />} />
+          <Route path="tugas-laporan-pkl/update/:id" element={<UpdateTugasPkl />} />
         </Route>
 
         <Route
