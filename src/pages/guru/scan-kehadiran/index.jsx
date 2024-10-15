@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQrScanner } from "../../../hook/useQrScanner";
+import LayoutPage from "../../../module/layoutPage";
+import { Table } from "semantic-ui-react";
+import { TableLoading } from "../../../components";
+import { format } from "date-fns";
+import { formatDate } from "../../../utils";
 
 const ScanKehadiran = () => {
+  const [data, setData] = useState({
+    waktu: "",
+    tanggal: "",
+  });
+  const [kehadiran, setKehadiran] = useState([]);
+  const [selectedWaktuSholat, setSelectedWaktuSholat] = useState("");
+  const [isSelectedWaktuSholat, setIsSelectedWaktuSholat] = useState(false);
+  const [countdown, setCountdown] = useState(600);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
+
   const handleScanResult = (result) => {
-    const validJsonString = result.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3');
-    
+    const { id, name } = JSON.parse(result);
+    const scanTime = new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    setKehadiran((prev) => {
+      const alreadyScanned = prev.some((entry) => entry.id === id);
+  
+      if (alreadyScanned) {
+        return prev; // 
+      }
+  
+      return [
+        ...prev,
+        {
+          id,
+          name,
+          kehadiran: scanTime,
+        },
+      ];
+    });
   };
 
   const {
@@ -16,37 +51,65 @@ const ScanKehadiran = () => {
     ref,
   } = useQrScanner(handleScanResult);
 
+  const waktuSholatOptions = [
+    { value: "subuh", label: "Subuh" },
+    { value: "dzuhur", label: "Dzuhur" },
+    { value: "ashar", label: "Ashar" },
+    { value: "maghrib", label: "Maghrib" },
+    { value: "isya", label: "Isya" },
+  ];
+
+  const handleConfirmWaktuSholat = async () => {
+    if (selectedWaktuSholat) {
+      setIsSelectedWaktuSholat(true);
+      setData((prev) => {
+        return {
+          waktu: selectedWaktuSholat,
+          tanggal: Date.now(),
+        };
+      });
+      await handleOpenCamera();
+      startCountdown();
+    }
+  };
+
+  const startCountdown = () => {
+    setIsCountdownActive(true);
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setIsCountdownActive(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   return (
-    <div className="qr-scanner-container flex flex-col items-center justify-center min-h-screen">
-      <div className="w-full max-w-md p-6 bg-white shadow-md rounded-lg">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Scan QR Kehadiran
-        </h1>
+    <LayoutPage title={"Scan Kehadiran"}>
+      <div className="relative flex min-h-[80vh] items-center justify-center bg-black">
+        <video
+          ref={ref}
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+        ></video>
 
-        <div className="relative mb-4">
-          <video
-            ref={ref}
-            className="w-full h-64 bg-gray-200 rounded-md shadow-inner object-cover"
-          ></video>
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-bold">
-              Loading Camera...
-            </div>
-          )}
-        </div>
-
-        <div className="text-center mt-4">
+        <div className="absolute bottom-8 left-0 right-0 z-10 flex justify-center">
           {!isCameraOpen ? (
             <button
-              onClick={handleOpenCamera}
-              className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-300"
+              onClick={async () => {
+                await handleOpenCamera();
+              }}
+              className="rounded-lg bg-green-500 px-4 py-2 text-white transition duration-300 hover:bg-green-600"
             >
               Start Camera
             </button>
           ) : (
             <button
               onClick={handleStopCamera}
-              className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300"
+              className="rounded-lg bg-red-500 px-4 py-2 text-white transition duration-300 hover:bg-red-600"
             >
               Stop Camera
             </button>
@@ -54,12 +117,80 @@ const ScanKehadiran = () => {
         </div>
 
         {!isHasCamera && (
-          <p className="mt-4 text-red-500 text-center">
+          <div className="absolute left-0 right-0 top-0 z-10 flex items-center justify-center bg-red-500 py-2 text-white">
             Your device does not have a camera.
-          </p>
+          </div>
         )}
       </div>
-    </div>
+
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-90 transition-opacity duration-500 ${
+          isSelectedWaktuSholat
+            ? "pointer-events-none opacity-0"
+            : "opacity-100"
+        } z-20`}
+      >
+        <h1 className="mb-4 text-2xl font-bold">Pilih Waktu Sholat</h1>
+        <select
+          className="mb-4 rounded-md border p-2"
+          value={selectedWaktuSholat}
+          onChange={(e) => setSelectedWaktuSholat(e.target.value)}
+        >
+          <option value="" disabled>
+            Pilih waktu sholat
+          </option>
+          {waktuSholatOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <button
+          className="rounded-lg bg-blue-500 px-4 py-2 text-white transition duration-300 hover:bg-blue-600"
+          onClick={handleConfirmWaktuSholat} // Panggil fungsi handleConfirmWaktuSholat
+        >
+          Konfirmasi
+        </button>
+      </div>
+
+      {isSelectedWaktuSholat && (
+        <>
+          <h3>
+            Waktu Sholat {selectedWaktuSholat} tanggal{" "}
+            {formatDate(data.tanggal)}.. Countdown: {Math.floor(countdown / 60)}
+            :{("0" + (countdown % 60)).slice(-2)}
+          </h3>
+
+          <Table celled selectable>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>No</Table.HeaderCell>
+                <Table.HeaderCell>ID</Table.HeaderCell>
+                <Table.HeaderCell>Nama</Table.HeaderCell>
+                <Table.HeaderCell>Kehadiran</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <TableLoading
+                count={4}
+                data={kehadiran}
+                messageEmpty={"Tidak ada data"}
+              >
+                {kehadiran &&
+                  kehadiran.map((kehadiranEntry, i) => (
+                    <Table.Row key={i}>
+                      <Table.Cell>{i + 1}</Table.Cell>
+                      <Table.Cell>{kehadiranEntry.id}</Table.Cell>
+                      <Table.Cell>{kehadiranEntry.name}</Table.Cell>
+                      <Table.Cell>{kehadiranEntry.kehadiran}</Table.Cell>
+                    </Table.Row>
+                  ))}
+              </TableLoading>
+            </Table.Body>
+          </Table>
+        </>
+      )}
+    </LayoutPage>
   );
 };
 

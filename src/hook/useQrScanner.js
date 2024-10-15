@@ -15,15 +15,15 @@ export const useQrScanner = (cb) => {
     const hasCamera = await QrScanner.hasCamera();
     const scanner = new QrScanner(qrScannerRef.current, (res) => {
       cb(res.data);
-      scanner.stop();
-      setIsCameraOpen(false);
+      // scanner.stop();
+      // setIsCameraOpen(false);
     }, {
       highlightScanRegion: true,
       highlightCodeOutline: true,
     });
 
     setIsHasCamera(hasCamera);
-    setIsLoading(false);
+    // setIsLoading(false);
     setQrScanner(scanner)
   };
 
@@ -46,13 +46,16 @@ export const useQrScanner = (cb) => {
   };
 
   useEffect(() => {
-    handleCheckCamera();
+    if (qrScannerRef.current) {
+      handleCheckCamera();
+    }
+    
     return () => {
       if (qrScanner?.destroy) {
         qrScanner.destroy();
       }
     };
-  }, []);
+  }, [qrScannerRef]);
 
   return {
     isLoading,
