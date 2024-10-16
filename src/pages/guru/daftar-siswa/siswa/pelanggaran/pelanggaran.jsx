@@ -33,7 +33,7 @@ const PelanggaranComponent = () => {
   //   return <div>Error mengambil data pelanggaran</div>;
   // }
 
-  console.log(pelanggaranData);
+  // console.log(pelanggaranData);
 
   return (
     <div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Select, Button, Icon, Form } from "semantic-ui-react";
 import { Formik } from "formik";
 import { getOptionsText } from "../../../../../utils/format";
+import { useParams } from "react-router-dom";
 
 export default function Filter({
   payload,
@@ -10,28 +11,33 @@ export default function Filter({
   params,
   setParams,
   dataTa,
-  dataPg, 
+  dataMapel,
 }) {
+  const { id } = useParams();
   const [th, setTh] = useState(params.ta || "");
-  const [pg, setPg] = useState(params.pelanggaran || "");
-  const [kt, setKt] = useState(params.kat_pelanggaran || "");
-  console.log(dataTa);
-  console.log(dataPg);
+  const [mpl, setMpl] = useState(params.nama_mapel || "");
+  const [jenisUjian, setJenisUjian] = useState(params.jenis_ujian || "");
+
+  // Opsi untuk jenis ujian
+  const ujianOptions = [
+    { value: "tugas", text: "Tugas" },
+    {  value: "pts", text: "PTS" },
+  ];
+
   // Menyinkronkan perubahan params dengan state lokal ketika komponen pertama kali di-load
   useEffect(() => {
     setTh(params.ta || "");
-    setPg(params.pelanggaran || "");
-    setKt(params.kat_pelanggaran || "");
+    setMpl(params.nama_mapel || "");
+    setJenisUjian(params.jenis_ujian || "");
   }, [params]);
-  
 
   const terapkan = (values, { resetForm }) => {
     setParams((prev) => {
       return {
         ...prev,
         ta: th,
-        pelanggaran: pg,
-        kat_pelanggaran: kt,
+        nama_mapel: mpl,
+        jenis_ujian: jenisUjian,
       };
     });
     setVisible(false);
@@ -42,7 +48,7 @@ export default function Filter({
     <Formik
       onSubmit={terapkan}
       enableReinitialize
-      initialValues={{ ta: th, pelanggaran: pg, kat_pelanggaran: kt }}
+      initialValues={{ ta: th, nama_mapel: mpl, jenis_ujian: jenisUjian }}
     >
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
@@ -60,12 +66,10 @@ export default function Filter({
                 onClick={() => {
                   setParams({
                     ta: null,
-                    pelanggaran: null,
-                    kat_pelanggaran: null,
+                    nama_mapel: null,
                   });
                   setTh("");
-                  setPg("");
-                  setKt("");
+                  setMpl("");
                   setVisible(false);
                 }}
                 className="text-lg"
@@ -74,60 +78,51 @@ export default function Filter({
               </button>
             </div>
 
+            {/* Pilihan Mata Pelajaran */}
+            <div className="text-left">
+              <Form.Field
+                control={Select}
+                value={mpl}
+                options={getOptionsText(dataMapel, "nama_mapel")}
+                label="Mata Pelajaran"
+                onChange={(event, data) => {
+                  setMpl(data.value);
+                }}
+                placeholder="Pilih Jenis Mata Pelajaran"
+                search
+                clearable
+              />
+            </div>
+
+            {/* Pilihan Jenis Ujian */}
+            <div className="text-left">
+              <Form.Field
+                control={Select}
+                value={jenisUjian}
+                options={ujianOptions}
+                // options={[
+                //   { value: 1, label: "tugas" },
+                //   { value: 2, label: "pts" },
+                // ]}
+                label="Jenis Ujian"
+                onChange={(event, data) => setJenisUjian(data.value)}
+                placeholder="Pilih Jenis Ujian"
+                search
+                clearable
+              />
+            </div>
+
             {/* Pilihan Tahun Ajaran */}
             <div className="text-left">
               <Form.Field
                 control={Select}
                 options={getOptionsText(dataTa, "nama_tahun_ajaran")}
                 label="Tahun Ajaran"
-                onChange={(event, data) => setTh(data.value)}
+                onChange={(event, data) => {
+                  setTh(data.value);
+                }}
                 value={th}
                 placeholder="Pilih Tahun Ajaran"
-                search
-                clearable
-              />
-            </div>
-
-            {/* Pilihan Jenis Pelanggaran */}
-            <div className="text-left">
-              <Form.Field
-                control={Select}
-                value={pg}
-                options={getOptionsText(dataPg, "nama_pelanggaran")}
-                label="Pelanggaran"
-                onChange={(event, data) => setPg(data.value)}
-                placeholder="Pilih Jenis Pelanggaran"
-                search
-                clearable
-              />
-            </div>
-
-            {/* Pilihan Kategori Pelanggaran */}
-            <div className="text-left">
-              <Form.Field
-                control={Select}
-                value={kt}
-                // options={[
-                //   ...new Set(
-                //     getOptionsText(dataPg, "kategori").map((option) => ({
-                //       value: option.value,
-                //       text: option.text
-                //     }))
-                //   )
-                // ]}
-                // options={getOptionsText(dataPg, "kategori").filter(
-                //   (option) => option.text === "Sedang" || option.text === "Berat"
-                // )}
-                options={getKategoriOptions()} // Panggil fungsi untuk mengambil opsi kategori pelanggaran
-
-                // options={getOptionsText(dataPg, "kategori")}
-                // options={[
-                //   { value: 1, label: "sedang" },
-                //   { value: 2, label: "berat" },
-                // ]}
-                label="Kategori Pelanggaran"
-                onChange={(event, data) => setKt(data.value)}
-                placeholder="Pilih Kategori Pelanggaran"
                 search
                 clearable
               />
@@ -148,10 +143,3 @@ export default function Filter({
     </Formik>
   );
 }
-
-const getKategoriOptions = () => {
-  return [
-    { value: 'sedang', text: 'Sedang' },
-    { value: 'berat', text: 'Berat' },
-  ];
-};

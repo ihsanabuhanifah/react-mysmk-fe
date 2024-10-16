@@ -2,7 +2,7 @@ import useToast from "../../../../hook/useToast";
 import axios, { syncToken } from "../../../../api/axiosClient";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
-import { listPelanggaran, listtahunajaran } from "../../../../api/list";
+import { listMapel, listPelanggaran, listtahunajaran } from "../../../../api/list";
 
 export const useUpdateProfile = (id) => {
   let queryClient = useQueryClient();
@@ -143,10 +143,36 @@ export function useListHasilUjian(id) {
   let [params, setParams] = useState({
     nama_mapel: "",
     judul_ujian: "",
+    jenis_ujian: "",
+    ta: "",
     page: 1,
     pageSize: 10,
   });
   syncToken();
+
+  let { data: dataMapel } = useQuery(
+    //query key
+    ["list_mapel"],
+    //axios function,triggered when page/pageSize change
+    () => listMapel(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
+      select: (response) => response.data.data,
+    }
+  );
+
+  let { data: dataTa } = useQuery(
+    ["list_tahun_ajaran"],
+    () => listtahunajaran(),
+    {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 60 * 24, // 24 jam
+      select: (res) => res.data.data,
+    }
+  );
 
   let { data, isFetching } = useQuery(
     [`/guru/siswa/hasil-ujian/detail`, params],
@@ -159,5 +185,19 @@ export function useListHasilUjian(id) {
     }
   );
 
-  return { data, isFetching, params, setParams };
+  let { data: dataJenis } = useQuery(
+    [`/guru/siswa/hasil-ujian/detail`, params],
+    () => axios.get(`/guru/siswa/hasil-ujian/${id}`, { params }).then((res) => res.data),
+    {
+      enabled: !!id,
+      staleTime: 1000 * 60 * 60 * 24, // 24 jam
+      select: (res) => res.data,
+      onSuccess: (res) => {},
+      onError: (res) => {},
+    }
+  );
+
+  return { data, isFetching, params, setParams, dataTa, dataMapel, dataJenis };
 }
+
+
