@@ -69,6 +69,7 @@ import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import Harian from "./pages/guru/jadwal/harian";
+import TugasPklPage from "./pages/siswa/tugas-pkl/page";
 
 
 function App() {
@@ -201,6 +202,7 @@ function App() {
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
           <Route path="laporan-pkl/laporan-diniyyah/:id" element={<LaporanDiniyyah />} />
+          <Route path="tugas-pkl" element={<TugasPklPage />} />
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>
