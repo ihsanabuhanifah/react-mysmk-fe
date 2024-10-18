@@ -13,6 +13,8 @@ import { createTugasPkl } from "../../../api/guru/tugas-pkl";
 import { FormLabel, ReactSelectAsync } from "../../../components";
 import BatasWaktuPicker from "../../../components/BatasWaktu";
 import moment from "moment";
+import TextEditorToolbar from "../../../components/ToolBar";
+import Editor from "../../../components/Editor";
 
 let tugasPklSchema = Yup.object().shape({
     tugas: Yup.string().required("wajib diisi"),
@@ -236,7 +238,23 @@ export default function CreateTugasPkl() {
                                             {errors.deskripsi_tugas}
                                         </div>
                                     )}
-
+                                    {/* <Editor
+                                        value={values?.deskripsi_tugas}
+                                        handleChange={(content) => {
+                                            const detail = handleSoal(payload, item);
+                                            setPayload((s) => {
+                                                s.data[detail.index] = {
+                                                    ...detail.soal[0],
+                                                    deskripsi_tugas: content,
+                                                };
+                                                setJawaban(content);
+                                                return {
+                                                    ...s,
+                                                    data: s.data,
+                                                };
+                                            });
+                                        }}
+                                    /> */}
                                 </section>
                             </div>
                             <div>
