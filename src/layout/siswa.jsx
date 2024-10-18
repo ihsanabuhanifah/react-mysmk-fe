@@ -1,12 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-
-import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
-
 import { MdMenu } from "react-icons/md";
-import useShowNotif from "../hook/useShowNotif";
-import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
 import { syncToken } from "../api/axiosClient";
 import SidebarSiswa from "./Sidebar/sidebarSiswa";
@@ -15,23 +10,20 @@ import { getProfile } from "../api/siswa/profile";
 import { IoLogOutOutline, IoNotifications } from "react-icons/io5";
 import { LoadingPage, ModalLogout } from "../components";
 import { useZUStore } from "../zustand/zustore";
-import { Menu, Sidebar } from "semantic-ui-react";
 import { useListNotif } from "../api/siswa/exam";
 import { SocketContext, SocketProvider } from "../pages/siswa/SocketContext";
+import NotifikasiSiswa from "../module/notifikasiSiswa";
 
 export default function Siswa() {
   let { pathname } = useLocation();
   const navigate = useNavigate();
   React.useEffect(() => {
     document.title = "MySMK";
-    // requestToken();
   });
-
   syncToken();
 
   const { setShowNotif, showNotif, setProfile } = useZUStore((state) => state);
-
-  const { data: dataNotif, isFetched } = useListNotif();
+  const { data: dataNotif } = useListNotif();
 
   const { identitas: data } = useList();
   let { isLoading } = useQuery(["/santri/profile"], () => getProfile(), {
@@ -45,8 +37,6 @@ export default function Siswa() {
   });
 
   const [sidebar, setSidebar] = React.useState(false);
-  let { jumlah } = useNotif();
-
   const [open, setOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -58,12 +48,12 @@ export default function Siswa() {
   const socket = useContext(SocketContext);
 
   useEffect(() => {
-    if (!socket) return; // Hanya lanjutkan jika socket sudah ada
-  
+    if (!socket) return;
+
     socket.on("message", (msg) => {
-      console.log(msg); // Ubah sesuai kebutuhan
+      console.log(msg);
     });
-  
+
     return () => {
       socket.off("message");
     };
@@ -95,7 +85,7 @@ export default function Siswa() {
             className="relative block xl:hidden"
           >
             <IoNotifications size={26} className="" />
-            {isFetched && (
+            {dataNotif?.list?.count > 0 && (
               <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
                 {dataNotif?.list?.count}
               </span>
@@ -115,40 +105,40 @@ export default function Siswa() {
       </header>
 
       <main className="xl:flex">
-          <div
-            className={`h-screen relative z-[999] w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
-              !sidebar
-                ? "-z-50 -translate-x-full transform xl:-translate-x-0"
-                : "z-10 -translate-x-0 transform transition duration-500"
-            } fixed bottom-0 top-0  z-[9999] flex h-full flex-col xl:fixed xl:w-[200px]`}
-          >
-            <div className="mb-8 mt-4 hidden pl-3 xl:block">
-              <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />
-            </div>
-
-            <div className="flex h-full flex-col xl:flex-1 xl:overflow-y-auto">
-              <SidebarSiswa setSidebar={setSidebar} />
-            </div>
-
-            <div className="mb-4 ml-2 mt-5 hidden xl:block">
-              <LogoutButton
-                onClick={() => {
-                  return setOpen(true);
-                }}
-                title={"Logout"}
-                logo={
-                  <IoLogOutOutline
-                    className={`h-6 w-6 text-gray-900 group-hover:text-[#18a558]`}
-                  />
-                }
-              />
-            </div>
+        <div
+          className={`w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
+            !sidebar
+              ? "-z-50 -translate-x-full transform xl:-translate-x-0"
+              : "z-10 -translate-x-0 transform transition duration-500"
+          } fixed bottom-0 top-0 z-[999] flex h-full flex-col xl:fixed xl:w-[200px]`}
+        >
+          <div className="mb-8 mt-4 hidden pl-3 xl:block">
+            <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />
           </div>
 
-          <div id="sidebar" className="xl:ml-[200px] w-full">
-              <Outlet data={data} />
+          <div className="flex h-full flex-col xl:flex-1 xl:overflow-y-auto">
+            <SidebarSiswa setSidebar={setSidebar} />
           </div>
-        </main>
+
+          <div className="mb-4 ml-2 mt-5 hidden xl:block">
+            <LogoutButton
+              onClick={() => {
+                return setOpen(true);
+              }}
+              title={"Logout"}
+              logo={
+                <IoLogOutOutline
+                  className={`h-6 w-6 text-gray-900 group-hover:text-[#18a558]`}
+                />
+              }
+            />
+          </div>
+        </div>
+
+        <div id="sidebar" className="w-full xl:ml-[200px]">
+          <Outlet data={data} />
+        </div>
+      </main>
 
       {showNotif && (
         <div
@@ -161,7 +151,7 @@ export default function Siswa() {
       <div
         className={`fixed right-0 top-0 h-full w-full transform bg-white text-gray-700 sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-[999] transition-transform duration-500`}
       >
-        <Notifikasi />
+        <NotifikasiSiswa />
       </div>
     </SocketProvider>
   );

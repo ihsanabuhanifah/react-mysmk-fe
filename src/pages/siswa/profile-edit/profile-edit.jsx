@@ -57,11 +57,11 @@ export default function ProfileEdit() {
         </div>
       ) : (
         <div className="mt-4 w-full xl:pr-[40%] border-l border-black/5">
-          <h1 className="mb-8 pl-5 font-poppins text-2xl font-black capitalize lg:pl-16 xl:pl-5">
+          <h1 className="mb-8 pl-5 font-poppins text-2xl font-black capitalize">
             Edit Profile
           </h1>
 
-          <div className="flex w-full flex-col items-center px-5 lg:px-16 xl:px-5">
+          <div className="flex w-full flex-col items-center px-5">
             <div
               onClick={() => {
                 upload();

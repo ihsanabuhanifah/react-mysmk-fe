@@ -1,15 +1,17 @@
 import React from "react";
 import { Select, Pagination, Icon } from "semantic-ui-react";
 export default function PaginationTable({
-  page,
-  pageSize,
   setPage,
   setPageSize,
+  page,
+  pageSize,
   totalPages,
   count
 }) {
+  console.log(page)
+  console.log(pageSize)
+  console.log(totalPages)
   let total = 0;
-
   if (typeof totalPages === "object") {
     totalPages?.map((item) => {
       total = total + item.count;
@@ -59,7 +61,7 @@ export default function PaginationTable({
           }}
           prevItem={{ content: <Icon name="angle left" />, icon: true }}
           nextItem={{ content: <Icon name="angle right" />, icon: true }}
-          totalPages={Math.ceil(total / pageSize)}
+          totalPages={Math.ceil(count / pageSize)}
         />
       </div>
     </div>

@@ -4,7 +4,7 @@ import { useListNotif } from "../api/siswa/exam";
 import { useZUStore } from "../zustand/zustore";
 
 export default function LayoutSiswa({ title, children }) {
-  const { data, isFetched } = useListNotif();
+  const { data } = useListNotif();
   const { setShowNotif, showNotif } = useZUStore((state) => state);
 
   return (
@@ -23,7 +23,7 @@ export default function LayoutSiswa({ title, children }) {
           className="relative hidden xl:block"
         >
           <IoNotifications size={30} className="" />
-          {isFetched && (
+          {data?.list?.count > 0 && (
             <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
               {data?.list?.count}
             </span>

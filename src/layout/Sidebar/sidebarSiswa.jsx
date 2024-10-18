@@ -17,7 +17,6 @@ import { useZUStore } from "../../zustand/zustore";
 import { LogoutButton } from "../siswa";
 
 export default function SidebarSiswa({ setSidebar }) {
-  let date = new Date();
   const [isSelect, setIsSelect] = useState(false);
   const { profile } = useZUStore((state) => state);
 
@@ -57,7 +56,7 @@ export default function SidebarSiswa({ setSidebar }) {
       <div className="mb-3 mr-2 flex items-center gap-x-2 rounded-lg bg-[#18a558] p-2">
         <div className="h-10 w-10 rounded-full bg-gray-200">
           <ImageWithFallback
-            src={profile?.user?.image}
+            src={profile.user.image}
             alt="You"
             fallbackSrc="/blankprofile.jpg"
           />
@@ -122,7 +121,7 @@ export default function SidebarSiswa({ setSidebar }) {
                   }`}
                 />
               }
-              active={url2 === 'edit'? "text-[#18a558]" : "text-gray-400"}
+              active={url2 === "edit" ? "text-[#18a558]" : "text-gray-400"}
             />
             <NavButton
               cls="list xl:hidden"
@@ -137,7 +136,7 @@ export default function SidebarSiswa({ setSidebar }) {
                   }`}
                 />
               }
-              active={url2 === 'security'? "text-[#18a558]" : "text-gray-400"}
+              active={url2 === "security" ? "text-[#18a558]" : "text-gray-400"}
             />
           </div>
         )}
@@ -199,7 +198,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-        <NavButton
+        {/* <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="chat"
@@ -212,7 +211,7 @@ export default function SidebarSiswa({ setSidebar }) {
               }`}
             />
           }
-        />
+        /> */}
       </nav>
       <div className="mb-4 ml-2 mt-5 block xl:hidden">
         <LogoutButton
@@ -240,7 +239,7 @@ function NavButton({
   cls,
   setIsSelect,
   isSelect = false,
-  active
+  active,
 }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
@@ -277,10 +276,12 @@ function NavButton({
       <div className="flex items-center">
         <div>{logo}</div>
         <p
-          className={`ml-3  whitespace-nowrap text-left font-poppins text-xs ${
+          className={`ml-3 whitespace-nowrap text-left font-poppins text-xs ${
             url === path
               ? "text-[0.85rem] font-black text-[#18a558]"
-              : active? active : "text-gray-400"
+              : active
+                ? active
+                : "text-gray-400"
           } group-hover:font-black group-hover:text-gray-600`}
         >
           {title}
@@ -288,13 +289,13 @@ function NavButton({
       </div>
       {cls
         ? url2 === path && (
-            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+            <div className="h-full w-1 rounded-l-md bg-[#18a558] xl:hidden"></div>
           )
         : url === path && (
-            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+            <div className="h-full w-1 rounded-l-md bg-[#18a558] xl:hidden"></div>
           )}
       {url === path && (
-        <div className="h-full hidden xl:block w-1 rounded-l-md bg-[#18a558]"></div>
+        <div className="hidden h-full w-1 rounded-l-md bg-[#18a558] xl:block"></div>
       )}
     </button>
   );

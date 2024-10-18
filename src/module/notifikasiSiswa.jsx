@@ -5,13 +5,13 @@ import { showFormattedDate } from '../utils/waktu'
 import { useListNotif } from '../api/siswa/exam'
 import { useZUStore } from '../zustand/zustore'
 
-export default function Notifikasi() {
+export default function NotifikasiSiswa() {
 	let navigate = useNavigate()
 	const { data } = useListNotif()
 	const { setShowNotif } = useZUStore((state) => state)
 
 	return (
-		<section className="mt-0 w-full overflow-auto p-3 pt-5 h-full xl:h-full xl:border-l-2">
+		<section className="mt-0 w-full overflow-auto p-3 pt-5 h-full xl:h-full border-l">
 			<div className="px-2 flex items-center mb-4 justify-between">
 				<h1 className="text-lg xl:block hidden mb-0">{showFormattedDate(new Date())}</h1>
 				<button className="block" onClick={setShowNotif}>
@@ -33,7 +33,7 @@ export default function Notifikasi() {
 												setShowNotif()
 												navigate(`/siswa/ujian`)
 											}}
-											className="text-sm xl:text-xs flex items-center italic text-justify hover:bg-green-400 xl:hover:bg-blue-50 p-2 text-white xl:text-red-500 hover:text-red-600"
+											className="text-sm xl:text-xs flex items-center italic text-justify hover:bg-blue-50 p-2 text-red-500 hover:text-red-600"
 										>
 											<div className="h-12 w-2 bg-green-400 mr-5"></div>
 											<div>

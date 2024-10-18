@@ -9,18 +9,16 @@ export default function DashboardSiswa() {
   const { data, isFetching, isFetched } = useTidakHadir();
   const [RS, setRS] = useState({});
 
-  console.log('data',data)
-
   useEffect(() => {
-    if (data) {
+    if (isFetched) {
       const rs = data.data.reduce((acc, curr) => {
-        acc[curr?.kehadiran?.nama_status_kehadiran] =
-          (acc[curr?.kehadiran?.nama_status_kehadiran] || 0) + 1;
+        acc[curr.kehadiran.nama_status_kehadiran] =
+          (acc[curr.kehadiran.nama_status_kehadiran] || 0) + 1;
         return acc;
       }, {});
       setRS(rs);
     }
-  }, [isFetching, data]);
+  }, [isFetched, data]);
 
   return (
     <LayoutSiswa title="Dashboard">

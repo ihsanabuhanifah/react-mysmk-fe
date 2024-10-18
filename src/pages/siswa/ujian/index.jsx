@@ -6,6 +6,7 @@ import ExamPage from "./ExamPage";
 import { Input, Button, Icon, Loader, Menu, Sidebar } from "semantic-ui-react";
 import useToast from "../../../hook/useToast";
 import FilterUjian from "./filterUjian";
+import { PaginationTable } from "../../../components";
 
 export default function UjianSiswa() {
   const [examActive, setExamActive] = useState(null);
@@ -13,6 +14,8 @@ export default function UjianSiswa() {
     useExam(examActive);
   const { customToast } = useToast();
   let [visible, setVisible] = React.useState(false);
+  
+  console.log(params)
 
   return (
     <LayoutSiswa title="Exam">
@@ -114,6 +117,28 @@ export default function UjianSiswa() {
               />
             </React.Fragment>
           ))
+        )}
+        {data && data.totalPage >= 1 && (
+          <div className="col-span-full">
+            <PaginationTable
+              page={params.page}
+              pageSize={params.pageSize}
+              setPageSize={(e) => {
+                setParams((prev) => ({
+                  ...prev,
+                  pageSize: e,
+                }));
+              }}
+              setPage={(e) => {
+                setParams((prev) => ({
+                  ...prev,
+                  page: e,
+                }));
+              }}
+              totalPages={data?.totalPage}
+              count={data.data.count}
+            />
+          </div>
         )}
       </section>
     </LayoutSiswa>
