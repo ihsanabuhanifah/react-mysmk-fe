@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
 import LayoutPage from "../../../module/layoutPage";
 import { format, parseISO } from "date-fns";
+import Pagination from "../../../components/Pagination";
 
 const bulan = [
   "Januari",
@@ -53,7 +54,7 @@ const TugasPklPage = () => {
 
   return (
     <LayoutPage title={"Tugas"} isLoading={isLoading}>
-      <div className="flex flex-col gap-1">
+      <div className="">
         {isLoading ? (
           <p className="text-center">Loading...</p> // Tampilkan loading
         ) : data.data && data.data.length > 0 ? (
@@ -75,6 +76,15 @@ const TugasPklPage = () => {
           <p className="text-center">Anda belum memiliki tugas.</p> // Tampilkan pesan jika tidak ada tugas
         )}
       </div>
+      <div className="w-full justify-center mt-4">
+            <Pagination
+              handlePage={handlePage}
+              handlePageSize={handlePageSize}
+              page={params.page}
+              pageSize={params.pageSize}
+              pagination={data?.pagination}
+            />
+          </div>
     </LayoutPage>
   );
 };

@@ -267,7 +267,6 @@ const LaporanPkl = () => {
                 </h2>
               </div>
             )}
-          </div>
           <div className="w-full justify-center mt-4">
             <Pagination
               handlePage={handlePage}
@@ -276,6 +275,7 @@ const LaporanPkl = () => {
               pageSize={params.pageSize}
               pagination={data?.pagination}
             />
+          </div>
           </div>
         </div>
       </div>

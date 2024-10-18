@@ -6,13 +6,14 @@ import {
   Button,
   Modal,
   Form,
+  Icon,
 } from "semantic-ui-react";
-import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import {
   useJawabanPklDetail,
   useUpdateJawabanTugasPkl,
 } from "../../../api/siswa/laporan-pkl";
+import { Formik, Form as FormikForm, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 const TugasPklCard = ({
   judul,
@@ -28,23 +29,27 @@ const TugasPklCard = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [isTenggatLewat, setIsTenggatLewat] = useState(false);
   const [dataJawaban, setDataJawaban] = useState(null);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const [indicatorVisible, setIndicatorVisible] = useState(false);
+  const [modalBellOpen, setModalBellOpen] = useState(false); // State for Bell modal
 
   const openLinkInNewTab = () => {
     window.open(link, "_blank");
   };
 
   const handleOpen = () => {
-    setModalOpen(true); // Membuka modal
+    setModalOpen(true);
   };
 
   const handleClose = () => {
-    setModalOpen(false); // Menutup modal
+    setModalOpen(false);
   };
 
   // Fetch detail jawaban saat modal dibuka
   const { data: jawabanDetail, isFetching } = useJawabanPklDetail(tugasPklId, {
-    enabled: modalOpen, // Hanya fetch ketika modal dibuka
+    enabled: modalOpen || modalBellOpen, // Fetch saat modal manapun terbuka
   });
+
   const { mutate, isLoading: updateLoading } = useUpdateJawabanTugasPkl(
     jawabanDetail && jawabanDetail.id
   );
@@ -52,7 +57,6 @@ const TugasPklCard = ({
   useEffect(() => {
     if (jawabanDetail) {
       setDataJawaban(jawabanDetail);
-      console.log("Jawaban Detail:", jawabanDetail);
     }
   }, [jawabanDetail]);
 
@@ -64,27 +68,36 @@ const TugasPklCard = ({
     }
   }, [tenggat_waktu]);
 
+  // Check if there are any messages or statuses
+  useEffect(() => {
+    const isMessageRead = localStorage.getItem(`messageRead_${tugasPklId}`);
+
+    if (jawabanDetail && (jawabanDetail.pesan || jawabanDetail.status)) {
+      setIndicatorVisible(!isMessageRead);
+      setHasUnreadMessages(true);
+    } else {
+      setHasUnreadMessages(false);
+    }
+  }, [jawabanDetail]);
+
+  // Handle marking the message as read
+  const handleNotificationClick = () => {
+    setIndicatorVisible(false);
+    localStorage.setItem(`messageRead_${tugasPklId}`, "true");
+    setModalBellOpen(true); // Open modal when bell is clicked
+  };
+
+  const handleBellModalClose = () => {
+    setModalBellOpen(false);
+  };
+
   const handleSubmit = (values) => {
-    console.log("values", values);
-    console.log("ini", jawabanDetail && jawabanDetail);
     if (jawabanDetail && jawabanDetail != null) {
       mutate(values);
     } else {
       submitFunction(values);
     }
   };
-
-  const initialValues = {
-    link_jawaban: (jawabanDetail && jawabanDetail.link_jawaban) || "",
-    tugas_pkl_id: tugasPklId,
-  };
-
-  const validationSchema = Yup.object().shape({
-    link_jawaban: Yup.string()
-      .url("Link tidak valid")
-      .required("Link wajib diisi"),
-    tugas_pkl_id: Yup.number().required("ID tugas wajib diisi"),
-  });
 
   return (
     <ItemGroup divided>
@@ -94,15 +107,45 @@ const TugasPklCard = ({
             <p className="text-sm font-semibold">{nama_guru || "-"}</p>
             <p className="text-xs text-gray-500">{created_at || "-"}</p>
           </div>
-          <Button
-            size="tiny"
-            color="blue"
-            onClick={handleOpen}
-            disabled={isTenggatLewat}
-          >
-            Kirim Tugas
-          </Button>
+
+          <div className="flex items-center space-x-3"> {/* Adjust space */} 
+  {/* Notification Button */}
+  <Button
+    icon
+    basic
+    color="blue"
+    onClick={handleNotificationClick}
+    style={{ position: "relative" }} // Add relative position to the Button
+  >
+    <Icon name="bell" />
+    {indicatorVisible && (
+      <div
+        style={{
+          width: "12px", // Adjust size for better visibility
+          height: "12px",
+          backgroundColor: "red",
+          borderRadius: "50%",
+          position: "absolute",
+          top: "0px", // Adjust position
+          right: "0px", // Adjust position
+          border: "2px solid white", // Add border to make it more visible
+        }}
+      />
+    )}
+  </Button>
+
+  {/* Submit Button */}
+  <Button
+    size="tiny"
+    color="blue"
+    onClick={handleOpen}
+    disabled={isTenggatLewat}
+  >
+    Kirim Tugas
+  </Button>
+</div>
         </div>
+
         <div className="flex justify-between items-start">
           <div className="w-3/4">
             <Header as="h3" className="text-lg font-semibold mt-6 pt-2">
@@ -110,15 +153,12 @@ const TugasPklCard = ({
             </Header>
             <p className="text-gray-600 mt-2 text-sm">{deskripsi || "-"}</p>
             {link !== null ? (
-              <>
-                {" "}
-                <a
-                  onClick={openLinkInNewTab}
-                  className="text-blue-500 underline mt-2 cursor-pointer"
-                >
-                  Detail Tugas
-                </a>
-              </>
+              <a
+                onClick={openLinkInNewTab}
+                className="text-blue-500 underline mt-2 cursor-pointer"
+              >
+                Detail Tugas
+              </a>
             ) : (
               <p>-</p>
             )}
@@ -132,7 +172,7 @@ const TugasPklCard = ({
         </div>
       </Segment>
 
-      {/* Modal */}
+      {/* Modal for Sending Assignment */}
       <Modal open={modalOpen} onClose={handleClose} size="small">
         <Modal.Header>
           Masukkan Link Jawaban
@@ -148,8 +188,17 @@ const TugasPklCard = ({
             <p>Loading...</p>
           ) : (
             <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
+              initialValues={{
+                link_jawaban:
+                  (jawabanDetail && jawabanDetail.link_jawaban) || "",
+                tugas_pkl_id: tugasPklId,
+              }}
+              validationSchema={Yup.object().shape({
+                link_jawaban: Yup.string()
+                  .url("Link tidak valid")
+                  .required("Link wajib diisi"),
+                tugas_pkl_id: Yup.number().required("ID tugas wajib diisi"),
+              })}
               onSubmit={handleSubmit}
               enableReinitialize
             >
@@ -186,6 +235,51 @@ const TugasPklCard = ({
           )}
         </Modal.Content>
       </Modal>
+
+      {/* Modal for Bell Notifications */}
+      <Modal open={modalBellOpen} onClose={handleBellModalClose} size="small">
+  <Modal.Header>
+    Detail Pesan
+    <Button
+      icon="close"
+      floated="right"
+      onClick={handleBellModalClose}
+      color="red"
+    />
+  </Modal.Header>
+  <Modal.Content>
+    {/* Cek apakah jawabanDetail ada dan bukan null */}
+    {jawabanDetail && (jawabanDetail.status !== null || jawabanDetail.pesan !== null) ? (
+      <>
+        <p>
+          <strong>Status: </strong>
+          <span
+            className="pl-1 text-lg font-semibold"
+            style={{
+              color:
+                jawabanDetail.status === "gagal"
+                  ? "red"
+                  : jawabanDetail.status === "selesai"
+                  ? "green"
+                  : jawabanDetail.status === "revisi"
+                  ? "orange"
+                  : "black", // Default color for other statuses
+            }}
+          >
+            {jawabanDetail.status || "Tidak ada status"}
+          </span>
+        </p>
+        <p>
+          <strong>Pesan: </strong> {jawabanDetail.pesan || "Tidak ada pesan"}
+        </p>
+      </>
+    ) : (
+      // Tampilkan ini jika jawabanDetail masih null atau datanya kosong
+      <p>Tidak ada data untuk ditampilkan</p>
+    )}
+  </Modal.Content>
+</Modal>
+
     </ItemGroup>
   );
 };
