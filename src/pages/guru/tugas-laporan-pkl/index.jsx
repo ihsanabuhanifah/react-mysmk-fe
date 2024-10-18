@@ -39,7 +39,7 @@ export default function TugasLaporanPkl() {
         {
             refetchOnWindowFocus: false,
             select: (response) => {
-                console.log('response tugas',response.data)
+                console.log('response tugas', response.data)
                 return response.data
             }
         }
@@ -56,7 +56,7 @@ export default function TugasLaporanPkl() {
     });
     return (
         <LayoutPage title={"Tugas Laporan Akhir Pkl"}>
-             <ModalAlert
+            <ModalAlert
                 open={showAlertDelete}
                 setOpen={setShowAlertDelete}
                 loading={deleteLoading}
@@ -110,39 +110,40 @@ export default function TugasLaporanPkl() {
                         <Table.Row>
                             <Table.HeaderCell>No</Table.HeaderCell>
                             <Table.HeaderCell>Judul</Table.HeaderCell>
-                            <Table.HeaderCell>Batas</Table.HeaderCell>
+                            <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
                             <Table.HeaderCell>Selesai</Table.HeaderCell>
                             <Table.HeaderCell>Aksi</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                            <TableLoading
-                                count={8}
-                                isLoading={isLoading}
-                                data={data?.data}
-                                messageEmpty={"Data Tidak Ditemukan"}
-                            >
-                                {data?.data?.map((value, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.Cell>{index + 1}</Table.Cell>
-                                        <Table.Cell>{value?.tugas}</Table.Cell>
-                                        <Table.Cell>{value?.batas_waktu}</Table.Cell>
-                                        
-                                        <Table.Cell>{value?.batas_waktu}</Table.Cell>
-                                        
-                                        <Table.Cell>
-                                            <EditButton
-                                                onClick={() => navigate(`update/${value?.id}`, { replace: true })}
-                                            />
-                                            <DeleteButton
-                                                onClick={() => confirmDelete(value?.id)}
-                                            />
-                                            <Button content={'Nilai'} color="blue" onClick={()=> navigate(`nilai/${value?.id}`,{replace:true})}></Button>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </TableLoading>
-                        </Table.Body>
+                        <TableLoading
+                            count={8}
+                            isLoading={isLoading}
+                            data={data?.data}
+                            messageEmpty={"Data Tidak Ditemukan"}
+                        >
+                            {data?.data?.map((value, index) => (
+                                <Table.Row key={index}>
+                                    <Table.Cell>{index + 1}</Table.Cell>
+                                    <Table.Cell>{value?.tugas}</Table.Cell>
+                                    <Table.Cell>{value?.batas_waktu}</Table.Cell>
+
+                                    {/* <Table.Cell>{value?.batas_waktu}</Table.Cell> */}
+                                    <Table.Cell>3/{index + 1 }</Table.Cell>
+
+                                    <Table.Cell>
+                                        <EditButton
+                                            onClick={() => navigate(`update/${value?.id}`, { replace: true })}
+                                        />
+                                        <DeleteButton
+                                            onClick={() => confirmDelete(value?.id)}
+                                        />
+                                        <Button content={'Nilai'} color="blue" onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}></Button>
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </TableLoading>
+                    </Table.Body>
                 </Table>
             </section>
 
