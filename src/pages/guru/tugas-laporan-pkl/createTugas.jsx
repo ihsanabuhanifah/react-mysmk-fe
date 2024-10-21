@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
-import { useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import LayoutPage from "../../../module/layoutPage";
 import { Icon, TextArea } from "semantic-ui-react";
 import { Formik } from "formik";
@@ -9,7 +9,7 @@ import { Form, Select, Button, Header, Input } from "semantic-ui-react";
 import * as Yup from "yup"
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { createTugasPkl } from "../../../api/guru/tugas-pkl";
+import { createTugasPkl, detailTugasPkl } from "../../../api/guru/tugas-pkl";
 import { FormLabel, ReactSelectAsync } from "../../../components";
 import BatasWaktuPicker from "../../../components/BatasWaktu";
 import moment from "moment";
@@ -19,7 +19,7 @@ import Editor from "../../../components/Editor";
 let tugasPklSchema = Yup.object().shape({
     tugas: Yup.string().required("wajib diisi"),
     link_soal: Yup.string().required("wajib diisi"),
-    batas_waktu: Yup.string().required("wajib diisi"),
+    batas_waktu: Yup.string().nullable().required("wajib disii"),
     deskripsi_tugas: Yup.string().required("wajib diisi"),
 })
 
@@ -35,10 +35,37 @@ export default function CreateTugasPkl() {
 
 
     };
+
+    let { data, isFetching } = useQuery(
+        //query key
+        ["/tugas-pkl/list/update", id],
+        //axios function,triggered when page/pageSize change
+        () => detailTugasPkl(id),
+        //configuration
+        {
+            // refetchInterval: 1000 * 60 * 60,
+            enabled: id !== undefined,
+            select: (response) => {
+                return response.data.data;
+                console.log(response.data.data)
+            },
+            onSuccess: (data) => {
+                console.log("dar", data);
+                // data.soal = JSON.parse(data.soal);
+
+                setInitialState({
+                    tugas: "",
+                    link_soal: "",
+                    batas_waktu: addSevenHours(data.batas_waktu),
+                    deskripsi_tugas: "",
+                });
+            },
+        }
+    );
     const [initialState, setInitialState] = useState({
         tugas: "",
         link_soal: "",
-        batas_waktu: "",
+        batas_waktu: null,
         deskripsi_tugas: "",
     })
 
@@ -205,7 +232,9 @@ export default function CreateTugasPkl() {
                                             {errors.batas_waktu}
                                         </div>
                                     )} */}
-                                    <BatasWaktuPicker
+
+                                    {/* asli */}
+                                    {/* <BatasWaktuPicker
                                         value={values.batas_waktu}
                                         onChange={(date) => setFieldValue('batas_waktu', date)}
                                     />
@@ -213,7 +242,33 @@ export default function CreateTugasPkl() {
                                         <div className="ui pointing red basic label ">
                                             {errors.batas_waktu}
                                         </div>
-                                    )}
+                                    )} */}
+                                    <div>
+                                        <Form.Field
+                                            control={Input}
+                                            label={{
+                                                children: "Batas Waktu ",
+                                                htmlFor: `batas_waktu`,
+                                                name: `batas_waktu`,
+                                            }}
+                                            placeholder="Jenis Ujian"
+                                            // options={jenisOptions}
+                                            id={`batas_waktu`}
+                                            name={`batas_waktu`}
+                                            onChange={(e) => {
+                                                setFieldValue(
+                                                    `batas_waktu`,
+                                                    e.target.value
+                                                );
+                                            }}
+                                            error={
+                                                errors?.payload?.[index]?.batas_waktu !== undefined &&
+                                                errors?.payload?.[index]?.batas_waktu
+                                            }
+                                            type="datetime-local"
+                                            value={values?.batas_waktu}
+                                        />
+                                    </div>
                                 </section>
 
                                 <section className="col-span-3 lg:col-span-1">
@@ -273,6 +328,15 @@ export default function CreateTugasPkl() {
     )
 
 }
+
+const addSevenHours = (isoString) => {
+    const date = new Date(isoString);
+    date.setHours(date.getHours() + 7);
+
+    // Format the date to 'YYYY-MM-DDTHH:MM'
+    const formattedDate = date.toISOString().slice(0, 16);
+    return formattedDate;
+};
 
 
 // const BatasWaktu = ({ value, onChange }) => {

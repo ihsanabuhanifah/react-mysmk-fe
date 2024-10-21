@@ -56,6 +56,7 @@ import LaporanPkl from "./pages/guru/laporan-pkl";
 import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
 import CreateTugasPkl from "./pages/guru/tugas-laporan-pkl/createTugas";
 import UpdateTugasPkl from "./pages/guru/tugas-laporan-pkl/updateTugasPkl";
+import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 
 function App() {
   return (
@@ -169,6 +170,7 @@ function App() {
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporanPkl />} />
           <Route path="tugas-laporan-pkl" element={<TugasLaporanPkl />} />
           <Route path="tugas-laporan-pkl/tambah" element={<CreateTugasPkl />} />
+          <Route path="tugas-laporan-pkl/nilai/:id" element={<TugasPklNilai />} />
           <Route path="tugas-laporan-pkl/update/:id" element={<UpdateTugasPkl />} />
         </Route>
 
