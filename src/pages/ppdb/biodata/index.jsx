@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LayoutPpdb from "../../../module/layoutPpdb";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -7,17 +7,38 @@ import {
   IoShieldOutline,
   IoMenu,
 } from "react-icons/io5";
-import { IoIosArrowForward,IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+
 export default function BiodataPpdb() {
   let { pathname } = useLocation();
   const navigate = useNavigate();
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true); // State untuk visibilitas button
 
   React.useEffect(() => {
     if (pathname === "/ppdb/biodata") {
       navigate("/ppdb/biodata/update");
     }
   }, [pathname, navigate]);
+
+  // Menambahkan event listener untuk scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Sembunyikan tombol jika halaman discroll lebih dari 100px
+      if (window.scrollY > 100) {
+        setIsButtonVisible(false);
+      } else {
+        setIsButtonVisible(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup event listener saat komponen di-unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <LayoutPpdb title="Biodata Calon santri">
@@ -58,18 +79,20 @@ export default function BiodataPpdb() {
           />
         </div>
 
-        <button
-          className={`sm:hidden fixed top-[135px] ${
-            !isSidebarVisible ? "left-4" : "left-[210px]"
-          } text-black`}
-          onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-        >
-          {isSidebarVisible ? (
-            <IoIosArrowBack size={24} /> // Jika sidebar terlihat, tampilkan arrow left
-          ) : (
-            <IoIosArrowForward size={24} /> // Jika sidebar tidak terlihat, tampilkan arrow right
-          )}
-        </button>
+        {isButtonVisible && ( // Hanya tampilkan tombol jika isButtonVisible bernilai true
+          <button
+            className={`sm:hidden fixed top-[135px] ${
+              !isSidebarVisible ? "left-4" : "left-[210px]"
+            } text-black`}
+            onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+          >
+            {isSidebarVisible ? (
+              <IoIosArrowBack size={24} /> // Jika sidebar terlihat, tampilkan arrow left
+            ) : (
+              <IoIosArrowForward size={24} /> // Jika sidebar tidak terlihat, tampilkan arrow right
+            )}
+          </button>
+        )}
 
         {/* Content Area */}
         <div className="flex-1 h-full bg-white">

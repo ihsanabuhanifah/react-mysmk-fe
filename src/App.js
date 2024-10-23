@@ -76,7 +76,7 @@ import Transfer from "./pages/ppdb/transfer/transfer";
 import BuktiTransfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
 import ListPembayaran from "./pages/guru/list-pembayaran";
 import EditPembayaran from "./pages/guru/list-pembayaran/edit-pembayaran";
-
+import TesDashboard from "./pages/ppdb/tes-dashboard/tes-dash";
 
 function App() {
   return (
@@ -137,7 +137,10 @@ function App() {
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-calonsantri" element={<DaftarCalonSiswa />} />
           <Route path="list-pembayaran" element={<ListPembayaran />} />
-          <Route path="list-pembayaran/konfirmasi-pembayaran/:id" element={<EditPembayaran />} />
+          <Route
+            path="list-pembayaran/konfirmasi-pembayaran/:id"
+            element={<EditPembayaran />}
+          />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
           <Route path="daftar-siswa/update-siswa/:id" element={<EditSiswa />} />
@@ -226,6 +229,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardPpdb />} />
+          <Route path="tes-dashboard" element={<TesDashboard/>} />
           <Route path="biodata" element={<BiodataPpdb />}>
             <Route path="update" element={<BiodataUpdatePPdb />} />
             <Route path="berkas" element={<BerkasPpdb />} />
@@ -235,9 +239,7 @@ function App() {
           <Route path="bukti-transfer" element={<BuktiTransfer />} />
           <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
-          <Route path="exam" element={<Ujian/>}>
-
-          </Route>
+          <Route path="exam" element={<Ujian />}></Route>
         </Route>
 
         {/* <Route

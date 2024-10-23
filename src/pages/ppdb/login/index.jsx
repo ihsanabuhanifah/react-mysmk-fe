@@ -41,34 +41,34 @@ const LoginPpdb = () => {
         no_hp: values.no_hp || undefined,
         password: values.password,
       });
-  
+
       console.log("Respons dari API:", result.data); // Logging seluruh data respons
-  
+
       Cookies.set("mysmk_token", result.data.token, {
         expires: 7,
       });
-  
+
       // Validasi jika role tidak ditemukan
       if (!result.data.user.role) {
-        setErrors({ msg: "Role tidak ditemukan dalam respons. Periksa akun Anda!" });
+        setErrors({
+          msg: "Role tidak ditemukan dalam respons. Periksa akun Anda!",
+        });
         return;
       }
-  
+
       // Validasi hanya role 'Calon Santri' yang bisa masuk
       if (result.data.user.role.toLowerCase() !== "calon santri") {
         setErrors({ msg: "Hanya Calon Santri yang dapat masuk!" });
         return;
       }
-  
+
       // Jika role adalah 'Calon Santri', navigasikan ke dashboard PPDB
       return navigate("/ppdb/dashboard");
-  
     } catch (err) {
       setErrors(err.response?.data || { msg: "Periksa koneksi internet Anda" });
       console.log("Periksa koneksi internet Anda");
     }
   };
-  
 
   return (
     <Formik
@@ -150,7 +150,11 @@ const LoginPpdb = () => {
                           : null
                       }
                       size="normal"
-                      style={{ width: "100%", maxWidth: "609px" }}
+                      style={{
+                        width: "100%",
+                        maxWidth: "609px",
+                        paddingLeft: "15px",
+                      }}
                     />
                     {(errors.email || errors.no_hp) && (
                       <Label basic color="red" pointing>
@@ -175,7 +179,11 @@ const LoginPpdb = () => {
                         }
                       }
                       size="normal"
-                      style={{ width: "100%", maxWidth: "609px" }}
+                      style={{
+                        width: "100%",
+                        maxWidth: "609px",
+                        paddingLeft: "15px",
+                      }}
                     />
                     {errors.password && touched.password && (
                       <Label basic color="red" pointing>

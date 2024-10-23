@@ -42,6 +42,7 @@ const RegisterPpdb = () => {
     password: "",
     passwordConfirmation: "",
     loginAs: "", // Pastikan ini ada dalam initial state
+    role:"Calon Santri"
   };
 
   const rolesOptions = [{ key: 11, value: 11, text: "Calon Santri" }];
