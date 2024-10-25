@@ -34,12 +34,11 @@ import { useState } from "react";
 import { FaCircleArrowLeft, FaCircleArrowRight } from "react-icons/fa6";
 
 const images = [CISCO, LSP, MIKRO, REDHAT, ITC, PENS, ANABUKI];
-const testi = [TESTI, TESTI, TESTI, TESTI, TESTI, TESTI, TESTI];
+const testi = [TESTI, TESTI, TESTI, TESTI];
 
 // Slider settings
 
 const sliderSettingsauto = {
-  dots: true,
   infinite: true,
   speed: 500,
   slidesToShow: 3,
@@ -67,24 +66,45 @@ const LandingPage = () => {
   const [imageIndex, setImageIndex] = useState(0);
 
   const settings = {
+    className: "center",
     infinite: true,
     lazyLoad: true,
     speed: 300,
-    slidesToShow: 5,
+    slidesToShow: 5, // Default for large screens
     centerMode: true,
-    centerPadding: 0,
+    centerPadding: "0",
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     beforeChange: (current, next) => setImageIndex(next),
   };
 
-  const settingsrifat = {
+  const settings1 = {
     dots: true,
+    infinite: true,
+    lazyLoad: true,
+    speed: 300,
+    slidesToShow: 3,  // Default menampilkan 3 gambar
+    centerMode: true,
+    centerPadding: 0,
+    // nextArrow: <NextArrow />,
+    // prevArrow: <PrevArrow />,
+    beforeChange: (current, next) => setImageIndex(next),
+    responsive: [
+      {
+        breakpoint: 768,  // Layar di bawah 768px (tablet dan smartphone)
+        settings: {
+          slidesToShow: 1,  // Tampilkan hanya 1 gambar
+        },
+      },
+    ],
+  };
+  
+
+  const settingsrifat = {
     infinite: true,
     speed: 500,
     slidesToShow: 2,
     slidesToScroll: 1,
-    autoplaySpeed: 3000,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
@@ -93,33 +113,52 @@ const LandingPage = () => {
     <>
       <Nav />
       <main>
-        <div className="p-4 bg-backgroundBaru bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
+        <div className="bg-backgroundBaru bg-cover bg-center h-screen w-screen flex items-center justify-center px-1 lg:px-8">
           <div className="flex flex-col items-center justify-center mr-8">
-            <p className="text-white font-bold text-5xl text-center leading-tight mb-6">
+            <p className="text-white font-bold text-2xl lg:text-5xl text-center leading-tight mb-6">
               Penerimaan Santri Baru
               <br />
               SMK Madinatul Quran
               <br />
-              <span className="text-white text-3xl font-extralight text-center leading-tight mb-6">
+              <span className="text-white text-2xl lg:text-3xl font-extralight text-center leading-tight mb-6">
                 Tahun Ajaran 2025-2026
               </span>
             </p>
             <div className="flex gap-6 justify-center">
               <Link to="register">
                 <button className="w-auto h-auto bg-green-600 rounded-2xl px-8 py-2">
-                  <p className="text-white font-semibold text-lg">Daftar</p>
-                </button>
-              </Link>
-              <Link to="login">
-                <button className="w-auto h-auto bg-white rounded-2xl px-8 py-2">
-                  <p className="text-customGreen font-semibold text-lg">
-                    Login
+                  <p className="text-white font-bold text-sm lg:text-lg">
+                    Download Brosur
                   </p>
                 </button>
               </Link>
             </div>
           </div>
         </div>
+
+        {/* About Section */}
+        <div className="flex flex-col-reverse lg:flex-row my-10 lg:my-40 mx-0 lg:mx-8 items-center w-full justify-center gap-3 lg:gap-60">
+          <div className="flex flex-col gap-8 mb-10">
+            <h3 className="text-customGreen text-3xl lg:text-5xl">
+              SMK MADINATULQURAN <br /> Boarding School
+            </h3>
+            <p className="text-sm text-left lg:text-3xl">
+              Sekolah Menengah Kejuruan MADINATULQURAN atau SMK MQ adalah <br />{" "}
+              salah satu sekolah di Kecamatan Jonggol Kabupaten Bogor, Jawa{" "}
+              <br /> Barat yang beroperasi mulai tahun 2015 dan sudah
+              terakreditasi <br /> dari BANS/M Kemendikbud.
+            </p>
+          </div>
+          <div className="mt-6 lg:mb-0">
+            <img
+              src={Gambarsatu}
+              alt="Gambar"
+              className="object-contain max-w-xs lg:max-w-lg"
+            />
+          </div>
+        </div>
+
+        {/* slider image */}
 
         <div className="">
           <Slider {...sliderSettingsauto}>
@@ -130,8 +169,8 @@ const LandingPage = () => {
                 className="w-full h-auto mx-auto"
               />
               <div className="absolute bottom-4 left-4">
-                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
-                  <p className="text-green-800 font-bold text-xl text-center">
+                <div className="bg-white bg-opacity-90 w-[100px] lg:w-[153px] items-center justify-center h-[25px] lg:h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-sm lg:text-xl text-center">
                     Class Room
                   </p>
                 </div>
@@ -144,8 +183,8 @@ const LandingPage = () => {
                 className="w-full h-auto mx-auto"
               />
               <div className="absolute bottom-4 left-4">
-                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
-                  <p className="text-green-800 font-bold text-xl text-center">
+                <div className="bg-white bg-opacity-90 w-[80px] lg:w-[153px] items-center justify-center h-[25px] lg:h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-sm lg:text-xl text-center">
                     Kantin
                   </p>
                 </div>
@@ -158,8 +197,8 @@ const LandingPage = () => {
                 className="w-full h-auto mx-auto"
               />
               <div className="absolute bottom-4 left-4">
-                <div className="bg-white bg-opacity-90 w-[153px] items-center justify-center h-[40px] px-4 py-2 rounded-lg shadow-md">
-                  <p className="text-green-800 font-bold text-xl text-center">
+                <div className="bg-white bg-opacity-90 w-[80px] lg:w-[153px] items-center justify-center h-[25px] lg:h-[40px] px-4 py-2 rounded-lg shadow-md">
+                  <p className="text-green-800 font-bold text-sm lg:text-xl text-center">
                     Masjid
                   </p>
                 </div>
@@ -168,34 +207,25 @@ const LandingPage = () => {
           </Slider>
         </div>
 
-        {/* About Section */}
-        <div className="flex my-10 mx-8 items-center w-full justify-center gap-60">
-          <div className="flex flex-col gap-8 mb-10">
-            <h3 className="text-customGreen text-[48px]">
-              SMK MADINATULQURAN <br /> Boarding School
-            </h3>
-            <p className="text-[24px]">
-              Sekolah Menengah Kejuruan MADINATULQURAN atau SMK MQ adalah <br />{" "}
-              salah satu sekolah di Kecamatan Jonggol Kabupaten Bogor, Jawa{" "}
-              <br /> Barat yang beroperasi mulai tahun 2015 dan sudah
-              terakreditasi <br /> dari BANS/M Kemendikbud.
-            </p>
-          </div>
-          <div className="ml-8">
-            <img src={Gambarsatu} alt="Gambar" className="object-contain" />
-          </div>
-        </div>
-
         {/* Academy Partner */}
-        <div className="my-10 py-10 bg-gray-100 cardacademy">
-          <p className="text-center font-bold text-[48px]">Academy Partner</p>
-          <div className="App px-96">
+        <div className="my-10 py-1 cardacademy">
+          <p className="text-center font-bold text-[24px] lg:text-[64px]">
+            Academy Partner
+          </p>
+          <div className="App px-10 lg:px-96">
             <Slider {...settings}>
               {images.map((img, idx) => (
                 <div
-                  className={idx === imageIndex ? "slide activeSlide" : "slide"}
+                  className={`slide ${idx === imageIndex ? "activeSlide" : ""}`}
+                  key={idx}
                 >
-                  <img src={img} alt={img} />
+                  <div className="w-full">
+                    <img
+                      src={img}
+                      alt={`Academy Partner ${idx}`}
+                      className="justify-center items-center"
+                    />
+                  </div>
                 </div>
               ))}
             </Slider>
@@ -204,27 +234,32 @@ const LandingPage = () => {
 
         {/* Mengapa harus Sekolah di SMK Mainatul Quran? */}
         <div className="my-10 py-10">
-          <div className="text-center text-[48px] font-bold">
+          <div className="text-center text-3xl lg:text-5xl font-bold">
             <p>
-              Mengapa harus Sekolah di <br /> SMK Mainatul Quran?
+              Mengapa harus Sekolah di <br /> SMK Madinatul Quran?
             </p>
           </div>
           <div className="flex justify-center">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-20 my-10 py-10 px-24">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 my-10 py-10 px-4 sm:px-12 lg:px-24">
+              {/* Item 1 */}
               <div
                 className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
-                style={{ width: "600px", height: "280px" }}
+                style={{ width: "100%", height: "280px" }}
               >
-                <div className="flex-shrink-0 mr-10">
-                  <img src={Gedung} alt="Sekolah IT Terbaik" />
+                <div className="flex-shrink-0 mr-6 sm:mr-10">
+                  <img
+                    src={Gedung}
+                    alt="Sekolah IT Terbaik"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-blue-900">
+                  <h3 className="text-xl sm:text-2xl font-bold text-blue-900">
                     Sekolah IT Terbaik
                   </h3>
-                  <p className="text-gray-600 text-base mt-2">
-                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
-                    elit. Ut eget nunc faucibus,
+                  <p className="text-base sm:text-lg text-gray-600 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br />
+                    adipiscing elit. Ut eget nunc faucibus,
                     <br /> rutrum lectus id, laoreet nunc. Nulla
                     <br />
                     commodo dignissim risus.
@@ -232,20 +267,25 @@ const LandingPage = () => {
                 </div>
               </div>
 
+              {/* Item 2 */}
               <div
                 className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
-                style={{ width: "600px", height: "280px" }}
+                style={{ width: "100%", height: "280px" }}
               >
-                <div className="flex-shrink-0 mr-10">
-                  <img src={Dompet} alt="Full Praktek" />
+                <div className="flex-shrink-0 mr-6 sm:mr-10">
+                  <img
+                    src={Dompet}
+                    alt="Full Praktek"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-blue-900">
+                  <h3 className="text-xl sm:text-2xl font-bold text-blue-900">
                     Full Praktek
                   </h3>
-                  <p className="text-gray-600 text-base mt-2">
-                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
-                    elit. Ut eget nunc faucibus,
+                  <p className="text-base sm:text-lg text-gray-600 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br />
+                    adipiscing elit. Ut eget nunc faucibus,
                     <br /> rutrum lectus id, laoreet nunc. Nulla
                     <br />
                     commodo dignissim risus.
@@ -253,20 +293,25 @@ const LandingPage = () => {
                 </div>
               </div>
 
+              {/* Item 3 */}
               <div
                 className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
-                style={{ width: "600px", height: "280px" }}
+                style={{ width: "100%", height: "280px" }}
               >
-                <div className="flex-shrink-0 mr-10">
-                  <img src={Piala} alt="Program Unggulan" />
+                <div className="flex-shrink-0 mr-6 sm:mr-10">
+                  <img
+                    src={Piala}
+                    alt="Program Unggulan"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-blue-900">
+                  <h3 className="text-xl sm:text-2xl font-bold text-blue-900">
                     Program Unggulan
                   </h3>
-                  <p className="text-gray-600 text-base mt-2">
-                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
-                    elit. Ut eget nunc faucibus,
+                  <p className="text-base sm:text-lg text-gray-600 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br />
+                    adipiscing elit. Ut eget nunc faucibus,
                     <br /> rutrum lectus id, laoreet nunc. Nulla
                     <br />
                     commodo dignissim risus.
@@ -274,20 +319,25 @@ const LandingPage = () => {
                 </div>
               </div>
 
+              {/* Item 4 */}
               <div
                 className="bg-white rounded-lg shadow-lg flex items-center justify-center p-5 border-2 border-transparent hover:border-blue-500 transition duration-300"
-                style={{ width: "600px", height: "280px" }}
+                style={{ width: "100%", height: "280px" }}
               >
-                <div className="flex-shrink-0 mr-10">
-                  <img src={Islam} alt="Pesantren Berbasis IT" />
+                <div className="flex-shrink-0 mr-6 sm:mr-10">
+                  <img
+                    src={Islam}
+                    alt="Pesantren Berbasis IT"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-2xl font-bold text-blue-900">
+                  <h3 className="text-xl sm:text-2xl font-bold text-blue-900">
                     Pesantren Berbasis IT
                   </h3>
-                  <p className="text-gray-600 text-base mt-2">
-                    Lorem ipsum dolor sit amet, consectetur <br /> adipiscing
-                    elit. Ut eget nunc faucibus,
+                  <p className="text-base sm:text-lg text-gray-600 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur <br />
+                    adipiscing elit. Ut eget nunc faucibus,
                     <br /> rutrum lectus id, laoreet nunc. Nulla
                     <br />
                     commodo dignissim risus.
@@ -299,15 +349,16 @@ const LandingPage = () => {
         </div>
 
         {/* Prestasi Murid & Alumni SMK Madinatul Quran */}
-        <div className="my-8 py-8 bg-gray-100">
-          <div className="text-center text-[32px] font-bold mb-6">
+        <div className="my-8 py-8 bg-gray-100 px-0 lg:px-52 ">
+          <div className="text-center text-lg lg:text-5xl font-bold">
             <p>
               Prestasi Murid & Alumni <br /> SMK Madinatul Quran
             </p>
           </div>
-          <Slider {...settingsrifat} className="py-40 px-40">
-            <div className="flex flex-row gap-3 justify-center items-center px-2">
-              <div className="rounded-lg flex flex-col items-center justify-center bg-white pb-4">
+          <Slider {...settingsrifat} className="py-40 px-10 lg:px-52 sliderripat">
+            {/* Menambahkan margin horizontal untuk memperlebar jarak antar item */}
+            <div className="flex flex-row gap-14 justify-center items-center px-6">
+              <div className="rounded-2xl flex flex-col items-center justify-center bg-white pb-4">
                 <div className="w-full mb-3">
                   <img
                     src={RIFAT}
@@ -315,23 +366,19 @@ const LandingPage = () => {
                     className="object-contain w-full"
                   />
                 </div>
-                <div className="flex flex-row px-3 mt-2 justify-between items-start w-full">
+                <div className="flex flex-row px-3 my-7 justify-between items-start w-full">
                   <div className="flex-grow">
-                    <h3 className="text-2xl font-bold">
+                    <h3 className="text-sm lg:text-2xl text-center font-bold">
                       Juara Olimpiade desain <br /> grafis nusantara
                     </h3>
-                  </div>
-                  <div className="ml-2">
-                    <button className="bg-green-500 text-xl text-white w-[160px] h-[60px] rounded-xl px-3 py-1">
-                      Learn More
-                    </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-row gap-3 justify-center items-center px-2">
-              <div className="rounded-lg flex flex-col items-center justify-center bg-white pb-4">
+            {/* Item kedua juga diberi jarak lebih lebar */}
+            <div className="flex flex-row gap-14 justify-center items-center px-6">
+              <div className="rounded-2xl flex flex-col items-center justify-center bg-white pb-4">
                 <div className="w-full mb-3">
                   <img
                     src={RIFAT}
@@ -339,16 +386,11 @@ const LandingPage = () => {
                     className="object-contain w-full"
                   />
                 </div>
-                <div className="flex flex-row px-3 mt-2 justify-between items-start w-full">
+                <div className="flex flex-row px-3 my-7 justify-between items-start w-full">
                   <div className="flex-grow">
-                    <h3 className="text-2xl font-bold">
+                    <h3 className="text-sm lg:text-2xl text-center font-bold">
                       Juara Olimpiade desain <br /> grafis nusantara
                     </h3>
-                  </div>
-                  <div className="ml-2">
-                    <button className="bg-green-500 text-xl text-white w-[160px] h-[60px] rounded-xl px-3 py-1">
-                      Learn More
-                    </button>
                   </div>
                 </div>
               </div>
@@ -357,21 +399,24 @@ const LandingPage = () => {
         </div>
 
         {/* Testimoni Alumini SMK Madinatul Quran */}
-        <div className="my-10">
-          <div className="text-center text-[48px] font-bold">
+        <div className="my-40">
+          <div className="text-center text-lg lg:text-5xl font-bold">
             <p>
               Testimoni Alumini <br /> SMK Madinatul Quran
             </p>
           </div>
           {/* Slider */}
 
-          <div className="App px-96 cardcoment">
-            <Slider {...settings}>
+          <div className="px-14 cardcoment">
+            <Slider {...settings1}>
               {testi.map((img, idx) => (
                 <div
                   className={idx === imageIndex ? "slide activeSlide" : "slide"}
                 >
-                  <img src={img} alt={img} />
+                  <img src={img}
+                   alt={img}
+                   className="justify-center items-center"
+                   />
                 </div>
               ))}
             </Slider>
@@ -380,7 +425,7 @@ const LandingPage = () => {
 
         {/* Gallery SMK Madinatul Quran */}
         <div className="py-16">
-          <div className="text-center bg-green-700 text-white text-[48px] font-bold">
+          <div className="text-center bg-green-700 text-white text-xl lg:text-5xl font-bold">
             <p>
               Gallery <br /> SMK Madinatul Quran
             </p>
@@ -428,69 +473,109 @@ const LandingPage = () => {
         </div>
 
         {/* Berita Terkini */}
-        <div className="my-10 py-10 flex flex-col px-16 justify-center items-center bg-gray-600/10">
-          <div className="text-start text-[48px] font-bold text-center mb-10">
+        <div className="my-3 lg:my-10 py-10 flex flex-col px-4 lg:px-16 justify-center items-center bg-gray-600/10">
+          <div className="text-start text-sm lg:text-5xl font-bold text-center mb-10">
             <p>Berita Terkini</p>
           </div>
-          {/* kiri */}
-          <div className="flex flex-row gap-10">
-            <div className="flex flex-col bg-white gap-7">
+
+          <div className="flex flex-col lg:flex-row gap-10 w-full lg:w-3/4 mx-auto">
+            {/* Kolom kiri - Gambar besar */}
+            <div className="w-full lg:w-1/2 flex flex-col bg-white gap-7">
               <div className="flex flex-col">
-                <img src={KELAS} alt="Pesantren Berbasis IT" />
+                <img
+                  src={KELAS}
+                  alt="Pesantren Berbasis IT"
+                  className="w-full h-full object-cover" // Gambar besar kiri
+                />
               </div>
-              <div className="flex items-center justify-center">
-                <p className="text-gray-600 text-center text-base mt-2">
+              <div className="flex items-center justify-center px-4">
+                <p className="text-gray-600 text-center text-xs sm:text-sm lg:text-lg mt-2 leading-loose">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-                  eget nunc <br /> faucibus, rutrum lectus id, laoreet nunc.
-                  Nulla commodo dignissim <br /> risus. rutrum lectus id,
-                  laoreet nunc. Nulla commodo dignissim risus.
+                  eget nunc faucibus, rutrum lectus id, laoreet nunc. Nulla
+                  commodo dignissim risus.
                 </p>
               </div>
             </div>
-            {/* Berita kanan */}
-            <div className="flex flex-col gap-8">
-              <div className="flex flex-row">
-                <div className="flex flex-col mr-10">
-                  <img src={MAKAN} alt="Pesantren Berbasis IT" />
+
+            {/* Kolom kanan - Dua gambar lebih kecil */}
+            <div className="w-full lg:w-1/2 flex flex-col gap-8">
+              <div className="flex flex-row gap-5">
+                {/* Gambar pertama */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={MAKAN}
+                    alt="Pesantren Berbasis IT"
+                    className="w-full h-32 object-cover lg:h-80" // Gambar kecil kanan
+                  />
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-4xl font-bold">Berita Terkini</h3>
-                  <p className="text-gray-600 text-base mt-14">
-                    Lorem ipsum dolor sit amet,
-                    <br /> consectetur adipiscing elit. Ut
-                    <br />
-                    eget nunc faucibus, rutrum
-                    <br /> lectus id, laoreet nunc. Nulla
-                    <br />
-                    commodo dignissim risus.
-                    <br /> rutrum lectus id, laoreet nunc.
-                    <br />
-                    Nulla commodo dignissim
-                    <br /> risus.
+                <div className="flex flex-col justify-between w-2/3">
+                  <h3 className="text-sm lg:text-2xl font-bold">
+                    Berita Terkini
+                  </h3>
+                  <p className="text-gray-600 text-xs lg:text-lg mt-2 leading-loose">
+                    Lorem ipsum dolor sit amet,{" "}
+                    <span className="block lg:inline">
+                      consectetur adipiscing elit. Ut
+                    </span>
+                    <span className="block lg:inline">
+                      eget nunc faucibus, rutrum
+                    </span>{" "}
+                    <span className="block lg:inline">
+                      lectus id, laoreet nunc. Nulla
+                    </span>
+                    <span className="block lg:inline">
+                      commodo dignissim risus. rutrum
+                    </span>{" "}
+                    <span className="block lg:inline">
+                      lectus id, laoreet nunc.
+                    </span>
+                    <span className="block lg:inline">
+                      Nulla commodo dignissim risus.
+                    </span>
                   </p>
-                  <p className="text-green-600 text-base mt-7">Read more</p>
+                  <p className="text-green-600 text-xs lg:text-lg mt-2">
+                    Read more
+                  </p>
                 </div>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-col mr-10">
-                  <img src={MAKAN} alt="Pesantren Berbasis IT" />
+
+              <div className="flex flex-row gap-5">
+                {/* Gambar kedua */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={MAKAN}
+                    alt="Pesantren Berbasis IT"
+                    className="w-full h-32 object-cover lg:h-80" // Gambar kecil kanan
+                  />
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-4xl font-bold">Berita Terkini</h3>
-                  <p className="text-gray-600 text-base mt-14">
-                    Lorem ipsum dolor sit amet,
-                    <br /> consectetur adipiscing elit. Ut
-                    <br />
-                    eget nunc faucibus, rutrum
-                    <br /> lectus id, laoreet nunc. Nulla
-                    <br />
-                    commodo dignissim risus.
-                    <br /> rutrum lectus id, laoreet nunc.
-                    <br />
-                    Nulla commodo dignissim
-                    <br /> risus.
+                <div className="flex flex-col justify-between w-2/3">
+                  <h3 className="text-sm lg:text-2xl font-bold">
+                    Berita Terkini
+                  </h3>
+                  <p className="text-gray-600 text-xs lg:text-lg mt-2 leading-loose">
+                    Lorem ipsum dolor sit amet,{" "}
+                    <span className="block lg:inline">
+                      consectetur adipiscing elit. Ut
+                    </span>
+                    <span className="block lg:inline">
+                      eget nunc faucibus, rutrum
+                    </span>{" "}
+                    <span className="block lg:inline">
+                      lectus id, laoreet nunc. Nulla
+                    </span>
+                    <span className="block lg:inline">
+                      commodo dignissim risus. rutrum
+                    </span>{" "}
+                    <span className="block lg:inline">
+                      lectus id, laoreet nunc.
+                    </span>
+                    <span className="block lg:inline">
+                      Nulla commodo dignissim risus.
+                    </span>
                   </p>
-                  <p className="text-green-600 text-base mt-7">Read more</p>
+                  <p className="text-green-600 text-xs lg:text-lg mt-2">
+                    Read more
+                  </p>
                 </div>
               </div>
             </div>
@@ -500,10 +585,10 @@ const LandingPage = () => {
         {/* daftar segera */}
         <div className="min-h-[50vh] flex justify-center items-center bg-backgroundbawah bg-fixed bg-no-repeat bg-cover bg-center">
           <div className="text-center">
-            <h3 className="text-white font-medium text-4xl">
+            <h3 className="text-white font-medium text-xl lg:text-5xl">
               Segera daftarkan putra anda sekarang
             </h3>
-            <div className="text-white text-xl font-normal text-center max-w-lg mx-auto">
+            <div className="text-white text-sm lg:text-xl font-normal text-center max-w-lg mx-auto">
               <p>
                 InsyaAllah kami adalah jawaban ayah bunda yang ingin putranya
                 belajar IT, tetapi tetap menomor satukan belajar diniyah sebagai
@@ -522,13 +607,15 @@ const LandingPage = () => {
           </div>
         </div>
 
-
+        {/* footer */}
         <footer className="bg-backgroundFooter">
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-10 lg:py-12 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-3 text-white">
               <div>
-                <h3 className="text-2xl font-semibold">Kontak :</h3>
-                <ul className="mt-4 space-y-2 text-2xl">
+                <h3 className="text-base lg:text-2xl font-semibold">
+                  Kontak :
+                </h3>
+                <ul className="mt-4 space-y-2 text-base lg:text-2xl">
                   <li>
                     <a
                       href="https://wa.me/6285888222457"
@@ -581,8 +668,10 @@ const LandingPage = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-semibold">Media Sosial :</h3>
-                <ul className="mt-4 space-y-2 text-2xl">
+                <h3 className="text-base lg:text-2xl font-semibold">
+                  Media Sosial :
+                </h3>
+                <ul className="mt-4 space-y-2 text-base lg:text-2xl">
                   <li className="flex items-center gap-2">
                     <svg
                       className="h-4 w-4"
@@ -635,8 +724,10 @@ const LandingPage = () => {
               </div>
 
               <div>
-                <h3 className="text-2xl font-semibold">Alamat :</h3>
-                <div className="mt-4 flex items-start gap-2 text-xl">
+                <h3 className="text-base lg:text-2xl font-semibold">
+                  Alamat :
+                </h3>
+                <div className="mt-4 flex items-start gap-2 text-sm lg:text-xl">
                   <svg
                     className="h-10 w-10"
                     fill="currentColor"
@@ -660,8 +751,9 @@ const LandingPage = () => {
             </div>
 
             <div className="mt-20 border-t border-white pt-4 text-center text-xs text-white">
-              <p className="text-left text-2xl">&copy; 2023 All Right Reserved. SMK MADINATULQURAN</p>
-              
+              <p className="text-left text-base lg:text-2xl">
+                &copy; 2023 All Right Reserved. SMK MADINATULQURAN
+              </p>
             </div>
           </div>
         </footer>

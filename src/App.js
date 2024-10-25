@@ -60,6 +60,8 @@ import LoginPpdb from "./pages/ppdb/login";
 import RegisterPpdb from "./pages/ppdb/register/register";
 import DashboardPpdb from "./pages/ppdb/dashboard/dashboard";
 import LandingPageRpl from "./pages/ppdb/landingpage/index1";
+import LandingPageTkj from "./pages/ppdb/landingpage/index2";
+import LandingBiaya from "./pages/ppdb/landingpage/index3";
 
 function App() {
   return (
@@ -188,9 +190,11 @@ function App() {
 
         {/* Routes PPDB */}
 
-        <Route path="/ppdb" element={<LandingPage />} >
-        <Route path="jurusan-rpl" element={<LandingPageRpl />} />
-        </Route>
+        <Route path="/ppdb" element={<LandingPage />} />
+        <Route path="/ppdb/jurusan-rpl" element={<LandingPageRpl />} />
+        <Route path="/ppdb/jurusan-tkj" element={<LandingPageTkj />} />
+        <Route path="/ppdb/biaya" element={<LandingBiaya />} />
+       
         
         <Route path="/ppdb/login" element={<LoginPpdb />} />
         <Route path="/ppdb/register" element={<RegisterPpdb />} />

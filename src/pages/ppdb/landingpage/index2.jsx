@@ -25,6 +25,7 @@ import MAKAN1 from "../../../image/ppdb/makan1.png";
 import CISCO from "../../../image/ppdb/academy/Group 108.png";
 import LSP from "../../../image/ppdb/academy/Group 109.png";
 import LABTOP1 from "../../../image/ppdb/labtop1.png";
+import LABTOPTKJ from "../../../image/ppdb/labtoptkj.png";
 import MIKRO from "../../../image/ppdb/academy/Group 110.png";
 import REDHAT from "../../../image/ppdb/academy/Group 111.png";
 import ITC from "../../../image/ppdb/academy/Group 112.png";
@@ -82,7 +83,7 @@ const slidesData = [
   // Tambahkan lebih banyak data jika diperlukan
 ];
 
-const LandingPageRpl = () => {
+const LandingPageTkj = () => {
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
@@ -131,50 +132,51 @@ const LandingPageRpl = () => {
       {/* <Nav /> */}
       <Nav />
       <main>
-        <div className="p-4 bg-backgroundRPL bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
+        <div className="p-4 bg-backgroundTkj bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
           <div className="flex flex-col items-center justify-center mr-8">
             <p className="text-white justify-between font-bold text-xl lg:text-5xl text-center leading-tight mb-6">
-              Jurusan <br /> Rekayasa Perangkat Lunak <br /> (RPL)
+              Jurusan <br /> Teknik Komputer Jaringan <br /> (TKJ)
             </p>
           </div>
         </div>
 
         {/* About Section */}
-        <div className="justify-center items-center text-center mt-10 lg:mt-20">
+        <div className="justify-center items-center text-center mt-20">
           <h3 className="font-medium text-sm lg:text-4xl">Pengenalan</h3>
         </div>
         <div className="flex flex-col lg:flex-row mx-0 lg:mx-4 my-10 lg:my-20 items-center w-full justify-center gap-4 lg:gap-10 px-4 lg:px-80">
           <div className="lg:w-1/2">
-            <img src={LABTOP1} alt="Gambar" className="w-full h-auto" />
+            <img src={LABTOPTKJ} alt="Gambar" className="w-full h-auto" />
           </div>
           <div className="flex flex-col gap-4 lg:gap-8 mb-10 lg:w-1/2">
             <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify mb-4">
-              Jurusan Rekayasa Perangkat Lunak adalah pilihan terbaik bagi siswa
-              yang ingin memahami dan menguasai dunia teknologi. Dengan
-              mengikuti jurusan ini, siswa akan dibekali dengan pengetahuan
-              mendalam tentang pengembangan perangkat lunak, pemrograman, dan
-              desain aplikasi modern.
+              Jurusan Teknik Komputer dan Jaringan adalah pilihan terbaik bagi
+              siswa yang ingin mendalami dunia teknologi informasi dan jaringan
+              komputer. Dengan mengikuti jurusan ini, siswa akan dibekali dengan
+              pengetahuan yang komprehensif tentang instalasi, konfigurasi, dan
+              pemeliharaan jaringan komputer serta teknologi komunikasi yang
+              terkini.
             </p>
             <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify mb-4">
               SMK MADINATULQURAN menawarkan pengalaman pembelajaran yang
-              interaktif, belajar dengan praktik, dan akses ke teknologi
-              terkini.
+              interaktif, fokus pada praktik langsung, serta akses ke perangkat
+              dan teknologi modern.
             </p>
             <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify">
-              Bergabunglah dengan jurusan Rekayasa Perangkat Lunak, dan
+              Bergabunglah dengan jurusan Teknik Komputer dan Jaringan, dan
               InsyaAllah siap akan siap untuk berkarir di industri teknologi
-              yang terus berkembang, menciptakan solusi inovatif, dan mengubah
-              dunia melalui kode-kode canggih yang dibuat. Segera raih impian
-              dalam dunia teknologi dengan memilih jurusan Rekayasa Perangkat
-              Lunak di SMK MADINATULQURAN!
+              informasi, membangun dan mengelola infrastruktur jaringan yang
+              handal, serta mendukung transformasi digital di berbagai sektor.
+              Segera raih impian dalam dunia teknologi dengan memilih jurusan
+              Teknik Komputer dan Jaringan di SMK MADINATULQURAN!
             </p>
           </div>
         </div>
 
-        {/* Kurikulum RPL */}
+        {/* Kurikulum TKJ */}
         <div className="my-8 py-20 px-5 lg:px-80">
           <div className="text-left text-[32] lg:text-[64px] font-bold mb-32">
-            <p>Kurikulum RPL</p>
+            <p>Kurikulum TKJ</p>
           </div>
           <div className="flex flex-col gap-9 items-center">
             <div className="flex space-x-4">
@@ -279,7 +281,7 @@ const LandingPageRpl = () => {
 
         {/* fasilitas */}
         <div className="text-left text-xl lg:text-5xl ml-10 lg:ml-80 font-bold mb-32">
-          <p>Fasilitas RPL</p>
+          <p>Fasilitas TKJ</p>
         </div>
 
         <div className="rounded-3xl p-10 lg:p-32 w-full lg:w-[1586px] h-full ml-auto">
@@ -334,8 +336,12 @@ const LandingPageRpl = () => {
                     <img src={slide.img} alt={slide.title} />
                     {/* Menampilkan teks yang berbeda untuk setiap slide */}
                     <div className="text-center">
-                      <h3 className="text-sm lg:text-xl font-bold">{slide.title}</h3>
-                      <p className="text-xs lg:text-xl text-gray-500">{slide.description}</p>
+                      <h3 className="text-sm lg:text-xl font-bold">
+                        {slide.title}
+                      </h3>
+                      <p className="text-xs lg:text-xl text-gray-500">
+                        {slide.description}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -499,4 +505,4 @@ const LandingPageRpl = () => {
   );
 };
 
-export default LandingPageRpl;
+export default LandingPageTkj;

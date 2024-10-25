@@ -25,6 +25,7 @@ import MAKAN1 from "../../../image/ppdb/makan1.png";
 import CISCO from "../../../image/ppdb/academy/Group 108.png";
 import LSP from "../../../image/ppdb/academy/Group 109.png";
 import LABTOP1 from "../../../image/ppdb/labtop1.png";
+import LABTOPTKJ from "../../../image/ppdb/labtoptkj.png";
 import MIKRO from "../../../image/ppdb/academy/Group 110.png";
 import REDHAT from "../../../image/ppdb/academy/Group 111.png";
 import ITC from "../../../image/ppdb/academy/Group 112.png";
@@ -82,7 +83,7 @@ const slidesData = [
   // Tambahkan lebih banyak data jika diperlukan
 ];
 
-const LandingPageRpl = () => {
+const LandingBiaya = () => {
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
@@ -131,220 +132,182 @@ const LandingPageRpl = () => {
       {/* <Nav /> */}
       <Nav />
       <main>
-        <div className="p-4 bg-backgroundRPL bg-cover bg-center h-screen w-screen flex items-center justify-center px-8">
-          <div className="flex flex-col items-center justify-center mr-8">
-            <p className="text-white justify-between font-bold text-xl lg:text-5xl text-center leading-tight mb-6">
-              Jurusan <br /> Rekayasa Perangkat Lunak <br /> (RPL)
+        <div className="w-screen px-5 lg:px-20 py-10">
+          <div className="bg-imageAbstrak w-full h-[201px] mt-40 items-center flex flex-col justify-center rounded-2xl shadow-2xl">
+            <h1 className="font-medium text-customGreen text-2xl lg:text-5xl">
+              Biaya Pendidikan
+            </h1>
+            <p className="text-xs lg:text-lg">
+              Berikut detail biaya pendidikan untuk jenjang SMK Mdinatul Quran
+              tahun ajaran 2025-2026
             </p>
           </div>
         </div>
 
-        {/* About Section */}
-        <div className="justify-center items-center text-center mt-10 lg:mt-20">
-          <h3 className="font-medium text-sm lg:text-4xl">Pengenalan</h3>
-        </div>
-        <div className="flex flex-col lg:flex-row mx-0 lg:mx-4 my-10 lg:my-20 items-center w-full justify-center gap-4 lg:gap-10 px-4 lg:px-80">
-          <div className="lg:w-1/2">
-            <img src={LABTOP1} alt="Gambar" className="w-full h-auto" />
-          </div>
-          <div className="flex flex-col gap-4 lg:gap-8 mb-10 lg:w-1/2">
-            <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify mb-4">
-              Jurusan Rekayasa Perangkat Lunak adalah pilihan terbaik bagi siswa
-              yang ingin memahami dan menguasai dunia teknologi. Dengan
-              mengikuti jurusan ini, siswa akan dibekali dengan pengetahuan
-              mendalam tentang pengembangan perangkat lunak, pemrograman, dan
-              desain aplikasi modern.
-            </p>
-            <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify mb-4">
-              SMK MADINATULQURAN menawarkan pengalaman pembelajaran yang
-              interaktif, belajar dengan praktik, dan akses ke teknologi
-              terkini.
-            </p>
-            <p className="text-[10px] sm:text-xs lg:text-xl font-light text-justify">
-              Bergabunglah dengan jurusan Rekayasa Perangkat Lunak, dan
-              InsyaAllah siap akan siap untuk berkarir di industri teknologi
-              yang terus berkembang, menciptakan solusi inovatif, dan mengubah
-              dunia melalui kode-kode canggih yang dibuat. Segera raih impian
-              dalam dunia teknologi dengan memilih jurusan Rekayasa Perangkat
-              Lunak di SMK MADINATULQURAN!
-            </p>
-          </div>
-        </div>
-
-        {/* Kurikulum RPL */}
-        <div className="my-8 py-20 px-5 lg:px-80">
-          <div className="text-left text-[32] lg:text-[64px] font-bold mb-32">
-            <p>Kurikulum RPL</p>
-          </div>
-          <div className="flex flex-col gap-9 items-center">
-            <div className="flex space-x-4">
-              <div className="bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-2 lg:py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 1
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
-                  </p>
-                </div>
-              </div>
-              <div className="bg-bglabtop w-[197px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 2
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
-                  </p>
-                </div>
-              </div>
+        {/* GELOMBANG */}
+        <div class="flex justify-between mt-10 lg:mt-40 items-center my-8 px-2 lg:px-40">
+          <div class="flex flex-col items-center">
+            <div class="flex items-center justify-center w-[35px] lg:w-[100px] h-[35px] lg:h-[100px] bg-green-500 text-white rounded-full text-3xl">
+              I
             </div>
-            <div className="mt-4 mb-5">
-              <div className="bg-bglabtop w-[390px] lg:w-[1324px] h-[96] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 3
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
-                  </p>
-                </div>
-              </div>
+            <div class="mt-2 text-center">
+              <p class="text-green-500 font-semibold text-sm lg:text-2xl">
+                Gelombang 1
+              </p>
+              <p class="text-gray-500 font-semibold text-xs lg:text-2xl">
+                Agustus - Desember 2024
+              </p>
             </div>
-            <div className="flex space-x-4">
-              <div className="bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-2 lg:py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 4
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
-                  </p>
-                </div>
-              </div>
-              <div className="bg-bglabtop w-[197px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 5
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
-                  </p>
-                </div>
-              </div>
+          </div>
+          <div class="border-t border-green-400 border-4 flex-grow mx-2 lg:mx-4"></div>
+          <div class="flex flex-col items-center">
+            <div class="flex items-center justify-center w-[35px] lg:w-[100px] h-[35px] lg:h-[100px] bg-green-500 text-white rounded-full text-3xl">
+              II
             </div>
-            <div className="mt-4 mb-5">
-              <div className="bg-bglabtop w-[390px] lg:w-[1324px] h-[96] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
-                    Semester 6
-                  </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
-                  </p>
-                </div>
-              </div>
+            <div class="mt-2 text-center">
+              <p class="text-green-500 font-semibold text-sm lg:text-2xl">
+                Gelombang 2
+              </p>
+              <p class="text-gray-500 font-semibold text-xs lg:text-2xl">
+                Januari - Maret 2025
+              </p>
+            </div>
+          </div>
+          <div class="border-t border-green-400 border-4 flex-grow mx-2 lg:mx-4"></div>
+          <div class="flex flex-col items-center">
+            <div class="flex items-center justify-center w-[35px] lg:w-[100px] h-[35px] lg:h-[100px] bg-green-500 text-white rounded-full text-3xl">
+              III
+            </div>
+            <div class="mt-2 text-center">
+              <p class="text-green-500 font-semibold text-sm lg:text-2xl">
+                Gelombang 3
+              </p>
+              <p class="text-gray-500 font-semibold text-xs lg:text-2xl">
+                April - Juni 2025
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Academy Partner */}
-        <div className="my-10 py-1 cardacademy">
-          <p className="text-center font-bold text-[24px] lg:text-[64px]">
-            Academy Partner
+        {/* TALBE */}
+        <div class="flex flex-col md:flex-row justify-center items-center space-y-8 md:space-y-0 md:space-x-8 mt-40 gap-20 px-5 lg:px-10">
+          <div class="bg-white shadow-lg rounded-lg w-full md:w-1/2 lg:w-1/3 min-h-[600px] flex flex-col">
+            <div class="bg-green-600 text-white text-center py-6 rounded-t-lg text-2xl font-bold">
+              Boarding
+            </div>
+            <div class="py-6 text-center">
+              <p class="text-gray-600 text-lg">Pendaftaran</p>
+              <p class="text-2xl lg:text-5xl font-extrabold text-blue-900">Rp 450.000</p>
+            </div>
+            <div class="border-t border-gray-300 my-6"></div>
+            <div class="text-left text-xl px-10 py-10 flex-grow">
+              <div class="flex justify-between py-3">
+                <p class="font-bold">Daftar Ulang</p>
+                <p class="font-bold">Rp 3.500.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang I</p>
+                <p class="text-right">Rp 14.500.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang II</p>
+                <p class="text-right">Rp 16.500.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang III</p>
+                <p class="text-right">Rp 18.500.000</p>
+              </div>
+              <div class="border-t border-gray-300 my-6"></div>
+              <div class="flex flex-col text-center">
+                <p class="font-bold">SPP Bulanan</p>
+                <p class="text-blue-900 font-extrabold">Rp 2.500.000</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white shadow-lg rounded-lg w-full md:w-1/2 lg:w-1/3 min-h-[600px] flex flex-col">
+            <div class="bg-green-600 text-white text-center py-6 rounded-t-lg text-2xl font-bold">
+              FullDay
+            </div>
+            <div class="py-6 text-center">
+              <p class="text-gray-600 text-lg">Pendaftaran</p>
+              <p class="text-2xl lg:text-5xl font-extrabold text-blue-900">Rp 450.000</p>
+            </div>
+            <div class="border-t border-gray-300 my-6"></div>
+            <div class="text-left text-xl lg:text-2xl px-10 py-10 flex-grow">
+              <div class="flex justify-between py-3">
+                <p class="font-bold">Daftar Ulang</p>
+                <p class="font-bold">Rp 3.500.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang I</p>
+                <p class="text-right">Rp 8.250.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang II</p>
+                <p class="text-right">Rp 9.250.000</p>
+              </div>
+              <div class="flex justify-between">
+                <p>Uang Masuk Gelombang III</p>
+                <p class="text-right">Rp 10.250.000</p>
+              </div>
+              <div class="border-t border-gray-300 my-6"></div>
+              <div class="flex flex-col text-center">
+                <p class="font-bold">SPP Bulanan</p>
+                <p class="text-blue-900 font-extrabold">Rp 1.000.000</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="px-10 lg:px-80 mt-10 mb-20">
+          <p class="text-lg lg:text-2xl font-bold text-red-600 mb-20">
+            Catatan : Biaya yang sudah di transfer tidak bisa dikembalikan
+            dengan kondisi dan alasan apapun
           </p>
-          <div className="App px-10 lg:px-96">
-            <Slider {...settings}>
-              {images.map((img, idx) => (
-                <div
-                  className={`slide ${idx === imageIndex ? "activeSlide" : ""}`}
-                  key={idx}
-                >
-                  <div className="w-full">
-                    <img
-                      src={img}
-                      alt={`Academy Partner ${idx}`}
-                      className="justify-center items-center"
-                    />
-                  </div>
-                </div>
-              ))}
-            </Slider>
+          <div className="">
+            <h1 className="text-lg lg:text-3xl font-bold text-customGreen">
+              Keterangan :
+            </h1>
+            <p className="text-base lg:text-2xl">
+              Uang Masuk : Uang Pangkal, Seragam, Almamater, Baju Muslim, Dan
+              Buku Agama.
+            </p>
+            <p className="text-base lg:text-2xl">
+              SPP Bulanan : Makan, Laundry, Dan Biaya Pendidikan.
+            </p>
+            <p className="text-base lg:text-2xl">
+              Daftar Ulang : Pemeliharaan dan Perbaikan Sarpras.
+            </p>
           </div>
         </div>
 
-        {/* fasilitas */}
-        <div className="text-left text-xl lg:text-5xl ml-10 lg:ml-80 font-bold mb-32">
-          <p>Fasilitas RPL</p>
-        </div>
-
-        <div className="rounded-3xl p-10 lg:p-32 w-full lg:w-[1586px] h-full ml-auto">
-          <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-36">
-            <div className="flex flex-col items-center">
-              <FaSnowflake className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Ruangan AC
+        {/* daftar segera */}
+        <div className="min-h-[50vh] flex justify-center items-center bg-backgroundbawah bg-fixed bg-no-repeat bg-cover bg-center">
+          <div className="text-center">
+            <h3 className="text-white font-medium text-xl lg:text-5xl">
+              Segera daftarkan putra anda sekarang
+            </h3>
+            <div className="text-white text-sm lg:text-xl font-normal text-center max-w-lg mx-auto">
+              <p>
+                InsyaAllah kami adalah jawaban ayah bunda yang ingin putranya
+                belajar IT, tetapi tetap menomor satukan belajar diniyah sebagai
+                bekal hidupnya.
               </p>
             </div>
-            <div className="flex flex-col items-center">
-              <FaWifi className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Wifi
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaBook className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Modul
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaClipboard className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Konsultasi
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaClipboard className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Konsultasi
-              </p>
+            <div className="pt-4">
+              <Link to="login">
+                <button className="w-auto h-auto bg-white rounded-lg px-8 py-2">
+                  <p className="text-customGreen font-semibold text-lg">
+                    Daftar sekarang
+                  </p>
+                </button>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* tracer study */}
-        <p className="text-center font-bold mt-40 text-xl lg:text-5xl">
-          tracer study
-        </p>
-        <div className="py-10 mb-10 justify-center items-center pr-10 bg-gray-100 sliderrifat">
-          <div className="px-0 lg:px-80 justify-center items-center">
-            <Slider {...settings1} className="justify-center items-center">
-              {slidesData.map((slide, idx) => (
-                <div
-                  className={idx === imageIndex ? "slide activeSlide" : "slide"}
-                  key={idx}
-                >
-                  {/* Membungkus gambar dan teks dalam card */}
-                  <div className="rounded-2xl bg-white shadow-lg flex flex-col items-center justify-center">
-                    <img src={slide.img} alt={slide.title} />
-                    {/* Menampilkan teks yang berbeda untuk setiap slide */}
-                    <div className="text-center">
-                      <h3 className="text-sm lg:text-xl font-bold">{slide.title}</h3>
-                      <p className="text-xs lg:text-xl text-gray-500">{slide.description}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
-        </div>
-
-        {/* Footer */}
+        {/* footer */}
         <footer className="bg-backgroundFooter">
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-10 lg:py-12 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 lg:grid-cols-3 text-white">
@@ -499,4 +462,4 @@ const LandingPageRpl = () => {
   );
 };
 
-export default LandingPageRpl;
+export default LandingBiaya;
