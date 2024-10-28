@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Select, Button, Icon, Form } from "semantic-ui-react";
 import { Formik } from "formik";
