@@ -12,6 +12,7 @@ import { DeleteButton, EditButton, ModalAlert, TableLoading } from "../../../com
 import useDelete from "../../../hook/useDelete";
 import { replace } from "formik";
 import { stringify } from "qs";
+import { listSiswaPkl } from "../../../api/guru/fitur-pkl";
 
 export default function TugasLaporanPkl() {
 
@@ -34,20 +35,15 @@ export default function TugasLaporanPkl() {
 
 
     };
-    let { data, isLoading, isFetching } = useQuery(
-        ["/tugas-pkl/update", id],
-        () => detailTugasPkl(id),
+    const { data, isLoading, isFetching } = useQuery(
+        ["/tempat-pkl/list", params],
+        () => listSiswaPkl(params),
         {
-            enabled: id !== undefined,
+            refetchOnWindowFocus: false,
             select: (response) => {
-                console.log(response.data.data)
-                return response.data
-            },
-            onSuccess: (response) => {
-                console.log(response)
-                
-            },
-            refetchInterval: 10000, 
+                console.log(response.data)
+                return response.data;
+            }
         }
     )
     const {
@@ -115,7 +111,7 @@ export default function TugasLaporanPkl() {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>No</Table.HeaderCell>
-                            <Table.HeaderCell>Judul</Table.HeaderCell>
+                            <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                             <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
                             <Table.HeaderCell>Selesai</Table.HeaderCell>
                             <Table.HeaderCell>Aksi</Table.HeaderCell>
@@ -128,11 +124,11 @@ export default function TugasLaporanPkl() {
                             data={data?.data}
                             messageEmpty={"Data Tidak Ditemukan"}
                         >
-                            {data?.map((value, index) => (
+                            {data?.data?.map((value, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>{index + 1}</Table.Cell>
-                                    <Table.Cell>{value.tugas}</Table.Cell>
-                                    <Table.Cell>{value.batas_waktu}</Table.Cell>
+                                    <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
+                                    <Table.Cell>{value.updated_at}</Table.Cell>
 
                                     {/* <Table.Cell>{value?.batas_waktu}</Table.Cell> */}
                                     <Table.Cell>3/{index + 1 }</Table.Cell>
