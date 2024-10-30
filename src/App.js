@@ -241,15 +241,6 @@ function App() {
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
           <Route path="exam" element={<Ujian />}></Route>
         </Route>
-
-        {/* <Route
-          path="/ppdb/pendaftaran"
-          element={
-            <ProtectRoutePpdb userRole="Calon Santri">
-              <PendaftaranCalonSantri />
-            </ProtectRoutePpdb>
-          }
-        /> */}
       </Routes>
     </div>
   );

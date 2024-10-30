@@ -122,7 +122,7 @@ export default function Ppdb() {
 
         <main className="flex h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full">
           <div
-            className={`w-full h-full xl:rounded-r-3xl bg-[#46C7C7] text-white xl:bg-gray-50 pl-2 ${
+            className={`w-full h-full xl:rounded-r-3xl bg-gray-50 text-white xl:bg-gray-50 pl-2 ${
               !sidebar
                 ? "transform -translate-x-full -z-50 xl:-translate-x-0"
                 : "transform -translate-x-0 z-10 transition duration-500"

@@ -12,7 +12,7 @@ import {
       <div className="border rounded-md text-xs ">
         <img
           className="w-full h-[120px] border-t-0 rounded-tr-md rounded-tl-md"
-          src="http://localhost:8085/file-1722260251838.JPEG"
+          src="https://backend-mysmk.smkmadinatulquran.sch.id/file-1722260251838.JPEG"
           alt="exam.jpg"
         />
         <section className="px-2 my-2">
