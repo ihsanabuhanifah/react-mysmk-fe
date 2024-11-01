@@ -56,6 +56,7 @@ function PenilaianPage() {
             exam_result: item.exam_result,
             last_result: item.last_result,
             is_lulus: item.is_lulus,
+            status : 'finish'
           };
         } else {
           return {};
@@ -222,13 +223,11 @@ function PenilaianPage() {
                                   )
                                 );
 
-                                if (value === 0) {
-                                  value = 0;
-                                }
                                 setFieldValue(
                                   `data[${index}]exam_result`,
                                   value
                                 );
+                               
 
                                 if (value > 74) {
                                   setFieldValue(`data[${index}]is_lulus`, 1);

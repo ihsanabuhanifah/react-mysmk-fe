@@ -120,7 +120,7 @@ export default function Siswa() {
               !sidebar
                 ? "-z-50 -translate-x-full transform xl:-translate-x-0"
                 : "z-10 -translate-x-0 transform transition duration-500"
-            } fixed bottom-0 top-0  z-[9999] flex h-full flex-col xl:fixed xl:w-[200px]`}
+            } fixed bottom-0 top-0  z-[996] flex h-full flex-col xl:fixed xl:w-[200px]`}
           >
             <div className="mb-8 mt-4 hidden pl-3 xl:block">
               <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />

@@ -135,11 +135,8 @@ export default function ExamPage({ examActive, setExamActive }) {
 				setMouse(false); // Stop countdown on mouse enter, but don't reset it
 			}
 		}}
-		style={{
-			zIndex:10000
-		}}
-
-			className="fixed top-0 left-0 right-0 bottom-0  border pb-30 bg-white z-50 overflow-hidden"
+		
+			className="fixed top-0 left-0 right-0 bottom-0  border pb-30 bg-white z-[999] overflow-hidden"
 		>
 			<ModalKonfirmasi
 				open={open}
@@ -256,6 +253,8 @@ export default function ExamPage({ examActive, setExamActive }) {
 								loading={submit.isLoading}
 								disabled={submit.isLoading}
 								onClick={() => {
+
+									console.log('open', open)
 									setOpen(true)
 								}}
 								icon={() => <Icon name="save" />}

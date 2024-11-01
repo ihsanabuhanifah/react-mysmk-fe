@@ -90,3 +90,41 @@ div::-webkit-scrollbar-thumb:hover {
     display: none;
   }
 }
+
+
+
+.playground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.editor {
+  width: 100%;
+  min-height: 200px;
+  background-color: #282c34;
+  color: white;
+  font-family: monospace;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+.preview {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}

@@ -5,6 +5,7 @@ function ModalKonfrimasi({ open, setOpen, loading, onConfirm, title }) {
   return (
     <Modal
       basic
+       className="z-[9999999999] "
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}

@@ -71,6 +71,8 @@ import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
+import Learning from "./pages/guru/Learning";
+import ReactLivePlayground from "./pages/guru/reactjs";
 
 function App() {
   return (
@@ -88,6 +90,8 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/learning" element={<Learning/>} />
+        <Route path="/react-live" element={<ReactLivePlayground/>} />
         <Route
           path="/login"
           element={
@@ -139,6 +143,7 @@ function App() {
           {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
           <Route path="absensi" element={<Jadwal />} />
           <Route path="monitor/harian" element={<Harian />} />
+         
           <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
           <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
           <Route path="absensi/jadwal" element={<ListJadwal />} />
@@ -197,6 +202,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardSiswa />} />
+         
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
