@@ -86,7 +86,7 @@ let personalSchema = Yup.object().shape({
     .nullable()
     .when("tipe", {
       is: (id) => {
-        if (id !== "ES") {
+        if (["ES", "LV"].includes(id) === false) {
           return true;
         }
       },
@@ -220,6 +220,8 @@ export default function FormSoal() {
       });
     }
   };
+
+  
   return (
     <LayoutPage
       isLoading={isFetching}
@@ -261,6 +263,8 @@ export default function FormSoal() {
                         size="small"
                       />
                     </div>}
+
+                    {console.log('err', errors)}
                     <div className="col-span-3">
                       <Form.Field
                         control={Select}
@@ -362,7 +366,7 @@ export default function FormSoal() {
                       />
                     </div>
 
-                    {value.tipe !== "ES" && (
+                    { ["ES", "LV"].includes(value.tipe) === false && (
                       <div>
                         <Form.Dropdown
                           selection

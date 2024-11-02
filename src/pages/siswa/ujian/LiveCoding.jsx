@@ -2,10 +2,17 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import clsx from "clsx";
 
-function LiveCodingPlayground() {
+function LiveCodingPlayground({
+  setPayload,
+  setJawaban,
+  payload,
+  handleSoal,
+  item,
+}) {
+  const [isLoading, setIsLoading] = useState(true);
   const [html, setHtml] = useState("<h1>ok</h1>");
   const [css, setCss] = useState("");
-  console.log('html', html)
+  console.log("html", html);
   const [js, setJs] = useState("");
   const [logs, setLogs] = useState([]);
   const iframeRef = useRef(null);
@@ -19,6 +26,9 @@ function LiveCodingPlayground() {
   }, []);
 
   useEffect(() => {
+    // if (isLoading) {
+    //   return;
+    // }
     // Kosongkan log setiap kali terjadi perubahan pada HTML, CSS, atau JavaScript
     setLogs([]);
 
@@ -83,7 +93,7 @@ function LiveCodingPlayground() {
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-  }, [html, css, js, logHandler]);
+  }, [html, css, js]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -99,8 +109,53 @@ function LiveCodingPlayground() {
     };
   }, []);
 
+  useEffect(() => {
+    const detail = handleSoal(payload, item);
+    setPayload((s) => {
+      s.data[detail.index] = {
+        ...detail.soal[0],
+        jawaban: JSON.stringify({
+          html: html,
+          css: css,
+          js: js,
+          logs: logs,
+        }),
+      };
+      setJawaban(() => {
+        return JSON.stringify({
+          html: html,
+          css: css,
+          js: js,
+          logs: logs,
+        });
+      });
+      return {
+        ...s,
+        data: s.data,
+      };
+    });
+  }, [html, css, js]);
+
+  useEffect(() => {
+    const detail = handleSoal(payload, item);
+
+    const jawaban = JSON.parse(payload.data[detail.index].jawaban);
+
+    setHtml(jawaban.html || "");
+    setCss(jawaban.css || "");
+    setJs(jawaban.js || "");
+    // setLogs(jawaban || "");
+
+    setIsLoading(false)
+
+    console.log("jawbaan", jawaban);
+  }, []);
+
+
+ 
+
   return (
-    <div className="flex min-h-screen flex-col items-center overflow-hidden bg-gray-900 text-white">
+    <div className="flex min-h-screen flex-col items-center overflow-hidden rounded-lg bg-gray-900 text-white">
       <header className="w-full bg-gray-800 py-4 text-center text-lg font-semibold shadow-lg">
         <h1>Live Coding Playground</h1>
       </header>
@@ -108,14 +163,14 @@ function LiveCodingPlayground() {
       <div className="flex w-full flex-col gap-4 p-4 lg:flex-row">
         <div
           className={clsx({
-            "grid w-full grid-cols-3 gap-5": code,
+            "grid w-full grid-cols-2 gap-5": code,
             hidden: code === false,
           })}
         >
           <div className="editor rounded-lg bg-gray-800 p-4">
             <h5 className="mb-2 text-sm font-bold text-gray-400">HTML</h5>
             <Editor
-              height="80vh"
+              height="450px"
               defaultLanguage="html"
               value={html}
               onChange={(value) => setHtml(value || "")}
@@ -126,7 +181,7 @@ function LiveCodingPlayground() {
           <div className="editor rounded-lg bg-gray-800 p-4">
             <h5 className="mb-2 text-sm font-bold text-gray-400">CSS</h5>
             <Editor
-              height="80vh"
+              height="450px"
               defaultLanguage="css"
               value={css}
               onChange={(value) => setCss(value || "")}
@@ -137,7 +192,7 @@ function LiveCodingPlayground() {
           <div className="editor rounded-lg bg-gray-800 p-4">
             <h5 className="mb-2 text-sm font-bold text-gray-400">JavaScript</h5>
             <Editor
-              height="80vh"
+              height="450px"
               defaultLanguage="javascript"
               value={js}
               onChange={(value) => setJs(value || "")}
@@ -147,23 +202,28 @@ function LiveCodingPlayground() {
         </div>
 
         <div
-          className={clsx("h-full w-full grid grid-cols-12 gap-2 rounded-lg bg-gray-800 p-2", {
-            hidden: code === true,
-          })}
+          className={clsx(
+            "grid h-full w-full grid-cols-12 gap-2 rounded-lg bg-gray-800 p-2",
+            {
+              hidden: code === true,
+            },
+          )}
         >
           <iframe
             ref={iframeRef}
             id="code"
             title="Live Output"
-            className="h-full col-span-9 rounded-lg bg-white"
-            style={{ minHeight: "85vh" }}
+            className="col-span-9 w-full rounded-lg bg-white"
+            style={{ height: "550px" }}
           />
 
-          <div className="col-span-3 p-2 rounded-lg border">
-            <h5 className="text-sm font-bold text-gray-400 mb-2">Console Output</h5>
-            <div className="bg-black text-white rounded-lg p-4 h-[80vh] overflow-auto">
+          <div className="col-span-3 rounded-lg border p-2">
+            <h5 className="mb-2 text-sm font-bold text-gray-400">
+              Console Output
+            </h5>
+            <div className="h-[500px] overflow-auto rounded-lg bg-black p-4 text-white">
               {logs.map((log, index) => (
-                <div key={index} className="text-xs font-mono">
+                <div key={index} className="font-mono text-xs">
                   {log}
                 </div>
               ))}

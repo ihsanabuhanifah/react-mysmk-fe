@@ -107,6 +107,8 @@ const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
   { key: "2", value: "TF", text: "True False" },
   { key: "3", value: "ES", text: "Essay/Project" },
+  { key: "4", value: "MC", text: "Pilihan Banyak" },
+  { key: "5", value: "LV", text: "Live Coding" },
 ];
 const pgOptions = [
   { key: "1", value: "A", text: "A" },

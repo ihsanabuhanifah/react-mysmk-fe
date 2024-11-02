@@ -1,5 +1,6 @@
 // import React, { useState } from "react";
-// import { LiveProvider, LiveEditor, LiveError, LivePreview } from "react-live";
+// import LiveProvider, { LiveEditor, LiveError, LivePreview } from 'react-live/dist/react-live.esm';
+
 // import "./styles.css";
 
 // const scope = { React };
