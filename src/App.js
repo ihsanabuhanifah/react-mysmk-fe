@@ -73,6 +73,7 @@ import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 import Learning from "./pages/guru/Learning";
 import ReactLivePlayground from "./pages/guru/reactjs";
+import Monitoring from "./pages/screen";
 
 function App() {
   return (
@@ -134,6 +135,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardGuru />} />
+          <Route path="monitoring" element={<Monitoring />} />
           <Route path="materi" element={<Materi />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />

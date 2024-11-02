@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 function LiveCodingPlayground() {
  
-  const [html, setHtml] = useState("<h1>ok</h1>");
+  const [html, setHtml] = useState("<h1>Happy Coding</h1>");
   const [css, setCss] = useState("");
  
   const [js, setJs] = useState("");
@@ -295,23 +295,24 @@ function LiveCodingPlayground() {
             style={{ height: `${iframeHeight}px`, width: iframeWidth }} // Set dynamic width
           />
 
-{/* <div  className="crounded-lg relative right-0  w-[300px] p-2">
-            <h5 className="mb-2 text-sm font-bold text-gray-400">
-              Console Output
-            </h5>
-            <div className="h-[80vh] overflow-auto rounded-lg bg-black p-4 text-white">
-              {logs.map((log, index) => (
-                <div key={index} className="font-mono text-xs">
-                  {log}
-                </div>
-              ))}
-            </div>
-          </div> */}
+
           <div
             onMouseDown={handleResizeWidth}
             className="cu absolute right-0 top-0 h-full w-[20%] cursor-pointer"
           />
         </div>
+       {!code && <> <div className="crounded-lg relative right-0 w-full p-2">
+          <div className="h-full overflow-auto rounded-lg bg-black p-4 text-white">
+            <h5 className="mb-2 text-sm font-bold text-gray-400">
+              Console Output
+            </h5>
+            {logs.map((log, index) => (
+              <div key={index} className="font-mono text-xs">
+                {log}
+              </div>
+            ))}
+          </div>
+        </div></>}
       </div>
     </div>
   );

@@ -6,12 +6,19 @@ module.exports = {
         test: /\.m?js$/,
         exclude: /node_modules\/(?!@monaco-editor)/,
         include: /node_modules/,
-        type: 'javascript/auto',
+        type: "javascript/auto",
         use: {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env", "@babel/preset-react"],
-            plugins: ["@babel/plugin-proposal-optional-chaining", "@babel/plugin-transform-modules-commonjs"],
+            plugins: [
+              "@babel/plugin-proposal-optional-chaining",
+              "@babel/plugin-transform-modules-commonjs",
+              "@babel/plugin-proposal-private-methods",
+              "@babel/plugin-proposal-class-properties",
+              "@babel/plugin-proposal-private-property-in-object"
+
+            ],
           },
         },
       });

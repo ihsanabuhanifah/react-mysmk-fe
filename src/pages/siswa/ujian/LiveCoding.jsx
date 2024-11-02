@@ -10,7 +10,7 @@ function LiveCodingPlayground({
   item,
 }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [html, setHtml] = useState("<h1>ok</h1>");
+  const [html, setHtml] = useState("<h1>Happy Coding</h1>");
   const [css, setCss] = useState("");
   console.log("html", html);
   const [js, setJs] = useState("");
@@ -23,7 +23,7 @@ function LiveCodingPlayground({
   let [jsCode, setJsCode] = useState(0);
 
   const [iframeHeight, setIframeHeight] = useState(600); // Set default height
-  const [iframeWidth, setIframeWidth] = useState("100%"); 
+  const [iframeWidth, setIframeWidth] = useState("100%");
   // Set default width
 
   const logHandler = useCallback((type, message) => {
@@ -189,17 +189,22 @@ function LiveCodingPlayground({
 
   useEffect(() => {
     const detail = handleSoal(payload, item);
+    console.log("pau", payload);
 
-    const jawaban = JSON.parse(payload.data[detail.index].jawaban);
+    console.log("item", item);
 
-    setHtml(jawaban.html || "");
-    setCss(jawaban.css || "");
-    setJs(jawaban.js || "");
+    if (payload.data?.[detail.index]?.jawaban === "") {
+      return setIsLoading(false);
+    }
+
+    const jawaban = JSON.parse(payload.data?.[detail.index]?.jawaban);
+
+    setHtml(jawaban?.html || "");
+    setCss(jawaban?.css || "");
+    setJs(jawaban?.js || "");
     // setLogs(jawaban || "");
 
     setIsLoading(false);
-
-    console.log("jawbaan", jawaban);
   }, []);
 
   return (
@@ -217,7 +222,7 @@ function LiveCodingPlayground({
               setHtmlCode((i) => (i === 1 ? 0 : 1));
             }}
           >
-            HTML 
+            HTML
           </button>
 
           <button
@@ -327,7 +332,6 @@ function LiveCodingPlayground({
             },
           )}
         >
-         
           <iframe
             onMouseDown={handleMouseDown}
             ref={iframeRef}
@@ -337,22 +341,22 @@ function LiveCodingPlayground({
             style={{ height: `${iframeHeight}px`, width: iframeWidth }} // Set dynamic width
           />
 
-{/* <div  className="crounded-lg relative right-0  w-[300px] p-2">
-            <h5 className="mb-2 text-sm font-bold text-gray-400">
-              Console Output
-            </h5>
-            <div className="h-[80vh] overflow-auto rounded-lg bg-black p-4 text-white">
-              {logs.map((log, index) => (
-                <div key={index} className="font-mono text-xs">
-                  {log}
-                </div>
-              ))}
-            </div>
-          </div> */}
           <div
             onMouseDown={handleResizeWidth}
             className="cu absolute right-0 top-0 h-full w-[20%] cursor-pointer"
           />
+        </div>
+        <div className="crounded-lg relative right-0 h-[100px] w-full p-2">
+          <div className="h-[80vh] overflow-auto rounded-lg bg-black p-4 text-white">
+            <h5 className="mb-2 text-sm font-bold text-gray-400">
+              Console Output
+            </h5>
+            {logs.map((log, index) => (
+              <div key={index} className="font-mono text-xs">
+                {log}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
