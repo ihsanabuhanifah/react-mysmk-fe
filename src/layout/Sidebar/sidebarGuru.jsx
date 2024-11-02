@@ -22,6 +22,12 @@ import {
   MdLaptopChromebook,
   MdChatBubble,
   MdFaceUnlock,
+  MdPerson,
+  MdCamera,
+  MdCameraAlt,
+  MdDataset,
+  MdSchedule,
+  MdHistory,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -363,13 +369,30 @@ export default function SidebarGuru({ setSidebar }) {
         {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
-            to="face"
-            path="face"
-            title={"Face"}
+            to="scan-kehadiran"
+            path="scan-kehadiran"
+            title={"Scan Kehadiran"}
             logo={
-              <MdFaceUnlock
+              <MdCameraAlt
                 className={`h-8 w-8 ${
-                  url === "face"
+                  url === "scan-kehadiran"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="data-kehadiran"
+            path="data-kehadiran"
+            title={"Data Kehadiran"}
+            logo={
+              <MdHistory
+                className={`h-8 w-8 ${
+                  url === "data-kehadiran"
                     ? "text-white-400"
                     : "text-gray-600"
                 }`}

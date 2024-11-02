@@ -66,7 +66,6 @@ export default function Siswa() {
   return (
     <SocketProvider>
       <ModalLogout open={open} setOpen={setOpen} />
-
       <header className="fixed left-0 top-0 z-[99] grid h-[70px] w-full grid-cols-10 items-center gap-x-5 border-b bg-white xl:hidden">
         <div className="relative col-span-4 flex h-full w-full items-center pl-5">
           <img

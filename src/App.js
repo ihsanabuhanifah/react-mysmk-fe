@@ -71,6 +71,7 @@ import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
+import DataKehadiran from "./pages/guru/data-kehadiran";
 
 function App() {
   return (
@@ -185,7 +186,8 @@ function App() {
             element={<Absensi />}
           />
           <Route path="chat" element={<ChatGuru />} />
-          <Route path="face" element={<ScanKehadiran />} />
+          <Route path="scan-kehadiran" element={<ScanKehadiran />} />
+          <Route path="data-kehadiran" element={<DataKehadiran />} />
         </Route>
 
         <Route
