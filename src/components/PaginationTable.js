@@ -36,6 +36,7 @@ export default function PaginationTable({
             { key: 4, value: 100, text: 100 },
             { key: 5, value: 250, text: 250 },
             { key: 6, value: 1000, text: 1000 },
+            { key: 7, value: 1, text: 1 },
           ]}
         />
 

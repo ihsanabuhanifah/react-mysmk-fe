@@ -50,8 +50,7 @@ import PenilaianPage from "./pages/guru/exam/PenilaianPage";
 import DashboardGuru from "./pages/guru/dashboard/dashboardguru";
 import DashboardSiswa from "./pages/siswa/dashboard/dashboardsiswa";
 import Profile from "./pages/siswa/profile";
-import ProfileEdit from "./pages/siswa/profile-edit/profile-edit";
-import SecuritySiswa from "./pages/siswa/security/SecuritySiswa";
+import ProfileEdit from "./pages/siswa/profile/profile-edit";
 import UjianSiswa from "./pages/siswa/ujian";
 import Rapor from "./pages/siswa/rapor/rapor";
 import RaporDetail from "./pages/siswa/rapor/raporDetail";
@@ -72,6 +71,7 @@ import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 import DataKehadiran from "./pages/guru/data-kehadiran";
+import SecuritySiswa from "./pages/siswa/profile/SecuritySiswa";
 
 function App() {
   return (

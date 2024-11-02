@@ -72,7 +72,7 @@ const FilterUjian = ({ params, setParams, setVisible, dataMapel }) => {
 							</button>
 						</div>
 
-						<div className="text-left">
+						{/* <div className="text-left">
 							<Form.Field
 								control={Select}
 								options={getOptionsText(dataMapel, 'nama_mapel')}
@@ -87,7 +87,7 @@ const FilterUjian = ({ params, setParams, setVisible, dataMapel }) => {
 								value={mp}
 								clearable
 							/>
-						</div>
+						</div> */}
 						<div className="text-left">
 							<Form.Field
 								control={Select}
