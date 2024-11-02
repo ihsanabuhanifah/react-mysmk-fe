@@ -15,11 +15,8 @@ import LV from "./LV";
 import Timer from "./Timer";
 
 export default function ExamPage({ examActive, setExamActive }) {
-  React.useEffect(() => {
-    document.title = "MySMK - Exam";
-  });
-
-  console.log("jalan");
+ 
+  
 
   let [soal, setSoal] = useState([]);
   let [cutDown, setCutDown] = useState(5); // Set initial countdown to 10
