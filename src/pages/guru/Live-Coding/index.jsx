@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import clsx from "clsx";
 
-
 function debounce(func, delay) {
   let timeout;
   return (...args) => {
@@ -14,12 +13,14 @@ function debounce(func, delay) {
 }
 
 function LiveCodingPlayground() {
- 
-  const [html, setHtml] = useState("<h1>Happy Coding</h1>");
-  const [css, setCss] = useState("");
- 
-  const [js, setJs] = useState("");
-  const [logs, setLogs] = useState([]);
+  const [html, setHtml] = useState(
+    localStorage.getItem("htmlCode") || "<h1>Happy Coding</h1>",
+  );
+  const [css, setCss] = useState(localStorage.getItem("cssCode") || "");
+  const [js, setJs] = useState(localStorage.getItem("jsCode") || "");
+  const [logs, setLogs] = useState(
+    JSON.parse(localStorage.getItem("logs")) || [],
+  );
   const iframeRef = useRef(null);
   const [code, setCode] = useState(true);
 
@@ -27,28 +28,32 @@ function LiveCodingPlayground() {
   let [cssCode, setCssCode] = useState(0);
   let [jsCode, setJsCode] = useState(0);
 
-  const [iframeHeight, setIframeHeight] = useState(600); // Set default height
-  const [iframeWidth, setIframeWidth] = useState("100%"); 
+  const [iframeHeight, setIframeHeight] = useState("100%"); // Set default height
+  const [iframeWidth, setIframeWidth] = useState("100%");
   // Set default width
 
   const logHandler = useCallback((type, message) => {
-    console.log("mee", message)
-    setLogs((prevLogs) => [
-      ...prevLogs,
-      `${type === "log" ? "": "Error :"} ${message}`,
-    ]);
+    setLogs((prevLogs) => {
+      const updatedLogs = [
+        ...prevLogs,
+        `${type === "log" ? "" : "Error :"} ${message}`,
+      ];
+      localStorage.setItem("logs", JSON.stringify(updatedLogs));
+      return updatedLogs;
+    });
   }, []);
 
   useEffect(() => {
     // Kosongkan log setiap kali terjadi perubahan pada HTML, CSS, atau JavaScript
     setLogs([]);
+    localStorage.setItem("logs", JSON.stringify([]));
 
     const document = iframeRef.current.contentDocument;
 
     // Loop protection function
     function addLoopProtection(code, timeout) {
-        const id = Math.random().toString(36).slice(2);
-        return `
+      const id = Math.random().toString(36).slice(2);
+      return `
         (function() {
             let start = Date.now();
             const originalLog = console.log;
@@ -61,7 +66,7 @@ function LiveCodingPlayground() {
                 start = Date.now(); // Reset timer for next iteration
             }
 
-            ${code.replace(/for\s*\(|while\s*\(|do\s*\{/g, match => `${match} loopGuard(),`)}
+            ${code.replace(/for\s*\(|while\s*\(|do\s*\{/g, (match) => `${match} loopGuard(),`)}
         })();
         `;
     }
@@ -130,9 +135,7 @@ function LiveCodingPlayground() {
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-}, [html, css, js]);
-
-  
+  }, [html, css, js]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -191,11 +194,10 @@ function LiveCodingPlayground() {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  
-
   const updateHtmlDebounced = useCallback(
     debounce((value) => {
       setHtml(value);
+      localStorage.setItem("htmlCode", value);
     }, 500),
     [],
   );
@@ -203,6 +205,7 @@ function LiveCodingPlayground() {
   const updateCssDebounced = useCallback(
     debounce((value) => {
       setCss(value);
+      localStorage.setItem("cssCode", value);
     }, 500),
     [],
   );
@@ -210,6 +213,7 @@ function LiveCodingPlayground() {
   const updateJsDebounced = useCallback(
     debounce((value) => {
       setJs(value);
+      localStorage.setItem("jsCode", value);
     }, 500),
     [],
   );
@@ -226,13 +230,29 @@ function LiveCodingPlayground() {
     updateJsDebounced(value || "");
   };
 
-  
+  const resetCode = () => {
+    setHtml("<h1>Happy Coding</h1>");
+    setCss("");
+    setJs("");
+    setLogs([]);
+    localStorage.removeItem("htmlCode");
+    localStorage.removeItem("cssCode");
+    localStorage.removeItem("jsCode");
+    localStorage.removeItem("logs");
+  };
+
   return (
-    <div className="flex min-h-screen flex-col items-center overflow-auto overflow-hidden  bg-gray-900 text-white">
-      <header className="item-center flex pl-5 w-full  py-2 justify-between bg-gray-800 text-center text-lg font-semibold shadow-lg">
-      <div className="py-2">
-      <h3 >SMK MADINATULQURAN LIVE CODING </h3>
-      </div>
+    <div className="flex h-screen flex-col items-center overflow-auto  bg-gray-900 text-white">
+      <header className="item-center flex w-full justify-between bg-gray-800 py-2 pl-5 text-center text-lg font-semibold shadow-lg">
+        <div className="flex space-x-2 py-2">
+          <h3>SMK MADINATULQURAN LIVE CODING </h3>
+          <button
+            onClick={resetCode}
+            className="rounded bg-red-500 px-4 py-1 text-white hover:bg-red-600"
+          >
+            Reset
+          </button>
+        </div>
         <div>
           <button
             className={clsx(
@@ -245,7 +265,7 @@ function LiveCodingPlayground() {
               setHtmlCode((i) => (i === 1 ? 0 : 1));
             }}
           >
-            HTML 
+            HTML
           </button>
 
           <button
@@ -292,7 +312,7 @@ function LiveCodingPlayground() {
         </div>
       </header>
 
-      <div className="flex w-full flex-col gap-4 overflow-auto p-4 lg:flex-row">
+      <div className="flex w-full overflow-hidden flex-col gap-4 p-4 lg:flex-row">
         <div
           className={clsx({
             "grid w-full gap-5": code,
@@ -305,10 +325,10 @@ function LiveCodingPlayground() {
           {htmlCode === 1 && (
             <>
               {" "}
-              <div className="editor rounded-lg bg-gray-800 p-4">
+              <div className="editor overflow-hidden rounded-lg bg-gray-800 p-4">
                 <h5 className="mb-2 text-sm font-bold text-gray-400">HTML</h5>
                 <Editor
-                  height="600px"
+                   height="100%"
                   defaultLanguage="html"
                   value={html}
                   onChange={handleHtmlChange}
@@ -319,10 +339,10 @@ function LiveCodingPlayground() {
           )}
 
           {cssCode === 1 && (
-            <div className="editor rounded-lg bg-gray-800 p-4">
+            <div className="editor overflow-hidden bg-gray-800 p-4">
               <h5 className="mb-2 text-sm font-bold text-gray-400">CSS</h5>
               <Editor
-                height="600px"
+                 height="100%"
                 defaultLanguage="css"
                 value={css}
                 onChange={handleCssChange}
@@ -332,12 +352,12 @@ function LiveCodingPlayground() {
           )}
 
           {jsCode === 1 && (
-            <div className="editor rounded-lg bg-gray-800 p-4">
+            <div className="editor overflow-hidden bg-gray-800 p-4">
               <h5 className="mb-2 text-sm font-bold text-gray-400">
                 JavaScript
               </h5>
               <Editor
-                height="600px"
+                 height="100%"
                 defaultLanguage="javascript"
                 value={js}
                 onChange={handleJsChange}
@@ -349,38 +369,41 @@ function LiveCodingPlayground() {
 
         <div
           className={clsx(
-            "relative grid h-full w-full rounded-lg bg-gray-800 p-2",
+            "relative grid h-[88vh] w-full rounded-lg bg-gray-800 p-2",
             {
               hidden: code === true,
             },
           )}
         >
-         
           <iframe
             onMouseDown={handleMouseDown}
             ref={iframeRef}
             id="code"
             title="Live Output"
             className="resize-handle h-full rounded-lg bg-white"
-            style={{ height: `${iframeHeight}px`, width: iframeWidth }} // Set dynamic width
+            style={{ height: `${iframeHeight}`, width: iframeWidth }} // Set dynamic width
           />
-
 
           <div
             onMouseDown={handleResizeWidth}
             className="cu absolute right-0 top-0 h-full w-[20%] cursor-pointer"
           />
         </div>
-      <div className="crounded-lg relative right-0 w-full p-2">
+        <div className="crounded-lg relative right-0 w-full p-2">
           <div className="h-full overflow-auto rounded-lg bg-black p-4 text-white">
             <h5 className="mb-2 text-sm font-bold text-gray-400">
               Console Output
-
-              
             </h5>
             {logs.map((log, index) => (
-              <div key={index} className="font-mono text-xs whitespace-pre-wrap">
-               <span className={clsx({"text-red-500" : log.includes("Error :")})}>{log}</span>
+              <div
+                key={index}
+                className="whitespace-pre-wrap font-mono text-xs"
+              >
+                <span
+                  className={clsx({ "text-red-500": log.includes("Error :") })}
+                >
+                  {log}
+                </span>
               </div>
             ))}
           </div>
