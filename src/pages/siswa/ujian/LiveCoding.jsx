@@ -44,31 +44,39 @@ function LiveCodingPlayground({
 
     // Define console override and error handling script
     const consoleOverride = `
-      (function() {
-        const log = console.log;
-        console.log = function(...args) {
-          let message = args.map(arg => {
-            if (typeof arg === 'string') return arg;
-            if (typeof arg === 'number') return \`Number: \${arg}\`;
-            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
-            return String(arg);
-          }).join(' ');
-
-          window.parent.postMessage({ type: 'log', message: message }, '*');
-          log.apply(console, args);
-        };
-
-        window.onerror = function(message, source, lineno, colno, error) {
-          window.parent.postMessage({ type: 'error', message: message }, '*');
-        };
+    (function() {
+      const originalLog = console.log;
+  
+      console.log = function(...args) {
+        const message = args.map(arg => {
         
-        try {
-          ${js}
-        } catch (error) {
-          window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
-        }
-      })();
-    `;
+          if (typeof arg === 'string') {
+            return '"' + arg  + '"';
+          } else if (typeof arg === 'object') {
+           
+            return JSON.stringify(arg, null, 2);
+          } else {
+           
+            return String(arg);
+          }
+        }).join(' ');
+  
+      
+        window.parent.postMessage({ type: 'log', message }, '*');
+      
+      };
+  
+      window.onerror = function(message) {
+        window.parent.postMessage({ type: 'error', message }, '*');
+      };
+  
+      try {
+        ${js}
+      } catch (error) {
+        window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
+      }
+    })();
+  `;
 
     // Tambahkan Tailwind CDN ke <head> iframe
     const documentContent = `
@@ -90,6 +98,7 @@ function LiveCodingPlayground({
 
     const messageHandler = (event) => {
       if (event.data.type === "log") {
+        console.log("log", event.data.message);
         logHandler("log", event.data.message);
       } else if (event.data.type === "error") {
         logHandler("error", event.data.message);
@@ -189,9 +198,6 @@ function LiveCodingPlayground({
 
   useEffect(() => {
     const detail = handleSoal(payload, item);
-    console.log("pau", payload);
-
-    console.log("item", item);
 
     if (payload.data?.[detail.index]?.jawaban === "") {
       return setIsLoading(false);
@@ -202,7 +208,7 @@ function LiveCodingPlayground({
     setHtml(jawaban?.html || "");
     setCss(jawaban?.css || "");
     setJs(jawaban?.js || "");
-    // setLogs(jawaban || "");
+    setLogs(jawaban.logs || []);
 
     setIsLoading(false);
   }, []);
