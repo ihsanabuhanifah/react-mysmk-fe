@@ -21,9 +21,10 @@ function LiveCodingPlayground() {
   // Set default width
 
   const logHandler = useCallback((type, message) => {
+    console.log("mee", message)
     setLogs((prevLogs) => [
       ...prevLogs,
-      `${type === "log" ? "Log" : "Error"}: ${message}`,
+      `${type === "log" ? "": "Error :"} ${message}`,
     ]);
   }, []);
 
@@ -38,31 +39,39 @@ function LiveCodingPlayground() {
 
     // Define console override and error handling script
     const consoleOverride = `
-      (function() {
-        const log = console.log;
-        console.log = function(...args) {
-          let message = args.map(arg => {
-            if (typeof arg === 'string') return arg;
-            if (typeof arg === 'number') return \`Number: \${arg}\`;
-            if (typeof arg === 'object') return JSON.stringify(arg, null, 2);
-            return String(arg);
-          }).join(' ');
-
-          window.parent.postMessage({ type: 'log', message: message }, '*');
-          log.apply(console, args);
-        };
-
-        window.onerror = function(message, source, lineno, colno, error) {
-          window.parent.postMessage({ type: 'error', message: message }, '*');
-        };
+    (function() {
+      const originalLog = console.log;
+  
+      console.log = function(...args) {
+        const message = args.map(arg => {
         
-        try {
-          ${js}
-        } catch (error) {
-          window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
-        }
-      })();
-    `;
+          if (typeof arg === 'string') {
+            return '"' + arg  + '"';
+          } else if (typeof arg === 'object') {
+           
+            return JSON.stringify(arg, null, 2);
+          } else {
+           
+            return String(arg);
+          }
+        }).join(' ');
+  
+      
+        window.parent.postMessage({ type: 'log', message }, '*');
+      
+      };
+  
+      window.onerror = function(message) {
+        window.parent.postMessage({ type: 'error', message }, '*');
+      };
+  
+      try {
+        ${js}
+      } catch (error) {
+        window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
+      }
+    })();
+  `;
 
     // Tambahkan Tailwind CDN ke <head> iframe
     const documentContent = `
@@ -301,18 +310,20 @@ function LiveCodingPlayground() {
             className="cu absolute right-0 top-0 h-full w-[20%] cursor-pointer"
           />
         </div>
-       {!code && <> <div className="crounded-lg relative right-0 w-full p-2">
+      <div className="crounded-lg relative right-0 w-full p-2">
           <div className="h-full overflow-auto rounded-lg bg-black p-4 text-white">
             <h5 className="mb-2 text-sm font-bold text-gray-400">
               Console Output
+
+              
             </h5>
             {logs.map((log, index) => (
-              <div key={index} className="font-mono text-xs">
+              <div key={index} className="font-mono text-xs whitespace-pre-wrap">
                 {log}
               </div>
             ))}
           </div>
-        </div></>}
+        </div>
       </div>
     </div>
   );

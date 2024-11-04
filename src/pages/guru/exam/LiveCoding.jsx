@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import clsx from "clsx";
 
+
 function debounce(func, delay) {
   let timeout;
   return (...args) => {
@@ -13,15 +14,14 @@ function debounce(func, delay) {
 }
 
 function LiveCodingPlayground({
-  setPayload,
-  setJawaban,
-  payload,
-  handleSoal,
-  item,
+  
+  jawaban,
+ 
 }) {
   const [isLoading, setIsLoading] = useState(true);
   const [html, setHtml] = useState("<h1>Happy Coding</h1>");
   const [css, setCss] = useState("");
+  console.log("html", jawaban);
   const [js, setJs] = useState("");
   const [logs, setLogs] = useState([]);
   const iframeRef = useRef(null);
@@ -35,19 +35,19 @@ function LiveCodingPlayground({
   const [iframeWidth, setIframeWidth] = useState("100%");
   // Set default width
 
-
-  
-
-  const logHandler = (type, message) => {
+  const logHandler = useCallback((type, message) => {
     setLogs((prevLogs) => [
       ...prevLogs,
       type === "log" ? message : `Error : ${message}`,
     ]);
-  };
+  }, []);
 
-  console.log("live live coding");
+  
+
+
 
   useEffect(() => {
+
     if (!iframeRef.current || isLoading) return;
     // if (isLoading) {
 
@@ -186,86 +186,21 @@ function LiveCodingPlayground({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
- 
-
   useEffect(() => {
-    const detail = handleSoal(payload, item);
-    setPayload((s) => {
-      s.data[detail.index] = {
-        ...detail.soal[0],
-        jawaban: JSON.stringify({
-          html: html,
-          css: css,
-          js: js,
-          logs: logs,
-        }),
-      };
-      setJawaban(() => {
-        return JSON.stringify({
-          html: html,
-          css: css,
-          js: js,
-          logs: logs,
-        });
-      });
-      return {
-        ...s,
-        data: s.data,
-      };
-    });
-  }, [html, css, js, logs]);
 
-  useEffect(() => {
-    const detail = handleSoal(payload, item);
-
-    if (payload.data?.[detail.index]?.jawaban === "") {
-      return setIsLoading(false);
+    if(!!jawaban === true) {
+       setHtml(jawaban.html || "")
+       setCss(jawaban.css || "")
+       setJs(jawaban.js || "")
+       setLogs(jawaban.logs || [])
     }
 
-    const jawaban = JSON.parse(payload.data?.[detail.index]?.jawaban);
+    
+   
+  }, [html, css, js]);
 
-    console.log('jawabab', jawaban)
-
-    setHtml(jawaban?.html || "");
-    setCss(jawaban?.css || "");
-    setJs(jawaban?.js || "");
-    setLogs(jawaban.logs || []);
-
-    setIsLoading(false);
-  }, []);
-
-  const updateHtmlDebounced = useCallback(
-    debounce((value) => {
-      setHtml(value);
-    }, 100),
-    [],
-  );
-
-  const updateCssDebounced = useCallback(
-    debounce((value) => {
-      setCss(value);
-    }, 100),
-    [],
-  );
-
-  const updateJsDebounced = useCallback(
-    debounce((value) => {
-      setJs(value);
-    }, 100),
-    [],
-  );
-
-  const handleHtmlChange = (value) => {
-    updateHtmlDebounced(value || "");
-  };
-
-  const handleCssChange = (value) => {
-    updateCssDebounced(value || "");
-  };
-
-  const handleJsChange = (value) => {
-    updateJsDebounced(value || "");
-  };
+  
+  
 
   return (
     <div className="flex min-h-screen flex-col items-center overflow-auto overflow-hidden rounded-lg bg-gray-900 text-white">
@@ -348,7 +283,7 @@ function LiveCodingPlayground({
                   height="600px"
                   defaultLanguage="html"
                   value={html}
-                  onChange={handleHtmlChange}
+                  onChange={()=> {}}
                   theme="vs-dark"
                 />
               </div>
@@ -362,7 +297,7 @@ function LiveCodingPlayground({
                 height="600px"
                 defaultLanguage="css"
                 value={css}
-                onChange={handleCssChange}
+                onChange={()=> {}}
                 theme="vs-dark"
               />
             </div>
@@ -377,7 +312,7 @@ function LiveCodingPlayground({
                 height="600px"
                 defaultLanguage="javascript"
                 value={js}
-                onChange={handleJsChange}
+                onChange={()=> {}}
                 theme="vs-dark"
               />
             </div>

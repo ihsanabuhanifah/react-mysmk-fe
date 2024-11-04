@@ -13,6 +13,7 @@ import {
 import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
+import LV from "./LV"
 import { useUpdateLastExam } from "../../../api/guru/ujian";
 import useList from "../../../hook/useList";
 
@@ -89,6 +90,17 @@ function ModalPenilaian({
                   {item.tipe === "ES" && (
                     <section className="mb-5 border rounded-lg shadow-md p-5">
                       <ES
+                        nomor={index + 1}
+                        soals={JSON.parse(item.soal)}
+                        jawaban={payload}
+                        item={item}
+                        setPayload={setPayload}
+                      />
+                    </section>
+                  )}]
+                   {item.tipe === "LV" && (
+                    <section className="mb-5 border rounded-lg shadow-md p-5">
+                      <LV
                         nomor={index + 1}
                         soals={JSON.parse(item.soal)}
                         jawaban={payload}
