@@ -197,7 +197,7 @@
     height: 250px;
     width: 100%;
   }
-
+  
   .cardcoment .activeSlide {
     transform: scale(1.0);
     opacity: 1;

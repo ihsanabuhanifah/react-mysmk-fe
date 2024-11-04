@@ -137,7 +137,7 @@ const LandingPage = () => {
         </div>
 
         {/* About Section */}
-        <div className="flex flex-col-reverse lg:flex-row my-10 lg:my-40 mx-0 lg:mx-8 items-center w-full justify-center gap-3 lg:gap-60">
+        <div className="flex flex-col-reverse lg:flex-row my-10 lg:my-40 mx-0 lg:mx-8 items-center w-full justify-center gap-3 lg:gap-60 px-2">
           <div className="flex flex-col gap-8 mb-10">
             <h3 className="text-customGreen text-3xl lg:text-5xl">
               SMK MADINATULQURAN <br /> Boarding School

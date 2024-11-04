@@ -197,12 +197,14 @@ const LandingBiaya = () => {
             </div>
             <div class="py-6 text-center">
               <p class="text-gray-600 text-lg">Pendaftaran</p>
-              <p class="text-2xl lg:text-5xl font-extrabold text-blue-900">Rp 450.000</p>
+              <p class="text-3xl lg:text-5xl font-black">
+                <span className="text-xl">Rp</span> 450.000
+              </p>
             </div>
             <div class="border-t border-gray-300 my-6"></div>
             <div class="text-left text-xl px-10 py-10 flex-grow">
               <div class="flex justify-between py-3">
-                <p class="font-bold">Daftar Ulang</p>
+                <p class="font-bold text-2xl">Daftar Ulang</p>
                 <p class="font-bold">Rp 3.500.000</p>
               </div>
               <div class="flex justify-between">
@@ -220,7 +222,9 @@ const LandingBiaya = () => {
               <div class="border-t border-gray-300 my-6"></div>
               <div class="flex flex-col text-center">
                 <p class="font-bold">SPP Bulanan</p>
-                <p class="text-blue-900 font-extrabold">Rp 2.500.000</p>
+                <p class="text-3xl lg:text-5xl font-black">
+                  <span className="text-xl">Rp</span>2.500.000
+                </p>
               </div>
             </div>
           </div>
@@ -231,12 +235,14 @@ const LandingBiaya = () => {
             </div>
             <div class="py-6 text-center">
               <p class="text-gray-600 text-lg">Pendaftaran</p>
-              <p class="text-2xl lg:text-5xl font-extrabold text-blue-900">Rp 450.000</p>
+              <p class="text-3xl lg:text-5xl font-black">
+                <span className="text-xl">Rp</span> 450.000
+              </p>
             </div>
             <div class="border-t border-gray-300 my-6"></div>
-            <div class="text-left text-xl lg:text-2xl px-10 py-10 flex-grow">
+            <div class="text-left text-xl px-10 py-10 flex-grow">
               <div class="flex justify-between py-3">
-                <p class="font-bold">Daftar Ulang</p>
+                <p class="font-bold text-2xl">Daftar Ulang</p>
                 <p class="font-bold">Rp 3.500.000</p>
               </div>
               <div class="flex justify-between">
@@ -254,7 +260,9 @@ const LandingBiaya = () => {
               <div class="border-t border-gray-300 my-6"></div>
               <div class="flex flex-col text-center">
                 <p class="font-bold">SPP Bulanan</p>
-                <p class="text-blue-900 font-extrabold">Rp 1.000.000</p>
+                <p class="text-3xl lg:text-5xl font-black">
+                  <span className="text-xl">Rp</span>1.000.000
+                </p>
               </div>
             </div>
           </div>

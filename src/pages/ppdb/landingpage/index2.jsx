@@ -180,72 +180,74 @@ const LandingPageTkj = () => {
           </div>
           <div className="flex flex-col gap-9 items-center">
             <div className="flex space-x-4">
-              <div className="bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-2 lg:py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 1
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
+                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
               </div>
-              <div className="bg-bglabtop w-[197px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 2
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
+                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
               </div>
             </div>
             <div className="mt-4 mb-5">
-              <div className="bg-bglabtop w-[390px] lg:w-[1324px] h-[96] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[390px] lg:w-[1324px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 3
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
                     Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex space-x-4">
-              <div className="bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-2 lg:py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 4
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
+                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
               </div>
-              <div className="bg-bglabtop w-[197px] lg:w-[650px] h-[96px] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[187px] lg:w-[650px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 5
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
-                    Mempelajari HTML Dasar, CSS Dasar, JS <br /> Dasar, dan UI
-                    UX
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
+                    Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
               </div>
             </div>
             <div className="mt-4 mb-5">
-              <div className="bg-bglabtop w-[390px] lg:w-[1324px] h-[96] lg:h-[306px] items-center justify-center rounded-lg">
-                <div className="text-center text-white flex-col gap-10 py-10">
-                  <h1 className="text-base lg:text-5xl font-bold">
+              <div className="relative group bg-bglabtop w-[390px] lg:w-[1324px] h-[96px] lg:h-[306px] rounded-lg overflow-hidden flex items-center justify-center transition-transform duration-300 transform hover:scale-105">
+                <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-0 transition-opacity duration-300 rounded-lg"></div>
+                <div className="relative text-center text-white transition-opacity duration-300">
+                  <h1 className="text-base lg:text-5xl font-bold group-hover:hidden">
                     Semester 6
                   </h1>
-                  <p className="text-xs lg:text-xl font-light">
+                  <p className="text-xs lg:text-xl font-light hidden group-hover:block">
                     Mempelajari HTML Dasar, CSS Dasar, JS Dasar, dan UI UX
                   </p>
                 </div>
@@ -284,37 +286,52 @@ const LandingPageTkj = () => {
           <p>Fasilitas TKJ</p>
         </div>
 
-        <div className="rounded-3xl p-10 lg:p-32 w-full lg:w-[1586px] h-full ml-auto">
-          <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-36">
-            <div className="flex flex-col items-center">
-              <FaSnowflake className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Ruangan AC
-              </p>
+        <div className="flex justify-center items-center min-h-screen flex-col">
+          <div className="rounded-3xl w-full max-w-[1586px] h-full flex flex-col gap-20 lg:gap-40">
+            {/* Top Row with 3 Columns */}
+            <div className="grid grid-cols-3 gap-12 lg:gap-24">
+              {/* Ruangan AC */}
+              <div className="flex flex-col items-center">
+                <FaSnowflake className="text-green-500 text-7xl sm:text-8xl mb-4" />
+                <p className="text-lg sm:text-2xl lg:text-3xl font-medium text-gray-600">
+                  Ruangan AC
+                </p>
+              </div>
+
+              {/* Wifi */}
+              <div className="flex flex-col items-center">
+                <FaWifi className="text-green-500 text-7xl sm:text-8xl mb-4" />
+                <p className="text-lg sm:text-2xl lg:text-3xl font-medium text-gray-600">
+                  Wifi
+                </p>
+              </div>
+
+              {/* Modul */}
+              <div className="flex flex-col items-center">
+                <FaBook className="text-green-500 text-7xl sm:text-8xl mb-4" />
+                <p className="text-lg sm:text-2xl lg:text-3xl font-medium text-gray-600">
+                  Modul
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col items-center">
-              <FaWifi className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Wifi
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaBook className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Modul
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaClipboard className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Konsultasi
-              </p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaClipboard className="text-green-500 text-6xl mb-3" />
-              <p className="text-lg lg:text-xl font-medium text-gray-600">
-                Konsultasi
-              </p>
+
+            {/* Bottom Row with 2 Columns */}
+            <div className="grid grid-cols-2 gap-12 lg:gap-24">
+              {/* Konsultasi 1 */}
+              <div className="flex flex-col items-center">
+                <FaClipboard className="text-green-500 text-7xl sm:text-8xl mb-4" />
+                <p className="text-lg sm:text-2xl lg:text-3xl font-medium text-gray-600">
+                  Konsultasi
+                </p>
+              </div>
+
+              {/* Konsultasi 2 */}
+              <div className="flex flex-col items-center">
+                <FaClipboard className="text-green-500 text-7xl sm:text-8xl mb-4" />
+                <p className="text-lg sm:text-2xl lg:text-3xl font-medium text-gray-600">
+                  Konsultasi
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -323,7 +340,7 @@ const LandingPageTkj = () => {
         <p className="text-center font-bold mt-40 text-xl lg:text-5xl">
           tracer study
         </p>
-        <div className="py-10 mb-10 justify-center items-center pr-10 bg-gray-100 sliderrifat">
+        <div className="py-10 mb-10 justify-center items-center pr-0 lg:pr-10 bg-gray-100 sliderrifat">
           <div className="px-0 lg:px-80 justify-center items-center">
             <Slider {...settings1} className="justify-center items-center">
               {slidesData.map((slide, idx) => (
