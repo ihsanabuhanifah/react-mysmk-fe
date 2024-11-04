@@ -22,6 +22,7 @@ function LiveCodingPlayground({
   const [isLoading, setIsLoading] = useState(true);
   const [html, setHtml] = useState("<h1>Happy Coding</h1>");
   const [css, setCss] = useState("");
+  console.log("html", html);
   const [js, setJs] = useState("");
   const [logs, setLogs] = useState([]);
   const iframeRef = useRef(null);
@@ -36,7 +37,7 @@ function LiveCodingPlayground({
   // Set default width
 
 
-  
+  console.log('log', logs)
 
   const logHandler = (type, message) => {
     setLogs((prevLogs) => [
@@ -58,6 +59,29 @@ function LiveCodingPlayground({
 
     const document = iframeRef.current.contentDocument;
 
+
+    function addLoopProtection(code, timeout) {
+      const id = Math.random().toString(36).slice(2);
+      return `
+      (function() {
+          let start = Date.now();
+          const originalLog = console.log;
+
+          // Loop protection function
+          function loopGuard() {
+              if (Date.now() - start > ${timeout}) {
+                  throw new Error('Terjadi Infinite Loop pada kode, Periksa kembali.');
+              }
+              start = Date.now(); // Reset timer for next iteration
+          }
+
+          ${code.replace(/for\s*\(|while\s*\(|do\s*\{/g, match => `${match} loopGuard(),`)}
+      })();
+      `;
+  }
+
+  const protectedJS = addLoopProtection(js, 200); // 1 detik batas eksekusi per loop
+
     // Define console override and error handling script
     const consoleOverride = `
     (function() {
@@ -67,7 +91,7 @@ function LiveCodingPlayground({
         const message = args.map(arg => {
         
           if (typeof arg === 'string') {
-            return '"' + arg  + '"';
+            return arg
           } else if (typeof arg === 'object') {
            
             return JSON.stringify(arg, null, 2);
@@ -87,7 +111,7 @@ function LiveCodingPlayground({
       };
   
       try {
-        ${js}
+        ${protectedJS}
       } catch (error) {
         window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
       }
@@ -411,13 +435,9 @@ function LiveCodingPlayground({
             <h5 className="mb-2 text-sm font-bold text-gray-400">
               Console Output
             </h5>
-
             {logs.map((log, index) => (
-              <div
-                key={index}
-                className="whitespace-pre-wrap font-mono text-xs"
-              >
-                {log}
+              <div key={index} className="font-mono text-xs whitespace-pre-wrap">
+               <span className={clsx({"text-red-500" : log.includes("Error :")})}>{log}</span>
               </div>
             ))}
           </div>

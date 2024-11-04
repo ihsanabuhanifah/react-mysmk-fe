@@ -2,6 +2,17 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import clsx from "clsx";
 
+
+function debounce(func, delay) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
+
 function LiveCodingPlayground() {
  
   const [html, setHtml] = useState("<h1>Happy Coding</h1>");
@@ -29,44 +40,59 @@ function LiveCodingPlayground() {
   }, []);
 
   useEffect(() => {
-    // if (isLoading) {
-    //   return;
-    // }
     // Kosongkan log setiap kali terjadi perubahan pada HTML, CSS, atau JavaScript
     setLogs([]);
 
     const document = iframeRef.current.contentDocument;
 
+    // Loop protection function
+    function addLoopProtection(code, timeout) {
+        const id = Math.random().toString(36).slice(2);
+        return `
+        (function() {
+            let start = Date.now();
+            const originalLog = console.log;
+
+            // Loop protection function
+            function loopGuard() {
+                if (Date.now() - start > ${timeout}) {
+                     throw new Error('Terjadi Infinite Loop pada kode, Periksa kembali.');
+                }
+                start = Date.now(); // Reset timer for next iteration
+            }
+
+            ${code.replace(/for\s*\(|while\s*\(|do\s*\{/g, match => `${match} loopGuard(),`)}
+        })();
+        `;
+    }
+
+    const protectedJS = addLoopProtection(js, 200); // 1 detik batas eksekusi per loop
+
     // Define console override and error handling script
     const consoleOverride = `
     (function() {
       const originalLog = console.log;
-  
+
       console.log = function(...args) {
         const message = args.map(arg => {
-        
           if (typeof arg === 'string') {
-            return '"' + arg  + '"';
+            return '"' + arg + '"';
           } else if (typeof arg === 'object') {
-           
             return JSON.stringify(arg, null, 2);
           } else {
-           
             return String(arg);
           }
         }).join(' ');
-  
-      
+
         window.parent.postMessage({ type: 'log', message }, '*');
-      
       };
-  
+
       window.onerror = function(message) {
         window.parent.postMessage({ type: 'error', message }, '*');
       };
-  
+
       try {
-        ${js}
+        ${protectedJS}
       } catch (error) {
         window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
       }
@@ -104,7 +130,9 @@ function LiveCodingPlayground() {
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-  }, [html, css, js]);
+}, [html, css, js]);
+
+  
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -164,6 +192,39 @@ function LiveCodingPlayground() {
   };
 
   
+
+  const updateHtmlDebounced = useCallback(
+    debounce((value) => {
+      setHtml(value);
+    }, 500),
+    [],
+  );
+
+  const updateCssDebounced = useCallback(
+    debounce((value) => {
+      setCss(value);
+    }, 500),
+    [],
+  );
+
+  const updateJsDebounced = useCallback(
+    debounce((value) => {
+      setJs(value);
+    }, 500),
+    [],
+  );
+
+  const handleHtmlChange = (value) => {
+    updateHtmlDebounced(value || "");
+  };
+
+  const handleCssChange = (value) => {
+    updateCssDebounced(value || "");
+  };
+
+  const handleJsChange = (value) => {
+    updateJsDebounced(value || "");
+  };
 
   
   return (
@@ -250,7 +311,7 @@ function LiveCodingPlayground() {
                   height="600px"
                   defaultLanguage="html"
                   value={html}
-                  onChange={(value) => setHtml(value || "")}
+                  onChange={handleHtmlChange}
                   theme="vs-dark"
                 />
               </div>
@@ -264,7 +325,7 @@ function LiveCodingPlayground() {
                 height="600px"
                 defaultLanguage="css"
                 value={css}
-                onChange={(value) => setCss(value || "")}
+                onChange={handleCssChange}
                 theme="vs-dark"
               />
             </div>
@@ -279,7 +340,7 @@ function LiveCodingPlayground() {
                 height="600px"
                 defaultLanguage="javascript"
                 value={js}
-                onChange={(value) => setJs(value || "")}
+                onChange={handleJsChange}
                 theme="vs-dark"
               />
             </div>
@@ -319,7 +380,7 @@ function LiveCodingPlayground() {
             </h5>
             {logs.map((log, index) => (
               <div key={index} className="font-mono text-xs whitespace-pre-wrap">
-                {log}
+               <span className={clsx({"text-red-500" : log.includes("Error :")})}>{log}</span>
               </div>
             ))}
           </div>

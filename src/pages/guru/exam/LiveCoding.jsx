@@ -13,15 +13,11 @@ function debounce(func, delay) {
   };
 }
 
-function LiveCodingPlayground({
-  
-  jawaban,
+function LiveCodingPlayground({jawaban}) {
  
-}) {
-  const [isLoading, setIsLoading] = useState(true);
   const [html, setHtml] = useState("<h1>Happy Coding</h1>");
   const [css, setCss] = useState("");
-  console.log("html", jawaban);
+ 
   const [js, setJs] = useState("");
   const [logs, setLogs] = useState([]);
   const iframeRef = useRef(null);
@@ -32,62 +28,71 @@ function LiveCodingPlayground({
   let [jsCode, setJsCode] = useState(0);
 
   const [iframeHeight, setIframeHeight] = useState(600); // Set default height
-  const [iframeWidth, setIframeWidth] = useState("100%");
+  const [iframeWidth, setIframeWidth] = useState("100%"); 
   // Set default width
 
   const logHandler = useCallback((type, message) => {
+    console.log("mee", message)
     setLogs((prevLogs) => [
       ...prevLogs,
-      type === "log" ? message : `Error : ${message}`,
+      `${type === "log" ? "": "Error :"} ${message}`,
     ]);
   }, []);
 
-  
-
-
-
   useEffect(() => {
-
-    if (!iframeRef.current || isLoading) return;
-    // if (isLoading) {
-
-    //   return;
-    // }
     // Kosongkan log setiap kali terjadi perubahan pada HTML, CSS, atau JavaScript
     setLogs([]);
 
     const document = iframeRef.current.contentDocument;
 
+    // Loop protection function
+    function addLoopProtection(code, timeout) {
+        const id = Math.random().toString(36).slice(2);
+        return `
+        (function() {
+            let start = Date.now();
+            const originalLog = console.log;
+
+            // Loop protection function
+            function loopGuard() {
+                if (Date.now() - start > ${timeout}) {
+                    throw new Error('Execution exceeded allowed time');
+                }
+                start = Date.now(); // Reset timer for next iteration
+            }
+
+            ${code.replace(/for\s*\(|while\s*\(|do\s*\{/g, match => `${match} loopGuard(),`)}
+        })();
+        `;
+    }
+
+    const protectedJS = addLoopProtection(js, 200); // 1 detik batas eksekusi per loop
+
     // Define console override and error handling script
     const consoleOverride = `
     (function() {
       const originalLog = console.log;
-  
+
       console.log = function(...args) {
         const message = args.map(arg => {
-        
           if (typeof arg === 'string') {
-            return '"' + arg  + '"';
+            return '"' + arg + '"';
           } else if (typeof arg === 'object') {
-           
             return JSON.stringify(arg, null, 2);
           } else {
-           
             return String(arg);
           }
         }).join(' ');
-  
-      
+
         window.parent.postMessage({ type: 'log', message }, '*');
-      
       };
-  
+
       window.onerror = function(message) {
         window.parent.postMessage({ type: 'error', message }, '*');
       };
-  
+
       try {
-        ${js}
+        ${protectedJS}
       } catch (error) {
         window.parent.postMessage({ type: 'error', message: error.toString() }, '*');
       }
@@ -104,7 +109,6 @@ function LiveCodingPlayground({
         <body class="bg-gray-100">
           ${html}
           <script>${consoleOverride}<\/script>
-          
         </body>
       </html>
     `;
@@ -115,7 +119,6 @@ function LiveCodingPlayground({
 
     const messageHandler = (event) => {
       if (event.data.type === "log") {
-        console.log("log", event.data.message);
         logHandler("log", event.data.message);
       } else if (event.data.type === "error") {
         logHandler("error", event.data.message);
@@ -127,7 +130,9 @@ function LiveCodingPlayground({
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-  }, [html, css, js]);
+}, [html, css, js]);
+
+  
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -186,25 +191,57 @@ function LiveCodingPlayground({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
+  
+
+  const updateHtmlDebounced = useCallback(
+    debounce((value) => {
+      setHtml(value);
+    }, 500),
+    [],
+  );
+
+  const updateCssDebounced = useCallback(
+    debounce((value) => {
+      setCss(value);
+    }, 500),
+    [],
+  );
+
+  const updateJsDebounced = useCallback(
+    debounce((value) => {
+      setJs(value);
+    }, 500),
+    [],
+  );
+
+  const handleHtmlChange = (value) => {
+    updateHtmlDebounced(value || "");
+  };
+
+  const handleCssChange = (value) => {
+    updateCssDebounced(value || "");
+  };
+
+  const handleJsChange = (value) => {
+    updateJsDebounced(value || "");
+  };
+
   useEffect(() => {
-
-    if(!!jawaban === true) {
-       setHtml(jawaban.html || "")
-       setCss(jawaban.css || "")
-       setJs(jawaban.js || "")
-       setLogs(jawaban.logs || [])
+    if (!!jawaban === true) {
+      setHtml(jawaban.html || "");
+      setCss(jawaban.css || "");
+      setJs(jawaban.js || "");
+      setLogs(jawaban.logs || []);
     }
-
-    
-   
-  }, [html, css, js]);
+  }, [jawaban]);
 
   
-  
-
   return (
-    <div className="flex min-h-screen flex-col items-center overflow-auto overflow-hidden rounded-lg bg-gray-900 text-white">
-      <header className="item-center flex w-full justify-between bg-gray-800 py-4 text-center text-lg font-semibold shadow-lg">
+    <div className="flex min-h-screen flex-col items-center overflow-auto overflow-hidden  bg-gray-900 text-white">
+      <header className="item-center flex pl-5 w-full  py-2 justify-between bg-gray-800 text-center text-lg font-semibold shadow-lg">
+      <div className="py-2">
+      <h3 >SMK MADINATULQURAN LIVE CODING </h3>
+      </div>
         <div>
           <button
             className={clsx(
@@ -217,7 +254,7 @@ function LiveCodingPlayground({
               setHtmlCode((i) => (i === 1 ? 0 : 1));
             }}
           >
-            HTML
+            HTML 
           </button>
 
           <button
@@ -283,7 +320,7 @@ function LiveCodingPlayground({
                   height="600px"
                   defaultLanguage="html"
                   value={html}
-                  onChange={()=> {}}
+                  onChange={handleHtmlChange}
                   theme="vs-dark"
                 />
               </div>
@@ -297,7 +334,7 @@ function LiveCodingPlayground({
                 height="600px"
                 defaultLanguage="css"
                 value={css}
-                onChange={()=> {}}
+                onChange={handleCssChange}
                 theme="vs-dark"
               />
             </div>
@@ -312,7 +349,7 @@ function LiveCodingPlayground({
                 height="600px"
                 defaultLanguage="javascript"
                 value={js}
-                onChange={()=> {}}
+                onChange={handleJsChange}
                 theme="vs-dark"
               />
             </div>
@@ -327,6 +364,7 @@ function LiveCodingPlayground({
             },
           )}
         >
+         
           <iframe
             onMouseDown={handleMouseDown}
             ref={iframeRef}
@@ -336,23 +374,22 @@ function LiveCodingPlayground({
             style={{ height: `${iframeHeight}px`, width: iframeWidth }} // Set dynamic width
           />
 
+
           <div
             onMouseDown={handleResizeWidth}
             className="cu absolute right-0 top-0 h-full w-[20%] cursor-pointer"
           />
         </div>
-        <div className="crounded-lg relative right-0 h-[100px] w-full p-2">
-          <div className="h-[80vh] overflow-auto rounded-lg bg-black p-4 text-white">
+      <div className="crounded-lg relative right-0 w-full p-2">
+          <div className="h-full overflow-auto rounded-lg bg-black p-4 text-white">
             <h5 className="mb-2 text-sm font-bold text-gray-400">
               Console Output
-            </h5>
 
+              
+            </h5>
             {logs.map((log, index) => (
-              <div
-                key={index}
-                className="whitespace-pre-wrap font-mono text-xs"
-              >
-                {log}
+              <div key={index} className="font-mono text-xs whitespace-pre-wrap">
+               <span className={clsx({"text-red-500" : log.includes("Error :")})}>{log}</span>
               </div>
             ))}
           </div>
@@ -363,3 +400,5 @@ function LiveCodingPlayground({
 }
 
 export default LiveCodingPlayground;
+
+
