@@ -91,7 +91,7 @@ function LiveCodingPlayground({
         const message = args.map(arg => {
         
           if (typeof arg === 'string') {
-            return arg
+            return '"' + arg + '"';
           } else if (typeof arg === 'object') {
            
             return JSON.stringify(arg, null, 2);

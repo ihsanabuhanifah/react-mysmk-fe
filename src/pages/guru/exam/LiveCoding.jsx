@@ -56,7 +56,7 @@ function LiveCodingPlayground({jawaban}) {
             // Loop protection function
             function loopGuard() {
                 if (Date.now() - start > ${timeout}) {
-                    throw new Error('Execution exceeded allowed time');
+                    throw new Error('Terjadi Infinite Loop pada kode, Periksa kembali.');
                 }
                 start = Date.now(); // Reset timer for next iteration
             }
