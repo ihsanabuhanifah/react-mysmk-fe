@@ -8,11 +8,13 @@ import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
 import { deleteTugasPkl, detailTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
-import { DeleteButton, EditButton, ModalAlert, TableLoading } from "../../../components";
+import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
 import { replace } from "formik";
 import { stringify } from "qs";
 import { listSiswaPkl } from "../../../api/guru/fitur-pkl";
+import { LabelStatus } from "../../../components/Label";
+import dayjs from "dayjs";
 
 export default function TugasLaporanPkl() {
 
@@ -25,6 +27,12 @@ export default function TugasLaporanPkl() {
     let debouncedKeyword = useDebounce(keyword, 500);
     let [visible, setVisible] = useState(false);
     const [filter, setFilter] = useState({});
+
+    let [namaSiswa, setNamaSiswa] = useState({});
+    const [open, setOpen] = useState(false);
+    const [jawaban, setJawaban] = useState([]);
+    const [value, setValue] = useState({});
+
 
     const params = {
         page,
@@ -113,8 +121,9 @@ export default function TugasLaporanPkl() {
                             <Table.HeaderCell>No</Table.HeaderCell>
                             <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
                             <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
-                            <Table.HeaderCell>Selesai</Table.HeaderCell>
-                            <Table.HeaderCell>Aksi</Table.HeaderCell>
+                            <Table.HeaderCell>Status</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Selesai</Table.HeaderCell> */}
+                            <Table.HeaderCell>Penilaian</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
@@ -128,26 +137,52 @@ export default function TugasLaporanPkl() {
                                 <Table.Row key={index}>
                                     <Table.Cell>{index + 1}</Table.Cell>
                                     <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
-                                    <Table.Cell>{value.updated_at}</Table.Cell>
+                                    <Table.Cell>{dayjs(value.batas_waktu).format("DD-MM-YY HH:mm:ss")}</Table.Cell>
 
-                                    {/* <Table.Cell>{value?.batas_waktu}</Table.Cell> */}
-                                    <Table.Cell>3/{index + 1 }</Table.Cell>
 
                                     <Table.Cell>
-                                        <EditButton
-                                            onClick={() => navigate(`update/${value?.id}`, { replace: true })}
-                                        />
-                                        <DeleteButton
-                                            onClick={() => confirmDelete(value?.id)}
-                                        />
-                                        <Button content={'Nilai'} color="blue" onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}></Button>
+                                        <LabelStatus status={value.status} />
+                                    </Table.Cell>
+                                    {/* <Table.Cell>3/{index + 1}</Table.Cell> */}
+
+                                    <Table.Cell>
+                                        <Button
+                                            color="linkedin"
+                                            type="button"
+                                            size="tiny"
+                                            onClick={() => {
+                                                setOpen(true);
+                                                // setNamaSiswa({
+                                                //     nama_siswa: item.siswa.nama_siswa,
+                                                //     mapel: mapel,
+                                                // });
+
+                                                // console.log("item", item);
+                                                // setItem(item);
+                                                // setJawaban(() => {
+                                                //     if (!!item.jawaban === false) {
+                                                //         return [];
+                                                //     }
+                                                //     return JSON.parse(item.jawaban);
+                                                // });
+                                            }}
+                                        >
+                                            {" "}
+                                            <Icon name="eye" /> Lihat
+                                        </Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}
                         </TableLoading>
                     </Table.Body>
                 </Table>
-                {JSON.stringify(data)}
+                <PaginationTable
+                    page={page}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    setPage={setPage}
+                    totalPages={data?.data?.count}
+                />
             </section>
 
         </LayoutPage>

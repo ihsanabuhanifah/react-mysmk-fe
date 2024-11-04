@@ -185,7 +185,7 @@ export default function LaporanPkl() {
 
 
             </div>
-            <div className="w-full justify-center mt-4">
+            {/* <div className="w-full justify-center mt-4">
                 <PaginationTable
                     handlePage={setPage}
                     handlePageSize={setPageSize}
@@ -193,7 +193,14 @@ export default function LaporanPkl() {
                     pageSize={params.pageSize}
                     pagination={data?.pagination}
                 />
-            </div>
+            </div> */}
+            <PaginationTable
+                    page={page}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    setPage={setPage}
+                    totalPages={data?.data?.count}
+                />
 
 
         </LayoutPage>

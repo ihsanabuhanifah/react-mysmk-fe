@@ -11,6 +11,8 @@ import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
 import { replace } from "formik";
+import dayjs from "dayjs";
+import { CopyButton } from "../../../components/buttonAksi/editButton";
 
 export default function TugasLaporanPkl() {
 
@@ -109,6 +111,7 @@ export default function TugasLaporanPkl() {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>No</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell> */}
                             <Table.HeaderCell>Judul</Table.HeaderCell>
                             <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
                             <Table.HeaderCell>Selesai</Table.HeaderCell>
@@ -125,12 +128,12 @@ export default function TugasLaporanPkl() {
                             {data?.data?.map((value, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>{index + 1}</Table.Cell>
+                                    {/* <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell> */}
                                     <Table.Cell>{value?.tugas}</Table.Cell>
-                                    <Table.Cell>{value?.batas_waktu}</Table.Cell>
-
                                     {/* <Table.Cell>{value?.batas_waktu}</Table.Cell> */}
-                                    <Table.Cell>3/{index + 1 }</Table.Cell>
-
+                                    <Table.Cell>{dayjs(value.batas_waktu).format("DD-MM-YY HH:mm:ss")}</Table.Cell>
+                                    {/* <Table.Cell>3/{index + 1 }</Table.Cell> */}
+                                    <Table.Cell>3/{index + 1}</Table.Cell>
                                     <Table.Cell>
                                         <EditButton
                                             onClick={() => navigate(`update/${value?.id}`, { replace: true })}
@@ -138,7 +141,8 @@ export default function TugasLaporanPkl() {
                                         <DeleteButton
                                             onClick={() => confirmDelete(value?.id)}
                                         />
-                                        <Button content={'Nilai'} color="blue" onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}></Button>
+                                        
+                                        <Button content={'Nilai'} size="tiny" color="blue" onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}></Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}

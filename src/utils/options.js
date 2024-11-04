@@ -130,8 +130,24 @@ const statusUjianOptions = [
   { key: "4", value: "locked", text: "Locked" },
   
 ];
+const durasiOptions = [
+  { key: "1", value: 60, text: "60 Menit" },
+  { key: "2", value: 90, text: "90 Menit" },
+  { key: "3", value: 120, text: "120 Menit" },
+  { key: "4", value: 180, text: "180 Menit" },
+  { key: "5", value: 360, text: "6 Jam" },
+  { key: "6", value: 720, text: "12 Jam" },
+  { key: "7", value: 1440, text: "1 Hari" },
+  { key: "8", value: 2880, text: "2 Hari" },
+  { key: "9", value: 4320, text: "3 Hari" },
+  { key: "10", value: 5760, text: "4 Hari" },
+  { key: "11", value: 7200, text: "5 Hari" },
+  { key: "12", value: 8640, text: "6 Hari" },
+  { key: "13", value: 10080, text: "7 Hari" },
+];
 
 export {
+  durasiOptions,
   izinOptions,
   kategoriOptions,
   approveOptions,

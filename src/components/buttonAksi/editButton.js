@@ -1,32 +1,43 @@
 import { Button, Icon } from "semantic-ui-react";
-export function EditButton({ onClick, disabled, size = 'md' }) {
+export function EditButton({ onClick, disabled, size = "md" }) {
   return (
     <button
       className="bg-none"
       onClick={onClick}
       disabled={disabled}
       type="button"
-      
     >
       <Icon size={size} disabled={disabled} name="edit" color="teal" />
     </button>
   );
 }
-export function AddButton({ onClick, disabled, size = 'md' }) {
+export function AddButton({ onClick, disabled, size = "md" }) {
   return (
     <button
       className="bg-none"
       onClick={onClick}
       disabled={disabled}
       type="button"
-      
     >
       <Icon size={size} disabled={disabled} name="add" color="teal" />
     </button>
   );
 }
 
-export function DeleteButton({ onClick, disabled, size = 'md' }) {
+export function CopyButton({ onClick, disabled, size = "small" }) {
+  return (
+    <button
+      className="bg-none"
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon size={size} disabled={disabled} name="copy" color="teal" />
+    </button>
+  );
+}
+
+export function DeleteButton({ onClick, disabled, size = "md" }) {
   return (
     <button
       compact
@@ -34,27 +45,42 @@ export function DeleteButton({ onClick, disabled, size = 'md' }) {
       onClick={onClick}
       disabled={disabled}
       type="button"
-      
     >
       <Icon size={size} disabled={disabled} name="trash" color="red" />
     </button>
   );
-  
 }
 
+export function ViewButton({ onClick, disabled, size = "md" }) {
+  return (
+    <button
+      compact
+      className="bg-none"
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon size={size} disabled={disabled} name="eye" color="blue" />
+    </button>
+  );
+}
 
-export function ViewButton({ onClick, disabled,size = 'md' }) {
-    return (
-      <button
-        compact
-        className="bg-none"
-        onClick={onClick}
-        disabled={disabled}
-        type="button"
+export function BackButton({ onClick, disabled, size = "small" }) {
+  return (
+    <button
+      compact
+      className="bg-none"
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon
+        size={size}
         
-      >
-        <Icon size={size} disabled={disabled} name="eye" color="blue" />
-      </button>
-    );
-    
-  }
+        disabled={disabled}
+        name="arrow left"
+        color="blue"
+      />
+    </button>
+  );
+}
