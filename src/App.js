@@ -71,9 +71,10 @@ import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
 import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
-import Learning from "./pages/guru/Learning";
+import LiveCoding from "./pages/guru/Live-Coding";
 import ReactLivePlayground from "./pages/guru/reactjs";
 import Monitoring from "./pages/screen";
+import LiveMySQL from "./pages/guru/Live-MySQL";
 
 function App() {
   return (
@@ -91,7 +92,8 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/learning" element={<Learning/>} />
+        <Route path="/live-coding" element={<LiveCoding/>} />
+        <Route path="/live-mysql" element={<LiveMySQL/>} />
         <Route path="/react-live" element={<ReactLivePlayground/>} />
         <Route
           path="/login"
