@@ -198,7 +198,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-        {/* <NavButton
+        <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="chat"
@@ -211,7 +211,7 @@ export default function SidebarSiswa({ setSidebar }) {
               }`}
             />
           }
-        /> */}
+        />
       </nav>
       <div className="mb-4 ml-2 mt-5 block xl:hidden">
         <LogoutButton

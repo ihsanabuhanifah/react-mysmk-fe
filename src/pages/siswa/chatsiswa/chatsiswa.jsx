@@ -8,6 +8,7 @@ import LayoutSiswa from "../../../module/layoutSiswa";
 import { Input } from "semantic-ui-react";
 import { IoArrowBack, IoSendOutline } from "react-icons/io5";
 import { format } from "date-fns";
+import useChatModule from "../../../hook/useChatModule";
 
 const ChatSiswa = () => {
   const socket = useContext(SocketContext);
@@ -17,8 +18,11 @@ const ChatSiswa = () => {
   const [namaGuru, setNamaGuru] = useState(null);
   const textareaRef = useRef(null);
   const [messages, setMessages] = useState([]);
-
   const { profile } = useZUStore((state) => state);
+  const { data: dataChat, isLoading: loadChat } = useChatModule(
+    idGuru,
+    profile.user_id,
+  );
 
   let { data, isLoading } = useQuery(["/list/guru"], () => listGuru(), {
     select: (res) => {
@@ -29,10 +33,8 @@ const ChatSiswa = () => {
   useEffect(() => {
     if (!socket) return;
     socket.on("message", (msg) => {
-      console.log(msg.pengirim)
-      console.log(idGuru)
-      if(Number(msg.pengirim) === idGuru) {
-        setMessages((prev) => ([...prev, msg]))
+      if (Number(msg.teacher_id) === idGuru) {
+        setMessages((prev) => [...prev, msg]);
       }
     });
     return () => {
@@ -43,19 +45,20 @@ const ChatSiswa = () => {
   const sendMessage = () => {
     if (message.trim()) {
       socket.emit("message", {
+        id: Date.now(),
         text: message,
-        pengirim: profile.user_id,
-        penerima: idGuru,
+        student_id: profile.user_id,
+        teacher_id: idGuru,
         role: profile.user.role,
       });
       setMessages((prev) => [
         ...prev,
         {
-          text: message,
-          pengirim: profile.user_id,
-          penerima: idGuru,
-          role: profile.user.role,
           id: Date.now(),
+          text: message,
+          student_id: profile.user_id,
+          teacher_id: idGuru,
+          role: profile.user.role,
         },
       ]);
       setMessage("");
@@ -99,6 +102,28 @@ const ChatSiswa = () => {
       }
     }
   };
+
+  useEffect(() => {
+    let historyChat;
+
+    if (dataChat) {
+      historyChat = JSON.parse(dataChat.message);
+      setMessages(historyChat);
+    } else {
+      setMessages([]);
+    }
+  }, [idGuru, dataChat]);
+
+  const scrollToRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollToRef.current) {
+      scrollToRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [scrollToRef, idGuru, messages]);
 
   if (isLoading) {
     return <LoadingPage />;
@@ -157,12 +182,13 @@ const ChatSiswa = () => {
                 {messages.map((_, i) => {
                   return (
                     <BubleChat
-                      rl={_.pengirim === profile.user_id}
+                      rl={_.teacher_id === profile.user_id}
                       text={_.text}
                       time={_.id}
                     />
                   );
                 })}
+                <div ref={scrollToRef}></div>
               </div>
               <div className="fixed bottom-0 left-0 right-0 flex h-[60px] w-full border-t bg-white px-5 py-2">
                 <Input
@@ -220,12 +246,13 @@ const ChatSiswa = () => {
                 {messages.map((_, i) => {
                   return (
                     <BubleChat
-                      rl={_.pengirim === profile.user_id}
+                      rl={_.role === "siswa"}
                       text={_.text}
                       time={_.id}
                     />
                   );
                 })}
+                <div ref={scrollToRef}></div>
               </div>
               <div className="h-auto w-full border-t">
                 <textarea
@@ -270,7 +297,9 @@ export const BubleChat = ({ text, rl, time }) => {
       >
         <p>
           {text}
-          <span className={`block ${rl? 'text-right' : 'text-left'} text-xs opacity-60`}>
+          <span
+            className={`block ${rl ? "text-right" : "text-left"} text-xs opacity-60`}
+          >
             {time}
           </span>
         </p>

@@ -8,10 +8,8 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const { profile } = useZUStore((state) => state);
 
-  console.log(profile)
-
   useEffect(() => {
-    const newSocket = io('https://bemysmk.devopsgeming.online', {
+    const newSocket = io('http://localhost:8085', {
       query: {
         idDB: profile.user_id,
         roleDB: profile.user.role

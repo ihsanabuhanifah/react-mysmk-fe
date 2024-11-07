@@ -72,6 +72,7 @@ import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 import DataKehadiran from "./pages/guru/data-kehadiran";
 import SecuritySiswa from "./pages/siswa/profile/SecuritySiswa";
+import ChatSiswa from "./pages/siswa/chatsiswa/chatsiswa";
 
 function App() {
   return (
@@ -198,6 +199,7 @@ function App() {
             </ProtectRoute>
           }
         >
+          <Route path="chat" element={<ChatSiswa />} />
           <Route path="dashboard" element={<DashboardSiswa />} />
           <Route path="laporan-pkl" element={<LaporanPkl />} />
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />

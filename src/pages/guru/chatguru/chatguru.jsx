@@ -8,6 +8,7 @@ import { LoadingPage } from "../../../components";
 import { Input } from "semantic-ui-react";
 import { IoArrowBack, IoSend, IoSendOutline } from "react-icons/io5";
 import { BubleChat } from "../../siswa/chatsiswa/chatsiswa";
+import useChatModule from "../../../hook/useChatModule";
 
 const ChatGuru = () => {
   const socket = useContext(SocketContext);
@@ -17,8 +18,11 @@ const ChatGuru = () => {
   const [namaSiswa, setNamaSiswa] = useState(null);
   const [search, setSearch] = useState("");
   const textareaRef = useRef(null);
-
   const { profile } = useZUStore((state) => state);
+  const { data: dataChat, isLoading: loadChat } = useChatModule(
+    profile.user_id,
+    idSiswa,
+  );
 
   let { data, isLoading } = useQuery(["siswa/list"], () => listSiswa(), {
     refetchOnWindowFocus: false,
@@ -55,10 +59,9 @@ const ChatGuru = () => {
   useEffect(() => {
     if (!socket) return;
     socket.on("message", (msg) => {
-      console.log(msg.pengirim)
-      console.log(idSiswa)
-      if(Number(msg.pengirim) === idSiswa) {
-        setMessages((prev) => ([...prev, msg]))
+      console.log(msg);
+      if (Number(msg.student_id) === idSiswa) {
+        setMessages((prev) => [...prev, msg]);
       }
     });
     return () => {
@@ -69,23 +72,47 @@ const ChatGuru = () => {
   const sendMessage = () => {
     if (message.trim()) {
       socket.emit("message", {
+        id: Date.now(),
         text: message,
-        pengirim: profile.user_id,
-        penerima: idSiswa,
+        teacher_id: profile.user_id,
+        student_id: idSiswa,
         role: profile.user.role,
       });
       setMessages((prev) => [
         ...prev,
         {
-          text: message,
-          pengirim: profile.user_id,
-          penerima: idSiswa,
           id: Date.now(),
+          text: message,
+          teacher_id: profile.user_id,
+          student_id: idSiswa,
+          role: profile.user.role,
         },
       ]);
       setMessage("");
     }
   };
+
+  useEffect(() => {
+    let historyChat;
+
+    if (dataChat) {
+      historyChat = JSON.parse(dataChat.message);
+      setMessages(historyChat);
+    } else {
+      setMessages([]);
+    }
+  }, [idSiswa, dataChat]);
+
+  const scrollToRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollToRef.current) {
+      scrollToRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [scrollToRef, idSiswa, messages]);
 
   if (isLoading) {
     return <LoadingPage />;
@@ -143,7 +170,7 @@ const ChatGuru = () => {
             {messages.map((_, i) => {
               return (
                 <BubleChat
-                  rl={_.pengirim === profile.user_id}
+                  rl={_.teacher_id === profile.user_id}
                   text={_.text}
                   time={_.id}
                 />
@@ -214,12 +241,13 @@ const ChatGuru = () => {
                 {messages.map((_, i) => {
                   return (
                     <BubleChat
-                      rl={_.pengirim === profile.user_id}
+                      rl={_.role === "guru"}
                       text={_.text}
                       time={_.id}
                     />
                   );
                 })}
+                <div ref={scrollToRef}></div>
               </div>
               <div className="h-auto w-full border-t">
                 <textarea
