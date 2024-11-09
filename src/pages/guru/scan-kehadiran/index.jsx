@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LayoutPage from "../../../module/layoutPage";
 import { Table } from "semantic-ui-react";
 import { TableLoading } from "../../../components";
 import { formatDate } from "../../../utils";
 import { useQrScannerSiswa } from "../../../hook/useQrScannerSiswa";
-import { cekWaktuSholat, useCreateWaktuSholat } from "../../../api/guru/kehadiransholat";
-import toast, { Toaster } from 'react-hot-toast';
-const notify = () => toast.success('Berhasil!');
+import {
+  cekWaktuSholat,
+  useCreateWaktuSholat,
+} from "../../../api/guru/kehadiransholat";
+import toast, { Toaster } from "react-hot-toast";
+import { SocketContext } from "../../siswa/SocketContext";
+import ModalKonfirmasi from "./ModalKonfirmasi";
+const notify = () => toast.success("Berhasil!");
 
 const ScanKehadiran = () => {
   const [data, setData] = useState({
@@ -18,7 +23,10 @@ const ScanKehadiran = () => {
   const [isSelectedWaktuSholat, setIsSelectedWaktuSholat] = useState(false);
   const [countdown, setCountdown] = useState(600);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { mutate } = useCreateWaktuSholat()
+  const { mutate } = useCreateWaktuSholat();
+  const socket = useContext(SocketContext);
+  let [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     const savedWaktuSholat = localStorage.getItem("selectedWaktuSholat");
@@ -35,16 +43,19 @@ const ScanKehadiran = () => {
       const savedWaktuSholat = localStorage.getItem("selectedWaktuSholat");
       const dataSTRING = JSON.stringify(kehadiran);
       localStorage.setItem("kehadiran", dataSTRING);
-      mutate({text: dataSTRING, waktu: savedWaktuSholat });
-      notify()
+      mutate({ text: dataSTRING, waktu: savedWaktuSholat });
+      notify();
+
+      let ROOMCODE = new Date().toLocaleDateString()
+      socket.emit("kehadiran", kehadiran)
     }
-  }, [kehadiran, mutate]);
+  }, [kehadiran, mutate, socket]);
 
   const handleUsePreviousData = async () => {
     const savedWaktuSholat = localStorage.getItem("selectedWaktuSholat");
     const countdown = localStorage.getItem("countdown");
     const savedAttendanceJSON = localStorage.getItem("kehadiran");
-    const savedAttendance = JSON.parse(savedAttendanceJSON)
+    const savedAttendance = JSON.parse(savedAttendanceJSON);
 
     if (savedWaktuSholat) {
       setSelectedWaktuSholat(savedWaktuSholat);
@@ -53,7 +64,7 @@ const ScanKehadiran = () => {
     }
     setKehadiran(savedAttendance);
     setIsModalVisible(false);
-    setIsSelectedWaktuSholat(true)
+    setIsSelectedWaktuSholat(true);
     startCountdown();
     await handleOpenCamera();
   };
@@ -82,12 +93,9 @@ const ScanKehadiran = () => {
         id,
         name,
         kehadiran: scanTime,
-        isTelat: Number(waktu) === 2
-      }
-      return [
-        ...prev,
-        newData
-      ];
+        isTelat: Number(waktu) === 2,
+      };
+      return [...prev, newData];
     });
   };
 
@@ -103,8 +111,8 @@ const ScanKehadiran = () => {
   ];
 
   const handleConfirmWaktuSholat = async () => {
-    handleDiscardPreviousData()
-    const data = await cekWaktuSholat(selectedWaktuSholat)
+    handleDiscardPreviousData();
+    const data = await cekWaktuSholat(selectedWaktuSholat);
     if (selectedWaktuSholat) {
       setIsSelectedWaktuSholat(true);
       setData((prev) => {
@@ -113,13 +121,15 @@ const ScanKehadiran = () => {
           tanggal: Date.now(),
         };
       });
-      if(data.data.data !== false) {
-        const dataOBJECT = JSON.parse(data.data.data.kehadiran)
-        setKehadiran(dataOBJECT)
+      if (data.data.data !== false) {
+        const dataOBJECT = JSON.parse(data.data.data.kehadiran);
+        setKehadiran(dataOBJECT);
       }
       localStorage.setItem("selectedWaktuSholat", selectedWaktuSholat);
       await handleOpenCamera();
       startCountdown();
+      let ROOMCODE = new Date().toLocaleDateString()
+      socket.emit('joinRoom', `${ROOMCODE}`)
     }
   };
 
@@ -137,14 +147,37 @@ const ScanKehadiran = () => {
   };
 
   window.addEventListener("beforeunload", function (event) {
-    const confirmationMessage = "Apakah Anda yakin ingin meninggalkan halaman ini? Perubahan yang belum disimpan mungkin hilang.";
-    
+    const confirmationMessage =
+      "Apakah Anda yakin ingin meninggalkan halaman ini? Perubahan yang belum disimpan mungkin hilang.";
+
     event.returnValue = confirmationMessage; // Untuk Firefox
     return confirmationMessage; // Untuk browser lain
-});
+  });
+
+  useEffect(() => {
+    if(!socket) return;
+
+    
+  }, [socket])
 
   return (
     <LayoutPage title={"Scan Kehadiran"}>
+       {open && (
+        <ModalKonfirmasi
+          open={open}
+          setOpen={setOpen}
+          onClick={() => {
+            let ROOMCODE = new Date().toLocaleDateString()
+            handleStopCamera()
+            socket.emit('leaveRoom', `${ROOMCODE}`)
+            setIsSelectedWaktuSholat(false)
+            setSelectedWaktuSholat('')
+            setCountdown(600)
+            setKehadiran([])
+            setOpen(false)
+          }}
+        />
+      )}
       <div className="relative flex min-h-[80vh] items-center justify-center bg-black">
         <video
           ref={ref}
@@ -164,10 +197,10 @@ const ScanKehadiran = () => {
             </button>
           ) : (
             <button
-              onClick={handleStopCamera}
+              onClick={() => setOpen(true)}
               className="rounded-lg bg-red-500 px-4 py-2 text-white transition duration-300 hover:bg-red-600"
             >
-              Stop Camera
+              Stop
             </button>
           )}
         </div>
@@ -246,7 +279,11 @@ const ScanKehadiran = () => {
                       <Table.Cell>{i + 1}</Table.Cell>
                       <Table.Cell>{kehadiranEntry.id}</Table.Cell>
                       <Table.Cell>{kehadiranEntry.name}</Table.Cell>
-                      <Table.Cell className={`${kehadiranEntry.isTelat && 'text-red-600'}`}>{kehadiranEntry.kehadiran}</Table.Cell>
+                      <Table.Cell
+                        className={`${kehadiranEntry.isTelat && "text-red-600"}`}
+                      >
+                        {kehadiranEntry.kehadiran}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
               </TableLoading>

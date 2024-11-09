@@ -14,8 +14,6 @@ export default function RaporDetail() {
 
 	const { data, isLoading } = useGetHasilBelajarDetail(id_mapel, ta_id)
 
-	console.log(data)
-
 	if(isLoading) {
 		return <LoadingPage />
 	}
@@ -23,7 +21,7 @@ export default function RaporDetail() {
 	return (
 		<LayoutSiswa title={`Hasil Belajar ${data?.data[0] ? data?.data[0].mapel?.nama_mapel : ''}`}>
 			<div className="w-full pl-2 pr-5 h-full">
-				<button onClick={() => navigate('/siswa/hasil-belajar')} className='flex items-center gap-2 hover:text-[#18a558]'>
+				<button onClick={() => navigate('/siswa/rapor')} className='flex items-center gap-2 hover:text-[#18a558]'>
 					<IoArrowBackOutline size={20} />
 					<p>Kembali</p>
 				</button>

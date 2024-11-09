@@ -216,11 +216,11 @@ function App() {
             <Route path="security" element={<SecuritySiswa />} />
           </Route>
 
-          <Route path="hasil-belajar" element={<HasilBelajar />} />
+          {/* <Route path="hasil-belajar" element={<HasilBelajar />} />
           <Route
             path="hasil-belajar/:id_mapel"
             element={<HasilBelajarGuru />}
-          />
+          /> */}
 
           <Route path="hasil-ujian" element={<HasilUjian />} />
           <Route path="rapor" element={<Rapor />} />
