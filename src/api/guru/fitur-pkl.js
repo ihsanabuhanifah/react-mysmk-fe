@@ -56,12 +56,17 @@ export function deleteSiswaPkl(id) {
   return axiosClient.delete(`guru/tempat-pkl/delete/${id}`);
 }
 
+
 export function detailSiswaPkl(id)  {
   syncToken();
   console.log("api detail");
   return axiosClient.get(`guru/tempat-pkl/detail/${id}`);
 }
 
+export function detailJawabanSiswaPkl(id)  {
+  syncToken();
+  return axiosClient.get(`guru/jawaban-tugas-pkl/detail/${id}`);
+}
 // export function updateSiswaPkl(payload) {
 //   syncToken()
 //   return axios.put("/guru/tempat-pkl/update", {

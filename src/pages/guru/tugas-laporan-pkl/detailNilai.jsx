@@ -1,83 +1,29 @@
-import { Button, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
-import LayoutPage from "../../../module/layoutPage";
+import { useQuery, useQueryClient } from "react-query";
+import { detailJawabanSiswaPkl } from "../../../api/guru/fitur-pkl";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
-import { useQuery, useQueryClient } from "react-query";
-import { useState } from "react";
-import useDebounce from "../../../hook/useDebounce";
-import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, detailTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
-import { encodeURlFormat } from "../../../utils";
-import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
-import useDelete from "../../../hook/useDelete";
-import { replace } from "formik";
-import { stringify } from "qs";
-import { detailJawabanSiswaPkl, listSiswaPkl } from "../../../api/guru/fitur-pkl";
-import { LabelStatus } from "../../../components/Label";
-import dayjs from "dayjs";
+import { Button, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
+import LayoutPage from "../../../module/layoutPage";
 
-export default function TugasLaporanPkl() {
-
-    const { id } = useParams();
-    const navigate = useNavigate();
-    let { page, pageSize, setPage, setPageSize } = usePage();
-    let queryClient = useQueryClient();
-    let [isOpen, setIsOpen] = useState(false);
-    let [keyword, setKeyword] = useState("");
-    let debouncedKeyword = useDebounce(keyword, 500);
-    let [visible, setVisible] = useState(false);
-    const [filter, setFilter] = useState({});
-
-    let [namaSiswa, setNamaSiswa] = useState({});
-    const [open, setOpen] = useState(false);
-    const [jawaban, setJawaban] = useState([]);
-    const [value, setValue] = useState({});
-
-    const { data:dataJawab, isLoading:loadingJawab, isFetching:fetchingJawab } = useQuery(
+export default function DetailPenilaian() {
+    const { data, isLoading , isFetching } = useQuery(
         ["/jawaban-tugas-pkl/detail", id],
         () => detailJawabanSiswaPkl(id),
         {
             refetchOnWindowFocus: false,
             select: (response) => {
-                console.log('penilaian',response)
+                console.log('penilaian', response)
                 return response.data;
             }
         }
     )
+    const { id } = useParams();
+    const navigate = useNavigate();
+    let { page, pageSize, setPage, setPageSize } = usePage();
+    let queryClient = useQueryClient();
 
-
-    const params = {
-        page,
-        pageSize,
-        keyword: debouncedKeyword,
-        ...filter,
-        nama_siswa: encodeURlFormat(filter?.nama_siswa?.label),
-
-
-    };
-    const { data, isLoading, isFetching } = useQuery(
-        ["/tempat-pkl/list", params],
-        () => listSiswaPkl(params),
-        {
-            refetchOnWindowFocus: false,
-            select: (response) => {
-                console.log(response.data)
-                return response.data;
-            }
-        }
-    )
-    const {
-        showAlertDelete,
-        setShowAlertDelete,
-        deleteLoading,
-        confirmDelete,
-        onConfirmDelete,
-    } = useDelete({
-        afterDeleted: () => queryClient.invalidateQueries("/tugas-pkl/list"),
-        onDelete: (id) => deleteTugasPkl(id),
-    });
     return (
-        <LayoutPage title={"Halaman Nilai Pkl"}>
+        <LayoutPage title={"Halaman Detail Nilai Pkl"}>
             <ModalAlert
                 open={showAlertDelete}
                 setOpen={setShowAlertDelete}

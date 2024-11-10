@@ -70,7 +70,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
     // }, []);
     const { id } = useParams();
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
-    // const [studentId, setStudentId] = useState(null);
+    const [studentId, setStudentId] = useState(null);
     const { mutate: downloadPdfIsMutate, isLoading: downloadPdfIsLoading, params, setParams, filterParams } = useDownloadPdf();
 
     // const handleDownloadPdf = useCallback((values) => {
@@ -92,7 +92,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
     const handleSubmit = (value, { resetForm }) => {
         // setFilter(values);
         setFilter(value);
-        // setStudentId(values?.nama_siswa?.value);
+        // setStudentId(value?.nama_siswa?.value);
         setVisible(false);
         console.log('Form Values:', value);
     };
@@ -224,7 +224,8 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                         console.log('siswa', data)
                                         
                                         // setFieldValue(`studentId`, data.value);
-                                        setFieldValue(`nama_siswa`, data);
+                                        setFieldValue(`nama_siswa`, data?.label);
+                                        console.log(data)
                                         // setFieldValue(`nama_siswa`, data);
                                         // setStudentId(data?.value);
                                         setParams((params) => ({

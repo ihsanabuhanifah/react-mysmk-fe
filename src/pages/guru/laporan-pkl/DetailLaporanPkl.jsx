@@ -147,7 +147,7 @@ export default function DetailLaporan() {
               </p>
             </div>
             
-            <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+            {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1">
               <Button size="medium" color="blue" onClick={() => downloadPdfBulananIsMutate(id)} disabled={downloadPdfBulananIsLoading} >
                 {
                   downloadPdfBulananIsLoading ? 'Loading' : (
@@ -158,7 +158,7 @@ export default function DetailLaporan() {
                 }
               </Button>
               
-            </div>
+            </div> */}
           </Segment>
           <Segment>
             <div className="text-left mb-4">
