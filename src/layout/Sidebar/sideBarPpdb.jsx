@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,6 +9,9 @@ import {
   IoShieldOutline,
   IoPencilOutline,
   IoDocumentTextOutline,
+  IoWalletOutline,
+  IoChatbubblesOutline,
+  IoPaperPlane,
 } from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
 import ImageWithFallback from "../../components/ImageWithFallback.js";
@@ -17,6 +21,7 @@ import {
 } from "../../api/ppdb/profile"; // Ensure correct path
 import { setProfile } from "../../redux/actions"; // Ensure correct path
 import ProfileImage from "../../image/ppdb/profile.png";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 export default function SidebarPpdb({ setSidebar }) {
   const [loading, setLoading] = useState(true);
@@ -71,7 +76,7 @@ export default function SidebarPpdb({ setSidebar }) {
       {/* Laptop */}
       <div className="mb-3 mr-2 flex items-center gap-x-2 rounded-lg bg-[#18a558] p-2">
         <div className="h-10 w-10 rounded-full bg-gray-200">
-        <img
+          <img
             className="w-10 h-10 rounded-full bg-gray-100"
             src={profileData?.profilePicture || ProfileImage}
             alt="Profile"
@@ -104,59 +109,39 @@ export default function SidebarPpdb({ setSidebar }) {
           }
         />
         <NavButton
-          isSelect={isSelect}
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="biodata"
           path="biodata"
-          title={"biodata"}
+          title={"Biodata Diri"}
           logo={
             <IoPerson
               className={
-                url === "biodata" || isSelect
+                url === "biodata"
                   ? "text-[#18a558]"
                   : "text-gray-400"
               }
             />
           }
         />
-        {isSelect && (
-          <div className="ml-5 border-l border-gray-400 pl-3 xl:hidden">
-            <NavButton
-              handleSidebar={handleSiderbar}
-              to="profile/edit"
-              path="edit"
-              title={"Edit Profile"}
-              logo={
-                <IoPencilOutline
-                  className={
-                    url2 === "edit" ? "text-[#18a558]" : "text-gray-400"
-                  }
-                />
-              }
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="berkas"
+          path="berkas"
+          title={"Berkas Diri"}
+          logo={
+            <MdAssignment
+              className={url === "berkas" ? "text-[#18a558]" : "text-gray-400"}
             />
-            <NavButton
-              handleSidebar={handleSiderbar}
-              to="profile/security"
-              path="security"
-              title={"Password & Security"}
-              logo={
-                <IoShieldOutline
-                  className={
-                    url2 === "security" ? "text-[#18a558]" : "text-gray-400"
-                  }
-                />
-              }
-            />
-          </div>
-        )}
+          }
+        />
         <NavButton
           handleSidebar={handleSiderbar}
           to="bukti-transfer"
           path="bukti-transfer"
-          title={"Bukti Transfer"}
+          title={"Biaya Pembayaran"}
           logo={
-            <MdLaptopMac
+            <IoWalletOutline
               className={
                 url === "bukti-transfer" ? "text-[#18a558]" : "text-gray-400"
               }
@@ -167,10 +152,49 @@ export default function SidebarPpdb({ setSidebar }) {
           handleSidebar={handleSiderbar}
           to="exam"
           path="exam"
-          title={"Ujian"}
+          title={"Ujian Test"}
           logo={
-            <IoDocumentTextOutline
+            <IoPencilOutline
               className={url === "exam" ? "text-[#18a558]" : "text-gray-400"}
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="wawancara"
+          path="wawancara"
+          title={"Wawancara"}
+          logo={
+            <IoChatbubblesOutline
+              className={
+                url === "wawancara" ? "text-[#18a558]" : "text-gray-400"
+              }
+            />
+          }
+        />
+         <NavButton
+          handleSidebar={handleSiderbar}
+          to="hasil-test"
+          path="hasil-test"
+          title={"Pengumuman Hasil"}
+          logo={
+            <IoMdCheckmarkCircleOutline
+              className={
+                url === "hasil-test" ? "text-[#18a558]" : "text-gray-400"
+              }
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="daftar-ulang"
+          path="daftar-ulang"
+          title={"Daftar Ulang"}
+          logo={
+            <IoShieldOutline
+              className={
+                url === "daftar-ulang" ? "text-[#18a558]" : "text-gray-400"
+              }
             />
           }
         />

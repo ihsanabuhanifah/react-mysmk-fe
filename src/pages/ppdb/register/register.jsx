@@ -6,10 +6,11 @@ import Banner from "../../../image/ppdb/backgorund.png";
 import Bannerregister from "../../../image/ppdb/BannerRegister.png";
 import LogoMq from "../../../image/ppdb/ppdb.png";
 import LogoMqWhite from "../../../image/ppdb/ppdbwhite.png";
-import { Button, Form, Select } from "semantic-ui-react";
+import { Button, Form, Icon, Message, Select } from "semantic-ui-react";
 import { registerPpdb } from "../../../api/ppdb/ppdbAuth";
 import Cookies from "js-cookie";
 import { Input, Label } from "../../../components/input";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Skema validasi menggunakan yup
 const RegisterPpdbSchema = yup.object().shape({
@@ -32,8 +33,20 @@ const RegisterPpdbSchema = yup.object().shape({
 
 const RegisterPpdb = () => {
   const [showPassword, setShowPassword] = React.useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] =
+    useState(false);
   const [showPopup, setShowPopup] = React.useState(false);
   const navigate = useNavigate();
+
+  // Fungsi untuk toggle visibility password
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
+  // Fungsi untuk toggle visibility password
+  const toggleConfirmationPasswordVisibility = () => {
+    setShowPasswordConfirmation((prevState) => !prevState);
+  };
 
   const initialState = {
     name: "",
@@ -42,7 +55,7 @@ const RegisterPpdb = () => {
     password: "",
     passwordConfirmation: "",
     loginAs: "", // Pastikan ini ada dalam initial state
-    role:"Calon Santri"
+    role: "Calon Santri",
   };
 
   const rolesOptions = [{ key: 11, value: 11, text: "Calon Santri" }];
@@ -116,7 +129,7 @@ const RegisterPpdb = () => {
                 style={{ height: "811px" }}
               >
                 <img
-                  src={Bannerregister}
+                  src={Banner}
                   alt="Banner"
                   className="absolute inset-0 w-full object-cover rounded-br-lg"
                   style={{ height: "811px" }}
@@ -142,7 +155,7 @@ const RegisterPpdb = () => {
                 />
               </div>
 
-              <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24 flex items-center justify-center mt-10">
+              <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24 flex items-center justify-center mt-7">
                 <div className="mx-auto max-w-sm text-left">
                   <h1 className="text-2xl font-bold sm:text-3xl">
                     Ayo bergabung bersama SMK Madinatulquran!
@@ -153,95 +166,116 @@ const RegisterPpdb = () => {
                   </p> */}
 
                   <Form onSubmit={handleSubmit}>
-                    <p>Username</p>
-                    <Input
-                      placeholder="Masukan nama Kamu"
+                    <Form.Field
+                      control={Input}
+                      label="Nama calon Santri"
+                      placeholder="Masukan Nama Calon Santri"
                       name="name"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.name}
                       disabled={isSubmitting}
-                      error={!!errors.name && touched.name}
-                    />
-                    {errors.name && touched.name && (
-                      <Label basic color="red" pointing>
-                        {errors.name}
-                      </Label>
-                    )}
-
-                    <p>No Handphone</p>
-                    <Input
-                      placeholder="masukan Nomor kamu"
-                      name="no_hp"
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      onClick={() => handleNoHpClick(setFieldValue)}
-                      value={values.no_hp}
-                      disabled={isSubmitting}
+                      fluid
+                      icon={"envelope"}
+                      iconPosition="left"
                       error={
-                        errors.no_hp &&
-                        touched.no_hp && {
-                          content: `${errors.no_hp}`,
+                        errors.name &&
+                        touched.name && {
+                          content: `${errors?.name}`,
                           pointing: "above",
                         }
                       }
                       type="text"
                     />
-
-                    <p>Email</p>
-                    <Input
-                      placeholder="Masukan email Kamu"
+                    <Form.Field
+                      control={Input}
+                      label="No Handphone"
+                      placeholder="Contoh : 85709291292"
+                      name="no_hp"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      onClick={() => handleNoHpClick(setFieldValue)} // Jika diperlukan
+                      value={values.no_hp}
+                      disabled={isSubmitting}
+                      fluid
+                      icon={"phone"} // Ikon yang sesuai
+                      iconPosition="left"
+                      error={
+                        errors.no_hp &&
+                        touched.no_hp && {
+                          content: `${errors?.no_hp}`,
+                          pointing: "above",
+                        }
+                      }
+                      type="text"
+                    />
+                    <Form.Field
+                      control={Input}
+                      label="Email"
+                      placeholder="Contoh : calonsantri@gmail.com"
                       name="email"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.email}
                       disabled={isSubmitting}
+                      fluid
                       error={
                         errors.email &&
                         touched.email && {
-                          content: `${errors.email}`,
+                          content: `${errors?.email}`,
                           pointing: "above",
                         }
                       }
-                      type="text"
+                      type="email"
                     />
-
-                    <p>Password</p>
-                    <Input
-                      placeholder="Masukan password Kamu"
+                    {/* Password Input */}
+                    <Form.Field
+                      control={Input}
+                      label="Kata Sandi"
+                      placeholder="Masukan Kata Sandi"
                       name="password"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.password}
                       disabled={isSubmitting}
+                      fluid
+                      icon={
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </span>
+                      }
+                      iconPosition="left"
                       error={
                         errors.password &&
                         touched.password && {
-                          content: `${errors.password}`,
+                          content: `${errors?.password}`,
                           pointing: "above",
                         }
                       }
                       type={showPassword ? "text" : "password"}
                     />
-
-                    <p>Konfirmasi Password</p>
-                    <Input
-                      placeholder="Masukan password Kamu"
+                    <Form.Field
+                      control={Input}
+                      label="Konfirmasi Kata Sandi"
+                      placeholder="Konfirmasi Kata Sandi"
                       name="passwordConfirmation"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.passwordConfirmation}
                       disabled={isSubmitting}
+                      fluid
                       error={
                         errors.passwordConfirmation &&
                         touched.passwordConfirmation && {
-                          content: `${errors.passwordConfirmation}`,
+                          content: `${errors?.passwordConfirmation}`,
                           pointing: "above",
                         }
                       }
-                      type={showPassword ? "text" : "password"}
+                      type="text"
                     />
-
                     <div className="flex flex-col items-center justify-center mt-8">
                       <Button
                         content={isSubmitting ? "Proses" : "Daftar"}
@@ -261,6 +295,14 @@ const RegisterPpdb = () => {
                           </a>
                         </p>
                       </Link>
+                      {errors.msg && (
+                        <Message
+                          color="red"
+                          className="mt-4 w-full max-w-[609px]"
+                        >
+                          {errors.msg}
+                        </Message>
+                      )}
                     </div>
                   </Form>
                 </div>

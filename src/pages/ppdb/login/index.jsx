@@ -5,7 +5,7 @@ import Banner from "../../../image/ppdb/backgroundKosong.png";
 import LogoMq from "../../../image/ppdb/ppdb.png";
 import Laptop from "../../../image/ppdb/laptop.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Label, Message } from "semantic-ui-react";
+import { Button, Icon, Label, Message } from "semantic-ui-react";
 import Cookies from "js-cookie";
 import * as yup from "yup";
 import { loginPpdb } from "../../../api/ppdb/ppdbAuth";
@@ -13,20 +13,43 @@ import { Input } from "../../../components/input";
 
 // Skema validasi menggunakan yup
 const LoginPpdbSchema = yup.object().shape({
-  email: yup.string().email("Format email tidak valid").nullable(),
+  email: yup
+    .string()
+    .email("Format email tidak valid")
+    .nullable()
+    .test(
+      "email-or-no_hp",
+      "Email atau nomor HP wajib diisi",
+      function (value) {
+        const { no_hp } = this.parent;
+        return value || no_hp; // Passes if either email or no_hp has a value
+      }
+    ),
   no_hp: yup
     .string()
     .matches(/^\d+$/, "Format nomor HP tidak valid")
-    .nullable(),
+    .nullable()
+    .test(
+      "email-or-no_hp",
+      "Email atau nomor HP wajib diisi",
+      function (value) {
+        const { email } = this.parent;
+        return value || email; // Passes if either email or no_hp has a value
+      }
+    ),
   password: yup
     .string()
     .min(8, "Password minimal 8 karakter")
-    .required("Wajib diisi!"),
+    .required("Silahkan isi password!"),
 });
 
 const LoginPpdb = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const initialState = {
     email: "",
@@ -162,38 +185,44 @@ const LoginPpdb = () => {
                       </Label>
                     )}
 
+                    {/* Password Input */}
                     <p className="text-lg font-medium mt-6">Password</p>
-                    <Input
-                      placeholder="Masukkan Password anda"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.password}
-                      disabled={isSubmitting}
-                      error={
-                        errors.password &&
-                        touched.password && {
-                          content: `${errors.password}`,
-                          pointing: "above",
+                    <div className="relative w-full max-w-[609px]">
+                      <Input
+                        placeholder="Masukkan Password anda"
+                        name="password"
+                        type={showPassword ? "text" : "password"} // Toggle between text and password
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.password}
+                        disabled={isSubmitting}
+                        error={
+                          errors.password &&
+                          touched.password && {
+                            content: `${errors.password}`,
+                            pointing: "above",
+                          }
                         }
-                      }
-                      size="normal"
-                      style={{
-                        width: "100%",
-                        maxWidth: "609px",
-                        paddingLeft: "15px",
-                      }}
-                    />
+                        size="normal"
+                        style={{
+                          width: "100%",
+                          maxWidth: "609px",
+                          paddingLeft: "15px",
+                        }}
+                      />
+                      {/* Toggle password visibility icon */}
+                      <Icon
+                        name={showPassword ? "eye slash" : "eye"} // Choose icon based on showPassword state
+                        link
+                        onClick={togglePasswordVisibility} // Toggle password visibility
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                      />
+                    </div>
                     {errors.password && touched.password && (
                       <Label basic color="red" pointing>
                         {errors.password}
                       </Label>
                     )}
-                    <span
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)}
-                    ></span>
                     <div className="flex flex-col items-center mt-8 relative w-full max-w-[609px]">
                       <div className="w-full flex">
                         <Button
@@ -212,7 +241,7 @@ const LoginPpdb = () => {
                       to="/ppdb/register"
                       className="my-16 w-full flex justify-center md:mr-18"
                     >
-                      <p className="text-base text-gray-500 text-center -ml-16">
+                      <p className="text-base text-gray-500 text-center lg:-ml-16">
                         Anda belum terdaftar?
                         <a className="hover:underline" href="#">
                           Daftar sekarang

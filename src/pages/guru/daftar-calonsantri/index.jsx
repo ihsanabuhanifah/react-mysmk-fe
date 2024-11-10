@@ -170,7 +170,8 @@ export default function DaftarCalonSiswa() {
               <Table.HeaderCell>Asal Sekolah</Table.HeaderCell>
               <Table.HeaderCell>Tanggal Lahir</Table.HeaderCell>
               <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
-              <Table.HeaderCell>Tes Seleksi</Table.HeaderCell>
+              <Table.HeaderCell>Status Ujian</Table.HeaderCell>
+              <Table.HeaderCell>Status Wawancara</Table.HeaderCell>
               <Table.HeaderCell>Aksi</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -195,10 +196,11 @@ export default function DaftarCalonSiswa() {
                   </Table.Cell>
                   <Table.Cell>{value?.ta_id}</Table.Cell>
                   <Table.Cell>{value?.status_ujian}</Table.Cell>
+                  <Table.Cell>{value?.wawancara.status_tes}</Table.Cell>
                   <Table.Cell>
                     <EditButton
                       onClick={() =>
-                        navigate(`update-calon-siswa/${value?.siswa?.id}`)
+                        navigate(`detail/${value?.id}`)
                       }
                     />
                     <DeleteButton

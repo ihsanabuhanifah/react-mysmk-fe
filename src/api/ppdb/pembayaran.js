@@ -1,8 +1,6 @@
-import { useToast } from "react-toastify";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import {useQuery} from "react-query";
 import { useState } from "react";
 
 export function CreateLampiranBuktiTransfer(values) {
@@ -85,25 +83,12 @@ export function ListPembayaran() {
     return { data, isLoading, isError, refetch };
   }
 
-  // export function useGetHasilPembayaranDetail(id) {
-  //   syncToken();
-    
-  //   const { data, isLoading } = useQuery(['/ppdb/pembayaran-ppdb/detail'], () => axios.get(`/ppdb/pembayaran-ppdb/detail/${id}`).then(res => res.data), {
-  //     onSuccess: (res) => {
-  //     },
-  //     onError: (res) => {
-  
-  //     }
-  //   })
-  
-  //   return { data, isLoading }
-  // }
 
 
   // Fungsi untuk mengambil detail pembayaran berdasarkan ID
-export function fetchPaymentDetails(id) {
+export function fetchPaymentDetails() {
   syncToken();
-  return axios.get(`/ppdb/pembayaran-ppdb/detail/${id}`).then(res => res.data);
+  return axios.get(`/ppdb/pembayaran-ppdb/detail`).then(res => res.data);
 }
 
 // Custom hook untuk mengambil detail pembayaran berdasarkan ID dengan react-query

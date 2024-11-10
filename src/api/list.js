@@ -84,10 +84,7 @@ export async function listAlquranOptions(keyword, loadedOptions, additional) {
   };
 }
 
-export function listCalonSiswa() {
-  syncToken();
-  return axios.get("guru/list-calsan");
-}
+
 
 export async function listCalonSiswaOptions(
   keyword,

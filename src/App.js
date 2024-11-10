@@ -71,12 +71,17 @@ import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
 import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
 import DetailPembayaran from "./pages/ppdb/detail-pembayaran/detail-pembayaran";
 import Ujian from "./pages/ppdb/exam/exam";
-import Bukti_Transfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
 import Transfer from "./pages/ppdb/transfer/transfer";
 import BuktiTransfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
 import ListPembayaran from "./pages/guru/list-pembayaran";
 import EditPembayaran from "./pages/guru/list-pembayaran/edit-pembayaran";
-import TesDashboard from "./pages/ppdb/tes-dashboard/tes-dash";
+import DaftarUlang from "./pages/ppdb/daftar-ulang/daftar-ulang";
+import Wawancara from "./pages/ppdb/wawancara/wawancara";
+import Pengumuman from "./pages/ppdb/pengumuman-hasil/pengumuman";
+import ListWawancara from "./pages/guru/list-wawancara";
+import DetailCalonSantri from "./pages/guru/daftar-calonsantri/detailCalon";
+import EditWawancara from "./pages/guru/list-wawancara/edit-wawancara";
+
 
 function App() {
   return (
@@ -136,10 +141,16 @@ function App() {
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
           <Route path="daftar-calonsantri" element={<DaftarCalonSiswa />} />
+          <Route path="daftar-calonsantri/detail/:id" element={<DetailCalonSantri />} />
           <Route path="list-pembayaran" element={<ListPembayaran />} />
           <Route
             path="list-pembayaran/konfirmasi-pembayaran/:id"
             element={<EditPembayaran />}
+          />
+          <Route path="list-wawancara" element={<ListWawancara />} />
+          <Route
+            path="list-wawancara/konfirmasi-wawancara/:id"
+            element={<EditWawancara />}
           />
           <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
           <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
@@ -229,17 +240,19 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardPpdb />} />
-          <Route path="tes-dashboard" element={<TesDashboard/>} />
           <Route path="biodata" element={<BiodataPpdb />}>
             <Route path="update" element={<BiodataUpdatePPdb />} />
-            <Route path="berkas" element={<BerkasPpdb />} />
           </Route>
 
+          <Route path="berkas" element={<BerkasPpdb />} />
           <Route path="transfer" element={<Transfer />} />
           <Route path="bukti-transfer" element={<BuktiTransfer />} />
           <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
           <Route path="exam" element={<Ujian />}></Route>
+          <Route path="wawancara" element={<Wawancara />}></Route>
+          <Route path="hasil-test" element={<Pengumuman />}></Route>
+          <Route path="daftar-ulang" element={<DaftarUlang />}></Route>
         </Route>
       </Routes>
     </div>

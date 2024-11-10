@@ -14,12 +14,12 @@ import useDebounce from "../../../hook/useDebounce";
 import { useQuery, useQueryClient } from "react-query";
 import { Table } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
-import { listPembayaran } from "../../../api/guru/pembayaran";
+import { listWawancara } from "../../../api/guru/wawancara";
 import { formatDate } from "../../../utils";
 import useDelete from "../../../hook/useDelete";
 import { deletePembayaranHandle } from "../../../api/guru/pembayaran";
 
-export default function ListPembayaran() {
+export default function ListWawancara() {
   let [visible, setVisible] = React.useState(false);
   let navigate = useNavigate();
   let { page, pageSize, setPage, setPageSize } = usePage();
@@ -37,7 +37,7 @@ export default function ListPembayaran() {
 
   let { data, isLoading } = useQuery(
     ["/list", params],
-    () => listPembayaran(params),
+    () => listWawancara(params),
     {
       refetchOnWindowFocus: false,
       select: (response) => {
@@ -67,7 +67,7 @@ export default function ListPembayaran() {
 
   return (
     <LayoutPage
-      title={"List Pembayaran"}
+      title={"List Wawancara calon Santri"}
       visible={visible}
       setVisible={setVisible}
     >
@@ -99,10 +99,12 @@ export default function ListPembayaran() {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>No</Table.HeaderCell>
-              <Table.HeaderCell>Nama User</Table.HeaderCell>
-              <Table.HeaderCell>Bukti Transfer</Table.HeaderCell>
-              <Table.HeaderCell>Keterangan</Table.HeaderCell>
-              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Nama Calon Santri</Table.HeaderCell>
+              <Table.HeaderCell>Metode Wawancara</Table.HeaderCell>
+              <Table.HeaderCell>Status Tes</Table.HeaderCell>
+              <Table.HeaderCell>Catatan</Table.HeaderCell>
+              <Table.HeaderCell>Pewawancara</Table.HeaderCell>
+              <Table.HeaderCell>Apakah Lulus</Table.HeaderCell>
               <Table.HeaderCell>Aksi</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -117,28 +119,16 @@ export default function ListPembayaran() {
                 <Table.Row key={value.id}>
                   {" "}
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>
-                    {value.informasi_calon_santri?.nama_siswa}
-                  </Table.Cell>{" "}
-                  <Table.Cell>
-                    <a
-                      href={value.bukti_tf}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {value.bukti_tf}
-                    </a>{" "}
-                  </Table.Cell>
-                  <Table.Cell>{value.keterangan}</Table.Cell>
-                  <Table.Cell>
-                    {value.status === 0
-                      ? "Belum Terverifikasi"
-                      : "Terverifikasi"}
-                  </Table.Cell>{" "}
+                  <Table.Cell>{value.informasi_calon_santri?.nama_siswa}</Table.Cell>{" "}
+                  <Table.Cell>{value.method}</Table.Cell>
+                  <Table.Cell>{value.status_tes}</Table.Cell>
+                  <Table.Cell>{value.catatan}</Table.Cell>
+                  <Table.Cell>{value.guruWawancara.nama_guru}</Table.Cell>
+                  <Table.Cell>{value.is_lulus === false ? "Belum Lulus" : "Lulus"}</Table.Cell>
                   <Table.Cell>
                     <EditButton
                       onClick={() =>
-                        navigate(`konfirmasi-pembayaran/${value.id}`)
+                        navigate(`konfirmasi-wawancara/${value.id}`)
                       } // Perbaiki referensi ke id
                     />
                     <DeleteButton

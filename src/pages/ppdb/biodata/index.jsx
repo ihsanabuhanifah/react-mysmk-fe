@@ -3,11 +3,7 @@ import LayoutPpdb from "../../../module/layoutPpdb";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   IoChevronForwardOutline,
-  IoPencilOutline,
-  IoShieldOutline,
-  IoMenu,
 } from "react-icons/io5";
-import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 export default function BiodataPpdb() {
   let { pathname } = useLocation();
@@ -43,57 +39,6 @@ export default function BiodataPpdb() {
   return (
     <LayoutPpdb title="Biodata Calon santri">
       <div className="flex h-full w-full">
-        {/* Sidebar */}
-        <div
-          className={`${
-            isSidebarVisible ? "block" : "hidden"
-          } sm:flex flex-col bg-white border-r border-black/5 h-full w-[185px] ml-2`}
-        >
-          <ButtonLink
-            title="Edit Profile"
-            logo={
-              <IoPencilOutline
-                size={22}
-                className={`${
-                  pathname === "/ppdb/biodata/update"
-                    ? "text-[#18a558]"
-                    : "text-gray-400"
-                }`}
-              />
-            }
-            to="/ppdb/biodata/update"
-          />
-          <ButtonLink
-            title="Berkas Profile"
-            logo={
-              <IoShieldOutline
-                size={22}
-                className={`${
-                  pathname === "/ppdb/biodata/berkas"
-                    ? "text-[#18a558]"
-                    : "text-gray-400"
-                }`}
-              />
-            }
-            to="/ppdb/biodata/berkas"
-          />
-        </div>
-
-        {isButtonVisible && ( // Hanya tampilkan tombol jika isButtonVisible bernilai true
-          <button
-            className={`sm:hidden fixed top-[135px] ${
-              !isSidebarVisible ? "left-4" : "left-[210px]"
-            } text-black`}
-            onClick={() => setIsSidebarVisible(!isSidebarVisible)}
-          >
-            {isSidebarVisible ? (
-              <IoIosArrowBack size={24} /> // Jika sidebar terlihat, tampilkan arrow left
-            ) : (
-              <IoIosArrowForward size={24} /> // Jika sidebar tidak terlihat, tampilkan arrow right
-            )}
-          </button>
-        )}
-
         {/* Content Area */}
         <div className="flex-1 h-full bg-white">
           <Outlet />

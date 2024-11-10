@@ -115,6 +115,20 @@ export default function SidebarGuru({ setSidebar }) {
 
         <NavButton
           handleSidebar={handleSiderbar}
+          to="list-wawancara"
+          path="list-wawancara"
+          title={"List Wawancara Calon Santri"}
+          logo={
+            <MdCreate
+              className={`h-8 w-8 ${
+                url === "list-wawancara" ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
+
+        <NavButton
+          handleSidebar={handleSiderbar}
           to="daftar-siswa"
           path="daftar-siswa"
           title={"Daftar Kelas"}

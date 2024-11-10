@@ -24,9 +24,22 @@ const BerkasPpdbSchema = yup.object().shape({
 export default function BerkasPpdb() {
   const navigate = useNavigate();
   const { profileData } = useProfileCalonSantri();
-  const { updateProfile, mutate } = useUpdateProfileCalonSantri(
-    profileData?.id
-  );
+  const { updateProfile, mutate } = useUpdateProfileCalonSantri(profileData?.id);
+
+  const [fileUrls, setFileUrls] = useState({
+    kk: null,
+    ijazah: null,
+    akte: null,
+    skb: null,
+    surat_pernyataan: null,
+  });
+
+  const handleFileDrop = (file, fieldName) => {
+    setFileUrls((prev) => ({
+      ...prev,
+      [fieldName]: URL.createObjectURL(file),
+    }));
+  };
 
   const initialState = {
     kk: profileData?.kk || "",
@@ -42,7 +55,7 @@ export default function BerkasPpdb() {
   };
 
   return (
-    <div className="mt-4 ml-4 pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
+    <div className="mt-2 ml-4 pr-[10%] sm:pr-[15%] md:pr-[30%] lg:pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
       <h3 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">
         Unggah Berkas Calon Santri
       </h3>
@@ -83,35 +96,30 @@ export default function BerkasPpdb() {
           isSubmitting,
         }) => (
           <Form onSubmit={handleSubmit} className="w-full pl-5">
-            {/* {JSON.stringify(values)} */}
             <Form.Field className="mb-4">
               <label>Kartu Keluarga</label>
               {!values.kk ? (
                 <DropzoneFilePpdb
                   handleDrop={(cont) => {
-                    if (cont && cont[0]) { // Jika cont adalah array
+                    if (cont && cont[0]) {
                       const file = cont[0];
                       if (file.size > 10 * 1024) {
                         alert("File anda terlalu besar! Maksimal 10 KB.");
-                        return; // Hentikan proses jika file terlalu besar
+                        return;
                       }
                     }
                     setFieldValue("kk", cont);
-                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
                 />
               ) : (
                 <div className="flex items-center space-x-2">
-                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("kk", null);
-                      console.log("File deleted");
                     }}
                   />
-                  {/* Link Tautan */}
                   {values.kk && (
                     <a
                       target="_blank"
@@ -138,27 +146,22 @@ export default function BerkasPpdb() {
               {!values.ijazah ? (
                 <DropzoneFilePpdb
                   handleDrop={(cont) => {
-                     // Cek apakah file melebihi 500 KB
-                     if (cont.size > 10 * 1024) {
+                    if (cont.size > 10 * 1024) {
                       alert("File anda terlalu besar! Maksimal 10 KB.");
-                      return; // Hentikan proses jika file terlalu besar
+                      return;
                     }
                     setFieldValue("ijazah", cont);
-                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
                 />
               ) : (
                 <div className="flex items-center space-x-2">
-                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("ijazah", null);
-                      console.log("File deleted");
                     }}
                   />
-                  {/* Link Tautan */}
                   {values.ijazah && (
                     <a
                       target="_blank"
@@ -185,27 +188,22 @@ export default function BerkasPpdb() {
               {!values.akte ? (
                 <DropzoneFilePpdb
                   handleDrop={(cont) => {
-                      // Cek apakah file melebihi 500 KB
-                      if (cont.size > 10 * 1024) {
-                        alert("File anda terlalu besar! Maksimal 10 KB.");
-                        return; // Hentikan proses jika file terlalu besar
-                      }
+                    if (cont.size > 10 * 1024) {
+                      alert("File anda terlalu besar! Maksimal 10 KB.");
+                      return;
+                    }
                     setFieldValue("akte", cont);
-                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
                 />
               ) : (
                 <div className="flex items-center space-x-2">
-                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("akte", null);
-                      console.log("File deleted");
                     }}
                   />
-                  {/* Link Tautan */}
                   {values.akte && (
                     <a
                       target="_blank"
@@ -226,32 +224,28 @@ export default function BerkasPpdb() {
                 <div className="text-red-500 text-sm mt-1">{errors.akte}</div>
               )}
             </Form.Field>
+
             <Form.Field className="mb-4">
               <label>Surat Keterangan Baik</label>
               {!values.skb ? (
                 <DropzoneFilePpdb
                   handleDrop={(cont) => {
-                     // Cek apakah file melebihi 500 KB
-                     if (cont.size > 10 * 1024) {
+                    if (cont.size > 10 * 1024) {
                       alert("File anda terlalu besar! Maksimal 10 KB.");
-                      return; // Hentikan proses jika file terlalu besar
+                      return;
                     }
                     setFieldValue("skb", cont);
-                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
                 />
               ) : (
                 <div className="flex items-center space-x-2">
-                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("skb", null);
-                      console.log("File deleted");
                     }}
                   />
-                  {/* Link Tautan */}
                   {values.skb && (
                     <a
                       target="_blank"
@@ -278,27 +272,22 @@ export default function BerkasPpdb() {
               {!values.surat_pernyataan ? (
                 <DropzoneFilePpdb
                   handleDrop={(cont) => {
-                    // Cek apakah file melebihi 500 KB
                     if (cont.size > 10 * 1024) {
                       alert("File anda terlalu besar! Maksimal 10 KB.");
-                      return; // Hentikan proses jika file terlalu besar
+                      return;
                     }
                     setFieldValue("surat_pernyataan", cont);
-                    console.log("File uploaded:", cont); // Tambahkan ini untuk debugging
                   }}
                 />
               ) : (
                 <div className="flex items-center space-x-2">
-                  {/* Tombol Delete */}
                   <Button
                     icon="delete"
                     color="red"
                     onClick={() => {
                       setFieldValue("surat_pernyataan", null);
-                      console.log("File deleted");
                     }}
                   />
-                  {/* Link Tautan */}
                   {values.surat_pernyataan && (
                     <a
                       target="_blank"
@@ -322,9 +311,16 @@ export default function BerkasPpdb() {
               )}
             </Form.Field>
 
-            <Button type="submit" color="blue" disabled={isSubmitting}>
-              {isSubmitting ? "Menyimpan..." : "Simpan"}
-            </Button>
+            <div className="flex justify-lef mt-8">
+              <Button
+                type="submit"
+                color="green"
+                disabled={isSubmitting}
+                className="w-[150px] py-3"
+              >
+                {isSubmitting ? "Uploading..." : "Simpan Berkas"}
+              </Button>
+            </div>
           </Form>
         )}
       </Formik>

@@ -15,12 +15,11 @@ import {
 } from "../../../api/ppdb/pembayaran";
 import { Formik } from "formik";
 import { Button, Form, Input, Label, Modal } from "semantic-ui-react";
-import DropzoneFile from "../../../components/Dropzone";
+import DropzoneFilePpdb from "../../../components/Dropzone";
+import { useQueryClient } from "react-query";
 
 const LampiranBuktiTransferSchema = yup.object().shape({
   bukti_tf: yup.string().nullable().required("File harus diunggah!"),
-  // keterangan: yup.string().nullable().required("Silahkan isi keterangan!"),
-  // teacher_id: yup.number().nullable().required("Teacher ID harus diisi!"),
 });
 
 // Simulasi user login (sesuaikan dengan logika login dari backend-mu)
@@ -33,7 +32,6 @@ const BuktiTransfer = () => {
   const { id } = useParams();
   const { profileData } = useProfileCalonSantri();
   const { dataPembayaran, error, isError } = useDetailPembayaran();
-  // const { dataDetail, isLoading, isError } = useGetHasilPembayaranDetail(id);
   const [paymentId, setPaymentId] = useState(null); // State untuk menyimpan paymentId
   const [openModal, setOpenModal] = useState(false);
   const [paymentDetails, setPaymentDetails] = useState(null); // Menyimpan data pembayaran
@@ -44,33 +42,13 @@ const BuktiTransfer = () => {
   const handlePopupToggle = () => {
     setShowPopup(!showPopup);
   };
-
-  // useEffect(() => {
-  //   if (isError && error?.response?.status === 404) {
-  //     navigate("/ppdb/transfer");
-  //   }
-  // }, [isError, error, navigate]);
+  const queryClient = useQueryClient();
+  const [showModal, setShowModal] = useState(false);
+  const [fileUrl, setFileUrl] = useState(null);
 
   const [initialValues, setInitialValues] = useState({
     bukti_tf: "",
-    // keterangan: "Registrasi",
-    // teacher_id: "",
   });
-
-  // Fetch data setelah paymentId tersimpan
-  useEffect(() => {
-    if (paymentId) {
-      const getPaymentDetails = async () => {
-        try {
-          const response = await fetchPaymentDetails(paymentId); // Panggil API untuk data berdasarkan paymentId
-          setPaymentDetails(response.data); // Simpan data pembayaran di state
-        } catch (error) {
-          console.error("Error fetching payment details:", error);
-        }
-      };
-      getPaymentDetails(); // Panggil fungsi untuk fetch data
-    }
-  }, [paymentId]);
 
   const onSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
@@ -78,7 +56,7 @@ const BuktiTransfer = () => {
       const updatedValues = {
         ...values,
         teacher_id: 2, // Mengisi teacher_id dengan nilai 2
-        keterangan: "Registrasi",
+        keterangan: "biaya pendaftaran",
       };
 
       const response = await CreateLampiranBuktiTransfer(updatedValues);
@@ -110,6 +88,9 @@ const BuktiTransfer = () => {
       setTimeout(() => {
         setOpenModal(false);
       }, 3000);
+
+      // Invalidate cache query terkait pembayaran
+      queryClient.invalidateQueries(dataPembayaran);
     } catch (error) {
       if (error?.response?.status === 422) {
         toast.warn(error?.response?.data?.msg || "Validasi gagal!", {
@@ -139,8 +120,23 @@ const BuktiTransfer = () => {
     }
   };
 
+  // Fetch data setelah paymentId tersimpan
+  useEffect(() => {
+    if (paymentId) {
+      const getPaymentDetails = async () => {
+        try {
+          const response = await fetchPaymentDetails(paymentId); // Panggil API untuk data berdasarkan paymentId
+          setPaymentDetails(response.data); // Simpan data pembayaran di state
+        } catch (error) {
+          console.error("Error fetching payment details:", error);
+        }
+      };
+      getPaymentDetails(); // Panggil fungsi untuk fetch data
+    }
+  }, [paymentId]);
+
   return (
-    <LayoutPpdb title="Transfer">
+    <LayoutPpdb title="Biaya Pendaftaran">
       <Formik
         initialValues={initialValues}
         validationSchema={LampiranBuktiTransferSchema}
@@ -179,7 +175,7 @@ const BuktiTransfer = () => {
                 <p>Belum ada Payment ID yang tersimpan.</p>
               )}  */}
               {/* Card Section */}
-              <div className="bg-white shadow-lg rounded-lg p-6 w-full mx-auto mt-8">
+              <div className="bg-white shadow-lg border-2 rounded-lg p-6 w-full mx-auto mt-8">
                 <h2 className="text-2xl font-bold mb-4">
                   Panduan Pembayaran Pendaftaran
                 </h2>
@@ -194,7 +190,7 @@ const BuktiTransfer = () => {
                   <p className="text-gray-700 flex flex-col">
                     Nominal yang harus dibayarkan sebesar:
                     <span className="font-semibold text-green-600 text-xl">
-                      450.000
+                      Rp450.000
                     </span>
                   </p>
                 </div>
@@ -222,7 +218,7 @@ const BuktiTransfer = () => {
                 </div>
               </div>
               {/* Lampiran Bukti Detail Transfer Section */}
-              <div className="bg-white shadow-lg rounded-lg p-6 w-full mx-auto mt-8">
+              <div className="bg-white shadow-lg border-2 rounded-lg p-6 w-full mx-auto mt-8">
                 {dataPembayaran ? (
                   <>
                     <h2 className="text-2xl font-bold mb-4">
@@ -233,10 +229,6 @@ const BuktiTransfer = () => {
                       <p>
                         Bukti transfer anda berhasil di upload, lihat
                         lampirannya di bawah ini
-                      </p>
-                      <p className="text-gray-700">
-                        <span className="font-semibold">Status:</span>{" "}
-                        {dataPembayaran?.status}
                       </p>
 
                       {/* Bungkus tombol dalam div flex-col */}
@@ -250,14 +242,16 @@ const BuktiTransfer = () => {
 
                         {/* Tambahan button berdasarkan status */}
                         {dataPembayaran?.status === 0 && (
-                          <button className="bg-transparent border-yellow-500 border-2 text-yellow-500 px-4 py-2 rounded w-[250px]">
-                            Menunggu Verifikasi dari Admin
-                          </button>
+                          <div className="bg-transparent border-yellow-500 border-2 text-yellow-500 px-2 py-2 rounded w-[250px]">
+                            <p className="text-center">
+                              Menunggu Verifikasi dari Admin
+                            </p>
+                          </div>
                         )}
                         {dataPembayaran?.status === 1 && (
-                          <button className="bg-transparent border-green-500 border-2 text-customGreen px-4 py-2 rounded w-[250px]">
-                            Pembayaran Berhasil
-                          </button>
+                          <div className="bg-transparent border-green-500 border-2 text-customGreen px-4 py-2 rounded w-[250px]">
+                            <p className="text-center"> Pembayaran Berhasil</p>
+                          </div>
                         )}
                       </div>
 
@@ -294,36 +288,48 @@ const BuktiTransfer = () => {
                   </>
                 ) : (
                   /*Card Upload Bukti Transfer*/
-
                   <>
                     <h2 className="text-2xl font-bold mb-4">
                       Lampiran Bukti Transfer
                     </h2>
 
                     <div className="py-8">
-                      <Form.Field className="mb-2 w-[450px]">
+                      <Form.Field className="mb-4 w-[450px]">
                         <label>Upload Bukti Transfer</label>
                         {!values.bukti_tf ? (
-                          <DropzoneFile
+                          <DropzoneFilePpdb
                             handleDrop={(cont) => {
                               setFieldValue("bukti_tf", cont);
                             }}
                           />
                         ) : (
                           <div className="flex items-center space-x-2">
+                            {/* Tombol Delete */}
                             <Button
                               icon="delete"
                               color="red"
-                              onClick={() => setFieldValue("bukti_tf", "")}
+                              onClick={() => {
+                                setFieldValue("bukti_tf", null);
+                                console.log("File deleted");
+                              }}
                             />
-                            {values.bukti_tf instanceof File && (
-                              <a
-                                target="_blank"
-                                rel="noreferrer"
-                                href={URL.createObjectURL(values.bukti_tf)}
+                            {/* Link Tautan */}
+                            {values.bukti_tf && (
+                              <span
+                                onClick={() => {
+                                  const url =
+                                    typeof values.bukti_tf === "string"
+                                      ? values.bukti_tf
+                                      : URL.createObjectURL(values.bukti_tf);
+                                  setFileUrl(url);
+                                  setShowModal(true);
+                                }}
+                                className="text-blue-500 underline cursor-pointer"
                               >
-                                {values.bukti_tf.name}
-                              </a>
+                                {typeof values.bukti_tf === "string"
+                                  ? values.bukti_tf
+                                  : values.bukti_tf.name}
+                              </span>
                             )}
                           </div>
                         )}
@@ -332,27 +338,29 @@ const BuktiTransfer = () => {
                             {errors.bukti_tf}
                           </div>
                         )}
+
+                        {/* Modal Popup */}
+                        {showModal && (
+                          <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
+                            <div className="bg-white p-4 rounded-lg w-[500px] h-[400px] flex flex-col">
+                              <button
+                                className="self-end text-red-500 font-bold mb-2"
+                                onClick={() => setShowModal(false)}
+                              >
+                                Close
+                              </button>
+                              <iframe
+                                src={fileUrl}
+                                className="w-full h-full border rounded-lg"
+                                title="File Preview"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </Form.Field>
                     </div>
 
                     <div className="my-4">
-                      {/* Checkbox */}
-                      <div className="pb-4">
-                        <label className="flex items-center">
-                          <input
-                            type="checkbox"
-                            className="form-checkbox h-5 w-5 text-green-600"
-                          />
-                          <span className="ml-2 text-md">
-                            Saya setuju dengan kententuan bahwa{" "}
-                            <a className="text-red-500 font-semibold">
-                              {" "}
-                              "Uang Yang Sudah Di Transfer Tidak Bisa
-                              Dikembalikan Dengan Alasan Atau Kondisi Apapun"
-                            </a>
-                          </span>
-                        </label>
-                      </div>
                       <p>
                         Dalam hadits abu Hurairah disebutkan bahwa Rasulullah
                         shallallahu ‘alaihi wa sallam bersabda:
@@ -372,7 +380,7 @@ const BuktiTransfer = () => {
 
                     <Button
                       type="submit"
-                      color="blue"
+                      color="green"
                       disabled={isSubmitting}
                       loading={isSubmitting}
                     >
@@ -384,27 +392,6 @@ const BuktiTransfer = () => {
               </div>
             </Form>
 
-            {/* <h3>Daftar Pembayaran</h3>
-            <ul>
-              {payments.map((payment) => (
-                <li key={payment.id}>
-                  <p>Keterangan: {payment.keterangan}</p>
-                  <p>Nominal: {payment.nominal}</p>
-                  <p>Dari: {payment.guru.nama_guru}</p>
-                  <p>
-                    Status:{" "}
-                    {payment.status === 0
-                      ? "Belum Dikonfirmasi"
-                      : "Dikonfirmasi"}
-                  </p>
-                  <img
-                    src={payment.bukti_tf}
-                    alt="Bukti Transfer"
-                    width={100}
-                  />
-                </li>
-              ))}
-            </ul> */}
 
             {/* Popup Success Modal */}
             <Modal

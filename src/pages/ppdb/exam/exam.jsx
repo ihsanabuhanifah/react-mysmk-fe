@@ -13,7 +13,7 @@ const Ujian = () => {
   const [dataUjian, setDataUjian] = useState([
     {
       ujian: {
-        mapel: { nama_mapel: "Matematika" },
+        mapel: { nama_mapel: "Test Calon santri" },
         waktu_mulai: new Date(),
         waktu_selesai: new Date(),
         durasi: "90 menit",
@@ -24,34 +24,6 @@ const Ujian = () => {
       jam_mulai: new Date(),
       jam_selesai: new Date(),
       status: "open",
-    },
-    {
-      ujian: {
-        mapel: { nama_mapel: "Bahasa Inggris" },
-        waktu_mulai: new Date(),
-        waktu_selesai: new Date(),
-        durasi: "60 menit",
-        jenis_ujian: "Ujian Akhir Semester",
-        tipe_ujian: "Esai",
-      },
-      teacher: { nama_guru: "Ibu Siti" },
-      jam_mulai: new Date(),
-      jam_selesai: new Date(),
-      status: "progress",
-    },
-    {
-      ujian: {
-        mapel: { nama_mapel: "Fisika" },
-        waktu_mulai: new Date(),
-        waktu_selesai: new Date(),
-        durasi: "120 menit",
-        jenis_ujian: "Ujian Harian",
-        tipe_ujian: "Pilihan Ganda",
-      },
-      teacher: { nama_guru: "Pak Budi" },
-      jam_mulai: new Date(),
-      jam_selesai: new Date(),
-      status: "finish",
     },
   ]);
 
