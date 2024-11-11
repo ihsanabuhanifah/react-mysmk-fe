@@ -217,7 +217,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                             <FormLabel label={"Nama Siswa"}>
                                 <ReactSelectAsync
                                     debounceTimeout={300}
-                                    value={values?.nama_siswa}
+                                    value={values.nama_siswa?.label}
                                     loadOptions={listSiswaOptions}
                                     isClearable
                                     onChange={(data) => {

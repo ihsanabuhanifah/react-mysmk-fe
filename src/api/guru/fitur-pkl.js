@@ -1,31 +1,9 @@
-// //guru
 
-// import axios from "../axiosClient";
-// import { syncToken } from "../axiosClient";
-// export function listSiswaPkl(params) {
-//   return axios.get("/guru/tempat-pkl/list", { params });
-// }
-
-// export function createSiswaPkl(payload) {
-//   return axios.post("/guru/tempat-pkl/create", payload);
-// }
-
-// export function deleteSiswaPkl(id) {
-//   return axios.delete(`guru/tempat-pkl/delete/${id}`);
-// }
-
-// export function detailSiswaPkl(id) {
-//   return axios.get(`guru/tempat-pkl/detail/${id}`);
-// }
-
-// export function updateSiswaPkl(id, values) {
-//   let payload = values.payload[0];
-
-//   return axios.put(`guru/tempat-pkl/update/${id}`, payload);
-// }
 
 import axios from "axios";
 import axiosClient, { syncToken } from "../axiosClient";
+import { usePagination } from "../../hook/usePagination";
+import { useQuery } from "react-query";
 
 export function listSiswaPkl(params) {
   syncToken();
@@ -73,3 +51,45 @@ export function detailJawabanSiswaPkl(id)  {
 //     payload: payload?.data[0],
 //   });
 // }
+
+
+export const useLaporanPklList = () => {
+  let defParams = {
+    page: 1,
+    pageSize: 10,
+    dariTanggal: null,
+    sampaiTanggal: null,
+    status_kehadiran: null,
+  };
+  const {
+    params,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+  } = usePagination(defParams);
+
+  const { isLoading, data, isFetching } = useQuery(
+    ["/guru/laporan-harian-pkl/list", filterParams],
+    () => listSiswaPkl(filterParams),
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+  return {
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    data,
+    isFetching,
+    isLoading,
+    params,
+  };
+};

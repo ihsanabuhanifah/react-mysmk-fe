@@ -6,12 +6,13 @@ import { useQuery, useQueryClient } from 'react-query';
 import { Button, Icon, Input, Menu, Sidebar, Table } from "semantic-ui-react";
 import { useNavigate } from 'react-router-dom';
 import usePage from "../../../hook/usePage";
-import { createSiswaPkl, deleteSiswaPkl, listSiswaPkl, updateSiswaPkl } from '../../../api/guru/fitur-pkl';
+import { createSiswaPkl, deleteSiswaPkl, listSiswaPkl, updateSiswaPkl, useLaporanPklList } from '../../../api/guru/fitur-pkl';
 import { toast } from 'react-toastify';
 import UploadExcel from '../../../components/ModalUploadExel';
 import useDebounce from '../../../hook/useDebounce';
 import FilterSiswaPkl from './filter';
 import { encodeURlFormat } from '../../../utils';
+import Pagination from '../../../components/pagination';
 
 export default function FiturPkl() {
 
@@ -43,7 +44,7 @@ export default function FiturPkl() {
     };
 
 
-    const { data, isLoading ,isFetching} = useQuery(
+    const { data, isLoading, isFetching } = useQuery(
         ["/tempat-pkl/list", params],
         () => listSiswaPkl(params),
         {
@@ -55,7 +56,21 @@ export default function FiturPkl() {
             },
         }
     );
+    // const {
+    //     data,
+    //     isFetching,
+    //     isLoading,
+    //     setParams,
+    //     handleFilter,
+    //     handleClear,
+    //     handlePageSize,
+    //     handlePage,
+    //     filterParams,
+    //     params,
+    //   } = useLaporanPklList();
+    //   console.log(data);
 
+    
     const {
         showAlertDelete,
         setShowAlertDelete,
@@ -165,7 +180,7 @@ export default function FiturPkl() {
                     {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1 transform transition-all duration-300">
                         <UploadExcel />
                     </div> */}
-                    <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+                    {/* <div className="col-span-6 lg:col-span-1 xl:col-span-1">
                         <Button
                             content={"Filter"}
                             type="button"
@@ -177,7 +192,7 @@ export default function FiturPkl() {
                                 setVisible(!visible);
                             }}
                         />
-                    </div>
+                    </div> */}
                 </section>
                 <section>
                     <Table celled selectable >
@@ -245,6 +260,13 @@ export default function FiturPkl() {
                         setPage={setPage}
                         totalPages={data?.pagination?.totalPages}
                     />
+                    {/* <Pagination
+                        handlePage={handlePage}
+                        handlePageSize={handlePageSize}
+                        page={params.page}
+                        pageSize={params.pageSize}
+                        pagination={data?.pagination}
+                    /> */}
                 </section>
             </div>
         </LayoutPage>
