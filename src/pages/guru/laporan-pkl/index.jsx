@@ -102,7 +102,7 @@ export default function LaporanPkl() {
     });
 
     return (
-        <LayoutPage title={"Laporan Pkl"} >
+        <LayoutPage title={"Jurnal Pkl"} >
             
             <Sidebar
                 as={Menu}

@@ -1,4 +1,4 @@
-import { Button, Icon, Menu, Sidebar, Table } from "semantic-ui-react";
+import { Button, Icon, Menu, Modal, Sidebar, Table } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
 import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, detailTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
+import { deleteTugasPkl, detailTugasPkl, listJawabanTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
@@ -32,18 +32,9 @@ export default function TugasLaporanPkl() {
     const [open, setOpen] = useState(false);
     const [jawaban, setJawaban] = useState([]);
     const [value, setValue] = useState({});
+    const [selectedJawaban, setSelectedJawaban] = useState(null);
 
-    const { data:dataJawab, isLoading:loadingJawab, isFetching:fetchingJawab } = useQuery(
-        ["/jawaban-tugas-pkl/detail", id],
-        () => detailJawabanSiswaPkl(id),
-        {
-            refetchOnWindowFocus: false,
-            select: (response) => {
-                console.log('penilaian',response)
-                return response.data;
-            }
-        }
-    )
+
 
 
     const params = {
@@ -55,17 +46,40 @@ export default function TugasLaporanPkl() {
 
 
     };
+    // const { data, isLoading, isFetching } = useQuery(
+    //     ["/jawaban-tugas-pkl/detailByTugasId", id],
+    //     () => listJawabanTugasPkl(id),
+    //     {
+    //         refetchOnWindowFocus: false,
+    //         select: (response) => {
+    //             console.log(response.data.data.detailJawaban)
+    //             return response.data;
+    //         }
+    //     }
+    // )
     const { data, isLoading, isFetching } = useQuery(
-        ["/tempat-pkl/list", params],
-        () => listSiswaPkl(params),
+        ["/jawaban-tugas-pkl/detailByTugasId", id],
+        () => listJawabanTugasPkl(id),
         {
             refetchOnWindowFocus: false,
             select: (response) => {
-                console.log(response.data)
+                console.log(response.data.data);
                 return response.data;
             }
         }
-    )
+    );
+
+    const handleOpenModal = (jawaban) => {
+        setSelectedJawaban(jawaban);
+        setIsOpen(true);
+    };
+
+    // Function to close the modal
+    const handleCloseModal = () => {
+        setIsOpen(false);
+        setSelectedJawaban(null);
+    };
+
     const {
         showAlertDelete,
         setShowAlertDelete,
@@ -99,67 +113,49 @@ export default function TugasLaporanPkl() {
 
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
-            
+
             <section className="mt-5">
                 <Table celled selectable >
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>No</Table.HeaderCell>
                             <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                            <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Batas Waktu</Table.HeaderCell> */}
                             <Table.HeaderCell>Status</Table.HeaderCell>
-                            {/* <Table.HeaderCell>Selesai</Table.HeaderCell> */}
+                            <Table.HeaderCell>Selesai</Table.HeaderCell>
                             <Table.HeaderCell>Penilaian</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         <TableLoading
                             count={8}
-                            isLoading={isLoading || isFetching}
-                            data={data?.data}
+                            isLoading={isLoading}
+                            data={data?.data.detailJawaban}
                             messageEmpty={"Data Tidak Ditemukan"}
                         >
-                            {data?.data?.map((value, index) => (
+                            {data?.data.detailJawaban?.map((value, index) => (
                                 <Table.Row key={index}>
                                     <Table.Cell>{index + 1}</Table.Cell>
-                                    <Table.Cell>{value?.siswa?.nama_siswa}</Table.Cell>
-                                    <Table.Cell>{dayjs(value.batas_waktu).format("DD-MM-YY HH:mm:ss")}</Table.Cell>
+                                    <Table.Cell>{value?.nama}</Table.Cell>
 
 
                                     <Table.Cell>
                                         <LabelStatus status={value.status} />
                                     </Table.Cell>
-                                    {/* <Table.Cell>3/{index + 1}</Table.Cell> */}
+                                    <Table.Cell ><Button className=" bg-gray-100" size="tiny">{data?.data.totalSiswa} / {data?.data.sudahDikerjakan}</Button></Table.Cell>
 
                                     <Table.Cell>
                                         <Button
                                             color="linkedin"
-                                            type="button"
                                             size="tiny"
-                                            // onClick={() => {
-                                            //     setOpen(true);
-                                            //     // setNamaSiswa({
-                                            //     //     nama_siswa: item.siswa.nama_siswa,
-                                            //     //     mapel: mapel,
-                                            //     // });
-
-                                            //     // console.log("item", item);
-                                            //     // setItem(item);
-                                            //     // setJawaban(() => {
-                                            //     //     if (!!item.jawaban === false) {
-                                            //     //         return [];
-                                            //     //     }
-                                            //     //     return JSON.parse(item.jawaban);
-                                            //     // });
-                                            // }}
-                                            onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}
+                                            onClick={() => handleOpenModal(value)}
                                         >
-                                            {" "}
                                             <Icon name="eye" /> Lihat
                                         </Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}
+
                         </TableLoading>
                     </Table.Body>
                 </Table>
@@ -171,7 +167,19 @@ export default function TugasLaporanPkl() {
                     totalPages={data?.data?.count}
                 />
             </section>
-
+            <Modal open={isOpen} onClose={handleCloseModal}>
+                <Modal.Header>Detail Jawaban Tugas</Modal.Header>
+                <Modal.Content>
+                    <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
+                    <p><strong>Pesan:</strong> {selectedJawaban?.pesan ?? "Tidak ada pesan"}</p>
+                    <p><strong>Jawaban:</strong> {selectedJawaban?.jawaban?.isi_jawaban ?? "Belum ada jawaban"}</p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color="red" onClick={handleCloseModal}>
+                        <Icon name="close" /> Tutup
+                    </Button>
+                </Modal.Actions>
+            </Modal>
         </LayoutPage>
     )
 }

@@ -18,7 +18,7 @@ import Editor from "../../../components/Editor";
 
 let tugasPklSchema = Yup.object().shape({
     tugas: Yup.string().required("wajib diisi"),
-    link_soal: Yup.string().required("wajib diisi"),
+    // link_soal: Yup.string().required("optional"),
     batas_waktu: Yup.string().nullable().required("wajib disii"),
     deskripsi_tugas: Yup.string().required("wajib diisi"),
 })
@@ -185,16 +185,16 @@ export default function CreateTugasPkl() {
                                         onBlur={handleBlur}
                                         fluid
                                         type="text"
-                                        error={
-                                            errors?.link_soal !== undefined &&
-                                            touched?.link_soal
-                                        }
+                                        // error={
+                                        //     errors?.link_soal !== undefined &&
+                                        //     touched?.link_soal
+                                        // }
                                     />
-                                    {touched.link_soal && errors.link_soal && (
+                                    {/* {touched.link_soal && errors.link_soal && (
                                         <div className="ui pointing red basic label ">
                                             {errors.link_soal}
                                         </div>
-                                    )}
+                                    )} */}
                                 </section>
 
                                 <section className="col-span-3 lg:col-span-1">
@@ -262,12 +262,13 @@ export default function CreateTugasPkl() {
                                                 );
                                             }}
                                             error={
-                                                errors?.payload?.[index]?.batas_waktu !== undefined &&
-                                                errors?.payload?.[index]?.batas_waktu
+                                                errors?.batas_waktu !== undefined &&
+                                                errors?.batas_waktu
                                             }
                                             type="datetime-local"
                                             value={values?.batas_waktu}
                                         />
+                                        
                                     </div>
                                 </section>
 

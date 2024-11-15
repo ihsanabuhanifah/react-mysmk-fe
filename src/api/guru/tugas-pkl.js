@@ -35,3 +35,11 @@ export function detailTugasPkl(id)  {
   console.log("api detail");
   return axiosClient.get(`guru/tugas-pkl/detail/${id}`);
 }
+
+export function listJawabanTugasPkl(id)  {
+  syncToken();
+  console.log("api detail");
+  return axiosClient.get(`guru/jawaban-tugas-pkl/detailByTugasId/${id}`);
+}
+
+

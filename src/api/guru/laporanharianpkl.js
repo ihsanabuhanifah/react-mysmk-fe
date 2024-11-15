@@ -85,7 +85,8 @@ export const useDownloadPdf = () => {
   const defParams = {
     bulan: null,
     tahun: 2024,
-    studentId: null,
+    // studentId: null,
+    siswa_id:null
   };
   // console.log(student_id);
 

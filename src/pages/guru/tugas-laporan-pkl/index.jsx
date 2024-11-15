@@ -3,16 +3,17 @@ import LayoutPage from "../../../module/layoutPage";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
 import { useQuery, useQueryClient } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
+import { deleteTugasPkl, listJawabanTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
 import { replace } from "formik";
 import dayjs from "dayjs";
 import { CopyButton } from "../../../components/buttonAksi/editButton";
+import { toast } from "react-toastify";
 
 export default function TugasLaporanPkl() {
 
@@ -46,6 +47,35 @@ export default function TugasLaporanPkl() {
             }
         }
     )
+    // const { data:dataJawab, isLoading:loadingJawab } = useQuery(
+    //     ["/jawaban-tugas-pkl/detailByTugasId", id],
+    //     () => listJawabanTugasPkl(id),
+    //     {
+    //         refetchOnWindowFocus: false,
+    //         select: (response) => {
+    //             const { totalSiswa, sudahDikerjakan } = response.data;
+    //             return { totalSiswa, sudahDikerjakan };
+    //         },
+    //     }
+    // )
+    useEffect(() => {
+        data;
+    }, [data]);
+
+    // const DataJawab = 
+
+    const handleCopy = async(text) => {
+        // navigator.clipboard.writeText(text)
+        try {
+            navigator.clipboard.writeText(text);
+            // const response = await navigator.clipboard.writeText(text);
+            // alert('Teks berhasil disalin ke clipboard!');
+            
+        } catch (error) {
+            // alert('Gagal menyalin teks!');
+            
+        }
+    };
     const {
         showAlertDelete,
         setShowAlertDelete,
@@ -80,7 +110,7 @@ export default function TugasLaporanPkl() {
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
             <section className="grid grid-cols-6 gap-5 mt-5 ">
-                <div className="col-span-6 lg:col-span-1 xl:col-span-1">
+                <div className="col-span-6 lg:col-span-1 xl:col-span-1 mb-5">
                     <Button
                         type="button"
                         color="teal"
@@ -92,19 +122,7 @@ export default function TugasLaporanPkl() {
                     />
 
                 </div>
-                <div className="col-span-6 lg:col-span-1 xl:col-span-1 mb-10">
-                    <Button
-                        content={"Filter"}
-                        type="button"
-                        fluid
-                        icon={() => <Icon name="filter" />}
-                        size="medium"
-                        color="blue"
-                        onClick={() => {
-                            setVisible(!visible);
-                        }}
-                    />
-                </div>
+                
             </section>
             <section>
                 <Table celled selectable >
@@ -113,8 +131,9 @@ export default function TugasLaporanPkl() {
                             <Table.HeaderCell>No</Table.HeaderCell>
                             {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell> */}
                             <Table.HeaderCell>Judul</Table.HeaderCell>
+                            <Table.HeaderCell>Link Soal</Table.HeaderCell>
                             <Table.HeaderCell>Batas Waktu</Table.HeaderCell>
-                            <Table.HeaderCell>Selesai</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Selesai</Table.HeaderCell> */}
                             <Table.HeaderCell>Aksi</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -130,10 +149,13 @@ export default function TugasLaporanPkl() {
                                     <Table.Cell>{index + 1}</Table.Cell>
                                     {/* <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell> */}
                                     <Table.Cell>{value?.tugas}</Table.Cell>
-                                    {/* <Table.Cell>{value?.batas_waktu}</Table.Cell> */}
+                                    <Table.Cell onClick={() => handleCopy(value?.link_soal)} className="cursor-pointer ">
+                                        {value?.link_soal}
+                                        <CopyButton >
+                                        </CopyButton></Table.Cell>
                                     <Table.Cell>{dayjs(value.batas_waktu).format("DD-MM-YY HH:mm:ss")}</Table.Cell>
                                     {/* <Table.Cell>3/{index + 1 }</Table.Cell> */}
-                                    <Table.Cell>3/{index + 1}</Table.Cell>
+                                    {/* <Table.Cell>3/{index + 1}</Table.Cell> */}
                                     <Table.Cell>
                                         <EditButton
                                             onClick={() => navigate(`update/${value?.id}`, { replace: true })}
@@ -141,7 +163,7 @@ export default function TugasLaporanPkl() {
                                         <DeleteButton
                                             onClick={() => confirmDelete(value?.id)}
                                         />
-                                        
+
                                         <Button content={'Nilai'} size="tiny" color="blue" onClick={() => navigate(`nilai/${value?.id}`, { replace: true })}></Button>
                                     </Table.Cell>
                                 </Table.Row>

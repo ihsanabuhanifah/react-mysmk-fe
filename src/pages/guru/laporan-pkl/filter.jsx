@@ -230,7 +230,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                         // setStudentId(data?.value);
                                         setParams((params) => ({
                                             ...params,
-                                            siswaId: data?.value,
+                                            siswa_id: data?.value,
                                             // nama_siswa:data.label
                                             
                                         }))
@@ -254,7 +254,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
 
                             <div className="absolute bottom-2 right-2 left-2">
                                 <Button type="submit" content="Terapkan" fluid color="teal" />
-                                <br />
+                                {/* <br />
                                 <Button
                                     fluid
                                     color="red"
@@ -278,7 +278,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                             <Icon name="download" /> Download PDF
                                         </>
                                     )}
-                                </Button>
+                                </Button> */}
                             </div>
                         </Container>
                     </section>

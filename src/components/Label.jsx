@@ -2,19 +2,29 @@ import { Label } from "semantic-ui-react";
 import { durasiOptions } from "../utils/options";
 
 export const LabelStatus = ({ status }) => {
-  if (status === "open") {
+  if (status === "belum dikerjakan") {
     return (
-      <Label size="tiny" content="Belum Dikerjakan" color="purple" as={"a"} />
+      <Label size="tiny" content="Belum Dikerjakan" color="yellow" as={"a"} />
     );
   }
-  if (status === "progress") {
+  if (status === "gagal") {
+    return (
+      <Label size="tiny" content="Gagal" color="red" as={"a"} />
+    );
+  }
+  if (status === "sedang dikerjakan") {
     return (
       <Label size="tiny" content="Sedang Dikerjakan" color="blue" as={"a"} />
     );
   }
-  if (status === "finish") {
+  if (status === "sudah dikerjakan") {
     return (
       <Label size="tiny" content="Selesai Dikerjakan" color="green" as={"a"} />
+    );
+  }
+  if (status === null) {
+    return (
+      <Label size="tiny" content="null" color="gray" as={"a"} />
     );
   }
   if (status === "harian") {
