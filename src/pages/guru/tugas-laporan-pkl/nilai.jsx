@@ -142,9 +142,10 @@ export default function TugasLaporanPkl() {
                                     <Table.Cell>
                                         <LabelStatus status={value.status} />
                                     </Table.Cell>
-                                    <Table.Cell ><Button className=" bg-gray-100" size="tiny">{data?.data.totalSiswa} / {data?.data.sudahDikerjakan}</Button></Table.Cell>
+                                    <Table.Cell >{data?.data.totalSiswa} / {data?.data.sudahDikerjakan}</Table.Cell>
 
                                     <Table.Cell>
+
                                         <Button
                                             color="linkedin"
                                             size="tiny"
