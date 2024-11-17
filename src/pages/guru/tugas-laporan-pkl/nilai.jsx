@@ -1,4 +1,4 @@
-import { Button, Icon, Menu, Modal, Sidebar, Table } from "semantic-ui-react";
+import { Button, Dropdown, Icon, Menu, Modal, Sidebar, Table, TextArea } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
@@ -34,6 +34,8 @@ export default function TugasLaporanPkl() {
     const [value, setValue] = useState({});
     const [selectedJawaban, setSelectedJawaban] = useState(null);
 
+    const [status, setStatus] = useState("");
+    const [pesan, setPesan] = useState("");
 
 
 
@@ -68,9 +70,22 @@ export default function TugasLaporanPkl() {
             }
         }
     );
+    const handleUpdate = () => {
+        mutation.mutate({
+            id: selectedJawaban?.student_id,
+            status,
+            pesan,
+        });
+    };
 
-    const handleOpenModal = (jawaban) => {
+    const handleOpenModalLihat = (jawaban) => {
         setSelectedJawaban(jawaban);
+        setIsOpen(true);
+    };
+    const handleOpenModalPesan = (jawaban) => {
+        setSelectedJawaban(jawaban);
+        setStatus(jawaban.status || "");
+        setPesan(jawaban.pesan || "");
         setIsOpen(true);
     };
 
@@ -79,6 +94,17 @@ export default function TugasLaporanPkl() {
         setIsOpen(false);
         setSelectedJawaban(null);
     };
+
+    const statusOptions = [
+        { key: "gagal", value: "gagal", text: "Gagal" },
+        { key: "revisi", value: "revisi", text: "Revisi" },
+        { key: "selesai", value: "selesai", text: "Selesai" },
+    ];
+    // const statusOptions = [
+    //     { key: "belum", value: "belum dikerjakan", text: "Belum Dikerjakan" },
+    //     { key: "sedang", value: "sedang dikerjakan", text: "Sedang Dikerjakan" },
+    //     { key: "selesai", value: "selesai", text: "Selesai" },
+    // ];
 
     const {
         showAlertDelete,
@@ -149,9 +175,16 @@ export default function TugasLaporanPkl() {
                                         <Button
                                             color="linkedin"
                                             size="tiny"
-                                            onClick={() => handleOpenModal(value)}
+                                            onClick={() => handleOpenModalLihat(value)}
                                         >
                                             <Icon name="eye" /> Lihat
+                                        </Button>
+                                        <Button
+                                            color="green"
+                                            size="tiny"
+                                            onClick={() => handleOpenModalPesan(value)}
+                                        >
+                                            <Icon name="chat" /> Pesan
                                         </Button>
                                     </Table.Cell>
                                 </Table.Row>
@@ -178,6 +211,46 @@ export default function TugasLaporanPkl() {
                 <Modal.Actions>
                     <Button color="red" onClick={handleCloseModal}>
                         <Icon name="close" /> Tutup
+                    </Button>
+                </Modal.Actions>
+            </Modal>
+                            {/* popup Pesan */}
+            <Modal open={isOpen} onClose={handleCloseModal}>
+                <Modal.Header>Ubah Status dan Pesan</Modal.Header>
+                <Modal.Content>
+                    <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
+                    <Dropdown
+                        placeholder="Pilih Status"
+                        fluid
+                        selection
+                        options={statusOptions}
+                        value={status}
+                        onChange={(e, { value }) => setStatus(value)}
+                    />
+                    <div className="mt-3">
+                        <strong>Pesan:</strong>
+                        <TextArea
+                            rows="4"
+                            value={pesan|| "Tidak ada pesan"}
+                            onChange={(e) => setPesan(e.target.value ||  "Tidak ada pesan")}
+                            style={{
+                                width: "100%",
+                                marginTop: "5px",
+                                border: "1px solid #ccc", // Garis pada textarea
+                                borderRadius: "4px",
+                                padding: "10px",
+                                fontSize: "14px",
+                            }}
+                        />
+                    </div>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button color="green" >
+                    {/* <Button color="green" onClick={handleUpdate} loading={mutation.isLoading}> */}
+                        <Icon name="check" /> Simpan
+                    </Button>
+                    <Button color="red" onClick={handleCloseModal}>
+                        <Icon name="close" /> Batal
                     </Button>
                 </Modal.Actions>
             </Modal>
