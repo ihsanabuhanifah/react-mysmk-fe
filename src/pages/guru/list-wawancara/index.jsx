@@ -119,12 +119,20 @@ export default function ListWawancara() {
                 <Table.Row key={value.id}>
                   {" "}
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell>{value.informasi_calon_santri?.nama_siswa}</Table.Cell>{" "}
+                  <Table.Cell>
+                    {value.informasi_calon_santri?.nama_siswa}
+                  </Table.Cell>{" "}
                   <Table.Cell>{value.method}</Table.Cell>
                   <Table.Cell>{value.status_tes}</Table.Cell>
                   <Table.Cell>{value.catatan}</Table.Cell>
                   <Table.Cell>{value.guruWawancara.nama_guru}</Table.Cell>
-                  <Table.Cell>{value.is_lulus === false ? "Belum Lulus" : "Lulus"}</Table.Cell>
+                  <Table.Cell>
+                    {value.is_lulus === "belum diumumkan"
+                      ? "Belum Diumumkan"
+                      : value.is_lulus === "tidak lulus"
+                      ? "Tidak Lulus"
+                      : "Lulus"}
+                  </Table.Cell>
                   <Table.Cell>
                     <EditButton
                       onClick={() =>

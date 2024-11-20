@@ -152,7 +152,7 @@ export default function SidebarPpdb({ setSidebar }) {
           handleSidebar={handleSiderbar}
           to="exam"
           path="exam"
-          title={"Ujian Test"}
+          title={"Ujian"}
           logo={
             <IoPencilOutline
               className={url === "exam" ? "text-[#18a558]" : "text-gray-400"}

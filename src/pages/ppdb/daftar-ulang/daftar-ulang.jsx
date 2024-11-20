@@ -124,7 +124,7 @@ const DaftarUlang = () => {
 
   // Check if wawancara data is incomplete or the student hasn't passed the interview
   const isWawancaraIncomplete =
-    !dataWawancara || dataWawancara.is_lulus === false;
+    !dataWawancara || dataWawancara.is_lulus === 'tidak lulus';
 
   return (
     <LayoutPpdb title="Daftar Ulang">

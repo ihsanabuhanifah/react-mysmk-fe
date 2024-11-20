@@ -71,6 +71,7 @@ const Wawancara = () => {
       const updatedValues = {
         ...values,
         pewawancara: 2, // Mengisi pewawancara dengan nilai 2
+        is_lulus:"belum diumumkan"
       };
 
       const response = await CreateWawancara(updatedValues);

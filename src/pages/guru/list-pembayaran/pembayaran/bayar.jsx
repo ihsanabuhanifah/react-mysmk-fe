@@ -97,7 +97,7 @@ const FormikComponent = ({ id, onSuccess, onError }) => {
                 />
               </Form.Group>
             </section>
-
+      
             <div className="mt-5">
               <Button
                 content={isSubmitting ? "Menyimpan" : "Simpan"}

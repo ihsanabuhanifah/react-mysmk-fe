@@ -4,70 +4,62 @@ import { Button, Form, Icon } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import { useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { konfirmasiWawancara } from "../../../../api/guru/wawancara";
+import { konfirmasiWawancara, useFetchWawancaraDetails } from "../../../../api/guru/wawancara";
 
 const FormikComponent = ({ id, onSuccess, onError }) => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate(); // Instantiate navigate
+  const navigate = useNavigate();
+
+  // Ambil data wawancara untuk diisi ke initialValues
+  const { data: wawancaraData, isLoading, error } = useFetchWawancaraDetails(id);
+
   const [initialValues, setInitialValues] = useState({
-    status: null, // Set default to null
+    status_tes: wawancaraData?.status_tes || "", // Menyesuaikan dengan status_tes dari API
+    is_lulus:wawancaraData?.is_lulus || ""
   });
 
-  // Ambil data pembayaran berdasarkan id
-  const { data, isLoading, error } = useQuery(
-    ["wawancara/konfirmasi", id],
-    () => konfirmasiWawancara(id), 
-    {
-      enabled: !!id, // Pastikan query hanya dijalankan jika id ada
-      onSuccess: (data) => {
-        setInitialValues({
-          status: Number(data?.wawancara?.status) || null, // Pastikan status diisi dari data dan diubah ke number
-        });
-      },
-      onError: (err) => {
-        console.error("Failed to fetch wawancara data:", err);
-        toast.error("Gagal mengambil data wawancara", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-      },
+  // Memperbarui initialValues ketika wawancaraData berubah
+  React.useEffect(() => {
+    if (wawancaraData) {
+      setInitialValues({
+        status_tes: wawancaraData.status_tes, // Menetapkan status tes awal dari data yang diterima
+        is_lulus:wawancaraData.is_lulus
+      });
     }
-  );
+  }, [wawancaraData]);
 
   const onSubmit = async (values, { resetForm }) => {
     try {
-      // Kirim status sebagai objek data
-      const response = await konfirmasiWawancara(id, { status: values.status });
-      
-      // Tampilkan popup saat respons berhasil
-      toast.success("Pembayaran berhasil dikonfirmasi!", {
+      // Buat objek data hanya dengan field yang diisi
+      const dataToSend = {};
+      if (values.status_tes) dataToSend.status_tes = values.status_tes;
+      if (values.is_lulus) dataToSend.is_lulus = values.is_lulus;
+  
+      // Kirim data update ke API hanya dengan field yang ada isinya
+      const response = await konfirmasiWawancara(id, dataToSend);
+  
+      // Tampilkan notifikasi berhasil
+      toast.success("Wawancara berhasil dikonfirmasi!", {
         position: "top-right",
         autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
-
+  
       resetForm();
       queryClient.invalidateQueries("wawancara/list");
       onSuccess && onSuccess();
-
+  
       // Navigasi ke halaman list wawancara
-      navigate("/guru/wawancara/list"); // Ubah path sesuai dengan rute yang tepat
+      navigate("/guru/list-wawancara");
     } catch (err) {
-      // Tampilkan popup saat terjadi error
-      toast.error("Terjadi kesalahan saat mengonfirmasi pembayaran.", {
+      // Tampilkan notifikasi error
+      toast.error("Terjadi kesalahan saat mengonfirmasi wawancara.", {
         position: "top-right",
         autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
       onError && onError(err);
     }
   };
+  
 
   return (
     <Formik
@@ -79,24 +71,45 @@ const FormikComponent = ({ id, onSuccess, onError }) => {
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-y-2 gap-x-5 shadow-md p-5 mt-5">
             <section>
-              <label htmlFor="status">Status Wawancara</label>
+              <label htmlFor="status_tes">Status Wawancara</label>
               <Form.Group inline>
                 <Form.Radio
-                  label="Sudah Wawanwacara"
-                  value={1}
+                  label="Sudah Wawancara"
+                  value="sudah"
                   checked={values.status_tes === "sudah"}
-                  onChange={() => handleChange({ target: { name: "status", value: 1 } })}
-                  name="status"
+                  onChange={() => handleChange({ target: { name: "status_tes", value: "sudah" } })}
+                  name="status_tes"
                 />
                 <Form.Radio
                   label="Belum Wawancara"
-                  value={0}
+                  value="belum"
                   checked={values.status_tes === "belum"}
-                  onChange={() => handleChange({ target: { name: "status", value: 0 } })}
-                  name="status"
+                  onChange={() => handleChange({ target: { name: "status_tes", value: "belum" } })}
+                  name="status_tes"
                 />
               </Form.Group>
             </section>
+
+            <section className="pt-8">
+              <label htmlFor="is_lulus">Apakah Santri Ini Lulus?</label>
+              <Form.Group inline>
+                <Form.Radio
+                  label="Lulus"
+                  value={"lulus"}
+                  checked={values.is_lulus === "lulus"}
+                  onChange={() => handleChange({ target: { name: "is_lulus", value: 'lulus' } })}
+                  name="is_lulus"
+                />
+                <Form.Radio
+                  label="Tidak Lulus"
+                  value={"tidak lulus"}
+                  checked={values.is_lulus === "tidak lulus"}
+                  onChange={() => handleChange({ target: { name: "is_lulus", value: 'tidak lulus' } })}
+                  name="is_lulus"
+                />
+              </Form.Group>
+            </section>
+
 
             <div className="mt-5">
               <Button

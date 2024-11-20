@@ -11,7 +11,7 @@ export function listWawancara(params) {
 // Fungsi konfirmasi pembayaran dengan data status
 export function konfirmasiWawancara(id, data) {
   syncToken();
-  return axios.put(`/guru/wawancara/konfirmasi/${id}`, data); // Kirim data status bersama permintaan
+  return axios.put(`/guru/wawancara/update/${id}`, data); // Kirim data status bersama permintaan
 }
 
   // Custom hook untuk mengambil detail pembayaran berdasarkan ID dengan react-query
@@ -20,7 +20,7 @@ export function useFetchWawancaraDetails(id) {
 
   // Menggunakan useQuery untuk mengambil data detail pembayaran
   const { data, isLoading, isError, refetch } = useQuery(
-    ['guru/wawancara/konfirmasi/', id],
+    ['guru/wawancara/update/', id],
     () => konfirmasiWawancara(id), // Memanggil fungsi fetchPaymentDetails
     {
       select: (response) => response?.data, // Pilih data dari response

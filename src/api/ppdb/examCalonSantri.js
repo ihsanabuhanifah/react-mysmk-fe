@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export function getExamCalonSantri(params) {
   syncToken();
-  return axios.get("/santri/exam/list", { params });
+  return axios.get("/ppdb/mapel", { params });
 }
 
 export function takeExamCalonSantri(id) {
@@ -19,7 +19,7 @@ export function takeExamCalonSantri(id) {
 export const useExamCalonSantri = (id) => {
     let [params, setParams] = useState({ page: 1, pageSize: 10 });
     const { isLoading, data, isFetching } = useQuery(
-      ["/santri/exam/list", params],
+      ["/ppdb/mapel", params],
       () => getExamCalonSantri(params),
       {
         keepPreviousData: true,

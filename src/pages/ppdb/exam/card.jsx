@@ -26,12 +26,8 @@ import {
           >
             <div>
               {" "}
-              <h4 style={{ margin: 0 }}>{item.ujian.mapel.nama_mapel}</h4>{" "}
-              <p style={{ margin: 0 }}>{item.teacher.nama_guru}</p>{" "}
+              <h4 style={{ margin: 0 }}>{item.nama_mapel}</h4>{" "}
             </div>
-            <span>
-              <LabelDurasi status={item.ujian.durasi} />
-            </span>
           </div>
   
           <section className="border rounded-md p-2">

@@ -120,7 +120,7 @@ const PendaftaranCalonSantri = () => {
                       )}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-8">
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-4">
                       <div className="w-full sm:w-[555px] flex flex-col">
                         <label className="block text-left pb-4">
                           Tanggal Lahir
@@ -164,7 +164,7 @@ const PendaftaranCalonSantri = () => {
                       </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-8">
+                    <div className="flex flex-col sm:flex-row gap-4 mb-4 pt-4">
                       <div className="w-full sm:w-[555px] flex flex-col">
                         <label className="block text-left pb-4">
                           Asal Sekolah
@@ -208,7 +208,7 @@ const PendaftaranCalonSantri = () => {
 
                     <div className="flex flex-col sm:flex-row justify-between mb-4 mt-4 gap-4">
                       <Link to={"/ppdb/dashboard"}>
-                        <button className="bg-btnCustom text-white p-4 w-full sm:w-[150px] rounded-lg">
+                        <button className="bg-gray-300 text-white p-4 w-full sm:w-[150px] rounded-lg">
                           Back
                         </button>
                       </Link>
