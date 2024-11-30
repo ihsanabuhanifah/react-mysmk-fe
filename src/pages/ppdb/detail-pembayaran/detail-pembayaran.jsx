@@ -1,81 +1,42 @@
-import { Link, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetHasilPembayaranDetail } from "../../../api/ppdb/pembayaran";
 import { useProfileCalonSantri } from "../../../api/ppdb/profile";
-import { useEffect, useState } from "react";
-import { getDetailPembayaranById } from "../../../api/ppdb/pembayaran";
-import { useQuery } from "react-query";
-import { toast } from "react-toastify";
 
 const DetailPembayaran = () => {
-  const { profileData, isLoading, isError, error } = useProfileCalonSantri();
-  const [pembayaranDataDetail, setPembayaranDataDetail] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { data, isLoading, isError } = useGetHasilPembayaranDetail(id);
+  const { profileData } = useProfileCalonSantri();
+  const [showPopup, setShowPopup] = useState(false);
 
-  const [initialValues, setInitialValues] = useState({
-    bukti_tf: "",
-    keterangan: "Registrasi",
-    teacher_id: "",
-  });
+  const handlePopupToggle = () => {
+    setShowPopup(!showPopup);
+  };
 
-  const { data: dataPembayaran } = useQuery(
-    ["/ppdb/pembayaran-ppdb/detail", id],
-    () => getDetailPembayaranById(id),
-    {
-      onSuccess: (data) => {
-        setInitialValues({
-          bukti_tf: data.data.bukti_tf || "",
-          keterangan: data.data.keterangan || "",
-          teacher_id: data.data.teacher_id || "",
-        });
-      },
-      onError: (err) => {
-        console.error("Failed to fetch detail pembayaran data:", err);
-        toast.error("Gagal mengambil data detail pembayaran", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      },
-    }
-  );
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading data.</p>;
+
   return (
-    <>
-      <Link
-        to="#"
-        className="flex items-center p-4 my-8 mx-4 text-md text-black hover:text-white bg-gray-300 rounded-lg transition-colors duration-200"
-        role="alert"
-      >
-        <p>Saat ini kami sedang melakukan pengecekan bukti transfer anda</p>
-      </Link>
-
+    <div>
       {/* Card Section */}
       <div className="bg-white shadow-lg rounded-lg p-6 w-full mx-auto mt-8">
-        <h2 className="text-2xl font-bold mb-4">
-          Panduan Pembayaran Pendaftaran
-        </h2>
+        <h2 className="text-2xl font-bold mb-4">Panduan Pembayaran Pendaftaran</h2>
 
         <div className="mb-4">
           <p className="text-gray-700">
-            Kepada ananda <span>{profileData?.nama_siswa}</span> harap melunasi
-            biaya pendaftaran sebagai syarat untuk bisa mengikuti rangkaian
-            proses penerimaan santri baru SMK Madinatul Quran.
+            Kepada ananda <span>{profileData.nama_siswa}</span>, harap melunasi biaya
+            pendaftaran sebagai syarat untuk bisa mengikuti rangkaian proses penerimaan
+            santri baru SMK Madinatul Quran.
           </p>
           <p className="text-gray-700 flex flex-col">
             Nominal yang harus dibayarkan sebesar:
-            <span className="font-semibold text-green-600 text-xl">
-              450.000
-            </span>
+            <span className="font-semibold text-green-600 text-xl">450.000</span>
           </p>
         </div>
 
         <div className="flex flex-col items-start mt-4">
-          <p className="text-lg font-semibold">
-            Untuk pembayarannya dapat dibayarkan ke rekening berikut:
-          </p>
+          <p className="text-lg font-semibold">Untuk pembayarannya dapat dibayarkan ke rekening berikut:</p>
           <p className="text-lg font-bold text-gray-500">
             Bank Muamalat
             <br />
@@ -89,51 +50,71 @@ const DetailPembayaran = () => {
 
         <div className="mt-6">
           <p>
-            Setelah melakukan pembayaran, mohon untuk melampirkan Bukti Transfer
-            melalui menu di bawah ini:
+            Setelah melakukan pembayaran, mohon untuk melampirkan Bukti Transfer melalui menu di bawah ini:
           </p>
         </div>
       </div>
 
-      {/* Lampiran Bukti Transfer Section */}
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full mx-auto mt-8">
-        <h2 className="text-2xl font-bold mb-4">Detail Pembayaran</h2>
+      <h1 className="text-2xl font-bold mt-8">Detail Pembayaran</h1>
+      {data ? (
+        <div className="bg-white shadow-lg rounded-lg p-6 w-full mx-auto mt-8">
+          <p>
+            <strong>ID Pembayaran:</strong> {data.id}
+          </p>
+          <p>
+            <strong>ID User:</strong> {data.user_id}
+          </p>
+          <p>
+            <strong>Nominal:</strong> {data.nominal}
+          </p>
+          <p>
+            <strong>Keterangan:</strong> {data.keterangan}
+          </p>
 
-        {pembayaranDataDetail ? (
-          <div className="mb-4">
-            <p className="text-gray-700">
-              Nominal Pembayaran:{" "}
-              <span className="font-semibold">
-                {pembayaranDataDetail.nominal}
-              </span>
-            </p>
-            <p className="text-gray-700">
-              Keterangan: <span>{pembayaranDataDetail.keterangan}</span>
-            </p>
-            <p className="text-gray-700">
-              Status Pembayaran:{" "}
-              <span>
-                {pembayaranDataDetail.status === 0
-                  ? "Belum Dibayar"
-                  : "Sudah Dibayar"}
-              </span>
-            </p>
-            <p className="text-gray-700">
-              Bukti Transfer:{" "}
-              <a
-                href={pembayaranDataDetail.bukti_tf}
-                target="_blank"
-                rel="noopener noreferrer"
+          <button
+            onClick={handlePopupToggle}
+            className="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+          >
+            Lihat Detail
+          </button>
+
+          {/* Pop-up untuk menampilkan bukti transfer */}
+          {showPopup && (
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+              onClick={handlePopupToggle}
+            >
+              <div
+                className="bg-white p-6 rounded-lg shadow-lg relative"
+                onClick={(e) => e.stopPropagation()} // Prevent click inside pop-up from closing it
               >
-                Lihat Bukti Transfer
-              </a>
-            </p>
-          </div>
-        ) : (
-          <p className="text-gray-700">Sedang memuat detail pembayaran...</p>
-        )}
-      </div>
-    </>
+                {data.bukti_tf ? (
+                  <img
+                    src={data.bukti_tf}
+                    alt="Bukti Transfer"
+                    style={{ width: "300px", height: "auto" }}
+                  />
+                ) : (
+                  <p>Bukti transfer tidak tersedia.</p>
+                )}
+                <button
+                  onClick={handlePopupToggle}
+                  className="bg-red-500 text-white px-4 py-2 mt-4 rounded absolute top-2 right-2"
+                >
+                  Tutup
+                </button>
+              </div>
+            </div>
+          )}
+
+          <p className="mt-4">
+            <strong>Nama Guru:</strong> {data.guru.nama_guru}
+          </p>
+        </div>
+      ) : (
+        <p>No data found.</p>
+      )}
+    </div>
   );
 };
 

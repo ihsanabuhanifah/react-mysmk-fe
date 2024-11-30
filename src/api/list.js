@@ -1,4 +1,4 @@
-import axios from "./axiosClient";
+import axios, { syncToken } from "./axiosClient";
 
 export function listMapel() {
   return axios.get("/list/mata-pelajaran");
@@ -71,6 +71,38 @@ export async function listAlquranOptions(keyword, loadedOptions, additional) {
 
   let options = result.data.map((item) => ({
     label: item.nama_surat,
+    value: item.id,
+  }));
+
+  return {
+    options: options,
+    hasMore: result.pagination?.current_page < result.pagination?.total_page,
+    additional: {
+      page: additional?.page + 1,
+      scope_of_service: additional?.scope_of_service,
+    },
+  };
+}
+
+
+
+export async function listCalonSiswaOptions(
+  keyword,
+  loadedOptions,
+  additional
+) {
+  let result = await axios.get(`guru/list-calsan`, {
+    params: {
+      page: additional.page,
+      pageSize: 10,
+      keyword,
+    },
+  });
+
+  result = result.data;
+
+  let options = result.data.rows.map((item) => ({
+    label: item.nama_siswa,
     value: item.id,
   }));
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import * as yup from "yup";
@@ -18,37 +19,19 @@ import {
 import lodash from "lodash";
 
 const BiodataCalonSantriSchema = yup.object().shape({
-  nama_siswa: yup.string().nullable().default("").required("wajib di isi!"),
-  tanggal_lahir: yup.string().nullable().default("").required("Wajib diisi!"),
-  tempat_lahir: yup.string().nullable().default("").required("wajib di isi!"),
-  alamat: yup.string().nullable().default("").required("wajib di isi!"),
-  sekolah_asal: yup.string().nullable().default("").required("wajib di isi!"),
-  nisn: yup
-    .string()
-    .nullable()
-    .default("")
-    .min(10, "Minimal 10 digit")
-    .max(10)
-    .required("Wajib di isi"),
-  nis: yup
-    .string()
-    .nullable()
-    .default("")
-    .min(10, "Minimal 10 digit")
-    .max(10)
-    .required("Wajib di isi"),
-  nik: yup
-    .string()
-    .nullable()
-    .default("")
-    .min(16, "Minimal 16 digit")
-    .max(16)
-    .required("Wajib di isi"),
+  nama_siswa: yup.string().nullable().default(""),
+  tanggal_lahir: yup.string().nullable().default(""),
+  tempat_lahir: yup.string().nullable().default(""),
+  alamat: yup.string().nullable().default(""),
+  sekolah_asal: yup.string().nullable().default(""),
+  nisn: yup.string().nullable().default("").max(10),
+  nis: yup.string().nullable().default("").max(10),
+  nik: yup.string().nullable().default("").max(16).required("Wajib di isi"),
   jenis_kelamin: yup.string().nullable().default("").required("wajib di isi!"),
-  anak_ke: yup.number().nullable().default("").required("wajib di isi!"),
-  nama_ayah: yup.string().nullable().default("").required("wajib di isi!"),
-  pekerjaan_ayah: yup.string().nullable().default("").required("wajib di isi!"),
-  nama_ibu: yup.string().nullable().default("").required("wajib di isi!"),
+  anak_ke: yup.number().nullable().default(""),
+  nama_ayah: yup.string().nullable().default(""),
+  pekerjaan_ayah: yup.string().nullable().default("").required("Wajib di isi!"),
+  nama_ibu: yup.string().nullable().default(""),
   pekerjaan_ibu: yup.string().nullable().default("").required("wajib di isi!"),
   nama_wali: yup.string().nullable().default("").optional(),
   pekerjaan_wali: yup.string().nullable().default("").optional(),
@@ -61,53 +44,66 @@ export default function BiodataUpdatePPdb() {
   const { updateProfile, mutate } = useUpdateProfileCalonSantri(
     profileData?.id
   );
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialState = {
-    nama_siswa: profileData.nama_siswa,
-    tanggal_lahir: profileData.tanggal_lahir,
-    tempat_lahir: profileData.tempat_lahir,
-    alamat: profileData.alamat,
-    sekolah_asal: profileData.sekolah_asal,
-    nisn: profileData.nisn,
-    nik: profileData.nik,
-    nis: profileData.nis,
-    jenis_kelamin: profileData.jenis_kelamin,
-    anak_ke: profileData.anak_ke,
-    nama_ayah: profileData.nama_ayah,
-    pekerjaan_ayah: profileData.pekerjaan_ayah,
-    nama_ibu: profileData.nama_ibu,
-    pekerjaan_ibu: profileData.pekerjaan_ibu,
-    nama_wali: profileData.nama_wali,
-    pekerjaan_wali: profileData.pekerjaan_wali,
-    hubungan: profileData.hubungan,
+    nama_siswa: profileData?.nama_siswa,
+    tanggal_lahir: profileData?.tanggal_lahir,
+    tempat_lahir: profileData?.tempat_lahir,
+    alamat: profileData?.alamat,
+    sekolah_asal: profileData?.sekolah_asal,
+    nisn: profileData?.nisn,
+    nik: profileData?.nik,
+    nis: profileData?.nis,
+    jenis_kelamin: profileData?.jenis_kelamin,
+    anak_ke: profileData?.anak_ke,
+    nama_ayah: profileData?.nama_ayah,
+    pekerjaan_ayah: profileData?.pekerjaan_ayah,
+    nama_ibu: profileData?.nama_ibu,
+    pekerjaan_ibu: profileData?.pekerjaan_ibu,
+    nama_wali: profileData?.nama_wali,
+    pekerjaan_wali: profileData?.pekerjaan_wali,
+    hubungan: profileData?.hubungan,
   };
 
-  const onSubmit = async (values, { setErrors }) => {
-    console.log("values yang di kirim pada mutate adalah:", values);
-    mutate(values);
+  const onSubmit = async (values) => {
+    setIsSubmitting(true); // Mengatur loading menjadi true saat mulai
+    try {
+      console.log("values yang dikirim pada mutate adalah:", values);
+      
+      // Menambahkan delay 2 detik untuk menguji efek loading
+      await new Promise((resolve) => setTimeout(resolve, 6000));
+      
+      await mutate(values);
+    } catch (error) {
+      console.error("Terjadi kesalahan saat submit:", error);
+    } finally {
+      setIsSubmitting(false); // Mengatur loading menjadi false setelah selesai
+    }
   };
+  
 
   return (
-    <div className="mt-4 pr-[40%] pb-8 h-full overflow-y-auto overflow-x-hidden">
-      <div className="">
-        <h1 className="text-2xl pl-5 capitalize mb-8 font-black font-poppins">
+    <div className="mt-4 pb-8 h-full overflow-y-auto overflow-x-hidden px-4 sm:px-6 md:px-8">
+      <div className="text-center mb-8">
+        <h1 className="text-2xl font-black font-poppins">
           Update Biodata
         </h1>
-        <p className="pl-5 pb-12 font-poppins">
-          Silahkan isi data diri anda dengan lengkap dan benar, kekeliruan dalam
-          pengisian dapat membuat anda tidak lulus verifikasi data
+        <p className="font-poppins mt-2">
+          Silahkan isi data diri anda dengan lengkap dan benar,
+          <br /> kekeliruan dalam pengisian dapat membuat anda tidak lulus
+          verifikasi data
         </p>
       </div>
 
-      <div className="flex flex-col w-full items-center ml-5">
-        <div className="w-[85px] border relative h-[85px] rounded-full bg-red-200 mb-4">
+      <div className="flex flex-col w-full items-center lg:ml-5">
+        <div className="w-[85px] h-[85px] bg-red-200 rounded-full mb-4 relative">
           <img
             src={Profile}
             alt="You"
-            className="w-full relative z-0 rounded-full"
+            className="w-full h-full rounded-full object-cover"
           />
-          <div className="w-[20px] h-[20px] bg-blue-500 absolute z-[5] rounded-full bottom-1 right-1 "></div>
+          <div className="w-[20px] h-[20px] bg-blue-500 absolute rounded-full bottom-1 right-1"></div>
         </div>
 
         <Formik
@@ -126,7 +122,7 @@ export default function BiodataUpdatePPdb() {
             setFieldValue,
             isSubmitting,
           }) => (
-            <Form onSubmit={handleSubmit} className="w-full">
+            <Form onSubmit={handleSubmit} className="w-full lg:w-3/4 xl:w-1/2">
               <Form.Field
                 control={Input}
                 label="Nama Lengkap"
@@ -255,7 +251,7 @@ export default function BiodataUpdatePPdb() {
                 type="text"
               />
               <Form.Field
-                control={Input}
+                control="select"
                 label="Jenis Kelamin"
                 name="jenis_kelamin"
                 onChange={handleChange}
@@ -270,10 +266,13 @@ export default function BiodataUpdatePPdb() {
                     pointing: "above",
                   }
                 }
-                type="text"
-              />
+              >
+                <option value="">Pilih Jenis Kelamin</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </Form.Field>
               <Form.Field
-                control={Input}
+                control="select"
                 label="Anak Ke"
                 name="anak_ke"
                 onChange={handleChange}
@@ -288,8 +287,20 @@ export default function BiodataUpdatePPdb() {
                     pointing: "above",
                   }
                 }
-                type="text"
-              />
+              >
+                <option value="">Pilih Anak Ke</option>
+                <option value="1">Anak Ke-1</option>
+                <option value="2">Anak Ke-2</option>
+                <option value="3">Anak Ke-3</option>
+                <option value="4">Anak Ke-4</option>
+                <option value="5">Anak Ke-5</option>
+                <option value="6">Anak Ke-6</option>
+                <option value="7">Anak Ke-7</option>
+                <option value="8">Anak Ke-8</option>
+                <option value="9">Anak Ke-9</option>
+                <option value="10">Anak Ke-10</option>
+                <option value="Lainnya">Lainnya</option>
+              </Form.Field>
               <Form.Field
                 control={Input}
                 label="Alamat Tinggal"
@@ -329,7 +340,6 @@ export default function BiodataUpdatePPdb() {
               <div className="text-customGreen font-semibold text-xl py-8">
                 <p>Data Orang Tua</p>
               </div>
-
               <Form.Field
                 control={Input}
                 label="Nama Bapak"
@@ -348,7 +358,6 @@ export default function BiodataUpdatePPdb() {
                 }
                 type="text"
               />
-
               <Form.Field
                 control={Input}
                 label="Nama Ibu"
@@ -368,8 +377,8 @@ export default function BiodataUpdatePPdb() {
                 type="text"
               />
               <Form.Field
-                control={Input}
-                label="Pekerjaan Bapak"
+                control="select"
+                label="Pekerjaan Ayah"
                 name="pekerjaan_ayah"
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -383,10 +392,17 @@ export default function BiodataUpdatePPdb() {
                     pointing: "above",
                   }
                 }
-                type="text"
-              />
+              >
+                <option value="">Pilih Pekerjaan Ayah</option>
+                <option value="PNS">PNS</option>
+                <option value="Wiraswasta">Wiraswasta</option>
+                <option value="Petani">Petani</option>
+                <option value="Nelayan">Nelayan</option>
+                <option value="Karyawan Swasta">Karyawan Swasta</option>
+                <option value="Lainnya">Lainnya</option>
+              </Form.Field>
               <Form.Field
-                control={Input}
+                control="select"
                 label="Pekerjaan Ibu"
                 name="pekerjaan_ibu"
                 onChange={handleChange}
@@ -401,8 +417,15 @@ export default function BiodataUpdatePPdb() {
                     pointing: "above",
                   }
                 }
-                type="text"
-              />
+              >
+                <option value="">Pilih Pekerjaan Ibu</option>
+                <option value="PNS">PNS</option>
+                <option value="Wiraswasta">Wiraswasta</option>
+                <option value="Petani">Petani</option>
+                <option value="Nelayan">Nelayan</option>
+                <option value="Karyawan Swasta">Karyawan Swasta</option>
+                <option value="Lainnya">Lainnya</option>
+              </Form.Field>
               <div className="text-customGreen text-xl py-8">
                 <p className="font-semibold">Data Wali</p>
                 <p className="text-base italic">
@@ -467,13 +490,13 @@ export default function BiodataUpdatePPdb() {
                 type="text"
               />
               <Button
-                content={isSubmitting ? "Proses" : "Simpan"}
                 type="submit"
                 fluid
                 size="medium"
                 color="green"
                 loading={isSubmitting}
-                disabled={isSubmitting || lodash.isEqual(initialState, values)}
+                disabled={isSubmitting}
+                content={isSubmitting ? "Proses" : "Simpan"}
               />
             </Form>
           )}

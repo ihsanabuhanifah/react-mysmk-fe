@@ -17,6 +17,13 @@ import { IoLogOutOutline } from "react-icons/io5";
 import ModalLogoutPpdb from "../components/ModalLogoutPpdb";
 import { getProfileCalonSantri } from "../api/ppdb/profile";
 
+// Loading Component
+const Loading = () => (
+  <div className="flex items-center justify-center h-full">
+    <div className="animate-spin rounded-full h-24 w-24 border-t-4 border-blue-500 border-solid"></div>
+  </div>
+);
+
 export default function Ppdb() {
   let { pathname } = useLocation();
   const navigate = useNavigate();
@@ -57,7 +64,11 @@ export default function Ppdb() {
   }, [pathname, navigate]);
 
   if (isLoading) {
-    return <h1>loading</h1>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   return (
@@ -111,7 +122,7 @@ export default function Ppdb() {
 
         <main className="flex h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full">
           <div
-            className={`w-full h-full xl:rounded-r-3xl bg-[#46C7C7] text-white xl:bg-gray-50 pl-2 ${
+            className={`w-full h-full xl:rounded-r-3xl bg-gray-50 text-white xl:bg-gray-50 pl-2 ${
               !sidebar
                 ? "transform -translate-x-full -z-50 xl:-translate-x-0"
                 : "transform -translate-x-0 z-10 transition duration-500"
