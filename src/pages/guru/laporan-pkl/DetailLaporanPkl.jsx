@@ -94,7 +94,7 @@ export default function DetailLaporan() {
     <LayoutPage title="Detail Laporan Santri">
       <div className="overflow-y-auto">
         <div className="flex flex-col gap-y-4 my-5 pb-10 w-full h-full pl-2 pr-5">
-          <div className="flex flex-row justify-start items-center" onClick={() => navigate(-1)}>
+          <div className="flex flex-row justify-start items-center" onClick={() => navigate('/guru/laporan-pkl/')}>
             <Icon
               name="arrow left"
               size="large"

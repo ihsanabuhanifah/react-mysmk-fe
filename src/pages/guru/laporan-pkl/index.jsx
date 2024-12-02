@@ -7,14 +7,17 @@ import LayoutPage from "../../../module/layoutPage";
 import useDebounce from "../../../hook/useDebounce";
 import useDelete from "../../../hook/useDelete";
 import ActivityCard from "../../../components/ActivityCardPkl";
-import { Button, Header, Icon, Label, Loader, Menu, Sidebar } from "semantic-ui-react";
+import { Button, Header, Icon, Label, Loader, Menu, Sidebar, Table } from "semantic-ui-react";
 import { DeleteButton, EditButton, PaginationTable, TableLoading } from "../../../components";
 import Card from "../../../components/CardLaporan";
 import FilterLaporanPkl from "./filter";
 import { encodeURlFormat } from "../../../utils";
-import Pagination from "../../../components/pagination";
 import { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
+import { CopyButton } from "../../../components/buttonAksi/editButton";
+import dayjs from "dayjs";
+import { formatTanggalIndo } from "../../../utils/formatTanggal";
+import { LabelStatus } from "../../../components/Label";
 
 
 export default function LaporanPkl() {
@@ -57,14 +60,6 @@ export default function LaporanPkl() {
     //   console.log(data);
 
 
-    // const statusColors = {
-    //     'hadir': 'green',
-    //     'izin': 'orange',
-    //     'sakit': 'red',
-    //     // Add more status-color mappings as needed
-    // };
-
-    //asli
     const params = {
         page, pageSize,
 
@@ -76,8 +71,8 @@ export default function LaporanPkl() {
         ...filter,
 
     };
-    console.log('params asli',params);
-    
+    console.log('params asli', params);
+
     const { data, isLoading, isFetching } = useQuery(
         ["/laporan-harian-pkl", params],
         () => listLaporanPkl(params),
@@ -102,8 +97,8 @@ export default function LaporanPkl() {
     });
 
     return (
-        <LayoutPage title={"Jurnal Pkl"} >
-            
+        <LayoutPage title={"Jurnal Pkl Santri"} >
+
             <Sidebar
                 as={Menu}
                 animation="overlay"
@@ -138,42 +133,18 @@ export default function LaporanPkl() {
 
             </section>
 
-            {/* <div className="flex flex-col gap-6 items-center w-full px-5 py-4 " >
 
-                    {data?.data?.map((value, index) => (
-
-                        <React.Fragment key={index}>
-
-                            <Card
-                                isFetching={isFetching}
-                                isLoading={isLoading}
-                                item={value}
-                            />
-
-                        </React.Fragment>
-
-                    ))}
-
-                
-
-
-            </div> */}
-
-            <div className="flex flex-col items-center w-full px-5 py-3 space-y-5 " ref={componentARef} count={8}>
-                {/* Display loader while fetching or loading data */}
+            {/* <div className="flex flex-col items-center w-full px-5 py-3 space-y-5 " ref={componentARef} count={8}>
                 {(isLoading || isFetching) && (
                     <Loader active inline="centered" content="Loading..." />
                 )}
 
-                {/* Check if there's no data and show a message */}
                 {data?.data?.length === 0 && !isLoading && !isFetching && (
                     <div className="w-full bg-yellow-50 text-center p-5 rounded">
                         <img src="image/data_not_found.png" alt="" />
                         <p className="text-brown-700 font-bold">Tidak Ditemukan Rekap pada filter yang dipilih</p>
                     </div>
                 )}
-
-                {/* Render cards if data is available */}
 
 
                 {data?.data?.map((value, index) => (
@@ -184,23 +155,64 @@ export default function LaporanPkl() {
                 ))}
 
 
-            </div>
-            {/* <div className="w-full justify-center mt-4">
-                <PaginationTable
-                    handlePage={setPage}
-                    handlePageSize={setPageSize}
-                    page={params.page}
-                    pageSize={params.pageSize}
-                    pagination={data?.pagination}
-                />
             </div> */}
-            <PaginationTable
+
+            <section className="px-4">
+                <Table celled selectable >
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>No</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Nama Guru</Table.HeaderCell> */}
+                            <Table.HeaderCell>Nama Santri</Table.HeaderCell>
+                            <Table.HeaderCell>Judul Kegiatan</Table.HeaderCell>
+                            <Table.HeaderCell>Kehadiran</Table.HeaderCell>
+                            <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                            {/* <Table.HeaderCell>Selesai</Table.HeaderCell> */}
+                            <Table.HeaderCell>Aksi</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        <TableLoading
+                            count={8}
+                            isLoading={isLoading}
+                            data={data?.data}
+                            messageEmpty={"Data Tidak Ditemukan"}
+                        >
+                            {data?.data?.map((value, index) => (
+                                <Table.Row key={index}>
+                                    <Table.Cell>{index + 1}</Table.Cell>
+                                    {/* <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell> */}
+                                    <Table.Cell >
+                                        {value?.siswa?.nama_siswa}
+                                    </Table.Cell>
+                                    <Table.Cell>{value?.judul_kegiatan}</Table.Cell>
+                                    <Table.Cell>{formatTanggalIndo(value.tanggal)}</Table.Cell>
+                                    <Table.Cell><LabelStatus status={value.status} /></Table.Cell>
+                                   
+                                    <Table.Cell>
+                                        {/* <EditButton
+                                            onClick={() => navigate(`update/${value?.id}`, { replace: true })}
+                                        />
+                                        <DeleteButton
+                                            onClick={() => confirmDelete(value?.id)}
+                                        /> */}
+
+                                        <Button content={'Detail'} size="tiny" color="blue" onClick={() => navigate(`/guru/laporan-pkl/detail/${value.id}`, { replace: true })}></Button>
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </TableLoading>
+                    </Table.Body>
+                </Table>
+
+                <PaginationTable
                     page={page}
                     pageSize={pageSize}
                     setPageSize={setPageSize}
                     setPage={setPage}
                     totalPages={data?.data?.count}
                 />
+            </section>
 
 
         </LayoutPage>

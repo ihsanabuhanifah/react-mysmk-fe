@@ -8,12 +8,10 @@ import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
 import { deleteTugasPkl, listJawabanTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
-import { DeleteButton, EditButton, ModalAlert, TableLoading } from "../../../components";
+import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
-import { replace } from "formik";
 import dayjs from "dayjs";
 import { CopyButton } from "../../../components/buttonAksi/editButton";
-import { toast } from "react-toastify";
 
 export default function TugasLaporanPkl() {
 
@@ -109,7 +107,7 @@ export default function TugasLaporanPkl() {
 
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
-            <section className="grid grid-cols-6 gap-5 mt-5 ">
+            <section className="grid grid-cols-6 gap-5 mt-5 px-4">
                 <div className="col-span-6 lg:col-span-1 xl:col-span-1 mb-5">
                     <Button
                         type="button"
@@ -124,7 +122,7 @@ export default function TugasLaporanPkl() {
                 </div>
                 
             </section>
-            <section>
+            <section className="px-4">
                 <Table celled selectable >
                     <Table.Header>
                         <Table.Row>
@@ -171,6 +169,13 @@ export default function TugasLaporanPkl() {
                         </TableLoading>
                     </Table.Body>
                 </Table>
+                <PaginationTable
+                    page={page}
+                    pageSize={pageSize}
+                    setPageSize={setPageSize}
+                    setPage={setPage}
+                    totalPages={data?.data?.count}
+                />
             </section>
 
         </LayoutPage>

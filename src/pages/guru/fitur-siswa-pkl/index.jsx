@@ -12,7 +12,7 @@ import UploadExcel from '../../../components/ModalUploadExel';
 import useDebounce from '../../../hook/useDebounce';
 import FilterSiswaPkl from './filter';
 import { encodeURlFormat } from '../../../utils';
-import Pagination from '../../../components/pagination';
+// import Pagination from '../../../components/pagination';
 
 export default function FiturPkl() {
 
@@ -150,7 +150,7 @@ export default function FiturPkl() {
                 <FilterSiswaPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterSiswaPkl>
             </Sidebar>
 
-            <div className="mt-5 space-y-5" onKeyPress={handleEvent}>
+            <div className="mt-5 space-y-5 px-4" onKeyPress={handleEvent}>
                 <section className="grid grid-cols-6 gap-5 ">
                     {/* <div className="col-span-5   lg:col-span-3 xl:col-span-3">
                         <Input

@@ -46,6 +46,7 @@ export default function DetailPenilaian() {
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
             
+            
             <section className="mt-5">
                 <Table celled selectable >
                     <Table.Header>

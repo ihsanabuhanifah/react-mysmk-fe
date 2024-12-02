@@ -2,9 +2,15 @@ import { Label } from "semantic-ui-react";
 import { durasiOptions } from "../utils/options";
 
 export const LabelStatus = ({ status }) => {
-  if (status === "belum dikerjakan") {
+  // hall tugas pkl ///
+  if (status === "selesai") {
     return (
-      <Label size="tiny" content="Belum Dikerjakan" color="yellow" as={"a"} />
+      <Label size="tiny" content="Selesai Dikerjakan" color="green" as={"a"} />
+    );
+  }
+  if (status === "revisi") {
+    return (
+      <Label size="tiny" content="Revisi" color="yellow" as={"a"} />
     );
   }
   if (status === "gagal") {
@@ -12,14 +18,21 @@ export const LabelStatus = ({ status }) => {
       <Label size="tiny" content="Gagal" color="red" as={"a"} />
     );
   }
-  if (status === "sedang dikerjakan") {
-    return (
-      <Label size="tiny" content="Sedang Dikerjakan" color="blue" as={"a"} />
-    );
-  }
+
+  // -------------------//
   if (status === "sudah dikerjakan") {
     return (
-      <Label size="tiny" content="Selesai Dikerjakan" color="green" as={"a"} />
+      <Label size="tiny" content="sudah Dikerjakan" color="green" as={"a"} />
+    );
+  }
+  if (status === "sedang dikerjakan") {
+    return (
+      <Label size="tiny" content="Sedang Dikerjakan" color="yellow" as={"a"} />
+    );
+  }
+  if (status === "belum dikerjakan") {
+    return (
+      <Label size="tiny" content="Belum Dikerjakan" color="red" as={"a"} />
     );
   }
   if (status === null) {
@@ -34,23 +47,27 @@ export const LabelStatus = ({ status }) => {
   if (status === "tugas") {
     return <Label size="tiny" content="Tugas" color="pink" as={"a"} />;
   }
-
+  
   if (status === "projek") {
     return <Label size="tiny" content="Proyek" color="black" as={"a"} />;
   }
-
+  
   if (status === "projek") {
     return <Label size="tiny" content="Projek" color="facebook" as={"a"} />;
   }
-
+  
+  // ---------laporan----------//
   if (status === "hadir") {
     return <Label size="tiny" content="Hadir" color="green" as={"a"} />;
   }
+  if (status === "izin") {
+    return <Label size="tiny" content="Izin" color="red" as={"a"} />;
+  }
+  // if (status === "izin") {
+  //   return <Label size="tiny" content="Izin" color="olive" as={"a"} />;
+  // }
   if (status === "sakit") {
     return <Label size="tiny" content="Sakit" color="blue" as={"a"} />;
-  }
-  if (status === "izin") {
-    return <Label size="tiny" content="Izin" color="olive" as={"a"} />;
   }
   if (status === "libur") {
     return <Label size="tiny" content="Libur" color="yellow" as={"a"} />;

@@ -2,11 +2,11 @@ import { Button, Dropdown, Icon, Menu, Modal, Sidebar, Table, TextArea } from "s
 import LayoutPage from "../../../module/layoutPage";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
 import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, detailTugasPkl, listJawabanTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
+import { deleteTugasPkl, detailTugasPkl, listJawabanTugasPkl, listTugasPkl, updateTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
@@ -23,6 +23,7 @@ export default function TugasLaporanPkl() {
     let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
     let [isOpen, setIsOpen] = useState(false);
+    let [isOpenPesan, setIsOpenPesan] = useState(false);
     let [keyword, setKeyword] = useState("");
     let debouncedKeyword = useDebounce(keyword, 500);
     let [visible, setVisible] = useState(false);
@@ -31,6 +32,7 @@ export default function TugasLaporanPkl() {
     let [namaSiswa, setNamaSiswa] = useState({});
     const [open, setOpen] = useState(false);
     const [jawaban, setJawaban] = useState([]);
+
     const [value, setValue] = useState({});
     const [selectedJawaban, setSelectedJawaban] = useState(null);
 
@@ -70,9 +72,29 @@ export default function TugasLaporanPkl() {
             }
         }
     );
+    const mutation = useMutation(updateTugasPkl, {
+        onSuccess: () => {
+            queryClient.invalidateQueries([`/jawaban-tugas-pkl/detailByTugasId`,id]);
+            alert("Status dan pesan berhasil diperbarui!");
+            setIsOpenPesan(false); // Tutup modal setelah berhasil update
+        },
+        onError: (error) => {
+            alert("Gagal memperbarui status dan pesan: " + error.message);
+        },
+    });
     const handleUpdate = () => {
+        console.log('value jawaban:', jawaban);
+        const { id } = jawaban;
+
+        if (!status || !pesan) {
+            alert("Status dan pesan harus diisi!");
+            return;
+        }
         mutation.mutate({
-            id: selectedJawaban?.student_id,
+            // id: selectedJawaban?.jawaban?.jawaban_id,
+            // id: selectedJawaban?.id,
+            id: selectedJawaban?.tugas_pkl_id,
+            // id,
             status,
             pesan,
         });
@@ -86,12 +108,16 @@ export default function TugasLaporanPkl() {
         setSelectedJawaban(jawaban);
         setStatus(jawaban.status || "");
         setPesan(jawaban.pesan || "");
-        setIsOpen(true);
+        setIsOpenPesan(true);
     };
 
     // Function to close the modal
     const handleCloseModal = () => {
         setIsOpen(false);
+        setSelectedJawaban(null);
+    };
+    const handleCloseModalPesan = () => {
+        setIsOpenPesan(false);
         setSelectedJawaban(null);
     };
 
@@ -140,7 +166,18 @@ export default function TugasLaporanPkl() {
                 <FilterLaporanPkl filter={filter} setFilter={setFilter} setVisible={setVisible} ></FilterLaporanPkl>
             </Sidebar>
 
-            <section className="mt-5">
+
+
+            <section className="mt-5 px-4">
+                <div className="flex flex-row justify-start items-center mb-5" onClick={() => navigate('/guru/tugas-laporan-pkl/')}>
+                    <Icon
+                        name="arrow left"
+                        size="large"
+
+                        className="cursor-pointer"
+                    />
+                    <p className="text-xl  font-semibold text-black cursor-pointer">Kembali</p>
+                </div>
                 <Table celled selectable >
                     <Table.Header>
                         <Table.Row>
@@ -160,7 +197,9 @@ export default function TugasLaporanPkl() {
                             messageEmpty={"Data Tidak Ditemukan"}
                         >
                             {data?.data.detailJawaban?.map((value, index) => (
+
                                 <Table.Row key={index}>
+
                                     <Table.Cell>{index + 1}</Table.Cell>
                                     <Table.Cell>{value?.nama}</Table.Cell>
 
@@ -177,12 +216,15 @@ export default function TugasLaporanPkl() {
                                             size="tiny"
                                             onClick={() => handleOpenModalLihat(value)}
                                         >
+
                                             <Icon name="eye" /> Lihat
                                         </Button>
                                         <Button
                                             color="green"
                                             size="tiny"
                                             onClick={() => handleOpenModalPesan(value)}
+                                            disabled={!value?.jawaban}
+                                        // disabled={!value?.jawaban || !value?.id}
                                         >
                                             <Icon name="chat" /> Pesan
                                         </Button>
@@ -203,8 +245,14 @@ export default function TugasLaporanPkl() {
             </section>
             <Modal open={isOpen} onClose={handleCloseModal}>
                 <Modal.Header>Detail Jawaban Tugas</Modal.Header>
+
                 <Modal.Content>
+                    <p><strong>ID:</strong> {selectedJawaban?.id}</p>
+                    {JSON.stringify(selectedJawaban)}
+
+
                     <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
+                    <p><strong>Status Siswa:</strong> {selectedJawaban?.status}</p>
                     <p><strong>Pesan:</strong> {selectedJawaban?.pesan ?? "Tidak ada pesan"}</p>
                     <p><strong>Jawaban:</strong> {selectedJawaban?.jawaban?.isi_jawaban ?? "Belum ada jawaban"}</p>
                 </Modal.Content>
@@ -214,8 +262,8 @@ export default function TugasLaporanPkl() {
                     </Button>
                 </Modal.Actions>
             </Modal>
-                            {/* popup Pesan */}
-            <Modal open={isOpen} onClose={handleCloseModal}>
+            {/* popup Pesan */}
+            <Modal open={isOpenPesan} onClose={handleCloseModalPesan}>
                 <Modal.Header>Ubah Status dan Pesan</Modal.Header>
                 <Modal.Content>
                     <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
@@ -231,8 +279,9 @@ export default function TugasLaporanPkl() {
                         <strong>Pesan:</strong>
                         <TextArea
                             rows="4"
-                            value={pesan|| "Tidak ada pesan"}
-                            onChange={(e) => setPesan(e.target.value ||  "Tidak ada pesan")}
+                            value={pesan}
+                            placeholder="ketikan pesan"
+                            onChange={(e) => setPesan(e.target.value || "Tidak ada pesan")}
                             style={{
                                 width: "100%",
                                 marginTop: "5px",
@@ -245,11 +294,11 @@ export default function TugasLaporanPkl() {
                     </div>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button color="green" >
-                    {/* <Button color="green" onClick={handleUpdate} loading={mutation.isLoading}> */}
+                    {/* <Button color="green" > */}
+                    <Button color="green" onClick={handleUpdate} loading={mutation.isLoading}>
                         <Icon name="check" /> Simpan
                     </Button>
-                    <Button color="red" onClick={handleCloseModal}>
+                    <Button color="red" onClick={handleCloseModalPesan}>
                         <Icon name="close" /> Batal
                     </Button>
                 </Modal.Actions>
