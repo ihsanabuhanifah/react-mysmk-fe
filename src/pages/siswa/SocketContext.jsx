@@ -11,22 +11,22 @@ export const SocketProvider = ({ children }) => {
 
   console.log(profile)
 
-  useEffect(() => {
-    const newSocket = io('http://localhost:8085', {
-      autoConnect: true,
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
+  // useEffect(() => {
+  //   const newSocket = io('http://localhost:8085', {
+  //     autoConnect: true,
+  //     reconnection: true,
+  //     reconnectionAttempts: Infinity,
+  //     reconnectionDelay: 1000,
       
-      query: {
-        idDB: profile.user_id,
-        roleDB: profile.user.role
-      }
-    });
-    setSocket(newSocket);
+  //     query: {
+  //       idDB: profile.user_id,
+  //       roleDB: profile.user.role
+  //     }
+  //   });
+  //   setSocket(newSocket);
 
-    return () => newSocket.close(); // Bersihkan koneksi saat unmount
-  }, [profile]);
+  //   return () => newSocket.close(); // Bersihkan koneksi saat unmount
+  // }, [profile]);
 
   useEffect(() => {
 

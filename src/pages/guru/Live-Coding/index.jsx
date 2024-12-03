@@ -71,7 +71,7 @@ function LiveCodingPlayground() {
         `;
     }
 
-    const protectedJS = addLoopProtection(js, 200); // 1 detik batas eksekusi per loop
+    const protectedJS = addLoopProtection(js, 500); // 1 detik batas eksekusi per loop
 
     // Define console override and error handling script
     const consoleOverride = `

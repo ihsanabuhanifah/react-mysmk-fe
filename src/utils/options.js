@@ -133,10 +133,14 @@ const jenisOptions = [
 ];
 
 const durasiOptions = [
+  { key: "15", value: 5, text: "5 Menit" },
+  { key: "14", value: 10, text: "10 Menit" },
   { key: "1", value: 60, text: "60 Menit" },
   { key: "2", value: 90, text: "90 Menit" },
-  { key: "3", value: 120, text: "120 Menit" },
-  { key: "4", value: 180, text: "180 Menit" },
+  { key: "3", value: 120, text: "2 Jam" },
+  { key: "4", value: 180, text: "3 Jam" },
+  { key: "4", value: 240, text: "4 Jam" },
+  { key: "4", value: 300, text: "5 Jam" },
   { key: "5", value: 360, text: "6 Jam" },
   { key: "6", value: 720, text: "12 Jam" },
   { key: "7", value: 1440, text: "1 Hari" },

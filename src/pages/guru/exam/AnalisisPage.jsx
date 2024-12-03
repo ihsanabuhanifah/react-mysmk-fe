@@ -82,24 +82,24 @@ export default function AnalisisPage({view}) {
                           title="Analisis Pilihan "
                           data={[
                             {
-                              name: `Jawaban A (${data.analisis[index].pilihan.a.count})`,
-                              value: data.analisis[index].pilihan.a.count,
+                              name: `Jawaban A (${data.analisis[index].pilihan.a?.count})`,
+                              value: data.analisis[index].pilihan.a?.count,
                             },
                             {
-                              name: `Jawaban B (${data.analisis[index].pilihan.b.count})`,
-                              value: data.analisis[index].pilihan.b.count,
+                              name: `Jawaban B (${data.analisis[index].pilihan.b?.count})`,
+                              value: data.analisis[index].pilihan.b?.count,
                             },
                             {
-                              name: `Jawaban C (${data.analisis[index].pilihan.c.count})`,
-                              value: data.analisis[index].pilihan.c.count,
+                              name: `Jawaban C (${data.analisis[index].pilihan.c?.count})`,
+                              value: data.analisis[index].pilihan.c?.count,
                             },
                             {
-                              name: `Jawaban D (${data.analisis[index].pilihan.d.count})`,
-                              value: data.analisis[index].pilihan.d.count,
+                              name: `Jawaban D (${data.analisis[index].pilihan.d?.count})`,
+                              value: data.analisis[index].pilihan.d?.count,
                             },
                             {
-                              name: `Jawaban E (${data.analisis[index].pilihan.e.count})`,
-                              value: data.analisis[index].pilihan.e.count,
+                              name: `Jawaban E (${data?.analisis?.[index]?.pilihan.e?.count})`,
+                              value: data?.analisis?.[index].pilihan.e?.count,
                             },
                           ]}
                         />

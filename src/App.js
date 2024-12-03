@@ -93,8 +93,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/live-coding" element={<LiveCoding/>} />
-        <Route path="/live-mysql" element={<LiveMySQL/>} />
-        <Route path="/react-live" element={<ReactLivePlayground/>} />
+        <Route path="/live-sql" element={<LiveMySQL/>} />
+        
         <Route
           path="/login"
           element={

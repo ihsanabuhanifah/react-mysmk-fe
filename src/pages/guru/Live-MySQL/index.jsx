@@ -110,7 +110,7 @@ function LiveMySQL() {
       <div onMouseUp={handleMouseUp} className="flex flex-1 gap-4 overflow-hidden">
         <div className="editor flex-1 flex flex-col rounded-lg bg-gray-800 p-4">
           
-          <h5 className="mb-2 text-sm font-bold text-gray-400">MySQL Editor</h5>
+          <h5 className="mb-2 text-sm font-bold text-gray-400">SQL Editor</h5>
           <Editor
             height="100%"
             defaultLanguage="sql"
@@ -150,7 +150,7 @@ function LiveMySQL() {
                     {result[0].columns.map((col, index) => (
                       <th
                         key={index}
-                        className="border-b bg-gray-100 px-4 py-2 text-left"
+                        className="border-b px-4 py-2 text-left uppercase bg-gray-700"
                       >
                         {col}
                       </th>
@@ -159,7 +159,7 @@ function LiveMySQL() {
                 </thead>
                 <tbody>
                   {result[0].values.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="even:bg-gray-50">
+                    <tr key={rowIndex} >
                       {row.map((value, colIndex) => (
                         <td
                           key={colIndex}
