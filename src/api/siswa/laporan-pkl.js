@@ -223,6 +223,7 @@ export function createLaporanDiniyyah(payload) {
   syncToken();
   return axios.post("/santri/laporan-diniyyah/create", payload);
 }
+
 export const useCreateLaporanDiniyyah = () => {
   const { successToast, warningToast } = useToast();
   const queryClient = useQueryClient();
@@ -350,7 +351,6 @@ export const useUpdateJawabanTugasPkl = (id) => {
   );
   return { mutate, isLoading };
 };
-
 export const useDownloadPdf = () => {
   const { successToast, warningToast } = useToast();
   const defParams = {
@@ -368,133 +368,115 @@ export const useDownloadPdf = () => {
     {
       onSuccess: (response) => {
         const data = response.data.data;
-        console.log(data);
 
-        // Validasi jika data laporan kosong
-        if (data.length === 0) {
-          // Generate HTML untuk pesan bahwa santri belum mengerjakan laporan
-          const generateNoReportHtml = (bulan) => {
-            return `
-              <div style="font-family: Arial, sans-serif; font-size: 14px;">
-                <div style="text-align: center;">
-                  <img src="${imageKop}" alt="Kop Surat" style="width: 100%; height: auto;" />
-                </div>
-                <h1 style="text-align: center; font-size: 24px;">Laporan PKL</h1>
-                <p style="text-align: center; font-size: 16px;">
-                  Santri belum mengerjakan laporan pada bulan ${bulan}.
-                </p>
-              </div>
-            `;
-          };
-
-          const content = generateNoReportHtml(
-            dayjs(params.bulan).format("MMMM")
-          );
-
-          const opt = {
-            margin: 1,
-            filename: `Laporan_PKL_Belum_Mengerjakan-${dayjs(
-              params.bulan
-            ).format("MMMM")}.pdf`,
-            image: { type: "jpeg", quality: 0.2 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: "in", format: "a4", orientation: "p" },
-          };
-
-          // Convert HTML to PDF
-          html2pdf()
-            .from(content)
-            .set(opt)
-            .save()
-            .then(() => {
-              successToast("PDF berhasil didownload!");
-            })
-            .catch((err) => {
-              console.error("Error saat mendownload PDF:", err);
-              warningToast("Gagal mendownload PDF.");
-            });
-
-          return; // Hentikan eksekusi jika data kosong
-        }
-
-        // Generate HTML untuk PDF jika ada data laporan
+        // Generate HTML untuk PDF
         const generateHtml = (data) => {
           return `
-            <div style="font-family: Arial, sans-serif; font-size: 14px;">
+            <div style="font-family: Arial, sans-serif; font-size: 14px; padding: 20px;">
               <div style="text-align: center;">
                 <img src="${imageKop}" alt="Kop Surat" style="width: 100%; height: auto;" />
               </div>
-              <h1 style="text-align: center; font-size: 24px;">Laporan PKL ${
-                data[0].siswa.nama_siswa
-              }</h1>
+              <h1 style="text-align: center; font-size: 24px;">Laporan PKL ${data[0]?.siswa?.nama_siswa || "Belum memiliki data"}</h1>
               <p style="text-align: center; font-size: 16px;">
-                Data laporan Bulan ${dayjs(data[0].tanggal).format("MMMM")}
+                Data laporan Bulan ${dayjs(data[0]?.tanggal).format("MMMM") || "-"}
               </p>
-              <style>
-                .table {
-                  width: 100%;
-                  border-collapse: collapse;
-                  font-size: 14px;
-                }
-                .table th, .table td {
-                  padding: 10px;
-                  border: 1px solid #ddd;
-                  text-align: left;
-                }
-                .table thead {
-                  background-color: #f2f2f2;
-                }
-                .table thead th {
-                  font-weight: bold;
-                }
-                .foto {
-                  width: 100px;
-                  height: auto;
-                }
-              </style>
-              <table class="table">
+        
+              <h2 style="margin-top: 20px;">Data Laporan Harian PKL</h2>
+              <table class="ui celled table" style="width: 100%; border-collapse: collapse; font-size: 14px;">
                 <thead>
                   <tr>
-                    <th>No</th>
-                    <th>Judul Kegiatan</th>
-                    <th>Isi Laporan</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">No</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Judul Kegiatan</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Isi Laporan</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Tanggal</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${data
-                    .map(
-                      (laporan, index) => `
-                      <tr>
-                        <td>${index + 1}</td>
-                        <td>${laporan.judul_kegiatan}</td>
-                        <td>${laporan.isi_laporan}</td>
-                        <td>${laporan.tanggal}</td>
-                        <td>${laporan.status}</td>
-                      </tr>
-                    `
-                    )
-                    .join("")}
+                  ${
+                    data.length > 0
+                      ? data
+                          .map(
+                            (laporan, index) => `
+                            <tr>
+                              <td style="padding: 8px; text-align: center; border: 1px solid black;">${index + 1}</td>
+                              <td style="padding: 8px; border: 1px solid black;">${laporan.judul_kegiatan || "Belum memiliki data"}</td>
+                              <td style="padding: 8px; border: 1px solid black;">${laporan.isi_laporan || "Belum memiliki data"}</td>
+                              <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.tanggal || "-"}</td>
+                              <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.status || "-"}</td>
+                            </tr>`
+                          )
+                          .join("")
+                      : `<tr><td colspan="5" style="text-align: center; padding: 8px;">Tidak ada data laporan PKL.</td></tr>`
+                  }
+                </tbody>
+              </table>
+        
+              <h2 style="margin-top: 40px;">Data Laporan Diniyyah</h2>
+              <table class="ui celled table" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                <thead>
+                  <tr>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">No</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Dari Surat</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sampai Surat</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Dari Ayat</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sampai Ayat</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Dzikir Pagi</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Dzikir Petang</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sholat Shubuh</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sholat Dzuhur</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sholat Ashar</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sholat Magrib</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid black;">Sholat Isya</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${
+                    data.length > 0
+                      ? data
+                          .map((laporan, index) =>
+                            laporan.laporan_diniyyah_harian && laporan.laporan_diniyyah_harian.length > 0
+                              ? laporan.laporan_diniyyah_harian
+                                  .map(
+                                    (diniyyah, diniIndex) => `
+                                    <tr>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${index + 1}.${diniIndex + 1}</td>
+                                      <td style="padding: 8px; border: 1px solid black;">${diniyyah.dari_surat || "-"}</td>
+                                      <td style="padding: 8px; border: 1px solid black;">${diniyyah.sampai_surat || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.dari_ayat || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sampai_ayat || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.dzikir_pagi ? "Ya" : "Tidak"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.dzikir_petang ? "Ya" : "Tidak"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_shubuh || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_dzuhur || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_ashar || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_magrib || "-"}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_isya || "-"}</td>
+                                    </tr>`
+                                  )
+                                  .join("")
+                              : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data diniyyah untuk hari ini.</td></tr>`
+                          )
+                          .join("")
+                      : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data laporan diniyyah.</td></tr>`
+                  }
                 </tbody>
               </table>
             </div>
           `;
         };
+        
 
         const content = generateHtml(data);
 
         const opt = {
           margin: 1,
-          filename: `Laporan_PKL_${data[0].siswa.nama_siswa}-${dayjs(
-            data[0].tanggal
-          ).format("MMMM")}.pdf`,
+          filename: `Laporan_PKL_${data[0]?.siswa?.nama_siswa || "No_Data"}_${dayjs().format("MMMM")}.pdf`,
           image: { type: "jpeg", quality: 0.2 },
           html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: "in", format: "a4", orientation: "p" },
+          jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
         };
 
-        // Convert HTML to PDF
         html2pdf()
           .from(content)
           .set(opt)
@@ -506,8 +488,6 @@ export const useDownloadPdf = () => {
             console.error("Error saat mendownload PDF:", err);
             warningToast("Gagal mendownload PDF.");
           });
-
-        console.log("ok kok");
       },
       onError: (err) => {
         console.error("Error saat mendownload PDF:", err);
@@ -518,6 +498,8 @@ export const useDownloadPdf = () => {
 
   return { mutate, isLoading, filterParams, setParams, params };
 };
+
+
 
 export const useDownloadPdfBulanan = () => {
   const { successToast, warningToast } = useToast();

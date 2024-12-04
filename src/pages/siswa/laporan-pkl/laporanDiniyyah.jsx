@@ -137,8 +137,6 @@ const LaporanDiniyyah = () => {
             dirty,
           }) => (
             <>
-              
-
               <Segment loading={detailIsLoading}>
                 <Form className="ui form" onSubmit={handleSubmit}>
                   <SemanticForm.Group widths="equal">
@@ -157,9 +155,7 @@ const LaporanDiniyyah = () => {
                           touched?.dari_surat
                         }
                         placeholder="Pilih Surat"
-                        additional={{
-                          page: 1,
-                        }}
+                        additional={{ page: 1 }}
                       />
                       <ErrorMessage
                         name="dari_surat"
@@ -168,24 +164,6 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
 
-                    <SemanticForm.Field>
-                      <label>Dari Ayat</label>
-                      <Field
-                        name="dari_ayat"
-                        as={Input}
-                        type="number"
-                        placeholder="Dari Ayat"
-                        value={values.dari_ayat}
-                      />
-                      <ErrorMessage
-                        name="dari_ayat"
-                        component="div"
-                        className="ui pointing red basic label"
-                      />
-                    </SemanticForm.Field>
-                  </SemanticForm.Group>
-
-                  <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
                       <FormLabel>Sampai Surat</FormLabel>
                       <ReactSelectAsync
@@ -201,9 +179,7 @@ const LaporanDiniyyah = () => {
                           touched?.sampai_surat
                         }
                         placeholder="Pilih Surat"
-                        additional={{
-                          page: 1,
-                        }}
+                        additional={{ page: 1 }}
                       />
                       <ErrorMessage
                         name="sampai_surat"
@@ -211,7 +187,26 @@ const LaporanDiniyyah = () => {
                         className="ui pointing red basic label"
                       />
                     </SemanticForm.Field>
+                  </SemanticForm.Group>
 
+                  <SemanticForm.Group widths="equal">
+                    
+                    <SemanticForm.Field>
+                      <label>Dari Ayat</label>
+                      <Field
+                        name="dari_ayat"
+                        as={Input}
+                        type="number"
+                        placeholder="Dari Ayat"
+                        value={values.dari_ayat}
+                        onChange={handleChange}
+                      />
+                      <ErrorMessage
+                        name="dari_ayat"
+                        component="div"
+                        className="ui pointing red basic label"
+                      />
+                    </SemanticForm.Field>
                     <SemanticForm.Field>
                       <label>Sampai Ayat</label>
                       <Field
@@ -220,6 +215,7 @@ const LaporanDiniyyah = () => {
                         type="number"
                         placeholder="Sampai Ayat"
                         value={values.sampai_ayat}
+                        onChange={handleChange}
                       />
                       <ErrorMessage
                         name="sampai_ayat"
@@ -228,7 +224,6 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
                   </SemanticForm.Group>
-
                   <Divider section />
 
                   <SemanticForm.Group widths="equal">

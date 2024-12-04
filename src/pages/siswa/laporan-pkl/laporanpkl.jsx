@@ -20,6 +20,8 @@ import Card from "./Card";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Pagination from "../../../components/Pagination";
+import TugasPklTable from "./Table";
+import TableLaporan from "./Table";
 
 const Statusoptions = [
   { key: "hadir", value: "hadir", text: "Hadir" },
@@ -202,7 +204,14 @@ const LaporanPkl = () => {
                 { key: "february", value: "2", text: "Februari" },
                 { key: "march", value: "3", text: "Maret" },
                 { key: "april", value: "4", text: "April" },
-                { key: "Agus", value: "8", text: "Agus" },
+                { key: "mei", value: "5", text: "Mei" },
+                { key: "Juni", value: "6", text: "Juni" },
+                { key: "Juli", value: "7", text: "Juli" },
+                { key: "Agustus", value: "8", text: "Agustus" },
+                { key: "September", value: "9", text: "September" },
+                { key: "Oktober", value: "10", text: "Oktober" },
+                { key: "November", value: "11", text: "November" },
+                { key: "Desember", value: "12", text: "Desember" },
                 {
                   key: "Semua Bulan",
                   value: "Semua Bulan",
@@ -234,32 +243,13 @@ const LaporanPkl = () => {
             style={{ maxHeight: "calc(100vh - 200px)" }}
           >
             {isFetching || isLoading ? (
-              <>
-                {[...Array(5)].map((_, index) => (
-                  <Segment key={index} className="mb-4">
-                    <Placeholder>
-                      <Placeholder.Header>
-                        <Placeholder.Line />
-                        <Placeholder.Line />
-                      </Placeholder.Header>
-                      <Placeholder.Paragraph>
-                        <Placeholder.Line length="medium" />
-                        <Placeholder.Line length="short" />
-                      </Placeholder.Paragraph>
-                    </Placeholder>
-                  </Segment>
-                ))}
-              </>
-            ) : data && data.data.length > 0 ? (
-              data.data.map((item, index) => (
-                <React.Fragment key={index}>
-                  <Card
-                    isFetching={isFetching}
-                    isLoading={isLoading}
-                    item={item}
-                  />
-                </React.Fragment>
+              Array.from({ length: 5 }).map((_, index) => (
+                <Segment key={index} className="mb-4">
+                  <Placeholder>{/* Placeholder loading */}</Placeholder>
+                </Segment>
               ))
+            ) : data && data.data.length > 0 ? (
+              <TableLaporan data={data.data} />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <h2 className="text-4xl font-semibold">
@@ -267,6 +257,7 @@ const LaporanPkl = () => {
                 </h2>
               </div>
             )}
+          </div>
           <div className="w-full justify-center mt-4">
             <Pagination
               handlePage={handlePage}
@@ -275,7 +266,6 @@ const LaporanPkl = () => {
               pageSize={params.pageSize}
               pagination={data?.pagination}
             />
-          </div>
           </div>
         </div>
       </div>
