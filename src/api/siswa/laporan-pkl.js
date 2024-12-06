@@ -366,9 +366,10 @@ export const useDownloadPdf = () => {
         responseType: "json",
       }),
     {
+      
       onSuccess: (response) => {
         const data = response.data.data;
-
+console.log(data)
         // Generate HTML untuk PDF
         const generateHtml = (data) => {
           return `
@@ -440,7 +441,7 @@ export const useDownloadPdf = () => {
                                   .map(
                                     (diniyyah, diniIndex) => `
                                     <tr>
-                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${index + 1}.${diniIndex + 1}</td>
+                                      <td style="padding: 8px; text-align: center; border: 1px solid black;">${index + 1}</td>
                                       <td style="padding: 8px; border: 1px solid black;">${diniyyah.dari_surat || "-"}</td>
                                       <td style="padding: 8px; border: 1px solid black;">${diniyyah.sampai_surat || "-"}</td>
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.dari_ayat || "-"}</td>
