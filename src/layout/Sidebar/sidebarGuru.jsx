@@ -40,8 +40,6 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
-  
-
   return (
     <>
       <ModalLogout open={open} setOpen={setOpen} />
@@ -85,6 +83,49 @@ export default function SidebarGuru({ setSidebar }) {
             />
           }
         />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="daftar-calonsantri"
+          path="daftar-calonsantri"
+          title={"Daftar Calon Santri"}
+          logo={
+            <MdOutlineSupervisorAccount
+              className={`h-8 w-8 ${
+                url === "daftar-calonsantri"
+                  ? "text-white-400"
+                  : "text-gray-600"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="list-pembayaran"
+          path="list-pembayaran"
+          title={"List Pembayaran"}
+          logo={
+            <MdCreate
+              className={`h-8 w-8 ${
+                url === "list-pembayaran" ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
+
+        <NavButton
+          handleSidebar={handleSiderbar}
+          to="list-wawancara"
+          path="list-wawancara"
+          title={"List Wawancara Calon Santri"}
+          logo={
+            <MdCreate
+              className={`h-8 w-8 ${
+                url === "list-wawancara" ? "text-white-400" : "text-gray-600"
+              }`}
+            />
+          }
+        />
+        
         <NavButton
           handleSidebar={handleSiderbar}
           to="daftar-siswa"
@@ -199,7 +240,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-         {checkRole(roles, "Guru") && (
+        {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`hasil-belajar`}
@@ -353,9 +394,14 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
           : "text-black"
       }`}
     >
-      <div style={{
-        zomm : '80%'
-      }} className="w-8 h-8 ">{logo}</div>
+      <div
+        style={{
+          zomm: "80%",
+        }}
+        className="w-8 h-8 "
+      >
+        {logo}
+      </div>
       {/* <p
         className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}

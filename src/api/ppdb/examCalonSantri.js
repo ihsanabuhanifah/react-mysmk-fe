@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export function getExamCalonSantri(params) {
   syncToken();
-  return axios.get("/ppdb/mapel", { params });
+  return axios.get("/ppdb/ujian/list", { params });
 }
 
 export function takeExamCalonSantri(id) {
@@ -19,7 +19,7 @@ export function takeExamCalonSantri(id) {
 export const useExamCalonSantri = (id) => {
     let [params, setParams] = useState({ page: 1, pageSize: 10 });
     const { isLoading, data, isFetching } = useQuery(
-      ["/ppdb/mapel", params],
+      ["/ppdb/ujian/list", params],
       () => getExamCalonSantri(params),
       {
         keepPreviousData: true,
@@ -36,7 +36,7 @@ export const useExamCalonSantri = (id) => {
     const { successToast, warningToast } = useToast();
     const mutate = useMutation(
       (id) => {
-        return axios.put(`/santri/exam/take/${id}`);
+        return axios.get(`/ppdb/exam/take/${id}`);
       },
       {
         onSuccess: (response) => {
@@ -45,7 +45,7 @@ export const useExamCalonSantri = (id) => {
   
         onError: (error) => {
           console.log("err", error.response);
-          warningToast(error);
+          // warningToast(error);
         },
       }
     );
@@ -56,7 +56,7 @@ export const useExamCalonSantri = (id) => {
     const { successToast, warningToast } = useToast();
     const mutate = useMutation(
       (payload) => {
-        return axios.put(`/santri/exam/progress`, {
+        return axios.put(`/ppdb/exam/progress`, {
           id: payload.id,
           data: payload.data,
         });
@@ -79,7 +79,7 @@ export const useExamCalonSantri = (id) => {
     const { successToast, warningToast } = useToast();
     const mutate = useMutation(
       (payload) => {
-        return axios.put(`/santri/exam/submit`, {
+        return axios.put(`/ppdb/exam/submit`, {
           id: payload.id,
           data: payload.data,
         });

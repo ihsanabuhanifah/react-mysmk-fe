@@ -31,7 +31,7 @@ function ModalLogoutPpdb({ open, setOpen }) {
 
             clearToken();
             localStorage.clear();
-            window.location.replace("/landingpage/login");
+            window.location.replace("/ppdb/login");
           }}
         >
           <Icon name="checkmark" /> Yakin

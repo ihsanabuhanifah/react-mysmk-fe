@@ -3,6 +3,7 @@ import htmr from "htmr";
 import { useEffect, useState } from "react";
 
 export default function Pg({ soals, item, setPayload, payload }) {
+  console.log("ini adalah soals",soals)
   let [jawaban, setJawaban] = useState("");
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
  
   return (
     <div className="space-y-5">
-      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
+      <div className="border p-2 rounded-md">{htmr(`<div>${item.soal}</div>`)}</div>
 
       <div className="relative pl-12">
         <button
@@ -50,7 +51,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           A
         </button>
-        <div>{htmr(`<div>${soals.a}</div>`)}</div>
+        <div>{htmr(`<div>${item.a}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -78,7 +79,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           B
         </button>
-        <div>{htmr(`<div>${soals.b}</div>`)}</div>
+        <div>{htmr(`<div>${item.b}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -106,7 +107,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           C
         </button>
-        <div>{htmr(`<div>${soals.c}</div>`)}</div>
+        <div>{htmr(`<div>${item.c}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -134,7 +135,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           D
         </button>
-        <div>{htmr(`<div>${soals.d}</div>`)}</div>
+        <div>{htmr(`<div>${item.d}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -162,7 +163,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           E
         </button>
-        <div>{htmr(`<div>${soals.e}</div>`)}</div>
+        <div>{htmr(`<div>${item.e}</div>`)}</div>
       </div>
     </div>
   );
@@ -170,7 +171,9 @@ export default function Pg({ soals, item, setPayload, payload }) {
 
 const handleSoal = (payload, item) => {
   const soal = payload.data.filter((x) => x.id === item.id);
+  console.log("ini soal",soal)
   const index = payload.data.findIndex((x) => x.id === item.id);
+  console.log("ini index",soal)
 
   return {
     soal,

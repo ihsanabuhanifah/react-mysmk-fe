@@ -81,6 +81,8 @@ import Pengumuman from "./pages/ppdb/pengumuman-hasil/pengumuman";
 import ListWawancara from "./pages/guru/list-wawancara";
 import DetailCalonSantri from "./pages/guru/daftar-calonsantri/detailCalon";
 import EditWawancara from "./pages/guru/list-wawancara/edit-wawancara";
+import UjianPpdb from "./pages/ppdb/exam/exam";
+import ExamPagePpdb from "./pages/ppdb/exam/ExamPage";
 
 
 function App() {
@@ -249,10 +251,11 @@ function App() {
           <Route path="bukti-transfer" element={<BuktiTransfer />} />
           <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
           <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
-          <Route path="exam" element={<Ujian />}></Route>
-          <Route path="wawancara" element={<Wawancara />}></Route>
-          <Route path="hasil-test" element={<Pengumuman />}></Route>
-          <Route path="daftar-ulang" element={<DaftarUlang />}></Route>
+          <Route path="exam" element={<UjianPpdb />}/>
+          <Route path="exam/:id" element={<ExamPagePpdb />} />
+          <Route path="wawancara" element={<Wawancara />}/>
+          <Route path="hasil-test" element={<Pengumuman />}/>
+          <Route path="daftar-ulang" element={<DaftarUlang />}/>
         </Route>
       </Routes>
     </div>
