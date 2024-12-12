@@ -1,25 +1,33 @@
-import { Button, Dropdown, Icon, Menu, Modal, Sidebar, Table, TextArea } from "semantic-ui-react";
+import { Button, Dropdown, Form, Icon, Menu, Modal, Sidebar, Table, TextArea } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import { useNavigate, useParams } from "react-router-dom";
 import usePage from "../../../hook/usePage";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, detailTugasPkl, listJawabanTugasPkl, listTugasPkl, updateTugasPkl } from "../../../api/guru/tugas-pkl";
+import { deleteTugasPkl, detailTugasPkl, listJawabanTugasPkl, listTugasPkl, updateJawabanPkl, updateTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
-import { replace } from "formik";
+import { ErrorMessage, Field, Formik, replace } from "formik";
 import { stringify } from "qs";
 import { detailJawabanSiswaPkl, listSiswaPkl } from "../../../api/guru/fitur-pkl";
 import { LabelStatus } from "../../../components/Label";
 import dayjs from "dayjs";
+import *  as Yup from 'yup'
+import { toast } from "react-toastify";
+
+let pesanSchema = Yup.object().shape({
+    status: Yup.string().required("wajib pilih"),
+    pesan: Yup.string().required("wajib diisi"),
+});
 
 export default function TugasLaporanPkl() {
 
     const { id } = useParams();
     const navigate = useNavigate();
+
     let { page, pageSize, setPage, setPageSize } = usePage();
     let queryClient = useQueryClient();
     let [isOpen, setIsOpen] = useState(false);
@@ -61,44 +69,88 @@ export default function TugasLaporanPkl() {
     //         }
     //     }
     // )
-    const { data, isLoading, isFetching } = useQuery(
+    let { data, isLoading, isFetching } = useQuery(
         ["/jawaban-tugas-pkl/detailByTugasId", id],
         () => listJawabanTugasPkl(id),
         {
+            enabled: id !== undefined,
             refetchOnWindowFocus: false,
             select: (response) => {
                 console.log(response.data.data);
                 return response.data;
-            }
+            },
+            onSuccess: (data) => {
+                console.log("data suksus", data);
+
+
+            },
         }
     );
-    const mutation = useMutation(updateTugasPkl, {
-        onSuccess: () => {
-            queryClient.invalidateQueries([`/jawaban-tugas-pkl/detailByTugasId`,id]);
-            alert("Status dan pesan berhasil diperbarui!");
-            setIsOpenPesan(false); // Tutup modal setelah berhasil update
-        },
-        onError: (error) => {
-            alert("Gagal memperbarui status dan pesan: " + error.message);
-        },
-    });
-    const handleUpdate = () => {
-        console.log('value jawaban:', jawaban);
-        const { id } = jawaban;
 
-        if (!status || !pesan) {
-            alert("Status dan pesan harus diisi!");
-            return;
+    let { data: dataPesan, isLoading: isLoadingPesan, isFetching: isFecthingPesan } = useQuery(
+        ["/jawaban-tugas-pkl/update", id],
+        () => updateJawabanPkl(id),
+        {
+            select: (response) => {
+                return response.data.data
+            },
+            onSuccess: (response) => {
+                console.log(response)
+
+            },
         }
-        mutation.mutate({
-            // id: selectedJawaban?.jawaban?.jawaban_id,
-            // id: selectedJawaban?.id,
-            id: selectedJawaban?.tugas_pkl_id,
-            // id,
-            status,
-            pesan,
-        });
-    };
+    )
+
+
+    // const mutation = useMutation(updateTugasPkl, {
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries([`/jawaban-tugas-pkl/detailByTugasId`,id]);
+    //         alert("Status dan pesan berhasil diperbarui!");
+    //         setIsOpenPesan(false); // Tutup modal setelah berhasil update
+    //     },
+    //     onError: (error) => {
+    //         alert("Gagal memperbarui status dan pesan: " + error.message);
+    //     },
+    // });
+    useEffect(() => {
+        if (data) {
+            setInitialState({
+                id: data.id,
+                status: data.status,
+                pesan: data.pesan,
+            });
+        }
+    }, [data]);
+
+    const [initialState, setInitialState] = useState({
+        id: data?.id,
+        status: data?.status,
+        pesan: data?.pesan
+    });
+    // const [initialState, setInitialState] = useState({
+    //     id: "",
+    //     tugas: "",
+    //     link_soal: "",
+    //     batas_waktu: null,
+    //     deskripsi_tugas: "",
+    // });
+
+    // const handleUpdate = () => {
+    //     console.log('value jawaban:', jawaban);
+    //     const { id } = jawaban;
+
+    //     if (!status || !pesan) {
+    //         alert("Status dan pesan harus diisi!");
+    //         return;
+    //     }
+    //     mutation.mutate({
+    //         // id: selectedJawaban?.jawaban?.jawaban_id,
+    //         // id: selectedJawaban?.id,
+    //         // id,
+    //         status,
+    //         pesan,
+    //     });
+    // };
 
     const handleOpenModalLihat = (jawaban) => {
         setSelectedJawaban(jawaban);
@@ -110,6 +162,7 @@ export default function TugasLaporanPkl() {
         setPesan(jawaban.pesan || "");
         setIsOpenPesan(true);
     };
+
 
     // Function to close the modal
     const handleCloseModal = () => {
@@ -131,6 +184,61 @@ export default function TugasLaporanPkl() {
     //     { key: "sedang", value: "sedang dikerjakan", text: "Sedang Dikerjakan" },
     //     { key: "selesai", value: "selesai", text: "Selesai" },
     // ];
+
+    //asli
+    // const onSubmit = async (values) => {
+    //     try {
+    //         const response = await updateJawabanPkl(id, {
+    //             id: selectedJawaban?.id,
+    //             status: values.status,
+    //             pesan: values.pesan,
+    //         });
+    //         // toast.success(response?.data?.msg, "Pesan berhasil diperbarui!");
+    //         toast.success(response?.data?.msg, {
+    //             position: "top-right",
+    //             autoClose: 1000,
+    //             hideProgressBar: false,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: "colored",
+    //         });
+
+
+    //         queryClient.invalidateQueries("tugas-laporan-pkl/nilai/:id");
+    //     } catch (error) {
+    //         console.error(error);
+    //         toast.error("Gagal memperbarui pesan!");
+    //     }
+    // };
+
+    const onSubmit = async (values, { setSubmitting }) => {
+        try {
+            const response = await updateJawabanPkl(selectedJawaban?.id, values);
+            toast.success("Status dan pesan berhasil diperbarui!", {
+                position: "top-right",
+                autoClose: 1000,
+                theme: "colored",
+            });
+            queryClient.invalidateQueries(["/jawaban-tugas-pkl/detailByTugasId", id]);
+            handleCloseModalPesan();
+        } catch (error) {
+            console.error("Error saat mengupdate:", error);
+            toast.error("Gagal memperbarui status dan pesan.", { theme: "colored" });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    //     const onSubmit = async (values) => {
+    //     try {
+    //       const response = await updateJawabanPkl(id, values);
+    //       toast.success(response?.data?.msg, { theme: "colored" });
+    //     } catch (err) {
+    //       toast.error("Ada kesalahan", { theme: "colored" });
+    //     }
+    //   };
 
     const {
         showAlertDelete,
@@ -248,7 +356,7 @@ export default function TugasLaporanPkl() {
 
                 <Modal.Content>
                     <p><strong>ID:</strong> {selectedJawaban?.id}</p>
-                    {JSON.stringify(selectedJawaban)}
+                    {/* {JSON.stringify(selectedJawaban)} */}
 
 
                     <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
@@ -262,47 +370,61 @@ export default function TugasLaporanPkl() {
                     </Button>
                 </Modal.Actions>
             </Modal>
-            {/* popup Pesan */}
-            <Modal open={isOpenPesan} onClose={handleCloseModalPesan}>
-                <Modal.Header>Ubah Status dan Pesan</Modal.Header>
+
+            <Modal
+                open={isOpenPesan}
+                onClose={handleCloseModalPesan}
+                size="small"
+            >
+                <Modal.Header>Update Status dan Pesan</Modal.Header>
                 <Modal.Content>
-                    <p><strong>Nama Siswa:</strong> {selectedJawaban?.nama}</p>
-                    <Dropdown
-                        placeholder="Pilih Status"
-                        fluid
-                        selection
-                        options={statusOptions}
-                        value={status}
-                        onChange={(e, { value }) => setStatus(value)}
-                    />
-                    <div className="mt-3">
-                        <strong>Pesan:</strong>
-                        <TextArea
-                            rows="4"
-                            value={pesan}
-                            placeholder="ketikan pesan"
-                            onChange={(e) => setPesan(e.target.value || "Tidak ada pesan")}
-                            style={{
-                                width: "100%",
-                                marginTop: "5px",
-                                border: "1px solid #ccc", // Garis pada textarea
-                                borderRadius: "4px",
-                                padding: "10px",
-                                fontSize: "14px",
-                            }}
-                        />
-                    </div>
+                    <Formik
+                        initialValues={{
+                            status: selectedJawaban?.status || "",
+                            pesan: selectedJawaban?.pesan || "",
+                        }}
+                        validationSchema={pesanSchema}
+                        onSubmit={onSubmit}
+                    >
+                        {({ handleSubmit, values, handleChange, isSubmitting }) => (
+                            <Form onSubmit={handleSubmit}>
+                                <Form.Field>
+                                    <label>Status</label>
+                                    <Dropdown
+                                        placeholder="Pilih Status"
+                                        fluid
+                                        selection
+                                        options={statusOptions}
+                                        name="status"
+                                        value={values.status}
+                                        onChange={(e, { value }) => handleChange({ target: { name: "status", value } })}
+                                    />
+                                    <ErrorMessage name="status" component="div" className="ui pointing red basic label" />
+                                </Form.Field>
+                                <Form.Field>
+                                    <label>Pesan</label>
+                                    <TextArea
+                                        placeholder="Masukkan pesan"
+                                        name="pesan"
+                                        value={values.pesan}
+                                        onChange={handleChange}
+                                    />
+                                    <ErrorMessage name="pesan" component="div" className="ui pointing red basic label" />
+                                </Form.Field>
+                                <div className="ui two buttons">
+                                    <Button type="submit" primary loading={isSubmitting} disabled={isSubmitting}>
+                                        Simpan
+                                    </Button>
+                                    <Button type="button" onClick={handleCloseModalPesan}>
+                                        Batal
+                                    </Button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
                 </Modal.Content>
-                <Modal.Actions>
-                    {/* <Button color="green" > */}
-                    <Button color="green" onClick={handleUpdate} loading={mutation.isLoading}>
-                        <Icon name="check" /> Simpan
-                    </Button>
-                    <Button color="red" onClick={handleCloseModalPesan}>
-                        <Icon name="close" /> Batal
-                    </Button>
-                </Modal.Actions>
             </Modal>
+
         </LayoutPage>
     )
 }

@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { useEffect, useState } from "react";
 import useDebounce from "../../../hook/useDebounce";
 import FilterLaporanPkl from "../laporan-pkl/filter";
-import { deleteTugasPkl, listJawabanTugasPkl, listTugasPkl } from "../../../api/guru/tugas-pkl";
+import { deleteTugasPkl,  listTugasPkl } from "../../../api/guru/tugas-pkl";
 import { encodeURlFormat } from "../../../utils";
 import { DeleteButton, EditButton, ModalAlert, PaginationTable, TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";

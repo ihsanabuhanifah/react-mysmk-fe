@@ -14,7 +14,6 @@ export const usePagination = (defaultParams) => {
       };
     });
   };
- 
 
   const handleKeyword = (keyword) => {
     setFilterParams({ ...params, keyword: keyword, page: 1 });
@@ -38,7 +37,7 @@ export const usePagination = (defaultParams) => {
   };
 
   const handlePageSize = (e) => {
-    console.log(e, "ddada")
+    console.log(e, "ddada");
     // console.log()
     setParams((params) => ({ ...params, pageSize: e, page: 1 }));
     setFilterParams((params) => ({
@@ -52,7 +51,6 @@ export const usePagination = (defaultParams) => {
     setParams((params) => ({ ...params, page: page }));
     setFilterParams((params) => ({ ...params, page: page }));
   };
-
 
   const handlePayload = (nama, value) => {
     setParams((pay) => {
@@ -73,6 +71,6 @@ export const usePagination = (defaultParams) => {
     handlePage,
     filterParams,
     handleSearch,
-    handlePayload
+    handlePayload,
   };
 };

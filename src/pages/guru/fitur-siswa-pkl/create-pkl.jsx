@@ -192,7 +192,7 @@ export default function CreatePkl() {
               
               {console.log('err fatih', errors)}
               {console.log('err touched', touched)}
-              {JSON.stringify(values)}
+              {/* {JSON.stringify(values)} */}
 
 
               <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">

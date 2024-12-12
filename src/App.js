@@ -50,7 +50,6 @@ import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
-import FileCoba from "./components/fileupload";
 import TestFatih from "./pages/guru/dashboard/test";
 import LaporanPkl from "./pages/guru/laporan-pkl";
 import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";

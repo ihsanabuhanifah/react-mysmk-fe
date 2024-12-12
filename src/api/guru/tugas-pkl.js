@@ -50,12 +50,13 @@ export function listJawabanTugasPkl(id) {
   return axiosClient.get(`guru/jawaban-tugas-pkl/detailByTugasId/${id}`);
 }
 
-export function updateJawabanPkl( {id, status, pesan} ) {
+export function updateJawabanPkl( id,values) {
   syncToken();
   // let payload = values.payload[0];
   console.log("update jawaban", values);
+  // return axiosClient.put(`guru/jawaban-tugas-pkl/update/${id}`, values);
   return axiosClient.put(`guru/jawaban-tugas-pkl/update/${id}`, {
-    status,
-    pesan,
+    status: values.status,
+    pesan: values.pesan,
   });
 }

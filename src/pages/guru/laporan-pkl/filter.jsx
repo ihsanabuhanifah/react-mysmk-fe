@@ -71,13 +71,13 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
     const { id } = useParams();
     const [dateRange, setDateRange] = useState({ start: '', end: '' });
     const [studentId, setStudentId] = useState(null);
-    const { mutate: downloadPdfIsMutate, isLoading: downloadPdfIsLoading, params, setParams, filterParams } = useDownloadPdf();
+    const { mutate: downloadPdfIsMutate, isLoading: downloadPdfIsLoading, params: downloadParams, setParams, filterParams } = useDownloadPdf();
 
     // const handleDownloadPdf = useCallback((values) => {
     //     const { bulan, tahun } = values;
     //     if (!studentId) {
     //         console.log('ID siswa belum dipilih');
-    //         return;
+    //         return;  
     //     }
     //     if (studentId && bulan && tahun) {
     //         const url = `/guru/laporan-harian-pkl/download-pdf/${studentId}`;
@@ -148,7 +148,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                             </button>
                         </div>
 
-                        <Container className="text-left">
+                        <Container className="text-left ">
                             {/* <div>
                                 <h1>HTML to PDF in Next.js</h1>
                                 <div ref={contentRef} style={{ padding: '20px', border: '1px solid #000' }}>
@@ -164,7 +164,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                 </Segment>
                             )}
 
-                            <FormLabel label={"Pilih Bulan"}>
+                            {/* <FormLabel label={"Pilih Bulan"}>
                                 <Dropdown
                                     placeholder="Pilih Bulan"
                                     fluid
@@ -185,7 +185,46 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                         // console.log('params', params.bulan)
                                     }}
                                 />
+                            </FormLabel> */}
+                            <FormLabel label={"Dari Tanggal"}>
+                                <Input
+                                className="w-full"
+                                    type="date"
+                                    placeholder="Dari Tanggal"
+                                    value={values?.dariTanggal}
+                                    onChange={(e) => {
+                                        const selectedDate = new Date(e.target.value);
+                                        const selectedYear = selectedDate.getFullYear();
+                                        const selectedMonth = selectedDate.getMonth() + 1;
+
+                                        setFieldValue('dariTanggal', e.target.value);
+                                        handleDateSelection(selectedYear, selectedMonth, setFieldValue);
+
+                                        setParams((params) => ({
+                                            ...params,
+                                            dariTanggal: e.target.value,
+                                        }));
+                                    }}
+                                />
                             </FormLabel>
+
+                            <FormLabel label={"Sampai Tanggal"}>
+                                <Input
+                                className="w-full"
+                                    type="date"
+                                    placeholder="Sampai Tanggal"
+                                    value={values?.sampaiTanggal}
+                                    onChange={(e) => {
+                                        setFieldValue('sampaiTanggal', e.target.value);
+
+                                        setParams((params) => ({
+                                            ...params,
+                                            sampaiTanggal: e.target.value,
+                                        }));
+                                    }}
+                                />
+                            </FormLabel>
+
 
                             <FormLabel label={"Pilih Tahun"}>
                                 <Dropdown
@@ -199,7 +238,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                     //     handleDateSelection(value, values.bulan, setFieldValue);
 
                                     // }}
-                                    onChange={(e, {value}) => {
+                                    onChange={(e, { value }) => {
                                         // setFieldValue('bulan', value);
                                         console.log('data', value);
                                         setFieldValue('tahun', value);
@@ -208,7 +247,7 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                             tahun: value,
 
                                         }))
-                                            // handleDateSelection(data.bulan, data, setFieldValue);
+                                        // handleDateSelection(data.bulan, data, setFieldValue);
                                         // console.log('params', params.tahun)
                                     }}
                                 />
@@ -221,8 +260,8 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                     loadOptions={listSiswaOptions}
                                     isClearable
                                     onChange={(data) => {
-                                        console.log('siswa', data)
-                                        
+
+
                                         // setFieldValue(`studentId`, data.value);
                                         setFieldValue(`nama_siswa`, data?.label);
                                         console.log(data)
@@ -230,9 +269,9 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                         // setStudentId(data?.value);
                                         setParams((params) => ({
                                             ...params,
-                                            siswa_id: data?.value,
+                                            studentId: data?.value,
                                             // nama_siswa:data.label
-                                            
+
                                         }))
                                     }}
                                     placeholder="Nama Siswa"
@@ -254,10 +293,11 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
 
                             <div className="absolute bottom-2 right-2 left-2">
                                 <Button type="submit" content="Terapkan" fluid color="teal" />
-                                {/* <br />
-                                <Button
+                                <br />
+                                {/* <Button
                                     fluid
                                     color="red"
+                                    
                                     // onClick={() => handleDownloadPdf(values)}
                                     onClick={() => {
                                         // Validasi bahwa bulan, tahun, dan student_id sudah terisi sebelum memanggil mutate
@@ -268,9 +308,11 @@ export default function FilterLaporanPkl({ filter, setFilter, setVisible }) {
                                         // console.log(values.student_id)
                                         
                                         // Mutate dipanggil hanya ketika semua parameter sudah lengkap
+                                        console.log('a');
                                         downloadPdfIsMutate();
+                                        
                                     }}
-                                    // disabled={downloadPdfIsLoading || !values.studentId || !values.bulan || !values.tahun}
+                                    disabled={downloadPdfIsLoading || !values.studentId || !values.bulan || !values.tahun}
                                 >
 
                                     {downloadPdfIsLoading ? 'Loading' : (

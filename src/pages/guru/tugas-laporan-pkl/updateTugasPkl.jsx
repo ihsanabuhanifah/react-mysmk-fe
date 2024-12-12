@@ -157,7 +157,7 @@ export default function UpdateTugasPkl() {
                     }) => (
                         <Form onSubmit={handleSubmit}>
 
-                            {JSON.stringify(values)}
+                            {/* {JSON.stringify(values)} */}
                             {console.log(values)
                             }
                             <div className="grid grid-cols-3 gap-y-3 gap-x-5 shadow-md p-5">
