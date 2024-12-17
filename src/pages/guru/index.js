@@ -25,6 +25,11 @@ import ListBankSoal from "./bank-soal";
 import FormSoal from "./bank-soal/FormSoal";
 import FormExam from "./exam/FormSoal";
 import ListExam from "./exam";
+import SppSiswa from "./spp-siswa";
+import DetailSpp from "./spp-siswa/DetailSpp";
+import NotifikasiSpp from "./spp-siswa/notifikasi-spp";
+import FilterSPP from "./spp-siswa/filter-spp";
+import FilterDetailSPP from "./spp-siswa/filter-detail";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
 
 export {
@@ -33,10 +38,14 @@ export {
   Dashboard,
   Halaqoh,
   Kunjungan,
+  SppSiswa,
   Pulang,
   Pelanggaran,
   Prestasi,
   Sholat,
+  FilterDetailSPP,
+  FilterSPP,
+  DetailSpp,
   AbsensiHalaqoh,
   LaporanGuruPiket,
   ListGuruPiketToday,
@@ -45,6 +54,7 @@ export {
   DaftarSiswa,
   Agenda,
   DetailSiswa,
+  NotifikasiSpp,
   PengampuHalaqoh,
   RekapHalaqoh,
   ListJadwal,
@@ -55,5 +65,5 @@ export {
   FormSoal,
   FormExam,
   ListExam,
-  CreateSiswa
+  CreateSiswa,
 };

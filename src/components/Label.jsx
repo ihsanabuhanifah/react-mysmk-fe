@@ -27,6 +27,23 @@ export const LabelStatus = ({ status }) => {
   }
 
 
+  if (status === "sudah") {
+    return (
+
+      <Label size="tiny" content="Sudah Di bayar" color="green" as={"a"} />
+     
+    );
+  }
+
+  if (status === "belum") {
+    return (
+
+      <Label size="tiny" content="Belum di bayar" color="red" as={"a"} />
+     
+    );
+  }
+
+
 
   if (status === "hadir") {
     return (

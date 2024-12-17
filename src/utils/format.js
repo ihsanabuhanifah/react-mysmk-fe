@@ -23,6 +23,13 @@ const getOptions = (array, text) => {
   return options;
 };
 
+function formatRupiah(number) {
+  return new Intl.NumberFormat('id-ID', {
+    minimumFractionDigits: 0,
+  }).format(number);
+}
+
+
 const getOptionsText = (array, text) => {
   const options = [];
 
@@ -37,8 +44,6 @@ const getOptionsText = (array, text) => {
 
   return options;
 };
-
-
 
 function statusApproval(value) {
   if (value === "disetujui") {
@@ -59,6 +64,23 @@ function statusApproval(value) {
     return (
       <div className="bg-yellow-300 text-gray-100 font-bold rounded-sm px-2 py-1 text-center">
         Menunggu
+      </div>
+    );
+  }
+}
+
+function statusPembayaran(value) {
+  if (value === "Sudah") {
+    return (
+      <div className="bg-green-500 text-gray-100 font-bold rounded-sm px-2 py-1 text-center">
+        Sudah Bayar
+      </div>
+    );
+  }
+  if (value === "Belum") {
+    return (
+      <div className="bg-red-500 text-gray-100 font-bold rounded-sm px-2 py-1 text-center">
+        Belum Bayar
       </div>
     );
   }
@@ -97,15 +119,13 @@ function formatAlasanTidakShoalt(value) {
   }
 }
 
-
-
-
 export {
   getOptions,
   statusApproval,
   formatAlasanTidakShoalt,
   formatWaktuSholat,
   getOptionsText,
+  formatRupiah,
   formatValue,
- 
+  statusPembayaran,
 };

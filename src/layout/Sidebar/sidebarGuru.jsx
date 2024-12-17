@@ -20,6 +20,8 @@ import {
   MdPhoneInTalk,
   MdCreate,
   MdLaptopChromebook,
+  MdCommentBank,
+  MdAccountBalanceWallet,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -40,7 +42,7 @@ export default function SidebarGuru({ setSidebar }) {
 
   const [open, setOpen] = React.useState(false);
 
-  console.log('ro;e', roles)
+  console.log("ro;e", roles);
 
   return (
     <>
@@ -297,6 +299,24 @@ export default function SidebarGuru({ setSidebar }) {
           />
         )}
 
+        {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
+            to="spp-siswa"
+            path="spp-siswa"
+            title={"Spp Siswa"}
+            logo={
+              <MdAccountBalanceWallet
+                className={`h-8 w-8 ${
+                  url === "spp-siswa"
+                    ? "text-white-400"
+                    : "text-gray-600"
+                }`}
+              />
+            }
+          />
+        )}
+
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
       </nav>
@@ -338,9 +358,14 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
           : "text-black"
       }`}
     >
-      <div style={{
-        zomm : '80%'
-      }} className="w-8 h-8 ">{logo}</div>
+      <div
+        style={{
+          zomm: "80%",
+        }}
+        className="w-8 h-8 "
+      >
+        {logo}
+      </div>
       <p
         className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
        ${url === path ? "text-white font-black" : "text-black"}

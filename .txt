@@ -1,0 +1,9 @@
+{
+    "payload": [
+        {
+            "student_id": 30,
+            "ta_id": 3,
+            " nominal":25000000
+        }
+    ]
+}

@@ -5,9 +5,8 @@ import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
-import 'react-quill/dist/quill.snow.css';
-import 'katex/dist/katex.min.css';
-
+import "react-quill/dist/quill.snow.css";
+import "katex/dist/katex.min.css";
 
 import {
   Jadwal,
@@ -37,6 +36,8 @@ import {
   ListExam,
   FormExam,
   CreateSiswa,
+  SppSiswa,
+  FilterSPP,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -47,6 +48,9 @@ import ProtectRoute from "./routers/ProtectRoute";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import PenilaianPage from "./pages/guru/exam/PenilaianPage";
+import DetailSpp from "./pages/guru/spp-siswa/DetailSpp";
+import NotifikasiSpp from "./pages/guru/spp-siswa/notifikasi-spp";
+import FilterDetailSPP from "./pages/guru/spp-siswa/filter-detail";
 
 function App() {
   return (
@@ -97,6 +101,11 @@ function App() {
             </ProtectRoute>
           }
         >
+          <Route path="spp-siswa" element={<SppSiswa />} />
+          <Route path="spp-siswa/DetailSpp/:student_id" element={<DetailSpp />} />
+          <Route path="spp-siswa/notifikasi-spp" element={<NotifikasiSpp />} />
+          <Route path="spp-siswa/filter-spp" element={<FilterSPP />} />
+          <Route path="spp-siswa/filter-detail" element={<FilterDetailSPP />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="kehadiran-guru" element={<Kehadiran />} />
           <Route path="daftar-siswa" element={<DaftarSiswa />} />
@@ -117,15 +126,12 @@ function App() {
             element={<PengampuHalaqoh />}
           />
           <Route path="bank-soal" element={<ListBankSoal />} />
-
           <Route path="bank-soal/tambah" element={<FormSoal />} />
           <Route path="bank-soal/update/:id" element={<FormSoal />} />
           <Route path="exam" element={<ListExam />} />
-
           <Route path="exam/tambah" element={<FormExam />} />
           <Route path="exam/penilaian/:id/:mapel" element={<PenilaianPage />} />
           <Route path="exam/update/:id" element={<FormExam />} />
-
           <Route path="halaqoh/absensi/rekap" element={<RekapHalaqoh />} />
           <Route
             path="pengampu/halaqoh/absensi"

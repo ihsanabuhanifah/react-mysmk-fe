@@ -15,15 +15,24 @@ const useCheckbox = () => {
     }
   };
 
- const isChecked = (id) => {
-    return payload.includes(id)
- }
+  const isChecked = (id) => {
+    return payload.includes(id);
+  };
+
+  const handleCheckAll = (id) => {
+    if (payload.length === id.length) {
+      setPayload([]);
+    } else {
+      setPayload(id.map((item) => item.id));
+    }
+  };
+
   return {
     handleCheck,
     isChecked,
+    handleCheckAll,
     payload,
-    setPayload
-    
+    setPayload,
   };
 };
 

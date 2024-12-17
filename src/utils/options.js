@@ -29,6 +29,17 @@ const approveOptions = [
   { key: "2", value: "ditolak", text: "Ditolak" },
   { key: "3", value: "disetujui", text: "Disetujui" },
 ];
+
+const StatusPembayaranOptions = [
+  { key: "1", value: "Sudah", text: "Sudah Bayar" },
+  { key: "2", value: "Belum", text: "Belum Bayar" },
+];
+
+const StatusSiswaOptions = [
+  { key: "1", value: "alumni", text: "Alumni" },
+  { key: "2", value: "active", text: "Active" },
+];
+
 const semesterOptions = [
   { key: "1", value: 1, text: "Semester 1" },
   { key: "2", value: 2, text: "Semester 2" },
@@ -36,6 +47,12 @@ const semesterOptions = [
   { key: "2", value: 4, text: "Semester 4" },
   { key: "3", value: 5, text: "Semester 5" },
   { key: "3", value: 6, text: "Semester 6" },
+];
+
+const periodeOptions = [
+  { key: "1", value: 1, text: "Bulan Ini" },
+  { key: "2", value: 2, text: "1 Semester" },
+  { key: "3", value: 3, text: "1 Tahun" },
 ];
 
 const kategoriPelanggaranOptions = [
@@ -125,7 +142,6 @@ const jenisOptions = [
   { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
   { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
   { key: "4", value: "US", text: "Ujian Sekolah" },
-  
 ];
 
 const durasiOptions = [
@@ -173,7 +189,10 @@ export {
   tipeSoalOptions,
   pgOptions,
   tfOptions,
+  periodeOptions,
+  StatusPembayaranOptions,
   jenisOptions,
+  StatusSiswaOptions,
   statusUjianOptions,
   tipeUjianOptions,
 };
