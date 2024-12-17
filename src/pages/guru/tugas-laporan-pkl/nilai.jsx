@@ -412,7 +412,7 @@ export default function TugasLaporanPkl() {
                                     <ErrorMessage name="pesan" component="div" className="ui pointing red basic label" />
                                 </Form.Field>
                                 <div className="ui two buttons">
-                                    <Button type="submit" primary loading={isSubmitting} disabled={isSubmitting}>
+                                    <Button type="submit" color="green" loading={isSubmitting} disabled={isSubmitting}>
                                         Simpan
                                     </Button>
                                     <Button type="button" onClick={handleCloseModalPesan}>

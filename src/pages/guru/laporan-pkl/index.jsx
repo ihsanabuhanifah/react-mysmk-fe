@@ -284,8 +284,8 @@ export default function LaporanPkl() {
                             <Table.HeaderCell>No</Table.HeaderCell>
                             <Table.HeaderCell>Nama Santri</Table.HeaderCell>
                             <Table.HeaderCell>Judul Kegiatan</Table.HeaderCell>
-                            <Table.HeaderCell>Kehadiran</Table.HeaderCell>
                             <Table.HeaderCell>Tanggal</Table.HeaderCell>
+                            <Table.HeaderCell>Kehadiran</Table.HeaderCell>
                             <Table.HeaderCell>Aksi</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
