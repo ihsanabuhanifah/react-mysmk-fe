@@ -83,7 +83,8 @@ export const useListReport = () => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
+      refetchOnWindowFocus : false,
+      staleTime: 1000 * 60 * 60 * 5,
     }
   );
 

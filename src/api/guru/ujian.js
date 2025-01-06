@@ -30,7 +30,7 @@ export const useListUjian = () => {
     page: 1,
     pageSize: 10,
     is_all: 1,
-    jenis_ujian : ""
+    jenis_ujian: "",
   });
 
   let { data, isLoading, isFetching } = useQuery(
@@ -41,7 +41,8 @@ export const useListUjian = () => {
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
-      staleTime: 100 * 60 * 5,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
       select: (response) => {
         return response.data;
       },
@@ -132,7 +133,8 @@ export const usePenilaian = (payload) => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
     },
   );
 
@@ -154,7 +156,8 @@ export const useSoal = (id) => {
       enabled: !!id === true,
 
       select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
     },
   );
 

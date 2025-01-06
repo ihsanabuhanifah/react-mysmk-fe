@@ -125,7 +125,7 @@ export default function FormExam() {
     materi: debouncedName,
     isExam: true,
 
-    is_all: 1,
+    is_all: 0,
   };
 
   let { data, isLoading } = useQuery(

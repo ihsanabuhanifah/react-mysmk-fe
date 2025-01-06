@@ -30,7 +30,8 @@ export const useLokasiPkl = () => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
+      refetchOnWindowFocus : false,
+      staleTime: 1000 * 60 * 60 * 5,
     }
   );
   return {
@@ -70,6 +71,8 @@ export const useLaporanPklList = () => {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
+      refetchOnWindowFocus : false,
+      staleTime: 1000 * 60 * 60 * 5,
     }
   );
   return {

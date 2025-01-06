@@ -14,7 +14,7 @@ export const useListBankSoal = () => {
     pageSize: 10,
     is_all: 1,
     mapel_id: null,
-    materi : ""
+    materi: "",
   });
 
   const [payload, setPayload] = useState({
@@ -22,15 +22,13 @@ export const useListBankSoal = () => {
     pageSize: 10,
     is_all: 1,
     mapel_id: null,
-    materi : ""
+    materi: "",
   });
   const handleKeyword = (keyword) => {
     setParams(() => {
       return { ...params, materi: keyword, page: 1 };
     });
-    
   };
- 
 
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -91,8 +89,9 @@ export const useListBankSoal = () => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      staleTime: 60 * 1000 * 10,
-    }
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
+    },
   );
 
   return {
@@ -108,7 +107,7 @@ export const useListBankSoal = () => {
     handlePageSize,
     handleParamsHit,
     handleSearch,
-    keyword
+    keyword,
   };
 };
 
