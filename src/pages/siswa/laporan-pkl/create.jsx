@@ -241,17 +241,17 @@ const CreateLaporanPkl = () => {
                   <div className="flex flex-col w-max">
                     <Button
                       loading={isLoadingCreate}
-                      type="submit"
+                      type="submit"   
                       color="green"
-                      disabled={!isWithinRange} // Disable jika di luar jangkauan
+                      // disabled={!isWithinRange} // Disable jika di luar jangkauan
                     >
                       Submit
                     </Button>
-                    {!isWithinRange && (
+                    {/* {!isWithinRange && (
                       <div className="ui pointing red basic label w-auto">
                         Anda Harus Berada dalam Jarak 1km dari Perusahaan Anda
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </Segment>
               </Form>

@@ -75,6 +75,9 @@ import LiveCoding from "./pages/guru/Live-Coding";
 import ReactLivePlayground from "./pages/guru/reactjs";
 import Monitoring from "./pages/screen";
 import LiveMySQL from "./pages/guru/Live-MySQL";
+import TugasPklPage from "./pages/siswa/tugas-pkl/page";
+
+
 
 function App() {
   return (
@@ -211,10 +214,15 @@ function App() {
           <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
           <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
           <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
+
           <Route
             path="laporan-pkl/laporan-diniyyah/:id"
             element={<LaporanDiniyyah />}
           />
+
+          <Route path="laporan-pkl/laporan-diniyyah/:id" element={<LaporanDiniyyah />} />
+          <Route path="tugas-pkl" element={<TugasPklPage />} />
+fitur-pkl-santri
           <Route path="ujian" element={<UjianSiswa />} />
           <Route path="ujian/:id/" element={<ExamPage />} />
           <Route path="profile" element={<Profile />}>

@@ -77,6 +77,7 @@ const Card = ({ item, hasSubmit }) => {
             Laporan Diniyyah
           </Button>
           <Button
+          disabled={!isSameDay}
             icon
             className="p-2 w-full md:w-auto"
             onClick={() => navigate(`/siswa/laporan-pkl/update/${item.id}`)}

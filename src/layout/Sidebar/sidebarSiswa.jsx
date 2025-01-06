@@ -11,6 +11,7 @@ import {
   IoShieldOutline,
   IoStatsChart,
 } from "react-icons/io5";
+
 import LogoMySMK from "../../image/MySMK.png";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
@@ -188,9 +189,27 @@ export default function SidebarSiswa({ setSidebar }) {
         <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
+         
+          to="laporan-pkl"
+          path="laporan-pkl"
+          title={"Jurnal Harian"}
+
+          logo={
+            <IoDocumentTextOutline
+              className={`h-6 w-6 ${
+                url === "rapor" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+         <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
           title={"Rapor"}
+
+          
           logo={
             <IoDocumentTextOutline
               className={`h-6 w-6 ${
@@ -209,6 +228,19 @@ export default function SidebarSiswa({ setSidebar }) {
             <IoChatbubblesOutline
               className={`h-6 w-6 ${
                 url === "chat" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+          <NavButton
+          handleSidebar={handleSiderbar}
+          to="tugas-pkl"
+          path="tugas-pkl"
+          title={"Tugas Pkl"}
+          logo={
+            <IoPencil
+              className={`h-6 w-6 ${
+                url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
