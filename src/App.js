@@ -7,6 +7,7 @@ import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import "react-quill/dist/quill.snow.css";
 import "katex/dist/katex.min.css";
+import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
 
 import {
   Jadwal,
@@ -37,6 +38,11 @@ import {
   FormExam,
   CreateSiswa,
   EditSiswa,
+  FiturPkl,
+  UpdateLaporanPkl,
+  CreatePkl,
+  DetailLaporanPkl,
+  TugasLaporanPkl,
 } from "./pages/guru";
 
 import NotFound from "./pages/NotFound";
@@ -198,6 +204,18 @@ function App() {
           />
           <Route path="chat" element={<ChatGuru />} />
           <Route path="face" element={<ScanKehadiran />} />
+          
+          <Route path="fitur-siswa-pkl" element={<FiturPkl />} />
+          <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
+          <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePkl />} />
+          <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
+          <Route path="laporan-pkl" element={<LaporanPkl />} />
+          <Route path="laporan-pkl/update/:id" element={<UpdateLaporanPkl />} />
+          <Route path="laporan-pkl/detail/:id" element={<DetailLaporanPkl />} />
+          <Route path="tugas-laporan-pkl" element={<TugasLaporanPkl />} />
+          <Route path="tugas-laporan-pkl/tambah" element={<CreateTugasPkl />} />
+          <Route path="tugas-laporan-pkl/nilai/:id" element={<TugasPklNilai />} />
+          <Route path="tugas-laporan-pkl/update/:id" element={<UpdateTugasPkl />} />
         </Route>
 
         <Route

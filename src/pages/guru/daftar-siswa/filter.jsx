@@ -69,7 +69,7 @@ export default function FilterSiswa({ filter, setFilter, setVisible }) {
                 options={getOptionsText(dataKelas?.data, "nama_kelas")}
                 label={{
                   children: "Kelas",
-                }}
+                }}  
                 onChange={(event, data) => {
                   setFieldValue(`nama_kelas`, data?.value);
                 }}

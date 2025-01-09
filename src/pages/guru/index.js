@@ -28,6 +28,12 @@ import ListExam from "./exam";
 import { CreateSiswa } from "./daftar-siswa/create-siswa";
 import { EditSiswa } from "./daftar-siswa/edit-siswa";
 // import { ProfileSiswa } from "./daftar-siswa/siswa/profile";
+import CreatePkl from "./fitur-siswa-pkl/create-pkl";
+import UpdatePkl from "./fitur-siswa-pkl/update-pkl";
+import CreateLaporanPkl from "./laporan-pkl";
+import UpdateLaporanPkl from "./laporan-pkl/UpdateLaporanPkl";
+import DetailLaporanPkl from "./laporan-pkl/DetailLaporanPkl";
+import TugasLaporanPkl from "./tugas-laporan-pkl/index";
 export {
   Absensi,
   Jadwal,
@@ -58,5 +64,13 @@ export {
   ListExam,
   CreateSiswa,
   EditSiswa,
+  FiturPkl,
+  CreatePkl,
+  TestFatih,
+  CreateLaporanPkl,
+  UpdateLaporanPkl,
+  DetailLaporanPkl,
+  TugasLaporanPkl,
+  UpdatePkl,
   // ProfileSiswa
 };

@@ -20,7 +20,7 @@ export default function AddSiswa() {
     ],
   });
 
- 
+
   let { dataHalaqoh } = useList();
   const onSubmit = async (values, { resetForm }) => {
     try {
@@ -42,7 +42,7 @@ export default function AddSiswa() {
           {
             halaqoh_id: "",
             student_id: "",
-nama_siswa : "",
+            nama_siswa: "",
             status: 1,
           },
         ],
@@ -96,7 +96,7 @@ nama_siswa : "",
               <div className="space-y-5">
                 {values?.data?.map((value, index) => (
                   <>
-                   
+
                     <div className="grid grid-cols-5 gap-y-2 gap-x-5 shadow-md p-5">
                       <section className="col-span-2">
                         <Form.Field
@@ -125,7 +125,7 @@ nama_siswa : "",
                           }}
                         />
                       </section>
-                      <section className="col-span-2"> 
+                      <section className="col-span-2">
                         <FormLabel
                           error={
                             errors?.data?.[index]?.student_id &&
@@ -155,19 +155,19 @@ nama_siswa : "",
                           />
                         </FormLabel>
                       </section>
-                      <section className= " flex items-center justify-end ">
-                      <DeleteButton
-                        disabled={values.data.length <= 1}
-                        onClick={() => {
-                          let filtered = values.data.filter((i, itemIndex) => {
-                            return itemIndex !== index;
-                          });
+                      <section className=" flex items-center justify-end ">
+                        <DeleteButton
+                          disabled={values.data.length <= 1}
+                          onClick={() => {
+                            let filtered = values.data.filter((i, itemIndex) => {
+                              return itemIndex !== index;
+                            });
 
-                          setFieldValue("data", filtered);
-                        }}
-                        size="small"
-                      />
-                    </section>
+                            setFieldValue("data", filtered);
+                          }}
+                          size="small"
+                        />
+                      </section>
                     </div>
                   </>
                 ))}

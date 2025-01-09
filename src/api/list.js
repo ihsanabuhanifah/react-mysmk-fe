@@ -88,8 +88,41 @@ export async function listAlquranOptions(keyword, loadedOptions, additional) {
 export async function listSiswaOptions(keyword, loadedOptions, additional) {
   let result = await axios.get(`/list/siswa`, {
     params: {
-      page: additional.page,
-      pageSize: 10,
+      // page: additional.page,
+      // tahun_ajaran:'2022/2023',
+      // angkatan:8,
+      // status:1,
+      // nama_kelas:'XII Rekayasa Perangkat Lunak',
+      // pageSize: 50,
+      keyword,
+    },
+  });
+
+  result = result.data;
+
+  let options = result.data.map((item) => ({
+    label: item.nama_siswa,
+    value: item.id,
+  }));
+
+  return {
+    options: options,
+    hasMore: result.pagination?.current_page < result.pagination?.total_page,
+    additional: {
+      page: additional?.page + 1,
+      scope_of_service: additional?.scope_of_service,
+    },
+  };
+}
+export async function listSiswaPklOptions(keyword, loadedOptions, additional) {
+  let result = await axios.get(`/list/siswa`, {
+    params: {
+      // page: additional.page,
+      // tahun_ajaran:'2022/2023',
+      // angkatan:8,
+      status:1,
+      nama_kelas:'XII Rekayasa Perangkat Lunak',
+      // pageSize: 50,
       keyword,
     },
   });
