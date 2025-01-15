@@ -34,6 +34,8 @@ import CreateLaporanPkl from "./laporan-pkl";
 import UpdateLaporanPkl from "./laporan-pkl/UpdateLaporanPkl";
 import DetailLaporanPkl from "./laporan-pkl/DetailLaporanPkl";
 import TugasLaporanPkl from "./tugas-laporan-pkl/index";
+import FiturPkl from "./fitur-siswa-pkl";
+
 export {
   Absensi,
   Jadwal,
@@ -66,11 +68,11 @@ export {
   EditSiswa,
   FiturPkl,
   CreatePkl,
-  TestFatih,
   CreateLaporanPkl,
   UpdateLaporanPkl,
   DetailLaporanPkl,
   TugasLaporanPkl,
   UpdatePkl,
+
   // ProfileSiswa
 };

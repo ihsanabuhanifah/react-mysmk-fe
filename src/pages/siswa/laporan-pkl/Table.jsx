@@ -30,7 +30,7 @@ const TableLaporan = ({ data }) => {
               </Table.Cell>
               <Table.Cell>
                 <Button color="blue" size="small" disabled={!isSameDay} onClick={() => navigate(`/siswa/laporan-pkl/laporan-diniyyah/${item.id}`)}>
-                  Diniyyah
+                  Laporan Diniyyah
                 </Button>
                 <Button color="green" icon size="small" disabled={!isSameDay} onClick={() => navigate(`/siswa/laporan-pkl/update/${item.id}`)}>
                   <Icon name="edit" />

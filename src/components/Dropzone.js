@@ -8,8 +8,8 @@ const DropzoneFile = ({ handleDrop }) => {
 
   return (
     <Dropzone
-      accept={{ "application/pdf": [".pdf"] }} // Membatasi hanya file PDF
-      maxSize={1024 * 1024} // Membatasi ukuran maksimum 1 MB
+      // accept={{ "application/pdf": [".pdf"] }} // Membatasi hanya file PDF
+       maxSize={1024 * 1024} // Membatasi ukuran maksimum 1 MB
       onDrop={async (acceptedFiles, rejectedFiles) => {
         if (rejectedFiles.length > 0) {
           alert("Hanya file PDF dengan ukuran maksimal 1 MB yang diizinkan.");

@@ -261,7 +261,7 @@ console.log(data)
           return `
             <div style="font-family: Arial, sans-serif; font-size: 14px; padding: 20px;">
               <div style="text-align: center;">
-                <img src="${imageKop}" alt="Kop Surat" style="width: 100%; height: auto;" />
+                <img  alt="Kop Surat" style="width: 100%; height: auto;" />
               </div>
               <h1 style="text-align: center; font-size: 24px;">Laporan PKL ${data[0]?.siswa?.nama_siswa || "Belum memiliki data"}</h1>
               <p style="text-align: center; font-size: 16px;">

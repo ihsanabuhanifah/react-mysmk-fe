@@ -56,9 +56,7 @@ export default function TugasLaporanPkl() {
     //         },
     //     }
     // )
-    useEffect(() => {
-        data;
-    }, [data]);
+   
 
     // const DataJawab = 
 

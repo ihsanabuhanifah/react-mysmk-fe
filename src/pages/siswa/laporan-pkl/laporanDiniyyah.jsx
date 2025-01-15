@@ -139,6 +139,7 @@ const LaporanDiniyyah = () => {
             <>
               <Segment loading={detailIsLoading}>
                 <Form className="ui form" onSubmit={handleSubmit}>
+                  <h1 className="text-gray-500">Laporan Membaca Alquran</h1>
                   <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
                       <FormLabel>Dari Surat</FormLabel>
@@ -225,6 +226,8 @@ const LaporanDiniyyah = () => {
                     </SemanticForm.Field>
                   </SemanticForm.Group>
                   <Divider section />
+
+                  <h1 className="text-gray-500">Laporan Sholat 5 Waktu</h1>
 
                   <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
@@ -322,6 +325,8 @@ const LaporanDiniyyah = () => {
 
                   <Divider section />
 
+                  <h1 className="text-gray-500">Laporan Dzikir Pagi Petang</h1>
+
                   <div className="w-full flex justify-between items-center px-0 md:px-6">
                     <SemanticForm.Field>
                       <Checkbox
@@ -342,12 +347,13 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
                   </div>
-
+                  <h5 className="text-yellow-600 italic">*Buatlah Laporan dengan Sebenar-benarnya </h5>
                   <Button
-                    className="mt-2"
+                    className="mt-2 w-[100%]"
                     style={{ marginBottom: "20px", marginTop: "15px" }}
                     type="submit"
                     color="green"
+                    block
                     loading={isLoading || updateIsLoading}
                     disabled={!dirty || isLoading || updateIsLoading}
                   >
@@ -359,6 +365,8 @@ const LaporanDiniyyah = () => {
           )}
         </Formik>
       </div>
+
+  
     </LayoutSiswa>
   );
 };

@@ -161,7 +161,7 @@ export default function Siswa() {
       <div
         className={`fixed right-0 top-0 h-full w-full transform bg-white text-gray-700 sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-[999] transition-transform duration-500`}
       >
-        <Notifikasi />
+        {/* <Notifikasi /> */}
       </div>
     </SocketProvider>
   );

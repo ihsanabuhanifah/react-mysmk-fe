@@ -7,7 +7,6 @@ import Guru from "./layout/guru";
 import Siswa from "./layout/siswa";
 import "react-quill/dist/quill.snow.css";
 import "katex/dist/katex.min.css";
-import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
 
 import {
   Jadwal,
@@ -82,6 +81,12 @@ import ReactLivePlayground from "./pages/guru/reactjs";
 import Monitoring from "./pages/screen";
 import LiveMySQL from "./pages/guru/Live-MySQL";
 import TugasPklPage from "./pages/siswa/tugas-pkl/page";
+import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
+import UpdatePkl from "./pages/guru/fitur-siswa-pkl/update-pkl";
+import CreateTugasPkl from "./pages/guru/tugas-laporan-pkl/createTugas";
+import UpdateTugasPkl from "./pages/guru/tugas-laporan-pkl/updateTugasPkl";
+import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
+
 
 
 

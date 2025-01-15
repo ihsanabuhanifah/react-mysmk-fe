@@ -62,14 +62,14 @@ const CreateLaporanPkl = () => {
               currentLocation.latitude,
               currentLocation.longtitude,
               data.data.latitude,
-              data.data.longtitude
+              data.data.longtitude,
             );
             setIsWithinRange(distance <= 1);
           }
         },
         (error) => {
           console.error("Error obtaining location:", error);
-        }
+        },
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
@@ -238,10 +238,12 @@ const CreateLaporanPkl = () => {
                       </div>
                     )}
                   </Form.Field>
-                  <div className="flex flex-col w-max">
+                  <div className="flex w-max flex-col">
                     <Button
+                      className="mt-2 w-[100%]"
+                      style={{ marginBottom: "20px", marginTop: "15px" }}
                       loading={isLoadingCreate}
-                      type="submit"   
+                      type="submit"
                       color="green"
                       // disabled={!isWithinRange} // Disable jika di luar jangkauan
                     >
@@ -366,7 +368,7 @@ const CreateLaporanPkl = () => {
 
   return (
     <LayoutSiswa title="Buat Jurnal Harian PKL">
-      <div className="flex flex-col gap-y-4 overflow-y-auto pb-10 w-full h-full pl-2 pr-5">
+      <div className="flex h-full w-full flex-col gap-y-4 overflow-y-auto pb-10 pl-2 pr-5">
         <div className="mb-6">
           <Icon
             name="arrow left"

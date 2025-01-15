@@ -2,7 +2,7 @@ import React from 'react';
 import useList from '../../../hook/useList';
 import LayoutPage from '../../../module/layoutPage';
 import { Formik } from 'formik';
-import { Form, Select, Button, Icon, Header, Input } from "semantic-ui-react";
+import { Form, Select, Button, Icon, Header, Input, TextArea } from "semantic-ui-react";
 import { AddButton, DeleteButton } from '../../../components';
 import { useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -21,17 +21,17 @@ let siswapklSchema = Yup.object().shape({
   nama_perusahaan: Yup.string().required("wajib diisi"),
   pembimbing_id: Yup.string().required("wajib diisi"),
   alamat: Yup.string().required("wajib diisi"),
-  provinsi: Yup.string().required("wajib diisi"),
-  kota: Yup.string().required("wajib diisi"),
-  kecamatan: Yup.string().required("wajib diisi"),
-  desa: Yup.string().required("wajib diisi"),
-  rt: Yup.string().required("wajib diisi"),
-  rw: Yup.string().required("wajib diisi"),
-  kode_pos: Yup.string().required("wajib diisi"),
-  no_hp: Yup.string().required("wajib diisi"),
-  longtitude: Yup.string().required("wajib diisi"),
-  latitude: Yup.string().required("wajib diisi"),
-  penanggung_jawab_perusahaan: Yup.string().required("wajib diisi"),
+  provinsi: Yup.string(),
+  kota: Yup.string(),
+  kecamatan: Yup.string(),
+  desa: Yup.string(),
+  rt: Yup.string(),
+  rw: Yup.string(),
+  kode_pos: Yup.string(),
+  no_hp: Yup.string(),
+  longtitude: Yup.string(),
+  latitude: Yup.string(),
+  penanggung_jawab_perusahaan: Yup.string(),
 });
 export default function CreatePkl() {
   const navigate = useNavigate();
@@ -84,8 +84,8 @@ export default function CreatePkl() {
     rw: "",
     kode_pos: "",
     no_hp: "",
-    longtitude: "",
-    latitude: "",
+    longtitude: 0,
+    latitude: 0,
   });
 
 
@@ -190,9 +190,7 @@ export default function CreatePkl() {
             <Form onSubmit={handleSubmit}
             >
               
-              {console.log('err fatih', errors)}
-              {console.log('err touched', touched)}
-              {/* {JSON.stringify(values)} */}
+             
 
 
               <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
@@ -275,9 +273,9 @@ export default function CreatePkl() {
                   )}
                 </section>
 
-                <section className="col-span-3 lg:col-span-1">
+                <section className="col-span-3 lg:col-span-3">
                   <Form.Field
-                    control={Input}
+                    control={TextArea}
                     label="Alamat"
                     placeholder="Ketikan Alamat Santri"
                     name={`alamat`}
