@@ -173,7 +173,7 @@ export default function ListExam() {
                 <Table.HeaderCell>Nama Guru</Table.HeaderCell>
                 <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
                 <Table.HeaderCell>Kelas</Table.HeaderCell>
-                <Table.HeaderCell>Tujuan Pembelajaran</Table.HeaderCell>
+              
                 <Table.HeaderCell>Jenis Assesmen</Table.HeaderCell>
                 <Table.HeaderCell>Tipe Assesmen</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
@@ -200,7 +200,7 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{value?.judul_ujian}</Table.Cell>
+                  
                     <Table.Cell>
                       {<LabelStatus status={value?.jenis_ujian} />}
                     </Table.Cell>
