@@ -11,15 +11,14 @@ export default function LayoutSiswa({ title, children }) {
 
 
   return (
-    <div className="flex h-full w-full flex-col">
-      <div className="flex fixed top-[70px] xl:top-0 left-0 xl:left-[200px] right-0 bg-white z-[99] items-center justify-between border-b border-black/5 pl-5 pr-12">
-        <div className="flex h-[73px] w-full items-center bg-white">
-          <h1 className="mb-10 font-poppins text-2xl font-black capitalize">
+    <section className="  mb-5 h-full   ">
+      <div className=" px-5 py-5 flex items-center ">
+          <h1 className="text-2xl capitalize mb-10 font-bold font-poppins">
             {title}
           </h1>
         </div>
 
-        <button
+        {/* <button
           onClick={() => {
             setShowNotif();
           }}
@@ -31,12 +30,18 @@ export default function LayoutSiswa({ title, children }) {
               {data?.list?.count}
             </span>
           )}
-        </button>
-      </div>
+        </button> */}
+     
 
-      <div className="w-full flex-1 bg-white mt-[143px] xl:mt-[73px] pb-8">
-        {children}
-      </div>
-    </div>
+        <div
+          id="scrollbar"
+          className="h-[95%]  bg-white border-t-2  w-full px-2 lg:px-5 pb-10 pt-5 overflow-auto  "
+        >
+
+          {/* <BackButton onClick={() => navigate(-1)}/> */}
+          
+          {children}
+        </div>
+    </section>
   );
 }

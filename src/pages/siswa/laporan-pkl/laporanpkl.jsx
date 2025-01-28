@@ -165,7 +165,7 @@ const LaporanPkl = () => {
 
       <div>
         <div className="flex flex-col gap-y-4 pb-10 w-full h-full pl-2 pr-5">
-          <div className="w-full flex gap-2">
+          <div className="grid sm:grid-cols-1 md:grid-cols-8 pt-5 gap-5">
             <Button
               color="green"
               size="medium"

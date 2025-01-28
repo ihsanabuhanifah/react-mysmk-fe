@@ -453,7 +453,7 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
   );
 }
 
-function LogoutButton({ to, title, logo, onClick }) {
+export function LogoutButton({ to, title, logo, onClick }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
 
