@@ -112,8 +112,8 @@ const CreateLaporanPkl = () => {
     isi_laporan: "",
     foto: "",
     status: "hadir",
-    longtitude: userLocation.longtitude || "",
-    latitude: userLocation.latitude || "",
+    longtitude:  107.018523 ,
+    latitude: -6.4871606,
     is_absen: true,
   };
 
