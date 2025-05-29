@@ -67,7 +67,10 @@ export default function Card({ item, handleExam }) {
           }
           type="button"
           disabled={item.status === "finish"}
-          onClick={handleExam}
+          onClick={()=> {
+            localStorage.setItem("mapel", item.mapel.nama_mapel)
+            handleExam()
+          }}
           icon={() => <Icon name="edit" />}
           size="tiny"
           fluid

@@ -51,7 +51,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       interval = setInterval(() => {
         setCutDown((c) => {
           socket.emit("catatan", {
-            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) batas toleransi ${cutDown} detik ${formatWaktu(new Date().toISOString())}`,
+            message: `${identitas.name} (${localStorage.getItem("mapel")}) batas toleransi ${cutDown} detik ${formatWaktu(new Date().toISOString())}`,
             roomId: roomId,
           });
 
@@ -60,7 +60,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       }, 1000);
     } else if (cutDown === 0 && data?.data?.tipe_ujian === "closed") {
       socket.emit("catatan", {
-        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) dikeluarkan dan menyimpan progress dari ujian pada ${formatWaktu(new Date().toISOString())}`,
+        message: `${identitas.name} (${localStorage.getItem("mapel")}) dikeluarkan dan menyimpan progress dari ujian pada ${formatWaktu(new Date().toISOString())}`,
 
         roomId: roomId,
       });
@@ -81,7 +81,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       setSoal(res);
 
       socket.emit("catatan", {
-        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) mulai ujian ${formatWaktu(new Date().toISOString())}`,
+        message: `${identitas.name} (${localStorage.getItem("mapel")}) mulai ujian ${formatWaktu(new Date().toISOString())}`,
 
         roomId: roomId,
       });
@@ -127,7 +127,7 @@ export default function ExamPage({ examActive, setExamActive }) {
         if (data?.data?.tipe_ujian === "closed") {
           console.log("mouse keluar");
           // socket.emit("catatan", {
-          //   message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+          //   message: `${identitas.name} (${localStorage.getItem("mapel")}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
           //   roomId: roomId,
           // });
           setMouse(true); // Start countdown on mouse leave
@@ -136,7 +136,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       onMouseEnter={() => {
         if (data?.data?.tipe_ujian === "closed") {
           // socket.emit("catatan", {
-          //   message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+          //   message: `${identitas.name} (${localStorage.getItem("mapel")}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
           //   roomId: roomId,
           // });
         }
@@ -152,7 +152,7 @@ export default function ExamPage({ examActive, setExamActive }) {
           submit.mutate(payload, {
             onSuccess: () => {
               socket.emit("catatan", {
-                message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) Menyelesaikan Ujian pada ${formatWaktu(new Date().toISOString())}`,
+                message: `${identitas.name} (${localStorage.getItem("mapel")}) Menyelesaikan Ujian pada ${formatWaktu(new Date().toISOString())}`,
 
                 roomId: roomId,
               });
@@ -292,7 +292,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                 disabled={progess.isLoading}
                 onClick={() => {
                   socket.emit("catatan", {
-                    message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
+                    message: `${identitas.name} (${localStorage.getItem("mapel")}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
 
                     roomId: roomId,
                   });
