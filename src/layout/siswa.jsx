@@ -1,35 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
 
-
 import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
-import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
 import { syncToken } from "../api/axiosClient";
 import SidebarSiswa from "./Sidebar/sidebarSiswa";
+import { useQuery } from "react-query";
+import { getProfile } from "../api/siswa/profile";
+import { IoLogOutOutline, IoNotifications } from "react-icons/io5";
+import { LoadingPage, ModalLogout } from "../components";
+import { useZUStore } from "../zustand/zustore";
+import { Menu, Sidebar } from "semantic-ui-react";
+import { useListNotif } from "../api/siswa/exam";
+import { SocketContext, SocketProvider } from "../pages/siswa/SocketContext";
 
 export default function Siswa() {
+  let { pathname } = useLocation();
+  const navigate = useNavigate();
   React.useEffect(() => {
     document.title = "MySMK";
     // requestToken();
   });
+
   syncToken();
+
+  const { setShowNotif, showNotif, setProfile } = useZUStore((state) => state);
+
+  const { data: dataNotif, isFetched } = useListNotif();
+
   const { identitas: data } = useList();
+  let { isLoading } = useQuery(["/santri/profile"], () => getProfile(), {
+    onSuccess: (response) => {
+      setProfile(response);
+    },
+    refetchOnWindowFocus: false,
+    select: (response) => {
+      return response.data.siswa;
+    },
+  });
 
   const [sidebar, setSidebar] = React.useState(false);
-  const [notif, setNotif] = React.useState(false);
-  let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
 
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (pathname === "/siswa") {
+      navigate("/siswa/dashboard");
+    }
+  }, [pathname, navigate]);
+
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!socket) return; // Hanya lanjutkan jika socket sudah ada
+  
+    socket.on("message", (msg) => {
+      console.log(msg); // Ubah sesuai kebutuhan
+    });
+  
+    return () => {
+      socket.off("message");
+    };
+  }, [socket]);
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
   return (
-    <div className="h-screen antialiased text-gray-700 overflow-hidden  ">
-      <header className="h-[8%]   xl:hidden  lg:h-1/12 xl:h-1/12 w-fullx items-center grid grid-cols-10 gap-x-5 border   ">
-        <div className=" col-span-4 xl:col-span-2 pl-5 lg:pl-2  xl:pl-5 2xl:pl-10  h-full w-full   relative flex items-center">
+    <SocketProvider>
+      <ModalLogout open={open} setOpen={setOpen} />
+
+      <header className="fixed left-0 top-0 z-[99] grid h-[70px] w-full grid-cols-10 items-center gap-x-5 border-b bg-white xl:hidden">
+        <div className="relative col-span-4 flex h-full w-full items-center pl-5">
           <img
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
@@ -38,94 +87,101 @@ export default function Siswa() {
           />
         </div>
 
-        <div className=" col-span-6 xl:col-span-2 flex items-center justify-end space-x-5   h-full w-full relative ">
+        <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-4 pr-5 xl:col-span-2">
           <button
             onClick={() => {
-              return setNotif(!notif);
+              setShowNotif();
             }}
-            className={`relative  `}
+            className="relative block xl:hidden"
           >
-            <IoIosNotifications
-              className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
-            />
-            {jumlah > 0 && (
-              <div
-                style={{ fontSize: "8px" }}
-                className="w-4 h-4 pt-1   absolute z-10 top-0 right-0 bg-red-400 text-white rounded-full"
-              >
-                {jumlah}
-              </div>
+            <IoNotifications size={26} className="" />
+            {isFetched && (
+              <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
+                {dataNotif?.list?.count}
+              </span>
             )}
           </button>
-          <div className="xl:block hidden xl:h-12 xl:w-12 w-10 h-10 bg-green-200 rounded-full"></div>
-          <div className="block xl:hidden  xl:h-12 xl:w-12 w-10 h-10 ">
+
+          <div className="flex items-center justify-center xl:hidden">
             <button
-              className="mb-5 "
               onClick={() => {
                 setSidebar(!sidebar);
               }}
             >
-              <MdMenu className="w-10 h-10" />
+              <MdMenu size={35} />
             </button>
           </div>
         </div>
       </header>
-      <main className="flex  h-[92%] lg:h-11/12 xl:h-11/12 xl:h-full      ">
-        <div
-        
-          className={` w-full h-full shadow-lg   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white  border-r-2  px-2  ${
-            !sidebar
-              ? "transform -translate-x-full -z-50   xl:-translate-x-0"
-              : "transform -translate-x-0 z-10  transition  duration-500 "
-          } h-full fixed top-0 bottom-0 xl:w-[15%]  xl:relative  `}
-        >
-          <SidebarSiswa setSidebar={setSidebar} />
-        </div>
-        <div
-          className={`content relative  h-full w-full   overflow-auto xl:overflow-hidden ${
-            showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
-          }`}
-        >
-          <div className=" bg-blue-400">
-            <button
-              onClick={() => {
-                return setShowNotf(!showNotif);
-              }}
-              className={` rounded-full p-2 hidden xl:block absolute  right-5 top-1 z-50 ${
-                showNotif ? "bg-red-400" : ""
-              }`}
-            >
-              <IoIosNotifications
-                className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
+
+      <main className="xl:flex">
+          <div
+            className={`h-screen relative z-[999] w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
+              !sidebar
+                ? "-z-50 -translate-x-full transform xl:-translate-x-0"
+                : "z-10 -translate-x-0 transform transition duration-500"
+            } fixed bottom-0 top-0  z-[996] flex h-full flex-col xl:fixed xl:w-[200px]`}
+          >
+            <div className="mb-8 mt-4 hidden pl-3 xl:block">
+              <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />
+            </div>
+
+            <div className="flex h-full flex-col xl:flex-1 xl:overflow-y-auto">
+              <SidebarSiswa setSidebar={setSidebar} />
+            </div>
+
+            <div className="mb-4 ml-2 mt-5 hidden xl:block">
+              <LogoutButton
+                onClick={() => {
+                  return setOpen(true);
+                }}
+                title={"Logout"}
+                logo={
+                  <IoLogOutOutline
+                    className={`h-6 w-6 text-gray-900 group-hover:text-[#18a558]`}
+                  />
+                }
               />
-              {jumlah > 0 && (
-                <div
-                  style={{ fontSize: "8px" }}
-                  className="w-4 h-4 pt-1   absolute z-10 top-1 right-2 bg-red-400 text-white rounded-full"
-                >
-                  {jumlah}
-                </div>
-              )}
-            </button>
+            </div>
           </div>
-          <div id="sidebar" className="h-full w-full  ">
-            <Outlet data={data} />
+
+          <div id="sidebar" className="xl:ml-[200px] w-full">
+              <Outlet data={data} />
           </div>
-        </div>
+        </main>
+
+      {showNotif && (
         <div
-          className={` w-full h-full   bg-[#46C7C7] text-white xl:text-gray-700 xl:bg-white    pl-0 xl:pl-2      ${
-            !notif
-              ? "transform -translate-y-full    xl:-translate-y-0"
-              : "transform -translate-y-0 transition  duration-500 "
-          } h-full z-10 fixed top-0 bottom-0 ${
-            !showNotif ? "xl:w-[20%]" : "xl:hidden"
-          } xl:relative  `}
-        >
-          <Notifikasi setNotif={setNotif} />
-        </div>
-      </main>
-    </div>
+          onClick={() => {
+            setShowNotif();
+          }}
+          className="fixed bottom-0 left-0 right-0 top-0 z-[998] bg-transparent"
+        ></div>
+      )}
+      <div
+        className={`fixed right-0 top-0 h-full w-full transform bg-white text-gray-700 sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-[999] transition-transform duration-500`}
+      >
+        <Notifikasi />
+      </div>
+    </SocketProvider>
   );
 }
 
-// className={`w-full h-full flex z-10 fixed top-0 bottom-0 xl:w-3/12  xl:relative text-white`}
+export function LogoutButton({ to, title, logo, onClick }) {
+  let { pathname } = useLocation();
+  let url = pathname.split("/")[2];
+
+  return (
+    <button
+      onClick={onClick}
+      className="group flex flex-grow-0 items-center font-extrabold"
+    >
+      <div>{logo}</div>
+      <p
+        className={`ml-2 text-left font-poppins text-xs font-extrabold text-gray-900 ${url === to ? "text-white-400" : "text-gray-600"} font-bold group-hover:text-[#18a558]`}
+      >
+        {title}
+      </p>
+    </button>
+  );
+}

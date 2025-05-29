@@ -52,7 +52,8 @@ export default function Pulang() {
     () => listPulang(parameter),
     //configuration
     {
-      refetchInterval: 1000 * 60 * 60,
+      refetchOnWindowFocus : false,
+      staleTime: 1000 * 60 * 60 * 5,
       select: (response) => {
         return response.data;
       },

@@ -50,6 +50,7 @@ export function listGuru() {
 export function listHalaqohGroup() {
   return axios.get("/list/halaqoh-grup");
 }
+
 export function listKelas() {
   return axios.get("/list/kelas");
 }

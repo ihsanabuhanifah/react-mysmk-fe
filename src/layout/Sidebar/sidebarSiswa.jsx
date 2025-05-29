@@ -1,32 +1,25 @@
-import React from "react";
-
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import { formatTahun } from "../../utils";
+import { MdClose, MdLaptopMac } from "react-icons/md";
 import {
-  MdClose,
-  MdOutlineDashboard,
-  MdOutlineLibraryBooks,
-  MdLogout,
-  MdLaptopMac,
-  MdPeople,
-  MdOutlineSupervisorAccount,
-  MdCheck,
-  MdFormatAlignCenter,
-  MdKeyboard,
-  MdFingerprint,
-  MdNavigation,
-  MdPhoneForwarded,
-  MdPhoneInTalk,
-  MdCreate,
-  MdLaptopChromebook,
-} from "react-icons/md";
-
+  IoChatbubbleOutline,
+  IoChatbubblesOutline,
+  IoCheckmarkDoneOutline,
+  IoDocumentTextOutline,
+  IoPencilOutline,
+  IoPerson,
+  IoShieldOutline,
+  IoStatsChart,
+} from "react-icons/io5";
 import LogoMySMK from "../../image/MySMK.png";
-import { ModalLogout } from "../../components";
+import ImageWithFallback from "../../components/ImageWithFallback";
+import { useZUStore } from "../../zustand/zustore";
+import { LogoutButton } from "../siswa";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
+  const [isSelect, setIsSelect] = useState(false);
+  const { profile } = useZUStore((state) => state);
 
   const handleSiderbar = () => {
     setSidebar(false);
@@ -34,15 +27,19 @@ export default function SidebarSiswa({ setSidebar }) {
 
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
+  let url2 = pathname.split("/")[3];
 
-  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    if (url === "profile") {
+      setIsSelect(true);
+    }
+  }, [url]);
 
   return (
     <>
-      <ModalLogout open={open} setOpen={setOpen} />
-
-      <div className="xl:hidden flex shadow-lg border-b-2 items-center justify-between h-20  w-full px-5 relative overflow-y-auto ">
-        <div className="h-24 w-24   flex-col mt-12 items-center">
+      {/* tablet */}
+      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1 xl:hidden">
+        <div className="mt-12 h-24 w-24 flex-col items-center">
           <img
             className="absolute"
             style={{ maxWidth: "60%", maxHeight: "60%" }}
@@ -51,105 +48,181 @@ export default function SidebarSiswa({ setSidebar }) {
           />
         </div>
 
-        <button className="" onClick={handleSiderbar}>
-          <MdClose className="w-10 h-10" />
+        <button className="text-gray-700" onClick={handleSiderbar}>
+          <MdClose className="h-10 w-10" />
         </button>
       </div>
-      <div className="h-16 w-12  bg-white hidden xl:flex mb-5 p-5">
-        <img
-          className="absolute"
-          style={{ maxWidth: "50%", maxHeight: "50%" }}
-          src={LogoMySMK}
-          alt={LogoMySMK}
-        />
+
+      {/* laptop */}
+      <div className="mb-3 mr-2 flex items-center gap-x-2 rounded-lg bg-[#18a558] p-2">
+        <div className="h-10 w-10 rounded-full bg-gray-200">
+          <ImageWithFallback
+            src={profile?.user?.image}
+            alt="You"
+            fallbackSrc="/blankprofile.jpg"
+          />
+        </div>
+
+        <div>
+          <p className="m-0 text-sm leading-none text-white/80">Hello</p>
+          <p className="text-md mt-1 font-black leading-none text-white">
+            {profile?.nama_siswa?.split(" ")[0]}
+          </p>
+        </div>
       </div>
+
       <nav
         id="scrollbar"
-        className="flex flex-col space-y-2 p-0  xl:p-0 h-[80%] pt-5 overflow-auto pb-12"
+        className="flex h-[80%] flex-col space-y-2 overflow-auto p-0 pb-12 pt-5 xl:p-0"
       >
         <NavButton
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="dashboard"
           path="dashboard"
           title={["Dashboard"]}
           logo={
-            <MdOutlineDashboard
-              className={`h-8 w-8 ${
-                url === "dashboard" ? "text-white-400" : "text-gray-600"
+            <IoStatsChart
+              className={`h-6 w-6 ${
+                url === "dashboard" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
         />
         <NavButton
+          isSelect={isSelect}
+          setIsSelect={setIsSelect}
+          cls="list xl:hidden"
           handleSidebar={handleSiderbar}
-          to="daftar-siswa"
-          path="daftar-siswa"
-          title={"Daftar Kelas"}
+          to="profile"
+          path="profile"
+          title={"Profile"}
           logo={
-            <MdOutlineSupervisorAccount
-              className={`h-8 w-8 ${
-                url === "daftar-siswa" ? "text-white-400" : "text-gray-600"
+            <IoPerson
+              className={`h-6 w-6 ${
+                url === "profile" || isSelect
+                  ? "text-[#18a558]"
+                  : "text-gray-400"
               }`}
             />
           }
         />
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to={`halaqoh-siswa`}
-          path={"halaqoh-siswa"}
-          title={["Daftar Halaqoh"]}
-          logo={
-            <MdPeople
-              className={`h-8 w-8 ${
-                url === `halaqoh-siswa` ? "text-white-400" : "text-gray-600"
-              }`}
+        {isSelect && (
+          <div className="ml-5 border-l border-gray-400 pl-3 xl:hidden">
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile"
+              path="edit"
+              title={"Edit Profile"}
+              logo={
+                <IoPencilOutline
+                  className={`h-6 w-6 ${
+                    url2 === "edit" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'edit'? "text-[#18a558]" : "text-gray-400"}
             />
-          }
-        />
-        <NavButton
-          handleSidebar={handleSiderbar}
-          to="kehadiran-guru"
-          path="kehadiran-guru"
-          title={["Absensi Guru"]}
-          logo={
-            <MdFingerprint
-              className={`h-8 w-8 ${
-                url === "kehadiran-guru" ? "text-white-400" : "text-gray-600"
-              }`}
+            <NavButton
+              cls="list xl:hidden"
+              handleSidebar={handleSiderbar}
+              to="profile/security"
+              path="security"
+              title={"Password & Security"}
+              logo={
+                <IoShieldOutline
+                  className={`h-6 w-6 ${
+                    url2 === "security" ? "text-[#18a558]" : "text-gray-400"
+                  }`}
+                />
+              }
+              active={url2 === 'security'? "text-[#18a558]" : "text-gray-400"}
             />
-          }
-        />
+          </div>
+        )}
 
         <NavButton
+          cls="xl:flex hidden"
+          setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
-          to={`halaqoh/absensi/${formatTahun(date)}`}
-          path={"halaqoh"}
-          title={["Absensi Halaqoh"]}
+          to="profile"
+          path="profile"
+          title={"Profile"}
           logo={
-            <MdLaptopChromebook
-              className={`h-8 w-8 ${
-                url === `halaqoh` ? "text-white-400" : "text-gray-600"
+            <IoPerson
+              className={`h-6 w-6 ${
+                url === "profile" ? "text-[#18a558]" : "text-gray-400"
               }`}
             />
           }
         />
-
-        {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
-      <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}
+        <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
+          to="ujian"
+          path="ujian"
+          title={"Ujian"}
+          logo={
+            <MdLaptopMac
+              className={`h-6 w-6 ${
+                url === "ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
+          to="hasil-ujian"
+          path="hasil-ujian"
+          title={"Hasil Ujian"}
+          logo={
+            <IoCheckmarkDoneOutline
+              className={`h-6 w-6 ${
+                url === "hasil-ujian" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
+          to="rapor"
+          path="rapor"
+          title={"Rapor"}
+          logo={
+            <IoDocumentTextOutline
+              className={`h-6 w-6 ${
+                url === "rapor" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+        <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
+          to="chat"
+          path="chat"
+          title={"Chat"}
+          logo={
+            <IoChatbubblesOutline
+              className={`h-6 w-6 ${
+                url === "chat" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
       </nav>
-      <div className="h-[10%] pl-3 pt-5">
+      <div className="mb-4 ml-2 mt-5 block xl:hidden">
         <LogoutButton
           onClick={() => {
-            return setOpen(true);
+            return setSidebar(true);
           }}
           title={"Logout"}
           logo={
-            <MdLogout
-              className={`h-8 w-8 ${
-                url === "laporan-guru-piket"
-                  ? "text-white-400"
-                  : "text-gray-600"
-              }`}
+            <IoChatbubbleOutline
+              className={`h-6 w-6 text-gray-700 group-hover:text-[#18a558]`}
             />
           }
         />
@@ -158,59 +231,71 @@ export default function SidebarSiswa({ setSidebar }) {
   );
 }
 
-function NavButton({ to, path, title, logo, handleSidebar }) {
+function NavButton({
+  to,
+  path,
+  title,
+  logo,
+  handleSidebar,
+  cls,
+  setIsSelect,
+  isSelect = false,
+  active
+}) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
+  let url2 = pathname.split("/")[3];
   const navigate = useNavigate();
 
   return (
     <button
       onClick={() => {
-        handleSidebar();
-        return navigate(to);
+        if (cls) {
+          if (cls.split(" ")[0] === "list") {
+            if (setIsSelect && isSelect === false) {
+              handleSidebar();
+
+              setIsSelect(true);
+              return navigate(to);
+            } else {
+              handleSidebar();
+              return navigate(to);
+            }
+          } else {
+            setIsSelect(false);
+            handleSidebar();
+            return navigate(to);
+          }
+        } else {
+          setIsSelect(false);
+          handleSidebar();
+          return navigate(to);
+        }
       }}
-      className={`flex items-center px-5  h-10 ${
-        url === path
-          ? "bg-[#00b5ad] rounded-lg text-white font-black"
-          : "text-black"
-      }`}
+      className={`group flex h-10 items-center justify-between pl-2 ${cls} w-full`}
     >
-      <div
-        style={{
-          zomm: "80%",
-        }}
-        className="w-8 h-8 "
-      >
-        {logo}
+      <div className="flex items-center">
+        <div>{logo}</div>
+        <p
+          className={`ml-3  whitespace-nowrap text-left font-poppins text-xs ${
+            url === path
+              ? "text-[0.85rem] font-black text-[#18a558]"
+              : active? active : "text-gray-400"
+          } group-hover:font-black group-hover:text-gray-600`}
+        >
+          {title}
+        </p>
       </div>
-      <p
-        className={`ml-5 text-xs whitespace-nowrap font-poppins text-left 
-       ${url === path ? "text-white font-black" : "text-black"}
-         `}
-      >
-        {title}
-      </p>
-    </button>
-  );
-}
-
-function LogoutButton({ to, title, logo, onClick }) {
-  let { pathname } = useLocation();
-  let url = pathname.split("/")[2];
-
-  return (
-    <button
-      onClick={onClick}
-      className="flex items-center font-extrabold  h-10  pl-2 "
-    >
-      <div className="w-8 h-8 ">{logo}</div>
-      <p
-        className={`font-extrabold ml-5 text-xs  font-poppins text-left ${
-          url === to ? "text-white-400 " : "text-gray-600 "
-        } font-bold hover:text-green-400`}
-      >
-        {title}
-      </p>
+      {cls
+        ? url2 === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )
+        : url === path && (
+            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+          )}
+      {url === path && (
+        <div className="h-full hidden xl:block w-1 rounded-l-md bg-[#18a558]"></div>
+      )}
     </button>
   );
 }

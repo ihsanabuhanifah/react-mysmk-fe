@@ -6,6 +6,7 @@ export default function PaginationTable({
   setPage,
   setPageSize,
   totalPages,
+  count
 }) {
   let total = 0;
 
@@ -16,11 +17,8 @@ export default function PaginationTable({
   } else {
     total = totalPages;
   }
-
- 
-
   return (
-    <div className="xl:flex lg:flex md:flex grid grid-cols-1 gap-5 items-center justify-between  w-full overflow-x-auto  lg:overflow-visible  xl:overflow-visible 2xl:overflow-visible py-2  ">
+    <div className="grid w-full grid-cols-1 items-center justify-between gap-5 overflow-x-auto py-2 md:flex lg:flex lg:overflow-visible xl:flex xl:overflow-visible 2xl:overflow-visible">
       <div className="flex items-center space-x-2">
         <Select
           onChange={(e, value) => {
@@ -30,7 +28,7 @@ export default function PaginationTable({
           value={pageSize}
           placeholder="Select Page"
           options={[
-            { key: 1, value: 10, text: 10 },
+            { key: 1, value: 10, text: 10  },
             { key: 2, value: 25, text: 25 },
             { key: 3, value: 50, text: 50 },
             { key: 4, value: 100, text: 100 },
@@ -40,15 +38,13 @@ export default function PaginationTable({
         />
 
         <p>
-          Menampilkan {total < pageSize ? total : pageSize} dari {total} data
+          Menampilkan {count < pageSize ? count : pageSize} dari {count} data
         </p>
       </div>
       <div className="">
         <Pagination
           compact
           onPageChange={(e, value) => {
-            console.log(value);
-
             setPage(value.activePage);
           }}
           defaultActivePage={page}
@@ -56,7 +52,7 @@ export default function PaginationTable({
           firstItem={{
             content: <Icon name="angle double left" />,
             icon: true,
-          }}
+          }} 
           lastItem={{
             content: <Icon name="angle double right" />,
             icon: true,

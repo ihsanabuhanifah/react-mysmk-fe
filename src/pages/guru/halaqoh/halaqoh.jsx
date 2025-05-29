@@ -522,7 +522,7 @@ export default function AbsensiHalaqoh() {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]dari_surat`,
                                       data.value
-                                    );
+                                     );
                                     sessionStorageSet(tanggal, values);
                                   }}
                                   placeholder="Dari Surat"

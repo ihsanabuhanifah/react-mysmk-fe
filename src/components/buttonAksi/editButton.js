@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button, Icon } from "semantic-ui-react";
 export function EditButton({ onClick, disabled, size = "small" }) {
   return (
@@ -8,6 +9,20 @@ export function EditButton({ onClick, disabled, size = "small" }) {
       type="button"
     >
       <Icon size={size} disabled={disabled} name="edit" color="teal" />
+    </button>
+  );
+}
+
+
+export function CopyButton({ onClick, disabled, size = "small" }) {
+  return (
+    <button
+      className="bg-none"
+      onClick={onClick}
+      disabled={disabled}
+      type="button"
+    >
+      <Icon size={size} disabled={disabled} name="copy" color="teal" />
     </button>
   );
 }

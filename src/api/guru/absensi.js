@@ -5,6 +5,7 @@ import { syncToken } from "../axiosClient";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
+import { useState } from "react";
 export function listJadwal(params) {
   syncToken();
   return axios.get("/guru/jadwal/list", { params });
@@ -215,4 +216,26 @@ export const useSubmitByAdmin = ({ tanggal, status, keterangan, values }) => {
     }
   );
   return mutate;
+};
+
+export function listAbsensiHarian(params) {
+  syncToken();
+  return axios.get("/guru/agenda/harian", { params });
+}
+
+export const useAbsensiHarian = () => {
+  let [params, setParams] = useState({
+    tanggal: dayjs(new Date()).format("YYYY-MM-DD"),
+  });
+  const { isLoading, data, isFetching , refetch} = useQuery(
+    ["/guru/absensi/harian", params],
+    () => listAbsensiHarian(params),
+    {
+      keepPreviousData: true,
+      select: (response) => response.data,
+      staleTime: 60 * 1000 * 10,
+    }
+  );
+
+  return { isLoading, data, isFetching, setParams, params, refetch };
 };

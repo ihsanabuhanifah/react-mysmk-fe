@@ -107,6 +107,8 @@ const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
   { key: "2", value: "TF", text: "True False" },
   { key: "3", value: "ES", text: "Essay/Project" },
+  { key: "4", value: "MC", text: "Pilihan Banyak" },
+  { key: "5", value: "LV", text: "Live Coding" },
 ];
 const pgOptions = [
   { key: "1", value: "A", text: "A" },
@@ -121,18 +123,28 @@ const tfOptions = [
 ];
 
 const jenisOptions = [
-  { key: "1", value: "harian", text: "Ulangan Harian" },
-  { key: "2", value: "PTS", text: "Penilaian Tengah Semester" },
-  { key: "3", value: "PAS", text: "Penilain Akhir Semester" },
-  { key: "4", value: "US", text: "Ujian Sekolah" },
-  
+  { key: "1", value: "tugas", text: "Tugas" },
+  { key: "2", value: "harian", text: "Ulangan Harian" },
+  { key: "3", value: "projek", text: "Projek" },
+  { key: "4", value: "pts", text: "Penilaian Tengah Semester" },
+  { key: "5", value: "pas", text: "Penilain Akhir Semester" },
+  { key: "6", value: "us", text: "Ujian Sekolah" },
+];
+
+const ujianOptions = [
+  { key: "1", value:1, text: "Ujian Saya" },
+  { key: "2", value: 0, text: "Semua Ujian" },
 ];
 
 const durasiOptions = [
+  { key: "15", value: 5, text: "5 Menit" },
+  { key: "14", value: 10, text: "10 Menit" },
   { key: "1", value: 60, text: "60 Menit" },
   { key: "2", value: 90, text: "90 Menit" },
-  { key: "3", value: 120, text: "120 Menit" },
-  { key: "4", value: 180, text: "180 Menit" },
+  { key: "3", value: 120, text: "2 Jam" },
+  { key: "4", value: 180, text: "3 Jam" },
+  { key: "4", value: 240, text: "4 Jam" },
+  { key: "4", value: 300, text: "5 Jam" },
   { key: "5", value: 360, text: "6 Jam" },
   { key: "6", value: 720, text: "12 Jam" },
   { key: "7", value: 1440, text: "1 Hari" },
@@ -176,4 +188,5 @@ export {
   jenisOptions,
   statusUjianOptions,
   tipeUjianOptions,
+  ujianOptions,
 };

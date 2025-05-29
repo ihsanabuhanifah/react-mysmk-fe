@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Table, Button, Input, Sidebar, Menu, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
@@ -5,6 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 
 import {
   DeleteButton,
+  EditButton,
   ModalAlert,
   TableLoading,
   ViewButton,
@@ -180,6 +182,7 @@ export default function DaftarSiswa() {
               <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
               <Table.HeaderCell>NIS</Table.HeaderCell>
               <Table.HeaderCell>NISN</Table.HeaderCell>
+              <Table.HeaderCell>Email</Table.HeaderCell>
               <Table.HeaderCell>Tempat Tanggal Lahir </Table.HeaderCell>
               <Table.HeaderCell>Kelas </Table.HeaderCell>
               <Table.HeaderCell>Diterima Tanggal</Table.HeaderCell>
@@ -203,6 +206,7 @@ export default function DaftarSiswa() {
 
                   <Table.Cell>{value?.siswa?.nis}</Table.Cell>
                   <Table.Cell>{value?.siswa?.nisn}</Table.Cell>
+                  <Table.Cell>{value?.siswa?.user?.email}</Table.Cell>
 
                   <Table.Cell>
                     {value?.siswa?.tempat_lahir},{" "}
@@ -218,9 +222,26 @@ export default function DaftarSiswa() {
                     {value?.tahun_ajaran?.nama_tahun_ajaran}
                   </Table.Cell>
                   <Table.Cell>
-                    {checkRole(roles, "Admin") && (
+                    {/* <>
                       <DeleteButton onClick={() => confirmDelete(value?.id)} />
-                    )}
+                      <EditButton
+                        onClick={() => navigate(`/update-siswa/${value?.id}`)}
+                      />
+                    </> */}
+                    <>
+                      {/* <EditButton
+                        onClick={() => navigate(`update-siswa/${value?.id}/`)}
+                      /> */}
+                      <EditButton
+                        onClick={() =>
+                          window.open(`daftar-siswa/update-siswa/${value?.siswa?.id}`)
+                        }
+                      />
+                      <DeleteButton
+                        onClick={() => confirmDelete(value?.id)}
+                        className="button-spacing"
+                      />
+                    </>
                   </Table.Cell>
                 </Table.Row>
               ))}

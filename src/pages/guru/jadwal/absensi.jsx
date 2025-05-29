@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { listAbsensi } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
@@ -90,39 +90,44 @@ export default function Absensi() {
     //configuration
     {
       keepPreviousData: true,
+      staleTime: 1000 * 60 * 5,
       select: (response) => response.data,
-      onSuccess: (data) => {
-        let session = sessionStorage.getItem(
-          `${kelas_id}_${mapel_id}_${tanggal}`
-        );
-
-        if (session === undefined || session == null) {
-          setIniitalState({
-            ...initialState,
-            tanggal: data?.absensi?.[0]?.tanggal,
-            semester: data?.absensi?.[0]?.semester,
-            ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
-            kelas_id: data?.absensi?.[0]?.kelas?.id,
-            mapel_id: data?.absensi?.[0]?.mapel?.id,
-            absensi_kehadiran: data?.absensi,
-            agenda_kelas: data?.agenda,
-          });
-        } else {
-          session = JSON.parse(session);
-          setIniitalState({
-            ...initialState,
-            tanggal: session.tanggal,
-            semester: session.semester,
-            ta_id: session.tahun_ajaran?.id,
-            kelas_id: session.kelas?.id,
-            mapel_id: session.mapel?.id,
-            absensi_kehadiran: session?.absensi_kehadiran,
-            agenda_kelas: session?.agenda_kelas,
-          });
-        }
-      },
     }
   );
+
+  useEffect(() => {
+    if (data !== undefined) {
+      let session = sessionStorage.getItem(
+        `${kelas_id}_${mapel_id}_${tanggal}`
+      );
+
+      if (session === undefined || session == null) {
+        setIniitalState({
+          ...initialState,
+          tanggal: data?.absensi?.[0]?.tanggal,
+          semester: data?.absensi?.[0]?.semester,
+          ta_id: data?.absensi?.[0]?.tahun_ajaran?.id,
+          kelas_id: data?.absensi?.[0]?.kelas?.id,
+          mapel_id: data?.absensi?.[0]?.mapel?.id,
+          absensi_kehadiran: data?.absensi,
+          agenda_kelas: data?.agenda,
+        });
+      } else {
+        session = JSON.parse(session);
+        setIniitalState({
+          ...initialState,
+          tanggal: session.tanggal,
+          semester: session.semester,
+          ta_id: session.tahun_ajaran?.id,
+          kelas_id: session.kelas?.id,
+          mapel_id: session.mapel?.id,
+          absensi_kehadiran: session?.absensi_kehadiran,
+          agenda_kelas: session?.agenda_kelas,
+        });
+      }
+    }
+  }, [data]);
+
   const { dataKelas, dataMapel } = useList();
 
   const onSubmit = async (values) => {
@@ -166,10 +171,12 @@ export default function Absensi() {
 
   let sessionTes = sessionStorage.getItem(`${kelas_id}_${mapel_id}_${tanggal}`);
 
-  console.log("se", sessionTes);
+  useEffect(() => {
+    setMapel(mapel_id);
+  }, [mapel_id]);
 
   return (
-    <LayoutPage title={"Agenda Mengajar"}>
+    <LayoutPage title={`Agenda Mengajar - ${initialState?.absensi_kehadiran[0]?.mapel?.nama_mapel}`} isLoading={isFetching}>
       {sessionTes !== null ? (
         <p className="text-red-500 text-lg font-bold">
           Belum Di Simpen ke Database
@@ -248,7 +255,7 @@ export default function Absensi() {
 
                   <div className=" col-span-1 flex items-center justify-center pt-4">
                     <Button
-                      content={"Remidial"}
+                      content={"Filter"}
                       type="button"
                       fluid
                       icon={() => <Icon name="filter" />}
