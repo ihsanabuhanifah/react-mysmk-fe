@@ -23,6 +23,7 @@ const TableSoal = ({
   title,
   materi,
   setMateri,
+  setNama_mapel
 }) => {
   return (
     <>
@@ -32,6 +33,8 @@ const TableSoal = ({
         {!isSoal && (
           <>
             {" "}
+
+          
             <Input
               placeholder="Cari"
               value={materi}

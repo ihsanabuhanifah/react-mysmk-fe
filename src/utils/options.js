@@ -129,7 +129,11 @@ const jenisOptions = [
   { key: "4", value: "pts", text: "Penilaian Tengah Semester" },
   { key: "5", value: "pas", text: "Penilain Akhir Semester" },
   { key: "6", value: "us", text: "Ujian Sekolah" },
-  
+];
+
+const ujianOptions = [
+  { key: "1", value:1, text: "Ujian Saya" },
+  { key: "2", value: 0, text: "Semua Ujian" },
 ];
 
 const durasiOptions = [
@@ -184,4 +188,5 @@ export {
   jenisOptions,
   statusUjianOptions,
   tipeUjianOptions,
+  ujianOptions,
 };

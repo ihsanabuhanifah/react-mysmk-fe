@@ -116,6 +116,7 @@ export default function ListExam() {
           payload={params}
           handlePayload={handlePayload}
           setVisible={setVisible}
+          handleClear={handleClear}
           onClick={handleFilter}
         />
       </Sidebar>
@@ -200,7 +201,10 @@ export default function ListExam() {
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
-                    <Table.Cell>{value?.judul_ujian}</Table.Cell>
+                    <Table.Cell>
+                      
+                      {value?.judul_ujian.slice(0, 20)}{value?.judul_ujian?.length > 20 ? "..." : ""}
+                      </Table.Cell>
                     <Table.Cell>
                       {<LabelStatus status={value?.jenis_ujian} />}
                     </Table.Cell>

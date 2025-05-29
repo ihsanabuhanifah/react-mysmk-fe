@@ -103,10 +103,12 @@ export default function FormExam() {
           ],
         });
       },
-    }
+    },
   );
   let { page, pageSize, setPage, setPageSize } = usePage();
   let [mapel_id, setMapel_id] = useState("");
+  let [nama_mapel, setNama_mapel] = useState("");
+  let [nama_mapel2, setNama_mapel2] = useState("");
   let [materi, setMateri] = useState("");
   let debouncedName = useDebounce(materi, 600);
 
@@ -124,6 +126,7 @@ export default function FormExam() {
     mapel_id,
     materi: debouncedName,
     isExam: true,
+    nama_mapel: encodeURIComponent(nama_mapel),
 
     is_all: 0,
   };
@@ -140,7 +143,7 @@ export default function FormExam() {
       select: (response) => {
         return response.data;
       },
-    }
+    },
   );
 
   const [initialState, setInitialState] = useState({
@@ -310,7 +313,7 @@ export default function FormExam() {
         style={{
           zoom: "80%",
         }}
-        className="p-0 lg:p-2  "
+        className="p-0 lg:p-2"
       >
         <FormikProvider value={formik}>
           <Form onSubmit={handleSubmit}>
@@ -324,10 +327,10 @@ export default function FormExam() {
             <section>
               {values?.payload?.map((value, index) => (
                 <div
-                  className="space-y-5 col-span-3  p-5   overflow-auto "
+                  className="col-span-3 space-y-5 overflow-auto p-5"
                   key={index}
                 >
-                  <section className=" grid grid-cols-1 lg:grid-cols-3 gap-5">
+                  <section className="grid grid-cols-1 gap-5 lg:grid-cols-3">
                     <div className="col-span-3">
                       <Form.Field
                         control={TextArea}
@@ -343,7 +346,7 @@ export default function FormExam() {
                         onChange={(e) => {
                           setFieldValue(
                             `payload[${index}]judul_ujian`,
-                            e.target.value
+                            e.target.value,
                           );
                         }}
                         error={
@@ -366,7 +369,7 @@ export default function FormExam() {
                         onChange={(event, data) => {
                           setFieldValue(
                             `payload[${index}]kelas_id`,
-                            data?.value
+                            data?.value,
                           );
                         }}
                         error={
@@ -381,36 +384,60 @@ export default function FormExam() {
                         }}
                       />
                     </div>
-                    <div>
-                      <Form.Field
-                        disabled={values.payload[0].soal.length > 0}
-                        control={Select}
-                        value={value?.mapel_id}
-                        options={getOptions(dataMapel?.data, "nama_mapel")}
-                        label={{
-                          children: "Mata Pelajaran",
-                          htmlFor: `payload[${index}]mapel_id`,
-                          name: `payload[${index}]mapel_id`,
-                        }}
-                        onChange={(event, data) => {
-                          setFieldValue(
-                            `payload[${index}]mapel_id`,
-                            data?.value
-                          );
+                    <div className="grid grid-cols-5 place-content-center gap-2">
+                      <div className="col-span-4">
+                        {" "}
+                        <Form.Field
+                          disabled={values.payload[0].soal.length > 0}
+                          control={Select}
+                          value={value?.mapel_id}
+                          options={getOptions(dataMapel?.data, "nama_mapel")}
+                          label={{
+                            children: "Mata Pelajaran",
+                            htmlFor: `payload[${index}]mapel_id`,
+                            name: `payload[${index}]mapel_id`,
+                          }}
+                          onChange={(event, data) => {
+                            setFieldValue(
+                              `payload[${index}]mapel_id`,
+                              data?.value,
+                            );
 
-                          setMapel_id(data?.value);
-                        }}
-                        error={
-                          errors?.payload?.[index]?.mapel_id !== undefined &&
-                          errors?.payload?.[index]?.mapel_id
-                        }
-                        placeholder="Pilih Mata Pelajaran"
-                        search
-                        searchInput={{
-                          id: `payload[${index}]mapel_id`,
-                          name: `payload[${index}]mapel_id`,
-                        }}
-                      />
+                            const label = data?.options?.filter(
+                              (x) => x.value === data?.value,
+                            );
+
+                            setNama_mapel(label[0]?.text?.slice(0, -1));
+                            setMapel_id(data?.value);
+                          }}
+                          error={
+                            errors?.payload?.[index]?.mapel_id !== undefined &&
+                            errors?.payload?.[index]?.mapel_id
+                          }
+                          placeholder="Pilih"
+                          search
+                          searchInput={{
+                            id: `payload[${index}]mapel_id`,
+                            name: `payload[${index}]mapel_id`,
+                          }}
+                        />
+                      </div>
+
+                      <div className="mt-5 flex items-center justify-center space-x-2">
+                        {" "}
+                        <Checkbox
+                          checked={nama_mapel !== ""}
+                          onChange={(e) => {
+                            if (nama_mapel !== "") {
+                              setNama_mapel("");
+                              setNama_mapel2(nama_mapel);
+                            } else {
+                              setNama_mapel(nama_mapel2);
+                            }
+                          }}
+                        />{" "}
+                        <span>Semua Semester</span>{" "}
+                      </div>
                     </div>
                     <div>
                       <Form.Dropdown
@@ -428,7 +455,7 @@ export default function FormExam() {
                         onChange={(e, data) => {
                           setFieldValue(
                             `payload[${index}]jenis_ujian`,
-                            data.value
+                            data.value,
                           );
                         }}
                         error={
@@ -454,7 +481,7 @@ export default function FormExam() {
                         onChange={(e) => {
                           setFieldValue(
                             `payload[${index}]waktu_mulai`,
-                            e.target.value
+                            e.target.value,
                           );
                         }}
                         error={
@@ -480,7 +507,7 @@ export default function FormExam() {
                         onChange={(e) => {
                           setFieldValue(
                             `payload[${index}]waktu_selesai`,
-                            e.target.value
+                            e.target.value,
                           );
                         }}
                         error={
@@ -508,7 +535,7 @@ export default function FormExam() {
                         onChange={(e, data) => {
                           setFieldValue(
                             `payload[${index}]tipe_ujian`,
-                            data.value
+                            data.value,
                           );
                         }}
                         error={
@@ -567,9 +594,10 @@ export default function FormExam() {
                       />
                     </div>
                   </section>
-                  <section className="border shadow-lg p-5 grid grid-cols-2 gap-5">
+                  <section className="grid grid-cols-2 gap-5 border p-5 shadow-lg">
                     <div>
                       <TableSoal
+                        setNama_mapel={setNama_mapel}
                         materi={materi}
                         setMateri={setMateri}
                         data={data}
@@ -652,7 +680,7 @@ export default function FormExam() {
               ) : (
                 <>
                   {urutan > 0 && (
-                    <section className="mb-5 border rounded-lg shadow-lg p-5">
+                    <section className="mb-5 rounded-lg border p-5 shadow-lg">
                       <h4>
                         Mata Pelajaran ini memiliki memiliki {urutan} ujian
                         sebelumnya, apakah anda ingin membuat ujian ini tidak
@@ -702,7 +730,7 @@ export default function FormExam() {
                   {(values?.payload[0].before === 2 ||
                     !!values?.payload[0].before === false) &&
                     urutan < 1 && (
-                      <section className="mb-5 border rounded-lg shadow-lg p-5">
+                      <section className="mb-5 rounded-lg border p-5 shadow-lg">
                         <h4>
                           Apakah anda akan menjadikan ini adalah exam
                           bertingkat?
@@ -730,7 +758,7 @@ export default function FormExam() {
                             onChange={(e, data) => {
                               setFieldValue(
                                 `payload[${0}]is_hirarki`,
-                                data.value
+                                data.value,
                               );
                             }}
                             error={
@@ -768,7 +796,7 @@ export default function FormExam() {
 
 const addSevenHours = (isoString) => {
   const date = new Date(isoString);
-  date.setHours(date.getHours() + 7);
+  date.setHours(date.getHours() - 7);
 
   // Format the date to 'YYYY-MM-DDTHH:MM'
   const formattedDate = date.toISOString().slice(0, 16);

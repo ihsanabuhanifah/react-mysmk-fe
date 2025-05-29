@@ -5,13 +5,14 @@ import { ReactSelectAsync, FormLabel } from "../../../components";
 import { listSiswaOptions } from "../../../api/list";
 
 import useList from "../../../hook/useList";
-import { jenisOptions } from "../../../utils/options";
+import { jenisOptions, ujianOptions } from "../../../utils/options";
 
 export default function Filter({
   payload,
   handlePayload,
   onClick,
   setVisible,
+  handleClear
 }) {
   const { dataKelas, dataMapel, dataTa, dataGuru } = useList();
 
@@ -27,10 +28,36 @@ export default function Filter({
         >
           Tutup
         </button>
+
+           <button
+          type="b"
+          onClick={() => {
+            handleClear()
+            setVisible(false);
+          }}
+          className="text-lg"
+        >
+          Clear
+        </button>
       </section>
 
       <Form>
         <section className="space-y-5">
+            <div className="text-left">
+            <Form.Dropdown
+              selection
+              search
+              label={{
+                children: "Tampilkan Ujian",
+              }}
+              placeholder="Pilih"
+              options={ujianOptions}
+              onChange={(e, data) => {
+                handlePayload("is_all", data?.value);
+              }}
+              value={payload?.is_all}
+            />
+          </div>
         <div className="text-left">
             <Form.Dropdown
               selection

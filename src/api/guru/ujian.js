@@ -94,10 +94,18 @@ export const useCreatePenilaian = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {
+      // Fungsi untuk mengurangi 7 jam dari waktu yang diberikan
+      const adjustTime = (datetime) => {
+        if (!datetime) return datetime;
+        const date = new Date(datetime);
+        date.setHours(date.getHours() - 7);
+        return date.toISOString(); // atau format yang sesuai dengan kebutuhan backend
+      };
+
       return axios.post(`/guru/nilai/create`, {
         id: payload.id,
-        waktu_mulai: payload.waktu_mulai,
-        waktu_selesai: payload.waktu_selesai,
+        waktu_mulai: adjustTime(payload.waktu_mulai),
+        waktu_selesai: adjustTime(payload.waktu_selesai),
         kelas_id: payload.kelas_id,
         mapel_id: payload.mapel_id,
         durasi: payload.durasi,
@@ -112,7 +120,6 @@ export const useCreatePenilaian = () => {
         queryClient.invalidateQueries("/ujian/list");
         successToast(response);
       },
-
       onError: (error) => {
         warningToast(error);
       },
@@ -120,7 +127,6 @@ export const useCreatePenilaian = () => {
   );
   return mutate;
 };
-
 export function listPenilaianMateri(params) {
   syncToken();
   return axios.get("/guru/nilai/list/teacher", { params });
