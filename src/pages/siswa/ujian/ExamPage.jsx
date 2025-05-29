@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useProgressExam,
   useSubmitExam,
@@ -13,11 +13,14 @@ import { Button, Icon, Dimmer, Loader, Modal } from "semantic-ui-react";
 import ModalKonfirmasi from "../../../components/ModalKonfrimasi";
 import LV from "./LV";
 import Timer from "./Timer";
-
+import { SocketContext } from "../../../SocketProvider";
+import useList from "../../../hook/useList";
+import { formatWaktu } from "../../../utils/waktu";
+const roomId = "SMKMQ-ROOM";
 export default function ExamPage({ examActive, setExamActive }) {
- 
-  
+  const { socket } = useContext(SocketContext);
 
+  const { identitas, dataMapel } = useList();
   let [soal, setSoal] = useState([]);
   let [cutDown, setCutDown] = useState(5); // Set initial countdown to 10
   let [open, setOpen] = useState(false);
@@ -31,8 +34,6 @@ export default function ExamPage({ examActive, setExamActive }) {
   });
 
   let { data, mutate, isLoading: isFetching } = useTakeExam();
-
-  
 
   useEffect(() => {
     mutate(examActive, {
@@ -50,6 +51,11 @@ export default function ExamPage({ examActive, setExamActive }) {
         setCutDown((c) => c - 1);
       }, 1000);
     } else if (cutDown === 0 && data?.data?.tipe_ujian === "closed") {
+      socket.emit("catatan", {
+        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) dikeluarkan dari ujian pada ${formatWaktu(new Date().toISOString())}`,
+
+        roomId: roomId,
+      });
       window.location.reload(); // Reload page when countdown reaches 0
     } else {
       clearInterval(interval);
@@ -57,15 +63,18 @@ export default function ExamPage({ examActive, setExamActive }) {
     return () => clearInterval(interval);
   }, [mouse, cutDown, data]);
 
- 
   // submit otomatis
-  
 
   useEffect(() => {
-   
     if (!!data?.data?.soal === true) {
       let res = JSON.parse(data.data.soal);
       setSoal(res);
+
+      socket.emit("catatan", {
+        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) mulai ujian ${formatWaktu(new Date().toISOString())}`,
+
+        roomId: roomId,
+      });
 
       let dataSoal;
       if (JSON.parse(data.data.jawaban).length === 0) {
@@ -103,19 +112,27 @@ export default function ExamPage({ examActive, setExamActive }) {
     );
   }
 
-
-  console.log('render ulang')
+  console.log("render ulang", data?.data?.tipe_ujian);
   return (
     <div
       onMouseLeave={() => {
         if (data?.data?.tipe_ujian === "closed") {
+          console.log("mouse keluar");
+          socket.emit("catatan", {
+            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+            roomId: roomId,
+          });
           setMouse(true); // Start countdown on mouse leave
         }
       }}
       onMouseEnter={() => {
         if (data?.data?.tipe_ujian === "closed") {
-          setMouse(false); // Stop countdown on mouse enter, but don't reset it
+          socket.emit("catatan", {
+            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+            roomId: roomId,
+          });
         }
+         setMouse(false); // Start countdown on mouse leave
       }}
       className="pb-30 fixed bottom-0 left-0 right-0 top-0 z-[999] overflow-hidden border bg-white"
     >
@@ -126,6 +143,11 @@ export default function ExamPage({ examActive, setExamActive }) {
         onConfirm={() => {
           submit.mutate(payload, {
             onSuccess: () => {
+              socket.emit("catatan", {
+                message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) Menyelesaikan Ujian pada ${formatWaktu(new Date().toISOString())}`,
+
+                roomId: roomId,
+              });
               window.location.reload();
             },
           });
@@ -160,7 +182,12 @@ export default function ExamPage({ examActive, setExamActive }) {
                 Jangan mengeluarkan mouse dari area ujian
               </p>
             )}
-           <Timer data={data} payload={payload} submit={submit} setModalAutoSubmit={setModalAutoSubmit}  />
+            <Timer
+              data={data}
+              payload={payload}
+              submit={submit}
+              setModalAutoSubmit={setModalAutoSubmit}
+            />
           </div>
 
           {soal?.map((item, index) => {
@@ -168,7 +195,6 @@ export default function ExamPage({ examActive, setExamActive }) {
 
             return (
               <React.Fragment key={index}>
-                
                 <div className="mt-2">
                   {index === activeSoal && item.tipe === "PG" ? (
                     <>
@@ -234,7 +260,6 @@ export default function ExamPage({ examActive, setExamActive }) {
           <div className="h-full px-5 shadow-lg">
             {soal.map((item, index) => (
               <button
-               
                 onClick={() => {
                   setActiveSoal(index);
                 }}
@@ -244,7 +269,6 @@ export default function ExamPage({ examActive, setExamActive }) {
                   {
                     "bg-green-400 text-white":
                       !!payload?.data?.[index]?.jawaban === true,
-                   
                   },
                 )}
               >
@@ -286,4 +310,3 @@ export default function ExamPage({ examActive, setExamActive }) {
     </div>
   );
 }
-

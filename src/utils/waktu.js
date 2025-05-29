@@ -274,6 +274,6 @@ export function formatJam(date){
     return "-"
   }
 
-  return dayjs(date).format("HH:mm:ss")
+  return dayjs(date).format(" HH:mm:ss")
 }
 

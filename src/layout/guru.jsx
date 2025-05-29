@@ -5,13 +5,14 @@ import LogoMySMK from "../image/MySMK.png";
 import SidebarGuru from "./Sidebar/sidebarGuru";
 import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
-import { IoIosNotifications, IoIosPeople } from "react-icons/io";
+import { IoIosNotifications, IoIosPeople, IoIosEye } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
 import { syncToken } from "../api/axiosClient";
 import { SocketContext } from "../SocketProvider";
 import RoomMembers from "./member";
 import { useRoomHandling } from "../hook/useRoomHandling";
+import RoomCatatan from "./monitoring";
 
 export default function Guru() {
   React.useEffect(() => {
@@ -23,10 +24,10 @@ export default function Guru() {
   const [roomUsers, setRoomUsers] = useState([]);
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);
-  const [showPanel, setShowPanel] = useState("members"); // 'notifications' or 'members'
+  const [showPanel, setShowPanel] = useState("members"); // 'notifications', 'members', or 'monitoring'
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
-  const roomId = "SMKMQ-ROOM"
+  const roomId = "SMKMQ-ROOM";
 
   const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
     useContext(SocketContext);
@@ -49,7 +50,7 @@ export default function Guru() {
     handleJoinRoom();
   }, [socket, data]);
 
-   useRoomHandling(socket, "SMKMQ-ROOM", data);
+  useRoomHandling(socket, roomId, data);
 
   return (
     <div className="h-screen overflow-hidden text-gray-700 antialiased">
@@ -145,7 +146,7 @@ export default function Guru() {
             !showNotif ? "xl:w-[20%]" : "xl:hidden"
           } xl:relative`}
         >
-          {/* Toggle Buttons */}
+          {/* Toggle Buttons - Now with 3 tabs */}
           <div className="flex border-b">
             <button
               className={`flex-1 py-2 ${showPanel === 'notifications' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
@@ -153,7 +154,7 @@ export default function Guru() {
             >
               <div className="flex items-center justify-center gap-2">
                 <IoIosNotifications />
-                <span>Notifications</span>
+                <span className="text-xs">Notifikasi</span>
                 {jumlah > 0 && (
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                     {jumlah}
@@ -167,18 +168,25 @@ export default function Guru() {
             >
               <div className="flex items-center justify-center gap-2">
                 <IoIosPeople />
-                <span>Online Users</span>
+                <span className="text-xs">Online</span>
+              </div>
+            </button>
+            <button
+              className={`flex-1 py-2 ${showPanel === 'monitoring' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
+              onClick={() => setShowPanel('monitoring')}
+            >
+              <div className="flex items-center justify-center gap-2">
+                <IoIosEye />
+                <span className="text-xs">Monitoring</span>
               </div>
             </button>
           </div>
           
           {/* Content Panel */}
           <div className="h-[calc(100%-45px)] overflow-y-auto">
-            {showPanel === 'notifications' ? (
-              <Notifikasi setNotif={setNotif} />
-            ) : (
-              <RoomMembers roomId={roomId}/>
-            )}
+            {showPanel === 'notifications' && <Notifikasi setNotif={setNotif} />}
+            {showPanel === 'members' && <RoomMembers roomId={roomId} />}
+            {showPanel === 'monitoring' && <RoomCatatan roomId={roomId} />}
           </div>
         </div>
       </main>
