@@ -94,8 +94,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       }
 
       setPayload((state) => {
-        return {
-          ...state,
+        return {          ...state,
           data: dataSoal,
         };
       });

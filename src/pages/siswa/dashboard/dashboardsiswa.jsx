@@ -2,13 +2,21 @@ import { Loader } from "semantic-ui-react";
 import { useTidakHadir } from "../../../api/siswa/absensi";
 import LayoutSiswa from "../../../module/layoutSiswa";
 import { useZUStore } from "../../../zustand/zustore";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { SocketContext } from "../../../SocketProvider";
+import Peer from 'simple-peer';
 
 export default function DashboardSiswa() {
   const { profile } = useZUStore((state) => state);
+  const peerRef = useRef();
+    const streamRef = useRef();
+
+  const { socket } = useContext(SocketContext);
   const { data, isFetching, isFetched } = useTidakHadir();
   const [RS, setRS] = useState({});
 
+  const   classroomId  = 123
+  const studentId = 123
   console.log('data',data)
 
   useEffect(() => {
@@ -22,9 +30,47 @@ export default function DashboardSiswa() {
     }
   }, [isFetching, data]);
 
+  useEffect(() => {
+    // 1. Connect to Socket.io
+  
+    socket.emit('join-classroom', classroomId, studentId, 'student');
+
+    // 2. Request screen sharing
+    navigator.mediaDevices.getDisplayMedia({ video: true })
+      .then(stream => {
+        streamRef.current = stream;
+
+        // 3. Setup WebRTC peer
+        peerRef.current = new Peer({
+          initiator: true,
+          trickle: false,
+          stream: stream
+        });
+
+        // 4. Handle WebRTC signaling
+        peerRef.current.on('signal', signal => {
+          socket.emit('signal-to-teacher', classroomId, studentId, signal);
+        });
+
+        socket.current.on('signal-from-teacher', (_, teacherSignal) => {
+          peerRef.current.signal(teacherSignal);
+        });
+      })
+      .catch(err => {
+        console.error('Error sharing screen:', err);
+      });
+
+    return () => {
+      if (peerRef.current) peerRef.current.destroy();
+      if (streamRef.current) streamRef.current.getTracks().forEach(track => track.stop());
+      if (socket.current) socket.current.disconnect();
+    };
+  }, [classroomId, studentId, socket]);
+
   return (
     <LayoutSiswa title="Dashboard">
       <>
+       
         {isFetching ? (
           <div className="ml-5 mt-[30px]">
             <Loader active inline="left" />
@@ -77,7 +123,7 @@ export default function DashboardSiswa() {
               </div>
             </div>
             <div className="col-span-12 flex flex-col rounded-md border bg-white px-4 pt-5 md:col-span-3 md:h-[280px]">
-              <p className="m-0 text-xl font-black opacity-90">
+              {/* <p className="m-0 text-xl font-black opacity-90">
                 Jadwal Hari Ini
               </p>
               <div className="mx-auto my-4 h-[1px] w-full rounded-md bg-black/10"></div>
@@ -96,8 +142,19 @@ export default function DashboardSiswa() {
               </div>
               <div className="mb-2 flex w-full justify-between">
                 <p className="font-black text-[#18a558]">Matematika</p>
-                <p className="font-black">08:00</p>
-              </div>
+                <p classNam
+                
+                e="font-black">08:00</p>
+              </div> */}
+
+              <video 
+        autoPlay 
+        muted 
+        style={{ width: '300px', border: '2px solid red' }}
+        ref={videoEl => {
+          if (videoEl && streamRef.current) videoEl.srcObject = streamRef.current;
+        }}
+      />
             </div>
           </div>
         )}
