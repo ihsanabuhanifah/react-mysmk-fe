@@ -269,3 +269,11 @@ export function formatWaktu(date){
 }
 
 
+export function formatJam(date){
+  if(date === null) {
+    return "-"
+  }
+
+  return dayjs(date).format("HH:mm:ss")
+}
+

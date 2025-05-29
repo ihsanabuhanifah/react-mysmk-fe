@@ -10,11 +10,16 @@ import {
   IoPerson,
   IoShieldOutline,
   IoStatsChart,
+  IoPencil, 
 } from "react-icons/io5";
+
+
+
 import LogoMySMK from "../../image/MySMK.png";
 import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
-import { LogoutButton } from "../siswa";
+import { LogoutButton } from "./sidebarGuru";
+import { ModalLogout } from "../../components";
 
 export default function SidebarSiswa({ setSidebar }) {
   let date = new Date();
@@ -24,6 +29,7 @@ export default function SidebarSiswa({ setSidebar }) {
   const handleSiderbar = () => {
     setSidebar(false);
   };
+    const [open, setOpen] = React.useState(false);
 
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
@@ -37,8 +43,10 @@ export default function SidebarSiswa({ setSidebar }) {
 
   return (
     <>
+
+<ModalLogout open={open} setOpen={setOpen} />
       {/* tablet */}
-      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1 xl:hidden">
+      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1 ">
         <div className="mt-12 h-24 w-24 flex-col items-center">
           <img
             className="absolute"
@@ -47,10 +55,11 @@ export default function SidebarSiswa({ setSidebar }) {
             alt={LogoMySMK}
           />
         </div>
+         <button className="lg:hidden" onClick={handleSiderbar}>
+                  <MdClose className="h-10 w-10" />
+                </button>
 
-        <button className="text-gray-700" onClick={handleSiderbar}>
-          <MdClose className="h-10 w-10" />
-        </button>
+        
       </div>
 
       {/* laptop */}
@@ -188,9 +197,27 @@ export default function SidebarSiswa({ setSidebar }) {
         <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
+         
+          to="laporan-pkl"
+          path="laporan-pkl"
+          title={"Jurnal Harian"}
+
+          logo={
+            <IoDocumentTextOutline
+              className={`h-6 w-6 ${
+                url === "rapor" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        />
+         <NavButton
+          setIsSelect={setIsSelect}
+          handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
           title={"Rapor"}
+
+          
           logo={
             <IoDocumentTextOutline
               className={`h-6 w-6 ${
@@ -213,11 +240,24 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
+          {/* <NavButton
+          handleSidebar={handleSiderbar}
+          to="tugas-pkl"
+          path="tugas-pkl"
+          title={"Tugas Pkl"}
+          logo={
+            <IoPencil
+              className={`h-6 w-6 ${
+                url === "laporan-pkl" ? "text-[#18a558]" : "text-gray-400"
+              }`}
+            />
+          }
+        /> */}
       </nav>
-      <div className="mb-4 ml-2 mt-5 block xl:hidden">
+      <div className="mb-4 ml-2 mt-5 block ">
         <LogoutButton
           onClick={() => {
-            return setSidebar(true);
+            return setOpen(true);
           }}
           title={"Logout"}
           logo={

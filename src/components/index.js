@@ -26,5 +26,6 @@ export {
   ModalAlert,
   ModalLogout,
   LoadingPage,
-  PaginationTable, AddButton
+  PaginationTable, 
+  AddButton,
 };

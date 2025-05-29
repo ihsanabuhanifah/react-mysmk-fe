@@ -184,217 +184,217 @@ export default function Pulang() {
                   )}
                 </div>
 
-              <section className="mt-5" style={{
-                zoom : '80%'
-              }}>
-              <Table celled padded>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell>No</Table.HeaderCell>
-                      <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                      <Table.HeaderCell>Pulang Dari</Table.HeaderCell>
-                      <Table.HeaderCell>Pulang Sampai</Table.HeaderCell>
-                      <Table.HeaderCell>Kepentingan</Table.HeaderCell>
-                      <Table.HeaderCell>Status Approval</Table.HeaderCell>
-                      <Table.HeaderCell width={16} content singleLine={approve}>
-                        Alasan Ditolak
-                      </Table.HeaderCell>
-                      <Table.HeaderCell>Approve By</Table.HeaderCell>
+                <section className="mt-5" style={{
+                  zoom: '80%'
+                }}>
+                  <Table celled padded>
+                    <Table.Header>
+                      <Table.Row>
+                        <Table.HeaderCell>No</Table.HeaderCell>
+                        <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
+                        <Table.HeaderCell>Pulang Dari</Table.HeaderCell>
+                        <Table.HeaderCell>Pulang Sampai</Table.HeaderCell>
+                        <Table.HeaderCell>Kepentingan</Table.HeaderCell>
+                        <Table.HeaderCell>Status Approval</Table.HeaderCell>
+                        <Table.HeaderCell width={16} content singleLine={approve}>
+                          Alasan Ditolak
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>Approve By</Table.HeaderCell>
 
-                      <Table.HeaderCell width={16} content singleLine={laporan}>
-                        Jam Kembali
-                      </Table.HeaderCell>
-                      <Table.HeaderCell width={16} content singleLine={laporan}>
-                        Tanggal Kembali
-                      </Table.HeaderCell>
-                      <Table.HeaderCell>Terlambat</Table.HeaderCell>
-                      <Table.HeaderCell>Denda</Table.HeaderCell>
-                      <Table.HeaderCell>Laporan</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    <TableLoading
-                      count={13}
-                      isLoading={isLoading}
-                      data={data?.data?.rows}
-                      messageEmpty={"Tidak Ada Pengajuan Izin"}
-                    >
-                      {values?.map((value, index) => (
-                        <Table.Row key={index}>
-                          <Table.Cell>{index + 1}</Table.Cell>
-                          <Table.Cell>
-                            <span className="capitalize">
-                              {handleViewNull(value?.siswa?.nama_siswa)}
-                            </span>
-                          </Table.Cell>
-                          <Table.Cell>
-                            {showFormattedDate(value?.izin_dari)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {showFormattedDate(value?.izin_sampai)}
-                          </Table.Cell>
-                          <Table.Cell textAlign="left">
-                            {handleViewNull(value?.kepentingan)}
-                          </Table.Cell>
+                        <Table.HeaderCell width={16} content singleLine={laporan}>
+                          Jam Kembali
+                        </Table.HeaderCell>
+                        <Table.HeaderCell width={16} content singleLine={laporan}>
+                          Tanggal Kembali
+                        </Table.HeaderCell>
+                        <Table.HeaderCell>Terlambat</Table.HeaderCell>
+                        <Table.HeaderCell>Denda</Table.HeaderCell>
+                        <Table.HeaderCell>Laporan</Table.HeaderCell>
+                      </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                      <TableLoading
+                        count={13}
+                        isLoading={isLoading}
+                        data={data?.data?.rows}
+                        messageEmpty={"Tidak Ada Pengajuan Izin"}
+                      >
+                        {values?.map((value, index) => (
+                          <Table.Row key={index}>
+                            <Table.Cell>{index + 1}</Table.Cell>
+                            <Table.Cell>
+                              <span className="capitalize">
+                                {handleViewNull(value?.siswa?.nama_siswa)}
+                              </span>
+                            </Table.Cell>
+                            <Table.Cell>
+                              {showFormattedDate(value?.izin_dari)}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {showFormattedDate(value?.izin_sampai)}
+                            </Table.Cell>
+                            <Table.Cell textAlign="left">
+                              {handleViewNull(value?.kepentingan)}
+                            </Table.Cell>
 
-                          <Table.Cell>
-                            {approve ? (
-                              <Dropdown
-                                placeholder="Status Approval"
-                                fluid
-                                selection
-                                search
-                                onChange={(event, data) => {
-                                  setUpdated(true);
-                                  setFieldValue(
-                                    `[${index}]status_approval`,
-                                    data.value
-                                  );
-                                  setFieldValue(`[${index}]updated`, true);
-                                  if (data.value === "menunggu") {
-                                    return setFieldValue(
-                                      `[${index}]alasan_ditolak`,
-                                      ""
-                                    );
-                                  }
-                                }}
-                                name={`[${index}]status_approval`}
-                                value={value.status_approval}
-                                options={approveOptions}
-                              />
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  setApprove(true);
-                                }}
-                                type="button"
-                              >
-                                {" "}
-                                {statusApproval(value?.status_approval)}
-                              </button>
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {approve ? (
-                              <TextArea
-                                selection
-                                style={{
-                                  padding: 10,
-                                }}
-                                search
-                                onChange={(e) => {
-                                  setUpdated(true);
-                                  setFieldValue(`[${index}]updated`, true);
-                                  setFieldValue(
-                                    `[${index}]alasan_ditolak`,
-                                    e.target.value
-                                  );
-                                }}
-                                name={`[${index}]alasan_ditolak`}
-                                value={value.alasan_ditolak}
-                              />
-                            ) : (
-                              handleViewNull(value?.alasan_ditolak)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(value?.pulang_approv_by?.nama_guru)}
-                          </Table.Cell>
-
-                          <Table.Cell>
-                            {laporan ? (
-                              <Input
-                                type="time"
-                                fluid
-                                selection
-                                search
-                                value={value.jam_kembali_ke_sekolah}
-                                onChange={(e) => {
-                                  setUpdated(true);
-                                  setFieldValue(`[${index}]updated`, true);
-
-                                  return setFieldValue(
-                                    `[${index}]jam_kembali_ke_sekolah`,
-                                    e.target.value
-                                  );
-                                }}
-                              />
-                            ) : (
-                              handleViewNull(value?.jam_kembali_ke_sekolah)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell collapsing>
-                            {laporan ? (
-                              <Input
-                                type="date"
-                                fluid
-                                name={`[${index}]tanggal_kembali`}
-                                selection
-                                search
-                                value={value.tanggal_kembali}
-                                onChange={(e) => {
-                                  setUpdated(true);
-                                  let selisih = selisihHari(
-                                    value.izin_sampai,
-                                    value.tanggal_kembali
-                                  );
-                                  setFieldValue(`[${index}]updated`, true);
-                                  console.log(selisih);
-                                  if (selisih > 0) {
+                            <Table.Cell>
+                              {approve ? (
+                                <Dropdown
+                                  placeholder="Status Approval"
+                                  fluid
+                                  selection
+                                  search
+                                  onChange={(event, data) => {
+                                    setUpdated(true);
                                     setFieldValue(
-                                      `[${index}]jumlah_hari_terlambat`,
-                                      selisih
+                                      `[${index}]status_approval`,
+                                      data.value
                                     );
-                                  }
-                                  return setFieldValue(
-                                    `[${index}]tanggal_kembali`,
-                                    e.target.value
-                                  );
-                                }}
-                              />
-                            ) : (
-                              showFormattedDate(value?.tanggal_kembali)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {laporan ? (
-                              <Input
-                                type="number"
-                                placeholder="Terlambat"
-                                fluid
-                                disabled
-                                selection
-                                search
-                                value={value.jumlah_hari_terlambat}
-                              />
-                            ) : (
-                              handleViewNull(value?.jumlah_hari_terlambat)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {laporan ? (
-                              <Input
-                                type="text"
-                                placeholder="Denda"
-                                fluid
-                                disabled
-                                selection
-                                search
-                                value={value.denda}
-                              />
-                            ) : (
-                              handleViewNull(value?.denda)
-                            )}
-                          </Table.Cell>
-                          <Table.Cell>
-                            {handleViewNull(value?.laporan_oleh?.nama_guru)}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </TableLoading>
-                  </Table.Body>
-                </Table>
-              </section>
+                                    setFieldValue(`[${index}]updated`, true);
+                                    if (data.value === "menunggu") {
+                                      return setFieldValue(
+                                        `[${index}]alasan_ditolak`,
+                                        ""
+                                      );
+                                    }
+                                  }}
+                                  name={`[${index}]status_approval`}
+                                  value={value.status_approval}
+                                  options={approveOptions}
+                                />
+                              ) : (
+                                <button
+                                  onClick={() => {
+                                    setApprove(true);
+                                  }}
+                                  type="button"
+                                >
+                                  {" "}
+                                  {statusApproval(value?.status_approval)}
+                                </button>
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {approve ? (
+                                <TextArea
+                                  selection
+                                  style={{
+                                    padding: 10,
+                                  }}
+                                  search
+                                  onChange={(e) => {
+                                    setUpdated(true);
+                                    setFieldValue(`[${index}]updated`, true);
+                                    setFieldValue(
+                                      `[${index}]alasan_ditolak`,
+                                      e.target.value
+                                    );
+                                  }}
+                                  name={`[${index}]alasan_ditolak`}
+                                  value={value.alasan_ditolak}
+                                />
+                              ) : (
+                                handleViewNull(value?.alasan_ditolak)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {handleViewNull(value?.pulang_approv_by?.nama_guru)}
+                            </Table.Cell>
+
+                            <Table.Cell>
+                              {laporan ? (
+                                <Input
+                                  type="time"
+                                  fluid
+                                  selection
+                                  search
+                                  value={value.jam_kembali_ke_sekolah}
+                                  onChange={(e) => {
+                                    setUpdated(true);
+                                    setFieldValue(`[${index}]updated`, true);
+
+                                    return setFieldValue(
+                                      `[${index}]jam_kembali_ke_sekolah`,
+                                      e.target.value
+                                    );
+                                  }}
+                                />
+                              ) : (
+                                handleViewNull(value?.jam_kembali_ke_sekolah)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell collapsing>
+                              {laporan ? (
+                                <Input
+                                  type="date"
+                                  fluid
+                                  name={`[${index}]tanggal_kembali`}
+                                  selection
+                                  search
+                                  value={value.tanggal_kembali}
+                                  onChange={(e) => {
+                                    setUpdated(true);
+                                    let selisih = selisihHari(
+                                      value.izin_sampai,
+                                      value.tanggal_kembali
+                                    );
+                                    setFieldValue(`[${index}]updated`, true);
+                                    console.log(selisih);
+                                    if (selisih > 0) {
+                                      setFieldValue(
+                                        `[${index}]jumlah_hari_terlambat`,
+                                        selisih
+                                      );
+                                    }
+                                    return setFieldValue(
+                                      `[${index}]tanggal_kembali`,
+                                      e.target.value
+                                    );
+                                  }}
+                                />
+                              ) : (
+                                showFormattedDate(value?.tanggal_kembali)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {laporan ? (
+                                <Input
+                                  type="number"
+                                  placeholder="Terlambat"
+                                  fluid
+                                  disabled
+                                  selection
+                                  search
+                                  value={value.jumlah_hari_terlambat}
+                                />
+                              ) : (
+                                handleViewNull(value?.jumlah_hari_terlambat)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {laporan ? (
+                                <Input
+                                  type="text"
+                                  placeholder="Denda"
+                                  fluid
+                                  disabled
+                                  selection
+                                  search
+                                  value={value.denda}
+                                />
+                              ) : (
+                                handleViewNull(value?.denda)
+                              )}
+                            </Table.Cell>
+                            <Table.Cell>
+                              {handleViewNull(value?.laporan_oleh?.nama_guru)}
+                            </Table.Cell>
+                          </Table.Row>
+                        ))}
+                      </TableLoading>
+                    </Table.Body>
+                  </Table>
+                </section>
               </div>
             </section>
           </Form>

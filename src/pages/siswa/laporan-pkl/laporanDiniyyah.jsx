@@ -137,10 +137,9 @@ const LaporanDiniyyah = () => {
             dirty,
           }) => (
             <>
-              
-
               <Segment loading={detailIsLoading}>
                 <Form className="ui form" onSubmit={handleSubmit}>
+                  <h1 className="text-gray-500">Laporan Membaca Alquran</h1>
                   <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
                       <FormLabel>Dari Surat</FormLabel>
@@ -157,9 +156,7 @@ const LaporanDiniyyah = () => {
                           touched?.dari_surat
                         }
                         placeholder="Pilih Surat"
-                        additional={{
-                          page: 1,
-                        }}
+                        additional={{ page: 1 }}
                       />
                       <ErrorMessage
                         name="dari_surat"
@@ -168,24 +165,6 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
 
-                    <SemanticForm.Field>
-                      <label>Dari Ayat</label>
-                      <Field
-                        name="dari_ayat"
-                        as={Input}
-                        type="number"
-                        placeholder="Dari Ayat"
-                        value={values.dari_ayat}
-                      />
-                      <ErrorMessage
-                        name="dari_ayat"
-                        component="div"
-                        className="ui pointing red basic label"
-                      />
-                    </SemanticForm.Field>
-                  </SemanticForm.Group>
-
-                  <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
                       <FormLabel>Sampai Surat</FormLabel>
                       <ReactSelectAsync
@@ -201,9 +180,7 @@ const LaporanDiniyyah = () => {
                           touched?.sampai_surat
                         }
                         placeholder="Pilih Surat"
-                        additional={{
-                          page: 1,
-                        }}
+                        additional={{ page: 1 }}
                       />
                       <ErrorMessage
                         name="sampai_surat"
@@ -211,7 +188,26 @@ const LaporanDiniyyah = () => {
                         className="ui pointing red basic label"
                       />
                     </SemanticForm.Field>
+                  </SemanticForm.Group>
 
+                  <SemanticForm.Group widths="equal">
+                    
+                    <SemanticForm.Field>
+                      <label>Dari Ayat</label>
+                      <Field
+                        name="dari_ayat"
+                        as={Input}
+                        type="number"
+                        placeholder="Dari Ayat"
+                        value={values.dari_ayat}
+                        onChange={handleChange}
+                      />
+                      <ErrorMessage
+                        name="dari_ayat"
+                        component="div"
+                        className="ui pointing red basic label"
+                      />
+                    </SemanticForm.Field>
                     <SemanticForm.Field>
                       <label>Sampai Ayat</label>
                       <Field
@@ -220,6 +216,7 @@ const LaporanDiniyyah = () => {
                         type="number"
                         placeholder="Sampai Ayat"
                         value={values.sampai_ayat}
+                        onChange={handleChange}
                       />
                       <ErrorMessage
                         name="sampai_ayat"
@@ -228,8 +225,9 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
                   </SemanticForm.Group>
-
                   <Divider section />
+
+                  <h1 className="text-gray-500">Laporan Sholat 5 Waktu</h1>
 
                   <SemanticForm.Group widths="equal">
                     <SemanticForm.Field>
@@ -327,6 +325,8 @@ const LaporanDiniyyah = () => {
 
                   <Divider section />
 
+                  <h1 className="text-gray-500">Laporan Dzikir Pagi Petang</h1>
+
                   <div className="w-full flex justify-between items-center px-0 md:px-6">
                     <SemanticForm.Field>
                       <Checkbox
@@ -347,12 +347,13 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
                   </div>
-
+                  <h5 className="text-yellow-600 italic">*Buatlah Laporan dengan Sebenar-benarnya </h5>
                   <Button
-                    className="mt-2"
+                    className="mt-2 w-[100%]"
                     style={{ marginBottom: "20px", marginTop: "15px" }}
                     type="submit"
                     color="green"
+                    block
                     loading={isLoading || updateIsLoading}
                     disabled={!dirty || isLoading || updateIsLoading}
                   >
@@ -364,6 +365,8 @@ const LaporanDiniyyah = () => {
           )}
         </Formik>
       </div>
+
+  
     </LayoutSiswa>
   );
 };

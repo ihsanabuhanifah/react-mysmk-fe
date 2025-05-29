@@ -22,6 +22,7 @@ import {
   MdLaptopChromebook,
   MdChatBubble,
   MdFaceUnlock,
+  MdApartment,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 
@@ -346,6 +347,22 @@ export default function SidebarGuru({ setSidebar }) {
         {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
+            to="fitur-siswa-pkl"
+            path="fitur-siswa-pkl"
+            title={"Fitur Siswa PKL"}
+            logo={
+              <MdApartment
+                className={`h-8 w-8 ${url === "fitur-siswa-pkl"
+                  ? "text-white-400"
+                  : "text-gray-600"
+                  }`}
+              />
+            }
+          />
+        )}
+        {checkRole(roles, "Guru") && (
+          <NavButton
+            handleSidebar={handleSiderbar}
             to="chat"
             path="chat"
             title={"Chat"}
@@ -436,7 +453,7 @@ function NavButton({ to, path, title, logo, handleSidebar }) {
   );
 }
 
-function LogoutButton({ to, title, logo, onClick }) {
+export function LogoutButton({ to, title, logo, onClick }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
 

@@ -1,187 +1,169 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
 
+import SidebarSiswa from "./Sidebar/sidebarSiswa";
 import { MdMenu } from "react-icons/md";
 import useShowNotif from "../hook/useShowNotif";
+import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
 import { syncToken } from "../api/axiosClient";
-import SidebarSiswa from "./Sidebar/sidebarSiswa";
-import { useQuery } from "react-query";
-import { getProfile } from "../api/siswa/profile";
-import { IoLogOutOutline, IoNotifications } from "react-icons/io5";
-import { LoadingPage, ModalLogout } from "../components";
-import { useZUStore } from "../zustand/zustore";
-import { Menu, Sidebar } from "semantic-ui-react";
-import { useListNotif } from "../api/siswa/exam";
-import { SocketContext, SocketProvider } from "../pages/siswa/SocketContext";
 
-export default function Siswa() {
-  let { pathname } = useLocation();
-  const navigate = useNavigate();
+import { useQuery } from "react-query";
+import { getProfile } from "../api/guru/profile";
+import { useZUStore } from "../zustand/zustore";
+import { LoadingPage } from "../components";
+import { SocketContext } from "../SocketProvider";
+
+export default function Guru() {
   React.useEffect(() => {
     document.title = "MySMK";
     // requestToken();
   });
-
   syncToken();
-
-  const { setShowNotif, showNotif, setProfile } = useZUStore((state) => state);
-
-  const { data: dataNotif, isFetched } = useListNotif();
-
   const { identitas: data } = useList();
-  let { isLoading } = useQuery(["/santri/profile"], () => getProfile(), {
-    onSuccess: (response) => {
-      setProfile(response);
-    },
-    refetchOnWindowFocus: false,
-    select: (response) => {
-      return response.data.siswa;
-    },
-  });
+  const { setProfile } = useZUStore((state) => state);
 
   const [sidebar, setSidebar] = React.useState(false);
+  const [notif, setNotif] = React.useState(false);
+  let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
 
-  const [open, setOpen] = React.useState(false);
-
-  React.useEffect(() => {
-    if (pathname === "/siswa") {
-      navigate("/siswa/dashboard");
-    }
-  }, [pathname, navigate]);
-
-  const socket = useContext(SocketContext);
-
-  useEffect(() => {
-    if (!socket) return; // Hanya lanjutkan jika socket sudah ada
   
-    socket.on("message", (msg) => {
-      console.log(msg); // Ubah sesuai kebutuhan
-    });
+
+
+  const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
+      useContext(SocketContext);
   
-    return () => {
-      socket.off("message");
+    const handleJoinRoom = async () => {
+      try {
+        const result = await joinRoom("SMKMQ-ROOM", {
+          email: data.email,
+          name: data.name,
+          id: data.id,
+          role : "Siswa"
+        });
+        console.log(result);
+      } catch (error) {
+        console.error("Failed to join room:", error);
+      }
     };
-  }, [socket]);
+  
+    useEffect(() => {
+      if (!socket && !data) return; // Hanya lanjutkan jika socket sudah ada
+  
+      handleJoinRoom();
+     
+    }, [socket, data]);
 
-  if (isLoading) {
-    return <LoadingPage />;
-  }
+
+ 
+  
 
   return (
-    <SocketProvider>
-      <ModalLogout open={open} setOpen={setOpen} />
+  
+      <div className="h-screen overflow-hidden text-gray-700 antialiased">
+        <header className="w-fullx grid h-[8%] grid-cols-10 items-center gap-x-5 border lg:h-1/12 xl:hidden xl:h-1/12">
+          <div className="relative col-span-4 flex h-full w-full items-center pl-5 lg:pl-2 xl:col-span-2 xl:pl-5 2xl:pl-10">
+            <img
+              className="absolute"
+              style={{ maxWidth: "60%", maxHeight: "60%" }}
+              src={LogoMySMK}
+              alt={LogoMySMK}
+            />
+          </div>
 
-      <header className="fixed left-0 top-0 z-[99] grid h-[70px] w-full grid-cols-10 items-center gap-x-5 border-b bg-white xl:hidden">
-        <div className="relative col-span-4 flex h-full w-full items-center pl-5">
-          <img
-            className="absolute"
-            style={{ maxWidth: "60%", maxHeight: "60%" }}
-            src={LogoMySMK}
-            alt={LogoMySMK}
-          />
-        </div>
-
-        <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-4 pr-5 xl:col-span-2">
-          <button
-            onClick={() => {
-              setShowNotif();
-            }}
-            className="relative block xl:hidden"
-          >
-            <IoNotifications size={26} className="" />
-            {isFetched && (
-              <span className="absolute right-1 top-1 inline-flex -translate-y-1/2 translate-x-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs font-bold leading-none text-white">
-                {dataNotif?.list?.count}
-              </span>
-            )}
-          </button>
-
-          <div className="flex items-center justify-center xl:hidden">
+          <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-5 xl:col-span-2">
             <button
               onClick={() => {
-                setSidebar(!sidebar);
+                return setNotif(!notif);
               }}
+              className={`relative`}
             >
-              <MdMenu size={35} />
+              <IoIosNotifications
+                className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
+              />
+              {jumlah > 0 && (
+                <div
+                  style={{ fontSize: "8px" }}
+                  className="absolute right-0 top-0 z-10 h-4 w-4 rounded-full bg-red-400 pt-1 text-white"
+                >
+                  {jumlah}
+                </div>
+              )}
             </button>
+            <div className="hidden h-10 w-10 rounded-full bg-green-200 xl:block xl:h-12 xl:w-12"></div>
+            <div className="block h-10 w-10 xl:hidden xl:h-12 xl:w-12">
+              <button
+                className="mb-5"
+                onClick={() => {
+                  setSidebar(!sidebar);
+                }}
+              >
+                <MdMenu className="h-10 w-10" />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
-
-      <main className="xl:flex">
+        </header>
+        <main className="lg:h-11/12 xl:h-11/12 flex h-[92%] xl:h-full">
           <div
-            className={`h-screen relative z-[999] w-full bg-gray-50 pl-2 text-white xl:rounded-r-3xl xl:bg-gray-50 ${
+            className={`h-full w-full border-r-2 bg-[#46C7C7] px-2 text-white shadow-lg xl:bg-white xl:text-gray-700 ${
               !sidebar
                 ? "-z-50 -translate-x-full transform xl:-translate-x-0"
                 : "z-10 -translate-x-0 transform transition duration-500"
-            } fixed bottom-0 top-0  z-[996] flex h-full flex-col xl:fixed xl:w-[200px]`}
+            } fixed bottom-0 top-0 h-full xl:relative xl:w-[15%]`}
           >
-            <div className="mb-8 mt-4 hidden pl-3 xl:block">
-              <img className="w-[65%]" src={LogoMySMK} alt={LogoMySMK} />
-            </div>
-
-            <div className="flex h-full flex-col xl:flex-1 xl:overflow-y-auto">
-              <SidebarSiswa setSidebar={setSidebar} />
-            </div>
-
-            <div className="mb-4 ml-2 mt-5 hidden xl:block">
-              <LogoutButton
+            <SidebarSiswa setSidebar={setSidebar} />
+          </div>
+          <div
+            className={`content relative h-full w-full overflow-auto xl:overflow-hidden ${
+              showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
+            }`}
+          >
+            <div className="bg-blue-400">
+              <button
                 onClick={() => {
-                  return setOpen(true);
+                  return setShowNotf(!showNotif);
                 }}
-                title={"Logout"}
-                logo={
-                  <IoLogOutOutline
-                    className={`h-6 w-6 text-gray-900 group-hover:text-[#18a558]`}
-                  />
-                }
-              />
+                className={`absolute right-5 top-1 z-50 hidden rounded-full p-2 xl:block ${
+                  showNotif ? "bg-red-400" : ""
+                }`}
+              >
+                <IoIosNotifications
+                  className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
+                />
+                {jumlah > 0 && (
+                  <div
+                    style={{ fontSize: "8px" }}
+                    className="absolute right-2 top-1 z-10 h-4 w-4 rounded-full bg-red-400 pt-1 text-white"
+                  >
+                    {jumlah}
+                  </div>
+                )}
+              </button>
+            </div>
+            <div id="sidebar" className="h-full w-full">
+              <Outlet data={data} />
             </div>
           </div>
-
-          <div id="sidebar" className="xl:ml-[200px] w-full">
-              <Outlet data={data} />
+          <div
+            className={`h-full w-full bg-[#46C7C7] pl-0 text-white xl:bg-white xl:pl-2 xl:text-gray-700 ${
+              !notif
+                ? "-translate-y-full transform xl:-translate-y-0"
+                : "-translate-y-0 transform transition duration-500"
+            } fixed bottom-0 top-0 z-10 h-full ${
+              !showNotif ? "xl:w-[20%]" : "xl:hidden"
+            } xl:relative`}
+          >
+            <Notifikasi setNotif={setNotif} />
           </div>
         </main>
-
-      {showNotif && (
-        <div
-          onClick={() => {
-            setShowNotif();
-          }}
-          className="fixed bottom-0 left-0 right-0 top-0 z-[998] bg-transparent"
-        ></div>
-      )}
-      <div
-        className={`fixed right-0 top-0 h-full w-full transform bg-white text-gray-700 sm:w-[70%] md:w-[30%] xl:w-[20%] ${showNotif ? "translate-x-0" : "translate-x-full"} z-[999] transition-transform duration-500`}
-      >
-        <Notifikasi />
       </div>
-    </SocketProvider>
+   
   );
 }
 
-export function LogoutButton({ to, title, logo, onClick }) {
-  let { pathname } = useLocation();
-  let url = pathname.split("/")[2];
-
-  return (
-    <button
-      onClick={onClick}
-      className="group flex flex-grow-0 items-center font-extrabold"
-    >
-      <div>{logo}</div>
-      <p
-        className={`ml-2 text-left font-poppins text-xs font-extrabold text-gray-900 ${url === to ? "text-white-400" : "text-gray-600"} font-bold group-hover:text-[#18a558]`}
-      >
-        {title}
-      </p>
-    </button>
-  );
-}
+// className={`w-full h-full flex z-10 fixed top-0 bottom-0 xl:w-3/12  xl:relative text-white`}
