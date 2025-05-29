@@ -50,7 +50,8 @@ export default function Guru() {
     handleJoinRoom();
   }, [socket, data]);
 
-  useRoomHandling(socket, roomId, data);
+  useRoomHandling(socket, roomId, data,  handleJoinRoom);
+
 
   return (
     <div className="h-screen overflow-hidden text-gray-700 antialiased">

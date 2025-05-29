@@ -2,10 +2,11 @@ import { useContext, useEffect, useState, useMemo } from "react";
 import { SocketContext } from "../SocketProvider";
 import { useRoomHandling } from "../hook/useRoomHandling";
 import { formatHariInd, formatJam } from "../utils/waktu";
-import { FiSearch, FiUser } from "react-icons/fi";
+import { FiSearch, FiUser, FiAlertCircle, FiCheckCircle, FiLogIn, FiLogOut } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const RoomCatatan = ({ roomId, data }) => {
-  const [members, setMembers] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const { socket } = useContext(SocketContext);
 
@@ -13,11 +14,11 @@ const RoomCatatan = ({ roomId, data }) => {
     if (!socket) return;
     
     const handleRoomUpdate = (data) => {
-      setMembers(data.catatanUjian);
+      setActivities(data.catatanUjian);
     };
 
     socket.emit('get-catatan', roomId, (response) => {
-      if (response.success) setMembers(response.catatanUjian);
+      if (response.success) setActivities(response.catatanUjian);
     });
 
     socket.on("catatan.reply", handleRoomUpdate);
@@ -27,32 +28,64 @@ const RoomCatatan = ({ roomId, data }) => {
     };
   }, [socket]);
 
-  const filteredMembers = useMemo(() => {
-    return members.filter(member => 
-      member.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredActivities = useMemo(() => {
+    return activities.filter(activity => 
+      activity.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [members, searchQuery]);
+  }, [activities, searchQuery]);
 
-  // Function to style the text based on content
-  const formatActivityText = (text) => {
-    if (text.includes('masuk')) {
-      return <span className="text-green-600">{text}</span>;
-    } else if (text.includes('keluar')) {
-      return <span className="text-red-600">{text}</span>;
-    } else if (text.includes('mulai')) {
-      return <span className="text-blue-600">{text}</span>;
-    }else if (text.includes('Menyelesaikan')) {
-      return <span className="text-green-700">{text}</span>;
-    }      
-    return text;
+  const getActivityType = (text) => {
+    if (text.includes('masuk')) return 'enter';
+    if (text.includes('toleransi')) return 'exit';
+     if (text.includes('keluar')) return 'exit';
+    if (text.includes('mulai')) return 'start';
+    if (text.includes('Menyelesaikan')) return 'complete';
+     if (text.includes('progress')) return 'progress';
+    return 'other';
+  };
+
+  const activityConfig = {
+    enter: {
+      icon: <FiLogIn className="text-green-500" />,
+      bg: "bg-green-50",
+      text: "text-green-700"
+    },
+    exit: {
+      icon: <FiLogOut className="text-red-500" />,
+      bg: "bg-red-50",
+      text: "text-red-700"
+    },
+    start: {
+      icon: <FiAlertCircle className="text-blue-500" />,
+      bg: "bg-blue-50",
+      text: "text-blue-700"
+    },
+    complete: {
+      icon: <FiCheckCircle className="text-green-600" />,
+      bg: "bg-green-200",
+      text: "text-green-900"
+    },
+     progress: {
+      icon: <FiCheckCircle className="text-green-600" />,
+      bg: "bg-green-100",
+      text: "text-green-800"
+    },
+    other: {
+      icon: <FiUser className="text-gray-500" />,
+      bg: "bg-gray-50",
+      text: "text-gray-700"
+    }
   };
 
   return (
-    <section className="bg-white rounded-lg shadow-sm p-4 h-full border border-gray-200 flex flex-col">
+    <section className="bg-white rounded-xl shadow-sm p-4 h-full border border-gray-100 flex flex-col">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">Exam Activity Log</h3>
-        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-          {filteredMembers.length} activities
+        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
+          <FiAlertCircle className="mr-2 text-blue-500" />
+          Exam Activity Log
+        </h3>
+        <span className="bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full font-medium">
+          {filteredActivities.length} {filteredActivities.length === 1 ? 'activity' : 'activities'}
         </span>
       </div>
       
@@ -63,7 +96,7 @@ const RoomCatatan = ({ roomId, data }) => {
         </div>
         <input
           type="text"
-          className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300 text-sm"
           placeholder="Search activities..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -71,39 +104,47 @@ const RoomCatatan = ({ roomId, data }) => {
       </div>
       
       <div className="flex-1 overflow-y-auto">
-        {filteredMembers.length > 0 ? (
+        {filteredActivities.length > 0 ? (
           <div className="space-y-2">
-            {filteredMembers.map((member, index) => (
-              <div 
-                key={index} 
-                className="flex items-start p-2 hover:bg-gray-50 rounded-lg transition-colors"
-              >
-                <div className="flex-shrink-0">
-                  {member.includes('masuk') ? (
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  ) :   member.includes('keluar') ? (
-                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                  ) : member.includes('mulai') ? (
-                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  ) : member.includes('Menyelesaikan') ? (
-                    <div className="w-2 h-2 rounded-full bg-green-600"></div>
-                  ) : (
-                    <div className="w-2 h-2 rounded-full bg-gray-400"></div>
-                  )}
-                </div>
-                <p className="text-xs ml-2">
-                  {formatActivityText(member)}
-                </p>
-              </div>
-            ))}
+            <AnimatePresence>
+              {filteredActivities.map((activity, index) => {
+                const type = getActivityType(activity);
+                const config = activityConfig[type];
+                
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className={`flex items-start p-3 rounded-lg transition-colors ${config.bg} hover:bg-opacity-70`}
+                  >
+                    <div className="flex-shrink-0 mt-0.5 mr-3">
+                      {config.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-medium ${config.text} break-words`}>
+                        {activity}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date().toLocaleTimeString()}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         ) : (
-          <div className="h-full flex flex-col items-center justify-center text-center py-4 text-gray-500">
-            <FiUser className="w-12 h-12 mb-2 text-gray-300" />
+          <div className="h-full flex flex-col items-center justify-center text-center py-4 text-gray-400">
+            <FiUser className="w-14 h-14 mb-3 text-gray-200" />
             {searchQuery ? (
-              <p>No activities found for "{searchQuery}"</p>
+              <p className="text-gray-500">No activities found for "{searchQuery}"</p>
             ) : (
-              <p>No activities recorded</p>
+              <>
+                <p className="font-medium text-gray-500">No activities recorded</p>
+                <p className="text-xs mt-1">Exam activities will appear here</p>
+              </>
             )}
           </div>
         )}

@@ -16,13 +16,14 @@ import Timer from "./Timer";
 import { SocketContext } from "../../../SocketProvider";
 import useList from "../../../hook/useList";
 import { formatWaktu } from "../../../utils/waktu";
+import { usePreventCheating } from "../../../hook/usePreventCheating";
 const roomId = "SMKMQ-ROOM";
 export default function ExamPage({ examActive, setExamActive }) {
   const { socket } = useContext(SocketContext);
 
   const { identitas, dataMapel } = useList();
   let [soal, setSoal] = useState([]);
-  let [cutDown, setCutDown] = useState(5); // Set initial countdown to 10
+  let [cutDown, setCutDown] = useState(3); // Set initial countdown to 10
   let [open, setOpen] = useState(false);
   let [mouse, setMouse] = useState(false);
   let [modalAutoSubmit, setModalAutoSubmit] = useState(false);
@@ -48,14 +49,23 @@ export default function ExamPage({ examActive, setExamActive }) {
     let interval;
     if (mouse && cutDown > 0) {
       interval = setInterval(() => {
-        setCutDown((c) => c - 1);
+        setCutDown((c) => {
+          socket.emit("catatan", {
+            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) batas toleransi ${cutDown} detik ${formatWaktu(new Date().toISOString())}`,
+            roomId: roomId,
+          });
+
+          return c - 1;
+        });
       }, 1000);
     } else if (cutDown === 0 && data?.data?.tipe_ujian === "closed") {
       socket.emit("catatan", {
-        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) dikeluarkan dari ujian pada ${formatWaktu(new Date().toISOString())}`,
+        message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) dikeluarkan dan menyimpan progress dari ujian pada ${formatWaktu(new Date().toISOString())}`,
 
         roomId: roomId,
       });
+
+      progess.mutate(payload);
       window.location.reload(); // Reload page when countdown reaches 0
     } else {
       clearInterval(interval);
@@ -94,12 +104,11 @@ export default function ExamPage({ examActive, setExamActive }) {
       }
 
       setPayload((state) => {
-        return {          ...state,
-          data: dataSoal,
-        };
+        return { ...state, data: dataSoal };
       });
     }
   }, [data, isFetching]);
+  usePreventCheating()
 
   if (isFetching || data?.data?.soal === undefined) {
     return (
@@ -111,27 +120,27 @@ export default function ExamPage({ examActive, setExamActive }) {
     );
   }
 
-  console.log("render ulang", data?.data?.tipe_ujian);
+  
   return (
     <div
       onMouseLeave={() => {
         if (data?.data?.tipe_ujian === "closed") {
           console.log("mouse keluar");
-          socket.emit("catatan", {
-            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
-            roomId: roomId,
-          });
+          // socket.emit("catatan", {
+          //   message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+          //   roomId: roomId,
+          // });
           setMouse(true); // Start countdown on mouse leave
         }
       }}
       onMouseEnter={() => {
         if (data?.data?.tipe_ujian === "closed") {
-          socket.emit("catatan", {
-            message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
-            roomId: roomId,
-          });
+          // socket.emit("catatan", {
+          //   message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
+          //   roomId: roomId,
+          // });
         }
-         setMouse(false); // Start countdown on mouse leave
+        setMouse(false); // Start countdown on mouse leave
       }}
       className="pb-30 fixed bottom-0 left-0 right-0 top-0 z-[999] overflow-hidden border bg-white"
     >
@@ -282,6 +291,11 @@ export default function ExamPage({ examActive, setExamActive }) {
                 loading={progess.isLoading}
                 disabled={progess.isLoading}
                 onClick={() => {
+                  socket.emit("catatan", {
+                    message: `${identitas.name} (${dataMapel?.data?.filter((i) => i.mapel_id === data.mapel)[0]["nama_mapel"]}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
+
+                    roomId: roomId,
+                  });
                   progess.mutate(payload);
                 }}
                 icon={() => <Icon name="save" />}

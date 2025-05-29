@@ -30,42 +30,7 @@ export default function DashboardSiswa() {
     }
   }, [isFetching, data]);
 
-  useEffect(() => {
-    // 1. Connect to Socket.io
-  
-    socket.emit('join-classroom', classroomId, studentId, 'student');
 
-    // 2. Request screen sharing
-    navigator.mediaDevices.getDisplayMedia({ video: true })
-      .then(stream => {
-        streamRef.current = stream;
-
-        // 3. Setup WebRTC peer
-        peerRef.current = new Peer({
-          initiator: true,
-          trickle: false,
-          stream: stream
-        });
-
-        // 4. Handle WebRTC signaling
-        peerRef.current.on('signal', signal => {
-          socket.emit('signal-to-teacher', classroomId, studentId, signal);
-        });
-
-        socket.current.on('signal-from-teacher', (_, teacherSignal) => {
-          peerRef.current.signal(teacherSignal);
-        });
-      })
-      .catch(err => {
-        console.error('Error sharing screen:', err);
-      });
-
-    return () => {
-      if (peerRef.current) peerRef.current.destroy();
-      if (streamRef.current) streamRef.current.getTracks().forEach(track => track.stop());
-      if (socket.current) socket.current.disconnect();
-    };
-  }, [classroomId, studentId, socket]);
 
   return (
     <LayoutSiswa title="Dashboard">
@@ -147,14 +112,7 @@ export default function DashboardSiswa() {
                 e="font-black">08:00</p>
               </div> */}
 
-              <video 
-        autoPlay 
-        muted 
-        style={{ width: '300px', border: '2px solid red' }}
-        ref={videoEl => {
-          if (videoEl && streamRef.current) videoEl.srcObject = streamRef.current;
-        }}
-      />
+           
             </div>
           </div>
         )}

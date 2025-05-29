@@ -232,7 +232,7 @@ export default function SidebarGuru({ setSidebar }) {
           />
         )}
 
-{checkRole(roles, "Guru") && (
+{/* {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to={`materi`}
@@ -246,7 +246,7 @@ export default function SidebarGuru({ setSidebar }) {
               />
             }
           />
-        )}
+        )} */}
         <NavButton
           handleSidebar={handleSiderbar}
           to="sholat"
@@ -377,7 +377,7 @@ export default function SidebarGuru({ setSidebar }) {
             }
           />
         )}
-        {checkRole(roles, "Guru") && (
+        {/* {checkRole(roles, "Guru") && (
           <NavButton
             handleSidebar={handleSiderbar}
             to="face"
@@ -393,7 +393,7 @@ export default function SidebarGuru({ setSidebar }) {
               />
             }
           />
-        )}
+        )} */}
 
         {/* <NavButton to="pengaturan" title={"Pengaturan"} logo={<LogoJadwal />} />
       <NavButton to="pengguna" title={"Pengguna"} logo={<LogoJadwal />} /> */}

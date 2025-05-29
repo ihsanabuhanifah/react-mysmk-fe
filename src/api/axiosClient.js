@@ -7,8 +7,8 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
-//baseURL: "https://bemysmk.devopsgeming.online/",
-baseURL: "http://localhost:8085/",
+baseURL: "https://bemysmk.devopsgeming.online/",
+// baseURL: "http://localhost:8085/",
 
 
 
