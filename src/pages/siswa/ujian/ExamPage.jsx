@@ -17,10 +17,11 @@ import { SocketContext } from "../../../SocketProvider";
 import useList from "../../../hook/useList";
 import { formatWaktu } from "../../../utils/waktu";
 import { usePreventCheating } from "../../../hook/usePreventCheating";
+import { useExamProtection } from "../../../hook/useExamProtection";
 const roomId = "SMKMQ-ROOM";
 export default function ExamPage({ examActive, setExamActive }) {
   const { socket } = useContext(SocketContext);
-
+  const { enterFullscreen } = useExamProtection(); // Gunakan hook protection
   const { identitas, dataMapel } = useList();
   let [soal, setSoal] = useState([]);
   let [cutDown, setCutDown] = useState(3); // Set initial countdown to 10
@@ -37,6 +38,7 @@ export default function ExamPage({ examActive, setExamActive }) {
   let { data, mutate, isLoading: isFetching } = useTakeExam();
 
   useEffect(() => {
+    enterFullscreen();
     mutate(examActive, {
       onError: () => {
         setExamActive(null);
@@ -53,6 +55,8 @@ export default function ExamPage({ examActive, setExamActive }) {
           socket.emit("catatan", {
             message: `${identitas.name} (${localStorage.getItem("mapel")}) batas toleransi ${cutDown} detik ${formatWaktu(new Date().toISOString())}`,
             roomId: roomId,
+            id: data?.data?.id,
+            userId: identitas?.id,
           });
 
           return c - 1;
@@ -63,6 +67,8 @@ export default function ExamPage({ examActive, setExamActive }) {
         message: `${identitas.name} (${localStorage.getItem("mapel")}) dikeluarkan dan menyimpan progress dari ujian pada ${formatWaktu(new Date().toISOString())}`,
 
         roomId: roomId,
+        id: data?.data?.id,
+        userId: identitas?.id,
       });
 
       progess.mutate(payload);
@@ -75,6 +81,8 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   // submit otomatis
 
+  console.log("Data", data);
+
   useEffect(() => {
     if (!!data?.data?.soal === true) {
       let res = JSON.parse(data.data.soal);
@@ -84,6 +92,8 @@ export default function ExamPage({ examActive, setExamActive }) {
         message: `${identitas.name} (${localStorage.getItem("mapel")}) mulai ujian ${formatWaktu(new Date().toISOString())}`,
 
         roomId: roomId,
+        id: data?.data?.id,
+        userId: identitas?.id,
       });
 
       let dataSoal;
@@ -108,7 +118,12 @@ export default function ExamPage({ examActive, setExamActive }) {
       });
     }
   }, [data, isFetching]);
-  usePreventCheating()
+  const handleViolation = (type) => {
+    alert(`Pelanggaran terdeteksi: ${type}`);
+    // Kirim log ke server jika diperlukan
+  };
+
+  usePreventCheating(handleViolation);
 
   if (isFetching || data?.data?.soal === undefined) {
     return (
@@ -120,25 +135,17 @@ export default function ExamPage({ examActive, setExamActive }) {
     );
   }
 
-  
   return (
     <div
       onMouseLeave={() => {
         if (data?.data?.tipe_ujian === "closed") {
           console.log("mouse keluar");
-          // socket.emit("catatan", {
-          //   message: `${identitas.name} (${localStorage.getItem("mapel")}) keluar dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
-          //   roomId: roomId,
-          // });
+
           setMouse(true); // Start countdown on mouse leave
         }
       }}
       onMouseEnter={() => {
         if (data?.data?.tipe_ujian === "closed") {
-          // socket.emit("catatan", {
-          //   message: `${identitas.name} (${localStorage.getItem("mapel")}) masuk dari area ujian di detik ke ${cutDown} dari toleransi pada ${formatWaktu(new Date().toISOString())}`,
-          //   roomId: roomId,
-          // });
         }
         setMouse(false); // Start countdown on mouse leave
       }}
@@ -155,6 +162,8 @@ export default function ExamPage({ examActive, setExamActive }) {
                 message: `${identitas.name} (${localStorage.getItem("mapel")}) Menyelesaikan Ujian pada ${formatWaktu(new Date().toISOString())}`,
 
                 roomId: roomId,
+                id: data?.data?.id,
+                userId: identitas?.id,
               });
               window.location.reload();
             },
@@ -295,6 +304,8 @@ export default function ExamPage({ examActive, setExamActive }) {
                     message: `${identitas.name} (${localStorage.getItem("mapel")}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
 
                     roomId: roomId,
+                    id: data?.data?.id,
+                    userId: identitas?.id,
                   });
                   progess.mutate(payload);
                 }}

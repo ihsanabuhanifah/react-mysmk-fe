@@ -21,12 +21,14 @@ import { TableWrapper } from "../../../components/TableWrap";
 import ModalPenilaian from "./ModalPenilaian";
 import { FormikProvider, useFormik } from "formik";
 import useList from "../../../hook/useList";
+import Monitoing from "./Monitoring";
+import { roomId } from "../../../layout/guru";
 
 function PenilaianModal({ view }) {
   let { id, mapel } = useParams();
   if (view) {
     id = view.id;
-    mapel= view.mapel;
+    mapel = view.mapel;
   }
 
   let [namaSiswa, setNamaSiswa] = useState({});
@@ -151,168 +153,184 @@ function PenilaianModal({ view }) {
         />
       </section>
       <section
+        className="grid grid-cols-12 gap-5 overflow-hidden"
         style={{
           zoom: "80%",
         }}
       >
-        <FormikProvider value={formik}>
-          <Form onSubmit={handleSubmit}>
-            <TableWrapper>
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell></Table.HeaderCell>
+        <div className="col-span-10">
+          {" "}
+          <FormikProvider value={formik}>
+            <Form onSubmit={handleSubmit}>
+              <TableWrapper>
+                <Table>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell></Table.HeaderCell>
 
-                    <Table.HeaderCell>No</Table.HeaderCell>
-                    <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
-                    <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
+                      <Table.HeaderCell>No</Table.HeaderCell>
+                      <Table.HeaderCell>Nama Siswa</Table.HeaderCell>
+                      <Table.HeaderCell>Mata Pelajaran</Table.HeaderCell>
 
-                    <Table.HeaderCell>Jam Mulai</Table.HeaderCell>
-                    <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
-                    <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
+                      <Table.HeaderCell>Jam Mulai</Table.HeaderCell>
+                      <Table.HeaderCell>Jam Selesai</Table.HeaderCell>
+                      <Table.HeaderCell>Status</Table.HeaderCell>
+                      <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
 
-                    <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-                    <Table.HeaderCell>Keterangan</Table.HeaderCell>
-                    <Table.HeaderCell>Lulus</Table.HeaderCell>
-                    <Table.HeaderCell>Penilaian</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  <TableLoading
-                    count={12}
-                    isLoading={isFetching}
-                    data={data?.data}
-                    messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
-                  >
-                    {values?.data?.map((item, index) => (
-                      <Table.Row key={index}>
-                        <Table.Cell>
-                          <Checkbox
-                            disabled={
-                              item.status === "open" ||
-                              (item.status === "progress" &&
-                                item.refresh_count > 0)
-                            }
-                            checked={isChecked(item.id)}
-                            onChange={(e) => {
-                              handleCheck(e, item.id);
-                            }}
-                          />
-                        </Table.Cell>
-                        <Table.Cell>{index + 1}</Table.Cell>
-                        <Table.Cell>{item.siswa.nama_siswa}</Table.Cell>
-                        <Table.Cell>{mapel}</Table.Cell>
-
-                        <Table.Cell>{formatWaktu(item.jam_mulai)}</Table.Cell>
-                        <Table.Cell>{formatWaktu(item.jam_submit)}</Table.Cell>
-                        <Table.Cell>
-                          <LabelStatus status={item.status} />
-                        </Table.Cell>
-
-                        <Table.Cell>
-                          {!!item.exam === true
-                            ? JSON.parse(item.exam).toString()
-                            : "-"}
-                        </Table.Cell>
-
-                        <Table.Cell>
-                          {
-                            <Input
-                              className="min-w-[100px]"
-                              placeholder="0"
-                              onChange={(e) => {
-                                let value = Math.max(
-                                  0,
-                                  Math.min(
-                                    100,
-                                    Number(e.target.value.replace(",", ".")),
-                                  ),
-                                );
-
-                                if (value === 0) {
-                                  value = 0;
-                                }
-                                setFieldValue(
-                                  `data[${index}]exam_result`,
-                                  value,
-                                );
-
-                                if (value > 74) {
-                                  setFieldValue(`data[${index}]is_lulus`, 1);
-                                } else {
-                                  setFieldValue(`data[${index}]is_lulus`, 0);
-                                }
-
-                                setFieldValue(
-                                  `data[${index}]last_result`,
-                                  data?.data[index].exam_result,
-                                );
-                                setFieldValue(`data[${index}]is_change`, true);
-                              }}
-                              value={
-                                item.exam_result < 1 ? "" : item.exam_result
+                      <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
+                      <Table.HeaderCell>Keterangan</Table.HeaderCell>
+                      <Table.HeaderCell>Lulus</Table.HeaderCell>
+                      <Table.HeaderCell>Penilaian</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    <TableLoading
+                      count={12}
+                      isLoading={isFetching}
+                      data={data?.data}
+                      messageEmpty={"Tidak Terdapat Ujian pada id yang dipilih"}
+                    >
+                      {values?.data?.map((item, index) => (
+                        <Table.Row key={index}>
+                          <Table.Cell>
+                            <Checkbox
+                              disabled={
+                                item.status === "open" ||
+                                (item.status === "progress" &&
+                                  item.refresh_count > 0)
                               }
-                              type="number"
+                              checked={isChecked(item.id)}
+                              onChange={(e) => {
+                                handleCheck(e, item.id);
+                              }}
                             />
-                          }
-                        </Table.Cell>
+                          </Table.Cell>
+                          <Table.Cell>{index + 1}</Table.Cell>
+                          <Table.Cell>{item.siswa.nama_siswa}</Table.Cell>
+                          <Table.Cell>{mapel}</Table.Cell>
 
-                        <Table.Cell>
-                          <span className="text-xs">
-                            {" "}
-                            <LabelKeterangan status={item.keterangan || "-"} />
-                          </span>
-                        </Table.Cell>
-                        <Table.Cell>
-                          <LabelKeterangan status={item.is_lulus || "-"} />
-                        </Table.Cell>
-                        <Table.Cell>
-                          <Button
-                            color="linkedin"
-                            type="button"
-                            onClick={() => {
-                              setOpen(true);
-                              setNamaSiswa({
-                                nama_siswa: item.siswa.nama_siswa,
-                                mapel: mapel,
-                              });
+                          <Table.Cell>{formatWaktu(item.jam_mulai)}</Table.Cell>
+                          <Table.Cell>
+                            {formatWaktu(item.jam_submit)}
+                          </Table.Cell>
+                          <Table.Cell>
+                            <LabelStatus status={item.status} />
+                          </Table.Cell>
 
-                              console.log("item", item);
-                              setItem(item);
-                              setJawaban(() => {
-                                if (!!item.jawaban === false) {
-                                  return [];
+                          <Table.Cell>
+                            {!!item.exam === true
+                              ? JSON.parse(item.exam).toString()
+                              : "-"}
+                          </Table.Cell>
+
+                          <Table.Cell>
+                            {
+                              <Input
+                                className="min-w-[100px]"
+                                placeholder="0"
+                                onChange={(e) => {
+                                  let value = Math.max(
+                                    0,
+                                    Math.min(
+                                      100,
+                                      Number(e.target.value.replace(",", ".")),
+                                    ),
+                                  );
+
+                                  if (value === 0) {
+                                    value = 0;
+                                  }
+                                  setFieldValue(
+                                    `data[${index}]exam_result`,
+                                    value,
+                                  );
+
+                                  if (value > 74) {
+                                    setFieldValue(`data[${index}]is_lulus`, 1);
+                                  } else {
+                                    setFieldValue(`data[${index}]is_lulus`, 0);
+                                  }
+
+                                  setFieldValue(
+                                    `data[${index}]last_result`,
+                                    data?.data[index].exam_result,
+                                  );
+                                  setFieldValue(
+                                    `data[${index}]is_change`,
+                                    true,
+                                  );
+                                }}
+                                value={
+                                  item.exam_result < 1 ? "" : item.exam_result
                                 }
-                                return JSON.parse(item.jawaban);
-                              });
-                            }}
-                          >
-                            {" "}
-                            <Icon name="eye" /> Lihat
-                          </Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </TableLoading>
-                </Table.Body>
-              </Table>
-              <section className="mt-5">
-                {values?.data?.[0]?.teacher_id === roles?.teacher_id && (
-                  <Button
-                    color="teal"
-                    fluid
-                    loading={mutateExam.isLoading}
-                    disabled={mutateExam.isLoading || isFetching}
-                    type="submit"
-                  >
-                    <Icon name="check" /> Perbaharui Nilai
-                  </Button>
-                )}
-              </section>
-            </TableWrapper>
-          </Form>
-        </FormikProvider>
+                                type="number"
+                              />
+                            }
+                          </Table.Cell>
+
+                          <Table.Cell>
+                            <span className="text-xs">
+                              {" "}
+                              <LabelKeterangan
+                                status={item.keterangan || "-"}
+                              />
+                            </span>
+                          </Table.Cell>
+                          <Table.Cell>
+                            <LabelKeterangan status={item.is_lulus || "-"} />
+                          </Table.Cell>
+                          <Table.Cell>
+                            <Button
+                              color="linkedin"
+                              type="button"
+                              onClick={() => {
+                                setOpen(true);
+                                setNamaSiswa({
+                                  nama_siswa: item.siswa.nama_siswa,
+                                  mapel: mapel,
+                                });
+
+                                console.log("item", item);
+                                setItem(item);
+                                setJawaban(() => {
+                                  if (!!item.jawaban === false) {
+                                    return [];
+                                  }
+                                  return JSON.parse(item.jawaban);
+                                });
+                              }}
+                            >
+                              {" "}
+                              <Icon name="eye" /> Lihat
+                            </Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
+                    </TableLoading>
+                  </Table.Body>
+                </Table>
+                <section className="mt-5">
+                  {values?.data?.[0]?.teacher_id === roles?.teacher_id && (
+                    <Button
+                      color="teal"
+                      fluid
+                      loading={mutateExam.isLoading}
+                      disabled={mutateExam.isLoading || isFetching}
+                      type="submit"
+                    >
+                      <Icon name="check" /> Perbaharui Nilai
+                    </Button>
+                  )}
+                </section>
+              </TableWrapper>
+            </Form>
+          </FormikProvider>
+        </div>
+
+        <div className="col-span-2 grid h-[1200px] overflow-auto pb-20">
+          {" "}
+          <Monitoing id={id} roomId={roomId} />
+        </div>
       </section>
     </>
   );

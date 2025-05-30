@@ -65,7 +65,7 @@ export const SocketProvider = ({ children }) => {
 
     let newSocket;
     try {
-      newSocket = io('https://bemysmk.devopsgeming.online/', socketOptions);
+      newSocket = io('http://localhost:8085', socketOptions);
       setSocket(newSocket);
 
       newSocket.on('connect', () => {

@@ -13,6 +13,7 @@ import { SocketContext } from "../SocketProvider";
 import RoomMembers from "./member";
 import { useRoomHandling } from "../hook/useRoomHandling";
 import RoomCatatan from "./monitoring";
+export const roomId = "SMKMQ-ROOM";
 
 export default function Guru() {
   React.useEffect(() => {
@@ -27,7 +28,7 @@ export default function Guru() {
   const [showPanel, setShowPanel] = useState("members"); // 'notifications', 'members', or 'monitoring'
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
-  const roomId = "SMKMQ-ROOM";
+  
 
   const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
     useContext(SocketContext);

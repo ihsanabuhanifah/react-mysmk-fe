@@ -23,19 +23,19 @@ export default function useForceFullscreen(targetRef) {
       const fullscreen = !!document.fullscreenElement;
       setIsFullscreen(fullscreen);
 
-      if (!fullscreen) {
-        // Re-minta fullscreen jika user keluar
-        requestFullscreen();
-      }
+      // if (!fullscreen) {
+      //   // Re-minta fullscreen jika user keluar
+      //   requestFullscreen();
+      // }
     };
 
-    document.addEventListener('fullscreenchange', handleChange);
-    requestFullscreen(); // Minta pertama kali saat mount
+    // document.addEventListener('fullscreenchange', handleChange);
+    // requestFullscreen(); // Minta pertama kali saat mount
 
-    return () => {
-      document.removeEventListener('fullscreenchange', handleChange);
-      exitFullscreen(); // Optional, keluar saat unmount
-    };
+    // return () => {
+    //   document.removeEventListener('fullscreenchange', handleChange);
+    //   exitFullscreen(); // Optional, keluar saat unmount
+    // };
   }, [targetRef]);
 
   return isFullscreen;

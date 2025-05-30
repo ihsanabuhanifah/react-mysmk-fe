@@ -1,19 +1,18 @@
 import { useContext, useEffect, useState, useMemo } from "react";
-import { SocketContext } from "../SocketProvider";
-import { useRoomHandling } from "../hook/useRoomHandling";
-import { formatHariInd, formatJam } from "../utils/waktu";
+import { SocketContext } from "../../../SocketProvider";
 import { FiSearch, FiUser, FiAlertCircle, FiCheckCircle, FiLogIn, FiLogOut, FiSend } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import useList from "../hook/useList";
+import useList from "../../../hook/useList";
 
-const RoomCatatan = ({ roomId, data }) => {
+const Monitoing = ({ roomId, id }) => {
   const [activities, setActivities] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const { socket } = useContext(SocketContext);
-  const {identitas} = useList()
+
+  const { identitas } = useList();
 
   useEffect(() => {
     if (!socket) return;
@@ -31,18 +30,29 @@ const RoomCatatan = ({ roomId, data }) => {
     return () => {
       socket.off("catatan.reply", handleRoomUpdate);
     };
-  }, [socket, roomId]);
+  }, [socket]);
 
   const filteredActivities = useMemo(() => {
     return activities.filter(activity => 
-      activity.message.toLowerCase().includes(searchQuery.toLowerCase())
+      activity.message.toLowerCase().includes(searchQuery.toLowerCase()) && id === activity.id
     );
   }, [activities, searchQuery]);
 
+  const getActivityType = (text) => {
+    if (text.message.includes('masuk')) return 'enter';
+    if (text.message.includes('toleransi')) return 'exit';
+    if (text.message.includes('keluar')) return 'exit';
+    if (text.message.includes('mulai')) return 'start';
+    if (text.message.includes('Menyelesaikan')) return 'complete';
+    if (text.message.includes('progress')) return 'progress';
+    return 'other';
+  };
+
   const extractNameFromMessage = (message) => {
+    // Example message: "John Doe masuk ke dalam ujian"
     const parts = message.split(' ');
     if (parts.length > 1) {
-      return parts[0] + ' ' + parts[1];
+      return parts[0] + ' ' + parts[1]; // Assuming name is first two words
     }
     return parts[0];
   };
@@ -64,7 +74,7 @@ const RoomCatatan = ({ roomId, data }) => {
       recipientId: selectedUser.id,
       message: message,
       timestamp: new Date().toISOString(),
-      senderId: identitas.name // Assuming data contains current user's id
+      senderId: identitas?.name // Your ID as the sender
     };
 
     socket.emit("kirim-pesan", { data: messageData }, (response) => {
@@ -72,20 +82,12 @@ const RoomCatatan = ({ roomId, data }) => {
       if (response.success) {
         setMessage("");
         setSelectedUser(null);
+        // Optionally show a success message
       } else {
+        // Handle error
         console.error("Failed to send message:", response.error);
       }
     });
-  };
-
-  const getActivityType = (text) => {
-    if (text.message.includes('masuk')) return 'enter';
-    if (text.message.includes('toleransi')) return 'exit';
-    if (text.message.includes('keluar')) return 'exit';
-    if (text.message.includes('mulai')) return 'start';
-    if (text.message.includes('Menyelesaikan')) return 'complete';
-    if (text.message.includes('progress')) return 'progress';
-    return 'other';
   };
 
   const activityConfig = {
@@ -209,12 +211,12 @@ const RoomCatatan = ({ roomId, data }) => {
                 
                 return (
                   <motion.div
+                   onClick={() => handleNameClick(activity)}
                     key={index}
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.2 }}
-                     onClick={() => handleNameClick(activity)}
-                    className={`flex items-start p-3 rounded-lg transition-colors ${config.bg} hover:bg-opacity-70`}
+                    className={`flex items-start p-3 cursor-pointer rounded-lg transition-colors ${config.bg} hover:bg-opacity-70`}
                   >
                     <div className="flex-shrink-0 mt-0.5 mr-3">
                       {config.icon}
@@ -222,6 +224,7 @@ const RoomCatatan = ({ roomId, data }) => {
                     <div className="flex-1 min-w-0">
                       <p className={`text-sm font-medium ${config.text} break-words`}>
                         {activity.message.split(' ').map((word, i, arr) => {
+                          // Check if this word is part of the name
                           if (i < 2 && name.includes(word)) {
                             return (
                               <span 
@@ -260,4 +263,4 @@ const RoomCatatan = ({ roomId, data }) => {
   );
 };
 
-export default RoomCatatan;
+export default Monitoing;

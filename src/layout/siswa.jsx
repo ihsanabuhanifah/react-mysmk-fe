@@ -21,6 +21,7 @@ import { useRoomHandling } from "../hook/useRoomHandling";
 import useForceFullscreen, {
   useFullscreenDetector,
 } from "../hook/useFullScreebDetector";
+import MessagePopup from "../pages/siswa/MessagePopUp";
 const roomId = "SMKMQ-ROOM";
 export default function Guru() {
   React.useEffect(() => {
@@ -67,6 +68,7 @@ export default function Guru() {
       ref={containerRef}
       className="h-screen overflow-hidden text-gray-700 antialiased"
     >
+      <MessagePopup socket={socket} userId={data?.id}/>
       <header className="w-fullx grid h-[8%] grid-cols-10 items-center gap-x-5 border lg:h-1/12 xl:hidden xl:h-1/12">
         <div className="relative col-span-4 flex h-full w-full items-center pl-5 lg:pl-2 xl:col-span-2 xl:pl-5 2xl:pl-10">
           <img
