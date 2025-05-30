@@ -124,7 +124,7 @@ const Monitoing = ({ roomId, id }) => {
   };
 
   return (
-    <section className="bg-white rounded-xl shadow-sm p-4 h-full border border-gray-100 flex flex-col">
+    <section  className="bg-white rounded-xl shadow-sm p-4 h-full border border-gray-100 flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-800 flex items-center">
           <FiAlertCircle className="mr-2 text-blue-500" />
@@ -200,7 +200,7 @@ const Monitoing = ({ roomId, id }) => {
         )}
       </AnimatePresence>
       
-      <div className="flex-1 overflow-y-auto">
+      <div id="scrollbar" className="flex-1 overflow-y-auto">
         {filteredActivities.length > 0 ? (
           <div className="space-y-2">
             <AnimatePresence>

@@ -100,7 +100,7 @@ export default function Guru() {
       </header>
       <main className="lg:h-11/12 xl:h-11/12 flex h-[92%] xl:h-full">
         <div
-          className={`h-full w-full border-r-2 bg-[#46C7C7] px-2 text-white shadow-lg xl:bg-white xl:text-gray-700 ${
+          className={`h-full w-full border-r-2 bg-[#46C7C7]  text-white shadow-lg xl:bg-white xl:text-gray-700 ${
             !sidebar
               ? "-z-50 -translate-x-full transform xl:-translate-x-0"
               : "z-10 -translate-x-0 transform transition duration-500"
@@ -113,7 +113,7 @@ export default function Guru() {
             showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
           }`}
         >
-          <div className="bg-blue-400">
+          <div className="bg-[#00BFBF]">
             <button
               onClick={() => {
                 return setShowNotf(!showNotif);
@@ -149,9 +149,9 @@ export default function Guru() {
           } xl:relative`}
         >
           {/* Toggle Buttons - Now with 3 tabs */}
-          <div className="flex border-b">
+          <div className="flex border-b mt-1">
             <button
-              className={`flex-1 py-2 ${showPanel === 'notifications' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
+              className={`flex-1 py-2 ${showPanel === 'notifications' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
               onClick={() => setShowPanel('notifications')}
             >
               <div className="flex items-center justify-center gap-2">
@@ -165,7 +165,7 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === 'members' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
+              className={`flex-1 py-2 ${showPanel === 'members' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
               onClick={() => setShowPanel('members')}
             >
               <div className="flex items-center justify-center gap-2">
@@ -174,7 +174,7 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === 'monitoring' ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
+              className={`flex-1 py-2 ${showPanel === 'monitoring' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
               onClick={() => setShowPanel('monitoring')}
             >
               <div className="flex items-center justify-center gap-2">

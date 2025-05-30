@@ -198,7 +198,7 @@ const RoomCatatan = ({ roomId, data }) => {
         )}
       </AnimatePresence>
       
-      <div className="flex-1 overflow-y-auto">
+      <div id="scrollbar" className="flex-1 overflow-y-auto">
         {filteredActivities.length > 0 ? (
           <div className="space-y-2">
             <AnimatePresence>
