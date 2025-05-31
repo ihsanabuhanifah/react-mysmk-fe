@@ -30,7 +30,7 @@ export default function Guru() {
   });
   syncToken();
   const { identitas: data } = useList();
-  const { setProfile } = useZUStore((state) => state);
+ 
   const containerRef = useRef(null);
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);
@@ -78,9 +78,9 @@ export default function Guru() {
             alt={LogoMySMK}
           />
         </div>
-        {isFullscreen
+        {/* {isFullscreen
           ? "Anda sedang dalam fullscreen"
-          : <ForceFullscreenModal/>}
+          : <ForceFullscreenModal/>} */}
 
         <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-5 xl:col-span-2">
           <button

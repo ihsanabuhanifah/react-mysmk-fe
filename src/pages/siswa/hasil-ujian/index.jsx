@@ -18,10 +18,22 @@ import { debounce } from "lodash";
 import FilterHasilUjian from "./filterhasilujian";
 
 export default function HasilUjian() {
-  const { data, isFetching, params, setParams, loadMapel, dataMapel, loadKelas, dataKelas } =
-    useListHasilUjian();
+  const {
+    data,
+    isFetching,
+    params,
+    setParams,
+    loadMapel,
+    dataMapel,
+    loadKelas,
+    dataKelas,
+     handlePageSize,
+    handlePage,
+  } = useListHasilUjian();
   const [sMapel, setSMapel] = useState("Semua Mapel");
   let [visible, setVisible] = React.useState(false);
+
+  console.log("Data", data)
 
   const debouncedSearch = useCallback(
     debounce((value) => {
@@ -115,9 +127,11 @@ export default function HasilUjian() {
                     <Table.Cell>{value.mapel.nama_mapel}</Table.Cell>
                     <Table.Cell>{value.exam_result}</Table.Cell>
                     <Table.Cell>
-                      { !!value.exam === false ? "-" : value.exam
-                        .replace(/[\[\]]/g, "")
-                        .replace(/,\s*/g, " - ")}
+                      {!!value.exam === false
+                        ? "-"
+                        : value.exam
+                            .replace(/[\[\]]/g, "")
+                            .replace(/,\s*/g, " - ")}
                     </Table.Cell>
                     <Table.Cell>{value.ujian.judul_ujian}</Table.Cell>
                     <Table.Cell>
@@ -134,24 +148,9 @@ export default function HasilUjian() {
           <PaginationTable
             page={params.page}
             pageSize={params.pageSize}
-            setPageSize={(e) => {
-              setParams((prev) => {
-                return {
-                  ...prev,
-                  pageSize: e,
-                };
-              });
-            }}
-            setPage={(e) => {
-              setParams((prev) => {
-                return {
-                  ...prev,
-                  page: e,
-                };
-              });
-            }}
-            totalPages={data?.totalPage}
-            count={data.count}
+            setPage={handlePage}
+            setPageSize={handlePageSize}
+            totalPages={data?.count}
           />
           <p className="text-red-400">*Nilai Akhir diberikan oleh guru</p>
         </div>

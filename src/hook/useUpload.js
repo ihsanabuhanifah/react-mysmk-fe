@@ -5,9 +5,11 @@ import useToast from "./useToast";
 import axios from "../api/axiosClient";
 import { useZUStore } from "../zustand/zustore";
 
-function useUploadFile() {
-  const { profile } = useZUStore((state) => state);
+function useUploadFile(profile) {
+ 
   const [isLoading, setIsLoading] = useState(false);
+
+  console.log("profile di upload", profile);
   const { warningToast } = useToast();
 
   const upload = () => {
@@ -28,7 +30,7 @@ function useUploadFile() {
 
           const url = res.data.url;
 
-          if (profile.user.image !== "NULL" || !profile.user.image) {
+          if (!!profile.user.image == true) {
             console.log("ada");
             const parts = profile.user.image.split("/");
             const fileName = parts[parts.length - 1];
@@ -36,8 +38,11 @@ function useUploadFile() {
           }
 
           await axios.post("/santri/profile/update/image", { url });
-          window.location.reload();
-        } catch {
+          
+          
+        } catch (error) {
+
+          console.error("Error uploading file:", error);
           warningToast("Gagal ubah foto!");
         } finally {
           setIsLoading(false);

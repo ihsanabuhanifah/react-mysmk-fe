@@ -244,7 +244,7 @@ export default function SidebarGuru({ setSidebar }) {
               <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
                 {section.category}
               </h3>
-              <div className="space-y-1">
+              <div className="space-y-1 whitespace-nowrap">
                 {section.items.map((item) => (
                   checkRole(roles, "Guru") && (
                     <NavButton

@@ -226,20 +226,7 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-        <NavButton
-          setIsSelect={setIsSelect}
-          handleSidebar={handleSiderbar}
-          to="chat"
-          path="chat"
-          title={"Chat"}
-          logo={
-            <IoChatbubblesOutline
-              className={`h-6 w-6 ${
-                url === "chat" ? "text-[#18a558]" : "text-gray-400"
-              }`}
-            />
-          }
-        />
+       
           {/* <NavButton
           handleSidebar={handleSiderbar}
           to="tugas-pkl"

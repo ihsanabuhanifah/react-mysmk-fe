@@ -3,15 +3,28 @@ import { syncToken } from "../axiosClient";
 import axios from "../axiosClient";
 import { useState } from "react";
 import { listKelas, listMapel } from "../list";
+import { usePagination } from "../../hook/usePagination";
 
 export function useListHasilUjian() {
-  let [params, setParams] = useState({
+  const {
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handlePayload,
+    handleSearch,
+  } = usePagination({
     nama_mapel: "",
     judul_ujian: "",
     kelas: "",
     page: 1,
     pageSize: 10,
   });
+
   syncToken();
 
   let { data, isFetching } = useQuery(
@@ -47,6 +60,8 @@ export function useListHasilUjian() {
 
   return {
     data,
+     handlePageSize,
+    handlePage,
     isFetching,
     params,
     setParams,

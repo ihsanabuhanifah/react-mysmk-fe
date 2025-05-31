@@ -3,7 +3,7 @@ import { imageParse } from "../../../api/guru/ujian";
 import { Icon, Progress } from "semantic-ui-react";
 import { FiXCircle } from "react-icons/fi";
 
-const ImageUploader = ({ setFieldValue, index, values }) => {
+const ImageUploader = ({ setFieldValue, index, values, setMemorize }) => {
   const [preview, setPreview] = useState(null);
   const [status, setStatus] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -12,31 +12,49 @@ const ImageUploader = ({ setFieldValue, index, values }) => {
   const uploadImage = async (file) => {
     setStatus("Memproses gambar...");
     setUploadProgress(30);
+    setMemorize(true)
 
     try {
       const res = await imageParse(file);
       const soal = res.data.text;
 
-      console.log("res", res.data)
-
-      // Update all fields at once
-      setFieldValue(`payload[${index}]`, {
-        ...values.payload[index],
-        point: 10,
-        tipe: "PG",
-        jawaban: soal?.jawaban,
-        soal: {
-          ...values.payload[index].soal,
-          tipe: "PG",
-          soal: `<div>${soal?.pertanyaan?.replace(/\n/g, '<br>')}</div>`,
-          a: soal?.pilihan?.A || "-",
-          b: soal?.pilihan?.B || "-",
-          c: soal?.pilihan?.C || "-",
-          d: soal?.pilihan?.D || "-",
-          e: soal?.pilihan?.E || "-",
-        },
-       
+    
+      setFieldValue(`payload[${index}].point`, 10);
+      setFieldValue(`payload[${index}].tipe`, "PG");
+      setFieldValue(`payload[${index}].jawaban`, soal?.jawaban);
+      setFieldValue(`payload[${index}].soal`, {
+        ...values.payload[index].soal,
+        soal : `<div>${soal?.pertanyaan?.replace(/\n/g, '<br>')}</div>`,
+        tipe : "PG",
+        a: soal?.pilihan.A || "-",
+        b: soal?.pilihan.B || "-",
+        c: soal?.pilihan.C || "-",
+        d: soal?.pilihan.D || "-",
+        e: soal?.pilihan.E || "-",
       });
+      //   setFieldValue(`payload[${index}].soal.soal`, soal?.pertanyaan);
+      //   setFieldValue(`payload[${index}].soal.a`, soal?.pilihan?.A || "-");
+      //   setFieldValue(`payload[${index}].soal.b`, soal?.pilihan?.B || "-");
+      //   setFieldValue(`payload[${index}].soal.c`, soal?.pilihan?.C || "-");
+      //   setFieldValue(`payload[${index}].soal.d`, soal?.pilihan?.D || "-");
+      //   setFieldValue(`payload[${index}].soal.e`, soal?.pilihan?.E || "-");
+
+      //   setFieldValue(`payload[${index}]`, {
+
+      //     tipe: "PG",
+      //     jawaban: soal?.jawaban,
+      //     soal: {
+      //       ...values.payload[index].soal,
+      //       tipe: "PG",
+      //       soal: `<div>${soal?.pertanyaan?.replace(/\n/g, '<br>')}</div>`,
+      //       a: soal?.pilihan?.A || "-",
+      //       b: soal?.pilihan?.B || "-",
+      //       c: soal?.pilihan?.C || "-",
+      //       d: soal?.pilihan?.D || "-",
+      //       e: soal?.pilihan?.E || "-",
+      //     },
+
+      //   });
 
       setUploadProgress(100);
       setStatus("Soal berhasil dibuat dari gambar!");
@@ -44,6 +62,8 @@ const ImageUploader = ({ setFieldValue, index, values }) => {
       console.error(error);
       setStatus("Gagal memproses gambar. Coba lagi.");
       setUploadProgress(0);
+    } finally {
+        setMemorize(false)
     }
   };
 
@@ -83,34 +103,37 @@ const ImageUploader = ({ setFieldValue, index, values }) => {
       ref={dropRef}
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className="cursor-pointer w-full relative rounded-xl border-2 border-dashed border-blue-200 bg-blue-50 p-6 text-center transition-all hover:border-blue-300 hover:bg-blue-100"
+      className="relative w-full cursor-pointer rounded-xl border-2 border-dashed border-blue-200 bg-blue-50 p-6 text-center transition-all hover:border-blue-300 hover:bg-blue-100"
       style={{ minHeight: "200px" }}
     >
       <div className="mb-4 flex justify-center">
-        <Icon 
-          name="image outline" 
-          size="big" 
-          color="blue" 
-          className="!block"
-        />
+        <Icon name="image outline" size="big" color="blue" className="!block" />
       </div>
 
-      <div className="absolute right-1 top-3 ">
-       <button onClick={()=> {
-        setPreview("")
-        setStatus("")
-        setUploadProgress(0)
-
-       }} className="flex items-center justify-between" > <FiXCircle/> </button>
+      <div className="absolute right-1 top-3">
+        <button
+          onClick={() => {
+            setPreview("");
+            setStatus("");
+            setUploadProgress(0);
+          }}
+          className="flex items-center justify-between"
+        >
+          {" "}
+          <FiXCircle />{" "}
+        </button>
       </div>
-      
+
       <h4 className="text-lg font-medium text-gray-700">
         Buat Soal dari Gambar
       </h4>
-      
+
       <p className="mt-2 text-gray-500">
         Seret & lepas gambar soal ke sini, atau <br />
-        <span className="font-semibold text-blue-500">tempel (Ctrl+V)</span> gambar yang sudah disalin
+        <span className="font-semibold text-blue-500">
+          tempel (Ctrl+V)
+        </span>{" "}
+        gambar yang sudah disalin
       </p>
 
       {uploadProgress > 0 && uploadProgress < 100 && (
@@ -135,13 +158,13 @@ const ImageUploader = ({ setFieldValue, index, values }) => {
       )}
 
       {status && (
-        <p className={`mt-3 text-sm ${
-          status.includes("Gagal") 
-            ? "text-red-500" 
-            : "text-green-500"
-        }`}>
-          <Icon 
-            name={status.includes("Gagal") ? "warning circle" : "check circle"} 
+        <p
+          className={`mt-3 text-sm ${
+            status.includes("Gagal") ? "text-red-500" : "text-green-500"
+          }`}
+        >
+          <Icon
+            name={status.includes("Gagal") ? "warning circle" : "check circle"}
           />
           {status}
         </p>

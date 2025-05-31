@@ -12,6 +12,7 @@ import jwt_decode from "jwt-decode";
 import axios from "../api/axiosClient";
 
 import Cookies from "js-cookie";
+import { getProfile, getProfileSiswa } from "../api/guru/profile";
 
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"));
@@ -150,6 +151,21 @@ export default function useList() {
     };
   }
 
+
+  let { data: profile, isFetching:profileFetching } = useQuery(
+    //query key
+    ["santri/profile"],
+    //axios function,triggered when page/pageSize change
+    () => getProfileSiswa(),
+    //configuration
+    {
+      keepPreviousData: true,
+      staleTime: 1000 * 60 * 60 * 12,
+      refetchOnWindowFocus: false,
+      select: (response) => response.data,
+    }
+  );
+
   return {
     dataKelas,
     dataGuru,
@@ -160,6 +176,8 @@ export default function useList() {
     dataAlquran,
     dataHalaqoh,
     listDataAlquran,
+    profile,
+    profileFetching
 
   };
 }

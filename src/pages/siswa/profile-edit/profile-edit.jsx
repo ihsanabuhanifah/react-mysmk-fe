@@ -13,6 +13,7 @@ import Editor from "../../../components/Editor";
 import useUploadFile from "../../../hook/useUpload";
 import ImageWithFallback from "../../../components/ImageWithFallback";
 import { useZUStore } from "../../../zustand/zustore";
+import useList from "../../../hook/useList";
 
 const profileSchema = Yup.object().shape({
   nama_siswa: Yup.string().nullable().required("Wajib Diisi"),
@@ -26,19 +27,21 @@ const profileSchema = Yup.object().shape({
 });
 
 export default function ProfileEdit() {
-  const { profile } = useZUStore((state) => state);
+  const { profile , profileFetching} = useList()
 
-  const { upload, isLoading: isLoadUpload } = useUploadFile();
+  console.log("pro", profile)
+
+  const { upload, isLoading: isLoadUpload } = useUploadFile(profile?.siswa);
 
   const initialState = {
-    nama_siswa: profile.nama_siswa,
-    nik: profile.nik,
-    tempat_lahir: profile.tempat_lahir,
-    alamat: profile.alamat,
-    sekolah_asal: profile.sekolah_asal,
-    jenis_kelamin: profile.jenis_kelamin,
-    anak_ke: profile.anak_ke,
-    tanggal_lahir: profile.tanggal_lahir,
+    nama_siswa: profile?.siswa?.nama_siswa,
+    nik: profile?.siswa?.nik,
+    tempat_lahir: profile?.siswa?.tempat_lahir,
+    alamat: profile?.siswa?.alamat,
+    sekolah_asal: profile?.siswa?.sekolah_asal,
+    jenis_kelamin: profile?.siswa?.jenis_kelamin,
+    anak_ke: profile?.siswa?.anak_ke,
+    tanggal_lahir: profile?.siswa?.tanggal_lahir,
   };
 
   const { mutate, isLoading } = useUpdateProfile();
@@ -51,7 +54,7 @@ export default function ProfileEdit() {
 
   return (
     <>
-      {isLoading || isLoadUpload ? (
+      {isLoading || isLoadUpload || profileFetching ? (
         <div className="ml-5 mt-[30px]">
           <Loader active inline="left" />
         </div>
@@ -62,7 +65,7 @@ export default function ProfileEdit() {
           </h1>
 
           <div className="flex w-full flex-col items-center px-5 lg:px-16 xl:px-5">
-            <div
+            {/* <div
               onClick={() => {
                 upload();
                 // baru berhasil upload belum keganti di db
@@ -74,7 +77,7 @@ export default function ProfileEdit() {
                 alt="You"
                 fallbackSrc="/blankprofile.jpg"
               />
-            </div>
+            </div> */}
 
             <Formik
               initialValues={initialState}

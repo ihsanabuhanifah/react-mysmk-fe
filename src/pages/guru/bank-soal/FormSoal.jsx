@@ -22,6 +22,7 @@ import {
 } from "../../../api/guru/bank_soal";
 import LayoutPage from "../../../module/layoutPage";
 import Editor from "../../../components/Editor";
+import MemoizedEditor from "../../../components/MemorizeEditor";
 import { SocketContext } from "../../../SocketProvider";
 import DropzoneFile from "../../../components/Dropzone";
 import ImageUploader from "./ImageUpload";
@@ -57,6 +58,7 @@ let AbsensiSchema = Yup.object().shape({
 
 export default function FormSoal() {
   const { socket } = useContext(SocketContext);
+  const [memorize, setMemorize] = useState(false);
   const { dataMapel } = useList();
   const [file, setFile] = useState("");
   const { id } = useParams();
@@ -120,7 +122,6 @@ export default function FormSoal() {
           payload: [
             {
               ...values.payload[0],
-              materi: "",
 
               soal: {
                 soal: "",
@@ -229,7 +230,6 @@ export default function FormSoal() {
       <div className="p-0">
         <FormikProvider values={formik}>
           {" "}
-         
           <Form onSubmit={handleSubmit}>
             {values?.payload?.map((value, index) => (
               <div className="space-y-5" key={index}>
@@ -279,13 +279,6 @@ export default function FormSoal() {
                   </div>
 
                   <div className="col-span-3">
-                    <ImageUploader
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      index={index}
-                    />
-                  </div>
-                  <div className="col-span-3">
                     <Form.Field
                       control={Input}
                       label={`Materi`}
@@ -293,8 +286,6 @@ export default function FormSoal() {
                       name={`payload[${index}]materi`}
                       onChange={(e, data) => {
                         setFieldValue(`payload[${index}]materi`, data.value);
-
-                        
                       }}
                       onBlur={handleBlur}
                       value={value?.materi === null ? "" : value?.materi}
@@ -305,6 +296,14 @@ export default function FormSoal() {
                         errors?.payload?.[index]?.materi !== undefined &&
                         errors?.payload?.[index]?.materi
                       }
+                    />
+                  </div>
+                  <div className="col-span-3">
+                    <ImageUploader
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      index={index}
+                      setMemorize={setMemorize}
                     />
                   </div>
                   <div>
@@ -385,16 +384,33 @@ export default function FormSoal() {
                 <section className="rounded-md border p-5 shadow-md">
                   <div className="mb-5">
                     <FormLabel>Uraian Soal</FormLabel>
-                    <Editor
-                      error={
-                        errors?.payload?.[index]?.soal?.soal !== undefined &&
-                        errors?.payload?.[index]?.soal?.soal
-                      }
-                      value={value?.soal.soal === null ? "" : value?.soal.soal}
-                      handleChange={(content) => {
-                        setFieldValue(`payload[${index}]soal.soal`, content);
-                      }}
-                    />
+                    {memorize ? (
+                      <MemoizedEditor
+                        error={
+                          errors?.payload?.[index]?.soal?.soal !== undefined &&
+                          errors?.payload?.[index]?.soal?.soal
+                        }
+                        value={
+                          value?.soal.soal === null ? "" : value?.soal.soal
+                        }
+                        handleChange={(content) => {
+                          setFieldValue(`payload[${index}]soal.soal`, content);
+                        }}
+                      />
+                    ) : (
+                      <Editor
+                        error={
+                          errors?.payload?.[index]?.soal?.soal !== undefined &&
+                          errors?.payload?.[index]?.soal?.soal
+                        }
+                        value={
+                          value?.soal.soal === null ? "" : value?.soal.soal
+                        }
+                        handleChange={(content) => {
+                          setFieldValue(`payload[${index}]soal.soal`, content);
+                        }}
+                      />
+                    )}
                   </div>
                   {/* <Form.Field
                       control={TextArea}
@@ -421,74 +437,147 @@ export default function FormSoal() {
                     <div className="space-y-5">
                       <section>
                         <FormLabel>Pilihan A</FormLabel>
-                        <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.a !== undefined &&
-                            errors?.payload?.[index]?.soal?.a
-                          }
-                          value={value?.soal.a === null ? "" : value?.soal.a}
-                          handleChange={(content) => {
-                            console.log("co", content);
-                            setFieldValue(`payload[${index}]soal.a`, content);
-                          }}
-                        />
+                        {memorize ? (
+                          <MemoizedEditor
+                            error={
+                              errors?.payload?.[index]?.soal?.soal !==
+                                undefined &&
+                              errors?.payload?.[index]?.soal?.soal
+                            }
+                            value={
+                              value?.soal.soal === null ? "" : value?.soal.soal
+                            }
+                            handleChange={(content) => {
+                              setFieldValue(
+                                `payload[${index}]soal.soal`,
+                                content,
+                              );
+                            }}
+                          />
+                        ) : (
+                          <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.a !== undefined &&
+                              errors?.payload?.[index]?.soal?.a
+                            }
+                            value={value?.soal.a === null ? "" : value?.soal.a}
+                            handleChange={(content) => {
+                              console.log("co", content);
+                              setFieldValue(`payload[${index}]soal.a`, content);
+                            }}
+                          />
+                        )}
                       </section>
                       <section>
                         <FormLabel>Pilihan B</FormLabel>
-                        <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.b !== undefined &&
-                            errors?.payload?.[index]?.soal?.b
-                          }
-                          value={value?.soal.b === null ? "" : value?.soal.b}
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.b`, content);
-                          }}
-                        />
+                        {memorize ? (
+                          <MemoizedEditor
+                            error={
+                              errors?.payload?.[index]?.soal?.b !== undefined &&
+                              errors?.payload?.[index]?.soal?.b
+                            }
+                            value={value?.soal.b === null ? "" : value?.soal.b}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.b`, content);
+                            }}
+                          />
+                        ) : (
+                          <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.b !== undefined &&
+                              errors?.payload?.[index]?.soal?.b
+                            }
+                            value={value?.soal.b === null ? "" : value?.soal.b}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.b`, content);
+                            }}
+                          />
+                        )}
                       </section>
 
                       <section>
                         <FormLabel>Pilihan C</FormLabel>
-                        <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.c !== undefined &&
-                            errors?.payload?.[index]?.soal?.c
-                          }
-                          value={value?.soal.c === null ? "" : value?.soal.c}
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.c`, content);
-                          }}
-                        />
+                        {memorize ? (
+                          <MemoizedEditor
+                            error={
+                              errors?.payload?.[index]?.soal?.c !== undefined &&
+                              errors?.payload?.[index]?.soal?.c
+                            }
+                            value={value?.soal.c === null ? "" : value?.soal.c}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.c`, content);
+                            }}
+                          />
+                        ) : (
+                          <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.c !== undefined &&
+                              errors?.payload?.[index]?.soal?.c
+                            }
+                            value={value?.soal.c === null ? "" : value?.soal.c}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.c`, content);
+                            }}
+                          />
+                        )}
                       </section>
 
                       <section>
                         <FormLabel>Pilihan D</FormLabel>
-                        <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.d !== undefined &&
-                            errors?.payload?.[index]?.soal?.d
-                          }
-                          va
-                          value={value?.soal.d === null ? "" : value?.soal.d}
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.d`, content);
-                          }}
-                        />
+                        {memorize ? (
+                          <MemoizedEditor
+                            error={
+                              errors?.payload?.[index]?.soal?.d !== undefined &&
+                              errors?.payload?.[index]?.soal?.d
+                            }
+                            va
+                            value={value?.soal.d === null ? "" : value?.soal.d}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.d`, content);
+                            }}
+                          />
+                        ) : (
+                          <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.d !== undefined &&
+                              errors?.payload?.[index]?.soal?.d
+                            }
+                            va
+                            value={value?.soal.d === null ? "" : value?.soal.d}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.d`, content);
+                            }}
+                          />
+                        )}
                       </section>
 
                       <section>
                         <FormLabel>Pilihan E</FormLabel>
-                        <Editor
-                          error={
-                            errors?.payload?.[index]?.soal?.e !== undefined &&
-                            errors?.payload?.[index]?.soal?.e
-                          }
-                          va
-                          value={value?.soal.e === null ? "" : value?.soal.e}
-                          handleChange={(content) => {
-                            setFieldValue(`payload[${index}]soal.e`, content);
-                          }}
-                        />
+                        {memorize ? (
+                          <MemoizedEditor
+                            error={
+                              errors?.payload?.[index]?.soal?.e !== undefined &&
+                              errors?.payload?.[index]?.soal?.e
+                            }
+                            va
+                            value={value?.soal.e === null ? "" : value?.soal.e}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.e`, content);
+                            }}
+                          />
+                        ) : (
+                          <Editor
+                            error={
+                              errors?.payload?.[index]?.soal?.e !== undefined &&
+                              errors?.payload?.[index]?.soal?.e
+                            }
+                            va
+                            value={value?.soal.e === null ? "" : value?.soal.e}
+                            handleChange={(content) => {
+                              setFieldValue(`payload[${index}]soal.e`, content);
+                            }}
+                          />
+                        )}
                       </section>
                     </div>
                   )}

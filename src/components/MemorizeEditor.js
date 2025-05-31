@@ -212,10 +212,10 @@ export const resizeFile = (file, rotate = 0) => (
 );
 
 
-export default Editor;
 
-// const MemoizedEditor = React.memo(({ value, onChange }) => (
-//   <Editor value={value} handleChange={onChange} />
-// ), (prev, next) => prev.value === next.value);
 
-// export default MemoizedEditor;
+const MemoizedEditor = React.memo(({ value, onChange }) => (
+  <Editor value={value} handleChange={onChange} />
+), (prev, next) => prev.value === next.value);
+
+export default MemoizedEditor;
