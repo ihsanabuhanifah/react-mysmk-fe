@@ -300,3 +300,14 @@ export const useCekUrutan = () => {
   );
   return mutate;
 };
+
+export function imageParse(file) {
+  syncToken();
+  const formData = new FormData();
+  formData.append("file", file);
+  return axios.post("/soal/image", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}

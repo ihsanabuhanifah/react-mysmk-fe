@@ -23,6 +23,8 @@ import {
 import LayoutPage from "../../../module/layoutPage";
 import Editor from "../../../components/Editor";
 import { SocketContext } from "../../../SocketProvider";
+import DropzoneFile from "../../../components/Dropzone";
+import ImageUploader from "./ImageUpload";
 
 let personalSchema = Yup.object().shape({
   materi: Yup.string().nullable().required("wajib disii"),
@@ -56,6 +58,7 @@ let AbsensiSchema = Yup.object().shape({
 export default function FormSoal() {
   const { socket } = useContext(SocketContext);
   const { dataMapel } = useList();
+  const [file, setFile] = useState("");
   const { id } = useParams();
   const queryClient = useQueryClient();
   let { data, isFetching, refetch } = useQuery(
@@ -70,7 +73,6 @@ export default function FormSoal() {
       staleTime: 1000 * 60 * 10,
       select: (response) => {
         let data = response.data.soal;
-
 
         data.soal = JSON.parse(data.soal);
         setInitialState({
@@ -181,8 +183,6 @@ export default function FormSoal() {
 
   let local = localStorage.getItem("create_soal");
 
-
-
   const formik = useFormik({
     initialValues: id ? initialState : local ? JSON.parse(local) : initialState,
     // initialValues : initialState,
@@ -211,7 +211,7 @@ export default function FormSoal() {
     if (!socket) return;
 
     socket.on("simpan.reply", (data) => {
-     console.log("Data", data)
+      console.log("Data", data);
     });
 
     return () => {
@@ -219,37 +219,17 @@ export default function FormSoal() {
     };
   }, [socket]); // ← Dependency `data` tidak perlu
 
+  console.log("values", values);
+
   return (
     <LayoutPage
       isLoading={isFetching}
-      title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
+      title={id === undefined ? "" : "Form Update Soal"}
     >
       <div className="p-0">
         <FormikProvider values={formik}>
           {" "}
-          <button
-            type="button"
-            onClick={() => {
-              socket.emit(
-                "simpan",
-                {
-                  data: {
-                    message: "ihsan",
-                    profile: "Ihsan Saantnaa",
-                  },
-                },
-                (response) => {
-                  if (response.success) {
-                    console.log("Server menerima data!");
-                  } else {
-                    console.error("Error:", response.error);
-                  }
-                },
-              );
-            }}
-          >
-            Simoan
-          </button>
+         
           <Form onSubmit={handleSubmit}>
             {values?.payload?.map((value, index) => (
               <div className="space-y-5" key={index}>
@@ -272,7 +252,6 @@ export default function FormSoal() {
                     </div>
                   )}
 
-                
                   <div className="col-span-3">
                     <Form.Field
                       control={Select}
@@ -298,6 +277,14 @@ export default function FormSoal() {
                       }
                     />
                   </div>
+
+                  <div className="col-span-3">
+                    <ImageUploader
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      index={index}
+                    />
+                  </div>
                   <div className="col-span-3">
                     <Form.Field
                       control={Input}
@@ -305,9 +292,9 @@ export default function FormSoal() {
                       placeholder="Materi"
                       name={`payload[${index}]materi`}
                       onChange={(e, data) => {
-
-
                         setFieldValue(`payload[${index}]materi`, data.value);
+
+                        
                       }}
                       onBlur={handleBlur}
                       value={value?.materi === null ? "" : value?.materi}
@@ -441,6 +428,7 @@ export default function FormSoal() {
                           }
                           value={value?.soal.a === null ? "" : value?.soal.a}
                           handleChange={(content) => {
+                            console.log("co", content);
                             setFieldValue(`payload[${index}]soal.a`, content);
                           }}
                         />
