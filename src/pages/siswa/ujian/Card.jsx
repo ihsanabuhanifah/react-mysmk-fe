@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import {
   LabelDurasi,
   LabelStatus,
@@ -99,7 +100,8 @@ function Waktu({ title, waktu }) {
   return (
     <div className="flex flex-col">
       <p className="mb-0 text-[12px] font-black opacity-80">{title}</p>
-      <p className="mb-0 text-[10px]">{formatWaktu(waktu)}</p>
+      <p className="mb-0 text-[10px]">{dayjs(waktu).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")}</p>
+            
     </div>
   );
 }

@@ -216,10 +216,12 @@ export default function ListExam() {
                     </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
-                      {dayjs(value.waktu_mulai).format("DD-MM-YY HH:mm:ss")}
+                     {dayjs(value.waktu_mulai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
+}
                     </Table.Cell>
                     <Table.Cell>
-                      {dayjs(value.waktu_selesai).format("DD-MM-YY HH:mm:ss")}
+                     {dayjs(value.waktu_selesai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
+}
                     </Table.Cell>
                     <Table.Cell>
                       <LabelTingkat

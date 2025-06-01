@@ -13,6 +13,7 @@ import { SocketContext } from "../SocketProvider";
 import RoomMembers from "./member";
 import { useRoomHandling } from "../hook/useRoomHandling";
 import RoomCatatan from "./monitoring";
+import MessagePopup from "../pages/guru/MessagePopup";
 export const roomId = "SMKMQ-ROOM";
 
 export default function Guru() {
@@ -28,7 +29,8 @@ export default function Guru() {
   const [showPanel, setShowPanel] = useState("members"); // 'notifications', 'members', or 'monitoring'
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
-  
+
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
     useContext(SocketContext);
@@ -51,8 +53,7 @@ export default function Guru() {
     handleJoinRoom();
   }, [socket, data]);
 
-  useRoomHandling(socket, roomId, data,  handleJoinRoom);
-
+  useRoomHandling(socket, roomId, data, handleJoinRoom);
 
   return (
     <div className="h-screen overflow-hidden text-gray-700 antialiased">
@@ -100,7 +101,7 @@ export default function Guru() {
       </header>
       <main className="lg:h-11/12 xl:h-11/12 flex h-[92%] xl:h-full">
         <div
-          className={`h-full w-full border-r-2 bg-[#46C7C7]  text-white shadow-lg xl:bg-white xl:text-gray-700 ${
+          className={`h-full w-full border-r-2 bg-[#46C7C7] text-white shadow-lg xl:bg-white xl:text-gray-700 ${
             !sidebar
               ? "-z-50 -translate-x-full transform xl:-translate-x-0"
               : "z-10 -translate-x-0 transform transition duration-500"
@@ -149,10 +150,10 @@ export default function Guru() {
           } xl:relative`}
         >
           {/* Toggle Buttons - Now with 3 tabs */}
-          <div className="flex border-b mt-1">
+          <div className="mt-1 flex border-b">
             <button
-              className={`flex-1 py-2 ${showPanel === 'notifications' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
-              onClick={() => setShowPanel('notifications')}
+              className={`flex-1 py-2 ${showPanel === "notifications" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              onClick={() => setShowPanel("notifications")}
             >
               <div className="flex items-center justify-center gap-2">
                 <IoIosNotifications />
@@ -165,8 +166,8 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === 'members' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
-              onClick={() => setShowPanel('members')}
+              className={`flex-1 py-2 ${showPanel === "members" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              onClick={() => setShowPanel("members")}
             >
               <div className="flex items-center justify-center gap-2">
                 <IoIosPeople />
@@ -174,8 +175,8 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === 'monitoring' ? 'bg-[#46C7C7] text-white' : 'bg-gray-100'}`}
-              onClick={() => setShowPanel('monitoring')}
+              className={`flex-1 py-2 ${showPanel === "monitoring" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              onClick={() => setShowPanel("monitoring")}
             >
               <div className="flex items-center justify-center gap-2">
                 <IoIosEye />
@@ -183,15 +184,31 @@ export default function Guru() {
               </div>
             </button>
           </div>
-          
+
           {/* Content Panel */}
           <div className="h-[calc(100%-45px)] overflow-y-auto">
-            {showPanel === 'notifications' && <Notifikasi setNotif={setNotif} />}
-            {showPanel === 'members' && <RoomMembers roomId={roomId} />}
-            {showPanel === 'monitoring' && <RoomCatatan roomId={roomId} />}
+            {showPanel === "notifications" && (
+              <Notifikasi setNotif={setNotif} />
+            )}
+            {showPanel === "members" && (
+              <RoomMembers
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser}
+                roomId={roomId}
+                data={data}
+              />
+            )}
+            {showPanel === "monitoring" && <RoomCatatan roomId={roomId} />}
           </div>
         </div>
       </main>
+      {console.log("se", selectedUser)}
+    {!!selectedUser === false &&   <MessagePopup
+        selectedUser={selectedUser}
+        socket={socket}
+        setSelectedUser={setSelectedUser}
+        userId={data?.id}
+      />}
     </div>
   );
 }

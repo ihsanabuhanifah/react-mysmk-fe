@@ -796,7 +796,7 @@ export default function FormExam() {
 
 const addSevenHours = (isoString) => {
   const date = new Date(isoString);
-  date.setHours(date.getHours() - 7);
+  date.setHours(date.getHours());
 
   // Format the date to 'YYYY-MM-DDTHH:MM'
   const formattedDate = date.toISOString().slice(0, 16);
