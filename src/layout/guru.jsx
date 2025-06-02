@@ -203,7 +203,7 @@ export default function Guru() {
         </div>
       </main>
       {console.log("se", selectedUser)}
-    {!!selectedUser === false &&   <MessagePopup
+    { <MessagePopup
         selectedUser={selectedUser}
         socket={socket}
         setSelectedUser={setSelectedUser}

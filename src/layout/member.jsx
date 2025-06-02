@@ -86,12 +86,9 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
 
   const handleSendMessage = (file) => {
     try {
+      if (!message.trim() || !selectedUser || !socket) return;
 
-
-      console.log("ok")
-      if ((!message.trim() && file) || !selectedUser || !socket) return;
-
-      console.log("file", file)
+      console.log("file", file);
 
       setIsSending(true);
 
@@ -103,13 +100,12 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
         message: message,
         timestamp: new Date().toISOString(),
         roomId: roomId,
-        file : file
+        file: file,
       };
 
-      
+      console.log("masuk sini");
+
       socket.emit("kirim-pesan", { data: messageData }, (response) => {
-
-
         setIsSending(false);
         if (response.success) {
           setMessage("");
@@ -166,12 +162,12 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {filteredMembers.length > 1 ? (
+        {filteredMembers.length > 0 ? (
           <div className="space-y-3">
             <AnimatePresence>
               {filteredMembers
                 .reverse()
-.filter((i)=> i.id !== data.id)
+                // .filter((i) => i.id !== data?.id)
                 .map((member) => (
                   <motion.div
                     key={member.id}

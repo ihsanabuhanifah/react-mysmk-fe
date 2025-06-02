@@ -123,8 +123,12 @@ export default function Chat({
 
   // Enhanced send message handler
   const enhancedSendMessage = async () => {
+
+    
     try {
-      if (!message.trim() || !attachment || isSending || isUploading) return;
+
+      console.log(message.trim(), !attachment , isSending ,isUploading)
+      if (!message.trim() || isSending || isUploading) return;
 
       let fileUrl = null;
       if (attachment) {
