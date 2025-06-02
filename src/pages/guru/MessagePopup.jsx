@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiX, FiMessageSquare, FiSend, FiArrowRight } from "react-icons/fi";
 
-const MessagePopup = ({ socket, userId, setSelectedUser,   }) => {
+const MessagePopup = ({ socket, userId, setSelectedUser }) => {
   const [incomingMessage, setIncomingMessage] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -15,8 +15,7 @@ const MessagePopup = ({ socket, userId, setSelectedUser,   }) => {
       if (data.recipientId === userId) {
         setIncomingMessage(data);
 
-         setIsVisible(true);
-       
+        setIsVisible(true);
 
         // Auto hide after 10 seconds
         const timer = setTimeout(() => {
@@ -61,11 +60,9 @@ const MessagePopup = ({ socket, userId, setSelectedUser,   }) => {
       if (response.success) {
         setReplyMessage("");
         setIsReplying(false);
-setIsVisible(false);
-       
+        setIsVisible(false);
 
         // Optionally open chat with the user
-
       }
     });
   };
@@ -160,13 +157,13 @@ setIsVisible(false);
                   Tutup
                 </button>
 
-                 <button
-                  onClick={()=> {
-                    handleClose()
-                     setSelectedUser({
-          id: incomingMessage.senderId,
-          name: incomingMessage.senderName,
-        });
+                <button
+                  onClick={() => {
+                    handleClose();
+                    setSelectedUser({
+                      id: incomingMessage.senderId,
+                      name: incomingMessage.senderName,
+                    });
                   }}
                   className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800"
                 >
@@ -188,6 +185,3 @@ setIsVisible(false);
 };
 
 export default MessagePopup;
-
-
-       
