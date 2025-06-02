@@ -68,13 +68,13 @@ export default function LV({ soals, jawaban, item, nomor, setPayload }) {
             ""
           )}
           <div className="mt-5">
-            <LiveCodingPlayground
+            {/* <LiveCodingPlayground
               jawaban={
                 !!jawabanSiswa?.jawaban === false
                   ? ""
                   : JSON.parse(jawabanSiswa.jawaban)
               }
-            />
+            /> */}
           </div>
         </div>
 

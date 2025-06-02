@@ -86,6 +86,7 @@ import CreateTugasPkl from "./pages/guru/tugas-laporan-pkl/createTugas";
 import UpdateTugasPkl from "./pages/guru/tugas-laporan-pkl/updateTugasPkl";
 import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 import { SocketProvider } from "./SocketProvider";
+import UjianBerjalan from "./pages/guru/exam/UjianBerjalan";
 
 function App() {
   return (
@@ -186,6 +187,7 @@ function App() {
             <Route path="bank-soal/tambah" element={<FormSoal />} />
             <Route path="bank-soal/update/:id" element={<FormSoal />} />
             <Route path="exam" element={<ListExam />} />
+              <Route path="ujian-berjalan" element={<UjianBerjalan />} />
             <Route path="hasil-belajar" element={<HasilBelajarGuru />} />
             <Route path="exam/tambah" element={<FormExam />} />
             <Route

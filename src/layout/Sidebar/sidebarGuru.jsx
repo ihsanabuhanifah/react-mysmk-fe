@@ -132,6 +132,13 @@ export default function SidebarGuru({ setSidebar }) {
           title: "Hasil Belajar",
           icon: <MdKeyboard className="h-5 w-5" />,
           roles: ["Guru"]
+        },
+         {
+          to: "ujian-berjalan",
+          path: "ujian-berjalan",
+          title: "Ujian Berjalan",
+          icon: <MdKeyboard className="h-5 w-5" />,
+          roles: ["Guru"]
         }
       ]
     },

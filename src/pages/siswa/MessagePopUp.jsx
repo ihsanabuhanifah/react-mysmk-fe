@@ -40,20 +40,20 @@ const MessagePopup = ({ socket, userId }) => {
     <AnimatePresence>
       {isVisible && incomingMessage && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-4 right-4 z-[99999]"
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 right-4 z-[99999]"
         >
-          <div className="bg-white rounded-lg shadow-lg w-80 border border-gray-200 overflow-hidden flex flex-col max-h-[80vh]">
-            <div className="bg-blue-600 text-white px-4 py-3 flex justify-between items-center flex-shrink-0">
+          <div className="bg-white rounded-lg shadow-lg w-80 border border-red-200 overflow-hidden flex flex-col max-h-[80vh]">
+            <div className="bg-red-600 text-white px-4 py-3 flex justify-between items-center flex-shrink-0">
               <div className="flex items-center">
                 <FiMessageSquare className="mr-2" />
                 <span className="font-medium">Pesan Masuk</span>
               </div>
               <button 
                 onClick={handleClose}
-                className="text-white hover:text-blue-200"
+                className="text-white hover:text-red-200 transition-colors"
               >
                 <FiX />
               </button>
@@ -63,17 +63,17 @@ const MessagePopup = ({ socket, userId }) => {
                 <span className="font-semibold">From: </span>
                 {incomingMessage.senderId}
               </p>
-              <div className="bg-blue-50 p-3 rounded-md break-words whitespace-pre-wrap overflow-auto max-h-[200px]">
+              <div className="bg-red-50 p-3 rounded-md break-words whitespace-pre-wrap overflow-auto max-h-[200px] border border-red-100">
                 <p className="text-gray-800">{incomingMessage.message}</p>
               </div>
               <p className="text-xs text-gray-500 mt-2">
                 {new Date(incomingMessage.timestamp).toLocaleTimeString()}
               </p>
             </div>
-            <div className="px-4 py-2 bg-gray-50 flex justify-end flex-shrink-0">
+            <div className="px-4 py-2 bg-gray-50 flex justify-end flex-shrink-0 border-t border-red-100">
               <button
                 onClick={handleClose}
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
               >
                 Close
               </button>

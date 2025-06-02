@@ -14,7 +14,6 @@ const MessagePopup = ({ socket, userId, setSelectedUser }) => {
     const handleIncomingMessage = (data) => {
       if (data.recipientId === userId) {
         setIncomingMessage(data);
-
         setIsVisible(true);
 
         // Auto hide after 10 seconds
@@ -61,8 +60,6 @@ const MessagePopup = ({ socket, userId, setSelectedUser }) => {
         setReplyMessage("");
         setIsReplying(false);
         setIsVisible(false);
-
-        // Optionally open chat with the user
       }
     });
   };
@@ -71,10 +68,10 @@ const MessagePopup = ({ socket, userId, setSelectedUser }) => {
     <AnimatePresence>
       {isVisible && incomingMessage && (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-4 right-4 z-[99999]"
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 right-4 z-[99999]"
         >
           <div className="flex max-h-[80vh] w-80 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             <div className="flex items-center justify-between bg-blue-600 px-4 py-3 text-white">

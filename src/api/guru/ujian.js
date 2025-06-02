@@ -9,6 +9,10 @@ import { usePagination } from "../../hook/usePagination";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
 }
+export function listUjianBerjalan(params) {
+  return axios.get("/guru/ujian/list/berjalan", { params });
+}
+
 
 export const useListUjian = () => {
   const {
@@ -311,3 +315,62 @@ export function imageParse(file) {
     },
   });
 }
+
+
+
+
+export const useListUjianBerjalan = () => {
+  const {
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handlePayload,
+    handleSearch,
+  } = usePagination({
+    teacher_id: "",
+    kelas_id: "",
+    mapel_id: "",
+    ta_id: "",
+    page: 1,
+    pageSize: 10,
+    jenis_ujian: "",
+  });
+
+  let { data, isLoading, isFetching, refetch } = useQuery(
+    //query key
+    ["/ujian/list/berjalan", [filterParams]],
+    //axios function,triggered when page/pageSize change
+    () => listUjianBerjalan(filterParams),
+    //configuration
+    {
+      // refetchInterval: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
+      select: (response) => {
+        return response.data;
+      },
+    },
+  );
+
+  return {
+    isLoading,
+    data,
+    isFetching,
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
+    handlePayload,
+    refetch
+  };
+};
