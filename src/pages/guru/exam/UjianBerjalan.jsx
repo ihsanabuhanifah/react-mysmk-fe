@@ -90,7 +90,7 @@ export default function UjianBerjalan() {
   }
 
   return (
-    <LayoutPage title="List Assesmen" isLoading={isFetching}>
+    <LayoutPage title="List Ujian Berjalan" isLoading={isFetching}>
       {analisiOpen && (
         <ModalPage open={analisiOpen} setOpen={setAnalisisOpen}>
           <AnalisisPage view={view} />

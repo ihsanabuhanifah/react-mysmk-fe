@@ -162,12 +162,12 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {filteredMembers.length > 0 ? (
+        {filteredMembers.length > 1 ? (
           <div className="space-y-3">
             <AnimatePresence>
               {filteredMembers
                 .reverse()
-                // .filter((i) => i.id !== data?.id)
+                .filter((i) => i.id !== data?.id)
                 .map((member) => (
                   <motion.div
                     key={member.id}
