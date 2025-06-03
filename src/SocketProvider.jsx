@@ -63,9 +63,8 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     let newSocket;
     try {
-   // newSocket = io("http://localhost:8085", socketOptions);
-  newSocket = io("https://bemysmk.devopsgeming.online", socketOptions);
-
+      // newSocket = io("http://localhost:8085", socketOptions);
+      newSocket = io(process.env.REACT_APP_API_URL, socketOptions);
       setSocket(newSocket);
 
       newSocket.on("connect", () => {

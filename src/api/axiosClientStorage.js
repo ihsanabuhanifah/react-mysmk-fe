@@ -7,7 +7,7 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClientStorage = axios.create({
-  baseURL: "https://storage.devopsgeming.online/",
+  baseURL: process.env.REACT_APP_API_STORAGE_URL || "https://storage.devopsgeming.online/",
  
 
 
