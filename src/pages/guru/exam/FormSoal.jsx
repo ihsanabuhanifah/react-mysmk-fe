@@ -173,7 +173,7 @@ export default function FormExam({id, copy}) {
 
     try {
       let response;
-      if (id === undefined) {
+      if (id === undefined || id === null) {
         response = await createExam({
           payload: [
             {
