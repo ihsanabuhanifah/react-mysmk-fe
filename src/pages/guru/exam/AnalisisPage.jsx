@@ -7,26 +7,26 @@ import ES from "./ES";
 import DonutChart from "../../../components/Chart/Donut";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { saveAs } from "file-saver";
-import { LoadingPage } from "../../../components";
+import { EditButton, LoadingPage } from "../../../components";
+import ModalUpdateUjian from "../bank-soal/ModalUpdate";
+import { FiEdit } from "react-icons/fi";
 
-export default function AnalisisPage({view}) {
-  
- 
+export default function AnalisisPage({ view }) {
   const { isLoading, data } = useAnalisisUjian(view.id);
   const ref = useRef();
 
+  let [open, setOpen] = useState(false);
+  let [id, setId] = useState(undefined);
 
-
-  console.log('data', data)
-
-  if(isLoading){
-    return <LoadingPage/>
+  if (isLoading) {
+    return <LoadingPage />;
   }
   return (
     <>
+      <ModalUpdateUjian open={open} setOpen={setOpen} id={id} />
       <section className="mb-5 flex items-center justify-end">
         <Button
           onClick={async () => {
@@ -40,9 +40,26 @@ export default function AnalisisPage({view}) {
         {data &&
           data?.soal?.map((item, index) => {
             return (
-              <section key={index} className="space-y-5">
+              <section key={index} className="mb-5 space-y-5 rounded-lg border">
+                <section className="flex items-center justify-start px-10 mt-5">
+                  <button
+                  className="flex items-center space-x-2"
+                    onClick={() => {
+                      setId(item.id);
+                      setOpen(true);
+                      // navigate(`/guru/bank-soal/update/${preview.id}`, {
+                      //   replace: true,
+                      // });
+                    }}
+                  >
+                    <FiEdit className="text-[#00BFBF]" />
+                    <span className="font-semibold text-[#00BFBF]">
+                      Perbaharui
+                    </span>
+                  </button>
+                </section>
                 {item.tipe === "PG" && (
-                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg border p-5 shadow-lg">
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg px-5 pb-5 shadow-lg">
                     <div className="col-span-2 rounded-xl p-4 shadow-sm">
                       <Pg
                         nomor={index + 1}
@@ -108,7 +125,7 @@ export default function AnalisisPage({view}) {
                   </section>
                 )}
                 {item.tipe === "TF" && (
-                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg border p-5 shadow-lg">
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg px-5 pb-5 shadow-lg">
                     <div className="col-span-2">
                       <TF
                         nomor={index + 1}
@@ -145,9 +162,8 @@ export default function AnalisisPage({view}) {
                   </section>
                 )}
 
-                {console.log("item", item?.soal)}
                 {item.tipe === "ES" && (
-                  <section className="mb-5 rounded-lg border p-5 shadow-lg">
+                  <section className="mb-5 rounded-lg px-5 pb-5 shadow-lg">
                     <ES
                       nomor={index + 1}
                       soals={JSON.parse(item?.soal)}
@@ -214,4 +230,3 @@ const handleDownloadPdf = async (printRef) => {
     console.error("Error generating PDF:", error);
   }
 };
-

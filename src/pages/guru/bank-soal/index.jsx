@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import { Table, Button, Form, Select, Icon, Input } from "semantic-ui-react";
 import { useQuery } from "react-query";
@@ -29,8 +29,10 @@ import ModalUpdateUjian from "./ModalUpdate";
 export default function ListBankSoal() {
   const { dataMapel, dataKelas, dataTa } = useList();
   const navigate = useNavigate();
-  let [id, setId]= useState(null)
-    const [open, setOpen] = useState(false)
+
+  const idParams = useParams();
+  let [id, setId] = useState(undefined);
+  const [open, setOpen] = useState(false);
 
   let {
     isLoading,
@@ -61,9 +63,15 @@ export default function ListBankSoal() {
     },
   });
 
+  useEffect(() => {
+    if (idParams) {
+      setId(idParams);
+    }
+  }, [idParams]);
+
   return (
     <LayoutPage title="Bank Soal">
-        {open && <ModalUpdateUjian id={id} setOpen={setOpen} open={open}/>}
+      {open && <ModalUpdateUjian id={id} setOpen={setOpen} open={open} />}
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
@@ -71,7 +79,7 @@ export default function ListBankSoal() {
         onConfirm={onConfirmDelete}
         title={"Apakah yakin akan menghapus soal terpilih ?"}
       />
-      <div className=" space-y-5">
+      <div className="space-y-5">
         <section className="grid grid-cols-5 gap-5">
           <div className="col-span-1 lg:col-span-1">
             <Button
@@ -79,21 +87,19 @@ export default function ListBankSoal() {
               color="teal"
               icon={() => <Icon name="add" />}
               onClick={() => {
-                setOpen(true)
-                setId(null)
+                setOpen(true);
+                setId(undefined);
               }}
               content="Tambah "
             />
           </div>
           <div className="col-span-4 flex items-center justify-end space-x-2">
-          
-              <Form.Field
-                control={Input}
-                placeholder="Cari ..."
-                onChange={handleSearch}
-                value={keyword}
-              />
-          
+            <Form.Field
+              control={Input}
+              placeholder="Cari ..."
+              onChange={handleSearch}
+              value={keyword}
+            />
 
             <Form.Field
               clear
@@ -166,8 +172,8 @@ export default function ListBankSoal() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                           setId(value?.id)
-                           setOpen(true)
+                            setId(value?.id);
+                            setOpen(true);
                           }}
                         />
                         <DeleteButton

@@ -146,7 +146,11 @@ export default function FormSoal({id}) {
       }
 
       queryClient.invalidateQueries("/bank-soal/list");
+      if(id){
+         queryClient.invalidateQueries(" /guru/ujian/analisa");
+      }
       localStorage.removeItem("create_soal");
+     
 
       toast.success(response?.data?.msg, {
         position: "top-right",
@@ -228,7 +232,7 @@ export default function FormSoal({id}) {
   return (
     <LayoutPage
       isLoading={isFetching}
-      title={id === null ? "Form Tambah Soal" : "Form Update Soal"}
+      title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
 
     

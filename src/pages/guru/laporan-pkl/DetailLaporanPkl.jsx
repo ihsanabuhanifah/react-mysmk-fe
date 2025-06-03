@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   Dimmer,
   Divider,
@@ -7,9 +7,7 @@ import {
   Loader,
   Placeholder,
   Segment,
-  List,
   Table,
-  Button,
 } from "semantic-ui-react";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
 import { useNavigate, useParams } from "react-router-dom";

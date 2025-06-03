@@ -21,6 +21,7 @@ import {
   MdChatBubble,
   MdFaceUnlock,
   MdApartment,
+  MdDocumentScanner,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
@@ -127,19 +128,20 @@ export default function SidebarGuru({ setSidebar }) {
           roles: ["Guru"]
         },
         {
-          to: "hasil-belajar",
-          path: "hasil-belajar",
-          title: "Hasil Belajar",
-          icon: <MdKeyboard className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-         {
           to: "ujian-berjalan",
           path: "ujian-berjalan",
           title: "Ujian Berjalan",
-          icon: <MdKeyboard className="h-5 w-5" />,
+          icon: <MdLaptopMac className="h-5 w-5" />,
           roles: ["Guru"]
-        }
+        },
+        {
+          to: "hasil-belajar",
+          path: "hasil-belajar",
+          title: "Hasil Belajar",
+          icon: <MdDocumentScanner className="h-5 w-5" />,
+          roles: ["Guru"]
+        },
+         
       ]
     },
     {
