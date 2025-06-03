@@ -27,6 +27,7 @@ import { SocketContext } from "../../../SocketProvider";
 import DropzoneFile from "../../../components/Dropzone";
 import ImageUploader from "./ImageUpload";
 
+
 let personalSchema = Yup.object().shape({
   materi: Yup.string().nullable().required("wajib disii"),
   mapel_id: Yup.string().nullable().required("wajib pilih"),
@@ -56,12 +57,14 @@ let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
 
-export default function FormSoal() {
+export default function FormSoal({id}) {
   const { socket } = useContext(SocketContext);
   const [memorize, setMemorize] = useState(false);
+  
   const { dataMapel } = useList();
   const [file, setFile] = useState("");
-  const { id } = useParams();
+  
+ 
   const queryClient = useQueryClient();
   let { data, isFetching, refetch } = useQuery(
     //query key
@@ -71,7 +74,7 @@ export default function FormSoal() {
     //configuration
     {
       // refetchInterval: 1000 * 60 * 60,
-      enabled: id !== undefined,
+      enabled: id !== null,
       staleTime: 1000 * 60 * 10,
       select: (response) => {
         let data = response.data.soal;
@@ -225,8 +228,10 @@ export default function FormSoal() {
   return (
     <LayoutPage
       isLoading={isFetching}
-      title={id === undefined ? "" : "Form Update Soal"}
+      title={id === null ? "Form Tambah Soal" : "Form Update Soal"}
     >
+
+    
       <div className="p-0">
         <FormikProvider values={formik}>
           {" "}

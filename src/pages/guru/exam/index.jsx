@@ -43,6 +43,7 @@ import { CopyButton } from "../../../components/buttonAksi/editButton";
 import Filter from "./filter";
 import AnalisisPage from "./AnalisisPage";
 import PenilaianModal from "./PenilaianModal";
+import ModalUpdateUjian from "./ModalUpdateUjian";
 
 export default function ListExam() {
   const navigate = useNavigate();
@@ -51,8 +52,11 @@ export default function ListExam() {
   let { roles } = useList();
   let [analisiOpen, setAnalisisOpen] = useState(false);
   let [penilaianOpen, setPenilaianOpen] = useState(false);
+  let [updateOpen, setUpdateOpen] = useState(false)
+  let [copyOpen, setCopyOpen] = useState(false)
   let [payload, setPayload] = useState({});
   let [view, setView] = useState({ id: null });
+  let [idUpdate, setIdUpdate] = useState(undefined)
 
   const {
     isLoading,
@@ -101,6 +105,13 @@ export default function ListExam() {
           <PenilaianModal view={view} />
         </ModalPage>
       )}
+
+      {updateOpen && (
+        <ModalUpdateUjian id={idUpdate} open={updateOpen} setOpen={setUpdateOpen}/>
+      )}
+       {copyOpen && (
+        <ModalUpdateUjian  copy id={idUpdate} open={copyOpen} setOpen={setCopyOpen}/>
+      )}
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -144,9 +155,12 @@ export default function ListExam() {
               color="teal"
               icon={() => <Icon name="add" />}
               onClick={() => {
-                navigate("tambah", {
-                  replace: true,
-                });
+
+                setUpdateOpen(true)
+                setIdUpdate(undefined)
+                // navigate("tambah", {
+                //   replace: true,
+                // });
               }}
               content="Tambah "
             />
@@ -235,9 +249,11 @@ export default function ListExam() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                            navigate(`update/${value.id}`, {
-                              replace: true,
-                            });
+                            setUpdateOpen(true)
+                            setIdUpdate(value.id)
+                            // navigate(`update/${value.id}`, {
+                            //   replace: true,
+                            // });
                           }}
                         />
                         <DeleteButton
@@ -251,9 +267,8 @@ export default function ListExam() {
                         />
                         <CopyButton
                           onClick={() => {
-                            navigate(`copy/${value.id}`, {
-                              replace: true,
-                            });
+                            setCopyOpen(true)
+                            setIdUpdate(value.id)
                           }}
                         />
                       </span>

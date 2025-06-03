@@ -54,19 +54,19 @@ let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
 
-export default function FormExam() {
+export default function FormExam({id, copy}) {
   let [open, setOpen] = useState(false);
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas, dataTa } = useList();
   let [urutan, setUrutan] = useState(0);
-  const { id } = useParams();
+ 
   let queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
 
   let { data: dataExam, isFetching: isLoadingSoal } = useQuery(
     //query key
-    ["/bank-soal/update", id],
+    ["/bank-soal/update", id, copy],
     //axios function,triggered when page/pageSize change
     () => detailUjian(id),
     //configuration
@@ -86,7 +86,7 @@ export default function FormExam() {
               jenis_ujian: data.jenis_ujian,
               judul_ujian: data.judul_ujian,
               mapel_id: data.mapel_id,
-              kelas_id: location?.pathname?.includes("copy")
+              kelas_id: copy === true
                 ? ""
                 : data.kelas_id,
               waktu_mulai: addSevenHours(data.waktu_mulai),
@@ -202,7 +202,7 @@ export default function FormExam() {
           ],
         });
       } else {
-        if (location?.pathname?.includes("copy")) {
+        if (copy === true) {
           response = await createExam({
             payload: [
               {
@@ -306,7 +306,7 @@ export default function FormExam() {
   return (
     <LayoutPage
       isLoading={isLoadingSoal}
-      title={id === undefined ? "Form Tambah Ujian" : "Form Update Ujian"}
+      title={id === undefined ? "Form Tambah Ujian" :  copy ? "Form Copy Ujian":"Form Update Ujian"}
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
       <div
@@ -654,7 +654,7 @@ export default function FormExam() {
 
             <div className="mt-5">
               {id ? (
-                location?.pathname?.includes("copy") ? (
+                copy === true ? (
                   <Button
                     content={isSubmitting ? "Menyimpan" : "Simpan"}
                     type="submit"

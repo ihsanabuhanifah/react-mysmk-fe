@@ -28,7 +28,12 @@ import usePage from "../../../hook/usePage";
 import { PaginationTable } from "../../../components";
 
 import { useQueryClient } from "react-query";
-import { deleteUjian, listUjian, useListUjian, useListUjianBerjalan } from "../../../api/guru/ujian";
+import {
+  deleteUjian,
+  listUjian,
+  useListUjian,
+  useListUjianBerjalan,
+} from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 import ModalPage from "../../../components/ModalPage";
@@ -43,6 +48,7 @@ import { CopyButton } from "../../../components/buttonAksi/editButton";
 import Filter from "./filter";
 import AnalisisPage from "./AnalisisPage";
 import PenilaianModal from "./PenilaianModal";
+import ModalUpdateUjian from "./ModalUpdateUjian";
 
 export default function UjianBerjalan() {
   const navigate = useNavigate();
@@ -53,6 +59,8 @@ export default function UjianBerjalan() {
   let [penilaianOpen, setPenilaianOpen] = useState(false);
   let [payload, setPayload] = useState({});
   let [view, setView] = useState({ id: null });
+  let [idUpdate, setIdUpdate] = useState(null);
+  let [updateOpen, setUpdateOpen] = useState(false);
 
   const {
     isLoading,
@@ -68,7 +76,7 @@ export default function UjianBerjalan() {
     filterParams,
     handleSearch,
     handlePayload,
-    refetch
+    refetch,
   } = useListUjianBerjalan();
 
   let queryClient = useQueryClient();
@@ -101,6 +109,14 @@ export default function UjianBerjalan() {
         <ModalPage open={penilaianOpen} setOpen={setPenilaianOpen}>
           <PenilaianModal view={view} />
         </ModalPage>
+      )}
+
+      {updateOpen && (
+        <ModalUpdateUjian
+          id={idUpdate}
+          open={updateOpen}
+          setOpen={setUpdateOpen}
+        />
       )}
       <Sidebar
         as={Menu}
@@ -161,7 +177,7 @@ export default function UjianBerjalan() {
               size="medium"
               color="teal"
               onClick={() => {
-                refetch()
+                refetch();
               }}
             />
           </div>
@@ -203,9 +219,9 @@ export default function UjianBerjalan() {
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>
-                      
-                      {value?.judul_ujian.slice(0, 20)}{value?.judul_ujian?.length > 20 ? "..." : ""}
-                      </Table.Cell>
+                      {value?.judul_ujian.slice(0, 20)}
+                      {value?.judul_ujian?.length > 20 ? "..." : ""}
+                    </Table.Cell>
                     <Table.Cell>
                       {<LabelStatus status={value?.jenis_ujian} />}
                     </Table.Cell>
@@ -217,12 +233,14 @@ export default function UjianBerjalan() {
                     </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
-                     {dayjs(value.waktu_mulai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-}
+                      {dayjs(value.waktu_mulai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
-                     {dayjs(value.waktu_selesai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-}
+                      {dayjs(value.waktu_selesai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
                       <LabelTingkat
@@ -236,16 +254,12 @@ export default function UjianBerjalan() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                            navigate(`update/${value.id}`, {
-                              replace: true,
-                            });
+                           setUpdateOpen(true)
+                            setIdUpdate(value.id)
                           }}
                         />
-                        <DeleteButton
-                          disabled={
-                           
-                            value.teacher_id !== roles?.teacher_id
-                          }
+                        {/* <DeleteButton
+                          disabled={value.teacher_id !== roles?.teacher_id}
                           onClick={() => {
                             confirmDelete(value?.id);
                           }}
@@ -256,7 +270,7 @@ export default function UjianBerjalan() {
                               replace: true,
                             });
                           }}
-                        />
+                        /> */}
                       </span>
                     </Table.Cell>
                     <Table.Cell>
@@ -290,7 +304,7 @@ export default function UjianBerjalan() {
                               };
                             });
 
-                            console.log('pem', penilaianOpen)
+                            console.log("pem", penilaianOpen);
                             setPenilaianOpen(true);
                           }}
                         />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import { Table, Button, Form, Select, Icon, Input } from "semantic-ui-react";
@@ -25,9 +25,12 @@ import {
 import { useQueryClient } from "react-query";
 import { LabelStatus } from "../../../components/Label";
 import { getOptions } from "../../../utils/format";
+import ModalUpdateUjian from "./ModalUpdate";
 export default function ListBankSoal() {
   const { dataMapel, dataKelas, dataTa } = useList();
   const navigate = useNavigate();
+  let [id, setId]= useState(null)
+    const [open, setOpen] = useState(false)
 
   let {
     isLoading,
@@ -60,6 +63,7 @@ export default function ListBankSoal() {
 
   return (
     <LayoutPage title="Bank Soal">
+        {open && <ModalUpdateUjian id={id} setOpen={setOpen} open={open}/>}
       <ModalAlert
         open={showAlertDelete}
         setOpen={setShowAlertDelete}
@@ -75,9 +79,8 @@ export default function ListBankSoal() {
               color="teal"
               icon={() => <Icon name="add" />}
               onClick={() => {
-                navigate("tambah", {
-                  replace: true,
-                });
+                setOpen(true)
+                setId(null)
               }}
               content="Tambah "
             />
@@ -163,9 +166,8 @@ export default function ListBankSoal() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                            navigate(`update/${value.id}`, {
-                              replace: true,
-                            });
+                           setId(value?.id)
+                           setOpen(true)
                           }}
                         />
                         <DeleteButton

@@ -161,6 +161,7 @@ export default function useList() {
     {
       keepPreviousData: true,
       staleTime: 1000 * 60 * 60 * 12,
+      enabled : roles?.role === "santri" || roles?.role === "siswa",
       refetchOnWindowFocus: false,
       select: (response) => response.data,
     }
