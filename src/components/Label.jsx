@@ -54,10 +54,10 @@ export const LabelStatus = ({ status }) => {
   if (status?.toUpperCase() === "PTS") {
     return <Label size="tiny" content="PTS" color="olive" as={"a"} />;
   }
-  if (status === "PAS") {
+  if (status?.toUpperCase() === "PAS" || status ==="SAS") {
     return <Label size="tiny" content="PAS" color="green" as={"a"} />;
   }
-  if (status === "US") {
+  if (status?.toUpperCase() === "US") {
     return <Label size="tiny" content="US" color="teal" as={"a"} />;
   }
 

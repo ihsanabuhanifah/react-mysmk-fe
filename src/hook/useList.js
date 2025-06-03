@@ -16,6 +16,8 @@ import { getProfile, getProfileSiswa } from "../api/guru/profile";
 
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"));
+
+  console.log("roles", roles);
   let { data: identitas } = useQuery(
     //query key
     ["authme"],
@@ -161,7 +163,7 @@ export default function useList() {
     {
       keepPreviousData: true,
       staleTime: 1000 * 60 * 60 * 12,
-      enabled : roles?.role === "santri" || roles?.role === "siswa",
+      enabled : roles?.role === "Santri" || roles?.role === "Siswa",
       refetchOnWindowFocus: false,
       select: (response) => response.data,
     }

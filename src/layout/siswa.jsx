@@ -22,6 +22,7 @@ import useForceFullscreen, {
   useFullscreenDetector,
 } from "../hook/useFullScreebDetector";
 import MessagePopup from "../pages/siswa/MessagePopUp";
+import { usePreventCheating } from "../hook/usePreventCheating";
 const roomId = "SMKMQ-ROOM";
 export default function Guru() {
   React.useEffect(() => {
@@ -62,6 +63,12 @@ export default function Guru() {
 
   useRoomHandling(socket, roomId, data, handleJoinRoom);
   const isFullscreen = useForceFullscreen(containerRef);
+  //  const handleViolation = (type) => {
+  //     alert(`Pelanggaran terdeteksi: ${type}`);
+  //     // Kirim log ke server jika diperlukan
+  //   };
+  
+  //   usePreventCheating(handleViolation);
 
   return (
     <div

@@ -12,10 +12,16 @@ import {
 } from "semantic-ui-react";
 import { useListHasilUjian } from "../../../api/siswa/hasil_ujian";
 import { PaginationTable, TableLoading } from "../../../components";
-import { LabelStatus, LabelTipeUjian } from "../../../components/Label";
+import {
+  LabelStatus,
+  LabelTingkat,
+  LabelTipeUjian,
+} from "../../../components/Label";
 import { getOptionsText } from "../../../utils/format";
 import { debounce } from "lodash";
 import FilterHasilUjian from "./filterhasilujian";
+import useList from "../../../hook/useList";
+import dayjs from "dayjs";
 
 export default function HasilUjian() {
   const {
@@ -27,13 +33,12 @@ export default function HasilUjian() {
     dataMapel,
     loadKelas,
     dataKelas,
-     handlePageSize,
+    handlePageSize,
     handlePage,
   } = useListHasilUjian();
   const [sMapel, setSMapel] = useState("Semua Mapel");
   let [visible, setVisible] = React.useState(false);
-
-  console.log("Data", data)
+  const { dataGuru } = useList();
 
   const debouncedSearch = useCallback(
     debounce((value) => {
@@ -52,7 +57,7 @@ export default function HasilUjian() {
   }, [debouncedSearch]);
 
   return (
-    <LayoutSiswa title="Hasil Ujain">
+    <LayoutSiswa title="Hasil Ujian">
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -108,10 +113,17 @@ export default function HasilUjian() {
             <Table.Header>
               <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Mapel</Table.HeaderCell>
+              <Table.HeaderCell>Nilai Ujian</Table.HeaderCell>
               <Table.HeaderCell>Nilai Akhir</Table.HeaderCell>
-              <Table.HeaderCell>Nilai</Table.HeaderCell>
-              <Table.HeaderCell>Judul Ujian</Table.HeaderCell>
+
+              <Table.HeaderCell>Ujian</Table.HeaderCell>
+              <Table.HeaderCell>Nama Guru</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
+              <Table.HeaderCell>Bertingkat</Table.HeaderCell>
+               <Table.HeaderCell>Status</Table.HeaderCell>
+                             <Table.HeaderCell>Durasi</Table.HeaderCell>
+                             <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
+                             <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
               <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
             </Table.Header>
             <Table.Body>
@@ -125,7 +137,6 @@ export default function HasilUjian() {
                   <Table.Row key={i}>
                     <Table.Cell>{i + 1}</Table.Cell>
                     <Table.Cell>{value.mapel.nama_mapel}</Table.Cell>
-                    <Table.Cell>{value.exam_result}</Table.Cell>
                     <Table.Cell>
                       {!!value.exam === false
                         ? "-"
@@ -133,10 +144,41 @@ export default function HasilUjian() {
                             .replace(/[\[\]]/g, "")
                             .replace(/,\s*/g, " - ")}
                     </Table.Cell>
-                    <Table.Cell>{value.ujian.judul_ujian}</Table.Cell>
+                    <Table.Cell>{value.exam_result}</Table.Cell>
+
+                    <Table.Cell>
+                      {<LabelStatus status={value.ujian.jenis_ujian} />}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {
+                        dataGuru?.data?.filter(
+                          (i) => i.id === value?.teacher_id,
+                        )[0]["nama_guru"]
+                      }
+                    </Table.Cell>
+
                     <Table.Cell>
                       {value.kelas.nama_kelas.split(" ")[0]}
                     </Table.Cell>
+                    <Table.Cell>
+                      <LabelTingkat
+                        status={
+                          value?.is_hirarki === 1 ? value?.urutan : "Tidak"
+                        }
+                      />
+                    </Table.Cell>
+                      <Table.Cell>
+                                          <LabelTingkat status={value?.status} />
+                                        </Table.Cell>
+                                        <Table.Cell>{value?.ujian?.durasi} Menit</Table.Cell>
+                                        <Table.Cell>
+                                         {dayjs(value.waktu_mulai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
+                    }
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                         {dayjs(value.waktu_selesai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
+                    }
+                                        </Table.Cell>
                     <Table.Cell>
                       {value.tahun_ajaran.nama_tahun_ajaran}
                     </Table.Cell>

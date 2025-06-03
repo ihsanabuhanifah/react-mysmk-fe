@@ -4,12 +4,18 @@ import {
   useSubmitExam,
   useTakeExam,
 } from "../../../api/siswa/exam";
-
 import Pg from "./Pg";
 import TF from "./TF";
 import ES from "./ES";
 import clsx from "clsx";
-import { Button, Icon, Dimmer, Loader, Modal } from "semantic-ui-react";
+import {
+  Button,
+  Icon,
+  Dimmer,
+  Loader,
+  Modal,
+  Progress,
+} from "semantic-ui-react";
 import ModalKonfirmasi from "../../../components/ModalKonfrimasi";
 import LV from "./LV";
 import Timer from "./Timer";
@@ -18,24 +24,25 @@ import useList from "../../../hook/useList";
 import { formatWaktu } from "../../../utils/waktu";
 import { usePreventCheating } from "../../../hook/usePreventCheating";
 import { useExamProtection } from "../../../hook/useExamProtection";
+
 const roomId = "SMKMQ-ROOM";
+
 export default function ExamPage({ examActive, setExamActive }) {
   const { socket } = useContext(SocketContext);
-  const { enterFullscreen } = useExamProtection(); // Gunakan hook protection
+  const { enterFullscreen } = useExamProtection();
   const { identitas, dataMapel } = useList();
-  let [soal, setSoal] = useState([]);
-  let [cutDown, setCutDown] = useState(3); // Set initial countdown to 10
-  let [open, setOpen] = useState(false);
-  let [mouse, setMouse] = useState(false);
-  let [modalAutoSubmit, setModalAutoSubmit] = useState(false);
+  const [soal, setSoal] = useState([]);
+  const [cutDown, setCutDown] = useState(120);
+  const [open, setOpen] = useState(false);
+  const [mouse, setMouse] = useState(false);
+  const [modalAutoSubmit, setModalAutoSubmit] = useState(false);
+  const [activeSoal, setActiveSoal] = useState(0);
+  const [payload, setPayload] = useState({ id: examActive });
+  const [answeredCount, setAnsweredCount] = useState(0);
+
   const progess = useProgressExam();
   const submit = useSubmitExam();
-  let [activeSoal, setActiveSoal] = useState(0);
-  let [payload, setPayload] = useState({
-    id: examActive,
-  });
-
-  let { data, mutate, isLoading: isFetching } = useTakeExam();
+  const { data, mutate, isLoading: isFetching } = useTakeExam();
 
   useEffect(() => {
     enterFullscreen();
@@ -46,7 +53,6 @@ export default function ExamPage({ examActive, setExamActive }) {
     });
   }, [examActive, mutate, setExamActive]);
 
-  // Countdown effect
   useEffect(() => {
     let interval;
     if (mouse && cutDown > 0) {
@@ -58,39 +64,31 @@ export default function ExamPage({ examActive, setExamActive }) {
             id: data?.data?.id,
             userId: identitas?.id,
           });
-
           return c - 1;
         });
       }, 1000);
     } else if (cutDown === 0 && data?.data?.tipe_ujian === "closed") {
       socket.emit("catatan", {
         message: `${identitas.name} (${localStorage.getItem("mapel")}) dikeluarkan dan menyimpan progress dari ujian pada ${formatWaktu(new Date().toISOString())}`,
-
         roomId: roomId,
         id: data?.data?.id,
         userId: identitas?.id,
       });
-
       progess.mutate(payload);
-      window.location.reload(); // Reload page when countdown reaches 0
+      window.location.reload();
     } else {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [mouse, cutDown, data]);
 
-  // submit otomatis
-
-  console.log("Data", data);
-
   useEffect(() => {
-    if (!!data?.data?.soal === true) {
-      let res = JSON.parse(data.data.soal);
+    if (!!data?.data?.soal) {
+      const res = JSON.parse(data.data.soal);
       setSoal(res);
 
       socket.emit("catatan", {
         message: `${identitas.name} (${localStorage.getItem("mapel")}) mulai ujian ${formatWaktu(new Date().toISOString())}`,
-
         roomId: roomId,
         id: data?.data?.id,
         userId: identitas?.id,
@@ -113,23 +111,38 @@ export default function ExamPage({ examActive, setExamActive }) {
         }));
       }
 
+      // Calculate answered questions
+      const answered = dataSoal.filter((item) => item.jawaban !== "").length;
+      setAnsweredCount(answered);
+
       setPayload((state) => {
         return { ...state, data: dataSoal };
       });
     }
   }, [data, isFetching]);
+
   const handleViolation = (type) => {
     alert(`Pelanggaran terdeteksi: ${type}`);
-    // Kirim log ke server jika diperlukan
   };
 
   usePreventCheating(handleViolation);
 
+  const updateAnswerCount = (newPayload) => {
+    const answered = newPayload?.data?.filter(
+      (item) => item.jawaban !== "",
+    ).length;
+    setAnsweredCount(answered);
+  };
+
+  useEffect(() => {
+    updateAnswerCount(payload);
+  }, [payload]);
+
   if (isFetching || data?.data?.soal === undefined) {
     return (
-      <div className="pb-30 fixed bottom-0 left-0 right-0 top-0 z-50 overflow-hidden border bg-white">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
         <Dimmer active inverted>
-          <Loader size="large">Mengambil Data Soal</Loader>
+          <Loader size="massive">Memuat Soal Ujian</Loader>
         </Dimmer>
       </div>
     );
@@ -139,18 +152,252 @@ export default function ExamPage({ examActive, setExamActive }) {
     <div
       onMouseLeave={() => {
         if (data?.data?.tipe_ujian === "closed") {
-          console.log("mouse keluar");
-
-          setMouse(true); // Start countdown on mouse leave
+          setMouse(true);
         }
       }}
       onMouseEnter={() => {
         if (data?.data?.tipe_ujian === "closed") {
+          setMouse(false);
         }
-        setMouse(false); // Start countdown on mouse leave
       }}
-      className="pb-30 fixed bottom-0 left-0 right-0 top-0 z-[999] overflow-hidden border bg-white"
+      className="fixed inset-0 z-[999] flex h-screen w-screen flex-col bg-gray-50 font-sans"
     >
+      {/* Countdown Overlay */}
+      {mouse && cutDown > 0 && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+          <div className="text-center">
+            <div className="animate-pulse text-6xl font-bold text-red-500">
+              {cutDown}
+            </div>
+            <div className="mt-4 text-2xl font-medium text-white">
+              Jangan keluar dari halaman ujian!
+            </div>
+            <div className="mt-2 text-lg text-gray-300">
+              Anda akan dikeluarkan secara otomatis
+            </div>
+          </div>
+        </div>
+      )}
+
+      {modalAutoSubmit && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white">
+              Waktu Ujian Telah Habis
+            </div>
+            <div className="mt-4 text-xl text-gray-300">
+              Jawaban Anda akan disimpan secara otomatis...
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header Section */}
+      <div className="flex items-center justify-between bg-green-600 p-4 text-white shadow-md">
+        <div className="flex items-center space-x-4">
+          <div className="text-xl font-bold">
+            {localStorage.getItem("mapel")}
+          </div>
+          {data?.data?.tipe_ujian === "closed" && (
+            <div className="rounded bg-red-500 px-3 py-1 text-sm font-medium">
+              Mode Pengawasan Ketat
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center space-x-6">
+          <div className="text-right">
+            <div className="text-sm font-medium">Sisa Waktu</div>
+            <Timer
+              data={data}
+              payload={payload}
+              submit={submit}
+              setModalAutoSubmit={setModalAutoSubmit}
+              className="text-2xl font-bold"
+            />
+          </div>
+          <div className="h-10 w-px bg-white opacity-30"></div>
+          <div className="text-right">
+            <div className="text-sm font-medium">Soal Terjawab</div>
+            <div className="text-2xl font-bold">
+              {answeredCount}/{soal.length}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="bg-green-500 px-4 py-1">
+        <Progress
+          value={answeredCount}
+          total={soal.length}
+          color="blue"
+          size="tiny"
+          className="m-0"
+        />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Question Navigation */}
+        <div className="w-64 border-r bg-white p-4 shadow-sm">
+          <div className="mb-6">
+            <h3 className="mb-3 text-lg font-semibold text-gray-800">
+              Navigasi Soal
+            </h3>
+            <div className="grid grid-cols-5 gap-2">
+              {soal.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveSoal(index)}
+                  className={clsx(
+                    "flex h-12 w-12 items-center justify-center rounded-lg border-2 text-lg font-medium transition-all",
+                    {
+                      "border-blue-500 bg-blue-100 text-blue-700":
+                        index === activeSoal,
+                      "border-green-500 bg-green-100 text-green-700":
+                        !!payload?.data?.[index]?.jawaban,
+                      "border-gray-300 hover:border-blue-300":
+                        !payload?.data?.[index]?.jawaban &&
+                        index !== activeSoal,
+                    },
+                  )}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-auto space-y-3 pt-4">
+            <Button
+              fluid
+              color="teal"
+              loading={progess.isLoading}
+              disabled={progess.isLoading}
+              onClick={() => {
+                socket.emit("catatan", {
+                  message: `${identitas.name} (${localStorage.getItem("mapel")}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
+                  roomId: roomId,
+                  id: data?.data?.id,
+                  userId: identitas?.id,
+                });
+                progess.mutate(payload);
+              }}
+              className="!flex items-center justify-center !py-3 !text-base"
+            >
+              <Icon name="save" className="!mr-2" />
+              Simpan Sementara
+            </Button>
+
+            <Button
+              fluid
+              color="blue"
+              loading={submit.isLoading}
+              disabled={submit.isLoading}
+              onClick={() => setOpen(true)}
+              className="!flex items-center justify-center !py-3 !text-base"
+            >
+              <Icon name="send" className="!mr-2" />
+              Selesai & Kirim
+            </Button>
+          </div>
+        </div>
+
+        {/* Question Content */}
+        <div className="flex-1 overflow-auto p-6">
+          <div className="mx-auto max-w-4xl rounded-lg bg-white p-8 shadow-sm">
+            {soal.map((item, index) => {
+              const soals = JSON.parse(item.soal);
+
+              return (
+                <div
+                  key={index}
+                  className={index === activeSoal ? "block" : "hidden"}
+                >
+                  <div className="mb-6 flex items-start">
+                    <div className="mr-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 text-lg font-bold text-blue-700">
+                      {index + 1}
+                    </div>
+                    <div className="flex-1">
+                      {index === activeSoal && item.tipe === "PG" && (
+                        <Pg
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+
+                      {index === activeSoal && item.tipe === "TF" && (
+                        <TF
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+
+                      {index === activeSoal && item.tipe === "ES" && (
+                        <ES
+                          tipe={data?.data?.tipe_ujian}
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+
+                      {index === activeSoal && item.tipe === "LV" && (
+                        <LV
+                          tipe={data?.data?.tipe_ujian}
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-8 flex justify-between border-t pt-6">
+                    <Button
+                      disabled={activeSoal === 0}
+                      onClick={() => setActiveSoal(activeSoal - 1)}
+                      className="!px-6 !py-3 !text-base"
+                    >
+                      <Icon name="arrow left" /> Sebelumnya
+                    </Button>
+
+                    <Button
+                      disabled={activeSoal === soal.length - 1}
+                      onClick={() => setActiveSoal(activeSoal + 1)}
+                      className="!px-6 !py-3 !text-base"
+                      teal
+                    >
+                      Selanjutnya <Icon name="arrow right" />
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Confirmation Modal */}
       <ModalKonfirmasi
         open={open}
         setOpen={setOpen}
@@ -160,7 +407,6 @@ export default function ExamPage({ examActive, setExamActive }) {
             onSuccess: () => {
               socket.emit("catatan", {
                 message: `${identitas.name} (${localStorage.getItem("mapel")}) Menyelesaikan Ujian pada ${formatWaktu(new Date().toISOString())}`,
-
                 roomId: roomId,
                 id: data?.data?.id,
                 userId: identitas?.id,
@@ -169,168 +415,11 @@ export default function ExamPage({ examActive, setExamActive }) {
             },
           });
         }}
-        title={"Apakah yakin akan mengakhiri ujian ?"}
+        title={"Konfirmasi Pengumpulan Jawaban"}
+        content={
+          "Apakah Anda yakin ingin mengakhiri ujian dan mengumpulkan jawaban? Pastikan semua soal telah terjawab."
+        }
       />
-
-      {mouse && cutDown > 0 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="text-4xl font-bold text-white">
-            Keluar dalam {cutDown} detik
-          </div>
-        </div>
-      )}
-
-      {modalAutoSubmit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="text-4xl font-bold text-white">
-            Waktu sudah habis. Anda akan keluar dalam beberapa saat lagi...
-          </div>
-        </div>
-      )}
-
-      <div className="grid h-screen w-screen grid-cols-12 gap-5 p-5">
-        <div
-          id="scrollbar"
-          className="h-screnn col-span-10 w-full overflow-auto rounded-md border px-10 pb-32 pt-5 shadow-lg"
-        >
-          <div className="flex items-center justify-between">
-            {data?.data?.tipe_ujian === "closed" && (
-              <p className="font-bold text-red-500">
-                Jangan mengeluarkan mouse dari area ujian
-              </p>
-            )}
-            <Timer
-              data={data}
-              payload={payload}
-              submit={submit}
-              setModalAutoSubmit={setModalAutoSubmit}
-            />
-          </div>
-
-          {soal?.map((item, index) => {
-            let soals = JSON.parse(item.soal);
-
-            return (
-              <React.Fragment key={index}>
-                <div className="mt-2">
-                  {index === activeSoal && item.tipe === "PG" ? (
-                    <>
-                      <Pg
-                        item={item}
-                        soals={soals}
-                        payload={payload}
-                        setPayload={setPayload}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-
-                  {index === activeSoal && item.tipe === "TF" ? (
-                    <>
-                      <TF
-                        item={item}
-                        soals={soals}
-                        payload={payload}
-                        setPayload={setPayload}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                  {index === activeSoal && item.tipe === "ES" ? (
-                    <>
-                      <ES
-                        tipe={data?.data?.tipe_ujian}
-                        item={item}
-                        soals={soals}
-                        payload={payload}
-                        setPayload={setPayload}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                  {index === activeSoal && item.tipe === "LV" ? (
-                    <>
-                      <LV
-                        tipe={data?.data?.tipe_ujian}
-                        item={item}
-                        soals={soals}
-                        payload={payload}
-                        setPayload={setPayload}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </React.Fragment>
-            );
-          })}
-        </div>
-
-        <div className="relative col-span-2 h-screen w-full rounded-md border shadow-lg">
-          <div className="flex items-center justify-center py-5">
-            <h5>Nomor Soal</h5>
-          </div>
-          <div className="h-full px-5 shadow-lg">
-            {soal.map((item, index) => (
-              <button
-                onClick={() => {
-                  setActiveSoal(index);
-                }}
-                key={index}
-                className={clsx(
-                  `m-2 h-12 w-12 rounded-md border font-bold hover:bg-blue-200`,
-                  {
-                    "bg-green-400 text-white":
-                      !!payload?.data?.[index]?.jawaban === true,
-                  },
-                )}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <div className="absolute bottom-2 left-0 right-0 space-y-2 px-5 pb-10">
-              <Button
-                content={"Simpan Progress"}
-                type="submit"
-                fluid
-                loading={progess.isLoading}
-                disabled={progess.isLoading}
-                onClick={() => {
-                  socket.emit("catatan", {
-                    message: `${identitas.name} (${localStorage.getItem("mapel")}) menyimpan progress Ujian pada ${formatWaktu(new Date().toISOString())}`,
-
-                    roomId: roomId,
-                    id: data?.data?.id,
-                    userId: identitas?.id,
-                  });
-                  progess.mutate(payload);
-                }}
-                icon={() => <Icon name="save" />}
-                size="medium"
-                color="teal"
-              />
-              <Button
-                content={"Submit Exam"}
-                type="submit"
-                fluid
-                loading={submit.isLoading}
-                disabled={submit.isLoading}
-                onClick={() => {
-                  console.log("open", open);
-                  setOpen(true);
-                }}
-                icon={() => <Icon name="save" />}
-                size="medium"
-                color="blue"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

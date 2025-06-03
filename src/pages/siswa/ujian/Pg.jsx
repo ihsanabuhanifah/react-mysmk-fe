@@ -22,7 +22,7 @@ export default function Pg({ soals, item, setPayload, payload }) {
 
  
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-xl">
       <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
 
       <div className="relative pl-12">
