@@ -1,34 +1,11 @@
+import React from "react";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 
 export default function ProtectLogin({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
-  // let [loading, setLoading] = React.useState(true);
-  // let { isLoading } = useQuery(
-  //   //query key
-  //   ["authme", auth],
-  //   //axios function,triggered when page/pageSize change
-  //   () => authme(),
-  //   //configuration
-  //   {
-  //     staleTime: 60 * 1000 * 60 * 12, // 12 jam,
-  //     select: (response) => {
-  //       const role = response?.data?.role;
-      
-      
-  //       if (!userRole.includes(role)) {
-  //         Cookies.remove("mysmk_token");
-  //         return <Navigate to="/login" />;
-  //       }
-  //     },
-  //     onSuccess: () => {
-  //       setLoading(false);
-  //     },
-  //   }
-  // );
-  // if (isLoading) {
-  //   return <LoadingPage></LoadingPage>;
-  // }
-  return auth === undefined ? children : <Navigate to="/" />;
+  let roles = jwt_decode(Cookies.get("mysmk_token"));
+  return auth === undefined ? children : <Navigate to={roles?.role === "Santri" ? "/siswa/dashboard" : "/guru/dashboard"} />;
 }
 //

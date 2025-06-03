@@ -118,7 +118,7 @@ export default function FormSoal({id}) {
       let response;
 
       // return console.log('va', values)
-      if (id === undefined) {
+      if (id === undefined || id === null) {
         response = await createBankSoal(values);
         resetForm();
         setInitialState({
@@ -147,7 +147,7 @@ export default function FormSoal({id}) {
 
       queryClient.invalidateQueries("/bank-soal/list");
       if(id){
-         queryClient.invalidateQueries(" /guru/ujian/analisa");
+         queryClient.invalidateQueries("/guru/ujian/analisa");
       }
       localStorage.removeItem("create_soal");
      

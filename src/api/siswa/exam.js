@@ -42,9 +42,18 @@ export const useExam = (id) => {
 
 export const useTakeExam = () => {
   const { successToast, warningToast } = useToast();
+
+
+ 
   const mutate = useMutation(
     (id) => {
-      return axios.put(`/santri/exam/take/${id}`);
+
+      if(id){
+        return axios.put(`/santri/exam/take/${id}`);
+      }
+
+      return true
+      
     },
     {
       onSuccess: (response) => {
