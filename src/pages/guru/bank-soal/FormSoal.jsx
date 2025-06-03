@@ -24,9 +24,7 @@ import LayoutPage from "../../../module/layoutPage";
 import Editor from "../../../components/Editor";
 import MemoizedEditor from "../../../components/MemorizeEditor";
 import { SocketContext } from "../../../SocketProvider";
-import DropzoneFile from "../../../components/Dropzone";
 import ImageUploader from "./ImageUpload";
-
 
 let personalSchema = Yup.object().shape({
   materi: Yup.string().nullable().required("wajib disii"),
@@ -57,14 +55,12 @@ let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
 
-export default function FormSoal({id}) {
+export default function FormSoal({ id }) {
   const { socket } = useContext(SocketContext);
   const [memorize, setMemorize] = useState(false);
-  
+
   const { dataMapel } = useList();
-  const [file, setFile] = useState("");
-  
- 
+
   const queryClient = useQueryClient();
   let { data, isFetching, refetch } = useQuery(
     //query key
@@ -146,11 +142,11 @@ export default function FormSoal({id}) {
       }
 
       queryClient.invalidateQueries("/bank-soal/list");
-      if(id){
-         queryClient.invalidateQueries("/guru/ujian/analisa");
+      if (id) {
+        queryClient.invalidateQueries("/guru/ujian/analisa");
+        queryClient.invalidateQueries("/bank-soal/update");
       }
       localStorage.removeItem("create_soal");
-     
 
       toast.success(response?.data?.msg, {
         position: "top-right",
@@ -227,15 +223,11 @@ export default function FormSoal({id}) {
     };
   }, [socket]); // ← Dependency `data` tidak perlu
 
-  console.log("values", values);
-
   return (
     <LayoutPage
       isLoading={isFetching}
       title={id === undefined ? "Form Tambah Soal" : "Form Update Soal"}
     >
-
-    
       <div className="p-0">
         <FormikProvider values={formik}>
           {" "}

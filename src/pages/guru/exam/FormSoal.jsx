@@ -76,9 +76,9 @@ export default function FormExam({id, copy}) {
       select: (response) => {
         return response.data.detail_ujian;
       },
+      refetchOnWindowFocus : false,
       onSuccess: (data) => {
-        console.log("dar", data);
-        // data.soal = JSON.parse(data.soal);
+       
 
         setInitialState({
           payload: [
@@ -140,6 +140,7 @@ export default function FormExam({id, copy}) {
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id ? !!dataExam?.mapel_id === true : true,
+      refetchOnWindowFocus : false,
       select: (response) => {
         return response.data;
       },

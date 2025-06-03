@@ -19,13 +19,16 @@ import { EditButton } from "../../../components";
 import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
+import ModalUpdateSoal from "../bank-soal/ModalUpdate";
 
 function ModalView({ open, setOpen, preview }) {
-  let soal = JSON.parse(preview.soal);
 
-  const navigate = useNavigate();
-
+  let [openSoal, setOpenSoal] = useState(false)
+  let [id,setId]=useState(undefined)
+ 
   return (
+    <>
+    <ModalUpdateSoal open={openSoal} setOpen={setOpenSoal} id={id}/>
     <Modal
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
@@ -39,11 +42,12 @@ function ModalView({ open, setOpen, preview }) {
             size="md"
             
               onClick={() => {
+               
 
-                window.open(`/guru/bank-soal/update/${preview.id}`)
-                // navigate(`/guru/bank-soal/update/${preview.id}`, {
-                //   replace: true,
-                // });
+                setOpenSoal(true)
+                
+                setId(preview?.id)
+
               }}
             />
           </section>
@@ -106,7 +110,7 @@ function ModalView({ open, setOpen, preview }) {
           <Icon name="remove" /> Batal
         </Button>
       </ModalActions>
-    </Modal>
+    </Modal></>
   );
 }
 

@@ -12,7 +12,7 @@ import {
 import FormExam from "./FormSoal";
 import FormSoal from "./FormSoal";
 
-function ModalUpdateUjian({
+function ModalUpdateSoal({
   open,
   setOpen,
   id,
@@ -45,5 +45,5 @@ function ModalUpdateUjian({
   );
 }
 
-export default ModalUpdateUjian;
+export default ModalUpdateSoal;
 
