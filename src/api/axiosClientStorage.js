@@ -8,11 +8,7 @@ const headers = {
 };
 const axiosClientStorage = axios.create({
   baseURL: "https://storage.devopsgeming.online/",
-  // baseURL: "https://mysmk.herokuapp.com",
-  // baseURL : "https://mysmk-be-production.herokuapp.com/",
-// baseURL: "http://localhost:3888/",
-// baseURL : "https://backend-mysmk-dev.smkmadinatulquran.sch.id/",
-// baseURL : "https://backend-mysmk.smkmadinatulquran.sch.id/",
+ 
 
 
 
@@ -22,6 +18,19 @@ const axiosClientStorage = axios.create({
   },
   headers,
 });
+
+axiosClientStorage.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+
+    config.headers["X-Authorization"] = `Bearer ${Cookies.get("mysmk_token")}`;
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  },
+);
 axiosClientStorage.interceptors.response.use(
   (response) => {
     return response;
@@ -40,11 +49,7 @@ axiosClientStorage.interceptors.response.use(
   }
 );
 
-export const syncToken = () => {
-  axiosClientStorage.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
-    "mysmk_token"
-  )}`;
-};
+
 
 export const clearToken = () => {
   delete axiosClientStorage.defaults.headers["mysmk_token"];

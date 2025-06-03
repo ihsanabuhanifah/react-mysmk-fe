@@ -1,5 +1,5 @@
 import axios from "axios";
-import Cookies from "js-cookie";  
+import Cookies from "js-cookie";
 import qs from "qs";
 
 const headers = {
@@ -7,11 +7,8 @@ const headers = {
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClient = axios.create({
-baseURL: "https://bemysmk.devopsgeming.online/",
-//baseURL: "http://localhost:8085/",
-
-
-
+  baseURL: "https://bemysmk.devopsgeming.online/",
+  //baseURL: "http://localhost:8085/",
 
   timeout: 1000 * 60 * 3,
   paramsSerializer: function (params) {
@@ -19,6 +16,20 @@ baseURL: "https://bemysmk.devopsgeming.online/",
   },
   headers,
 });
+
+axiosClient.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+
+    config.headers["X-Authorization"] = `Bearer ${Cookies.get("mysmk_token")}`;
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  },
+);
+
 axiosClient.interceptors.response.use(
   (response) => {
     return response;
@@ -26,7 +37,7 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (401 === error?.response?.status) {
       Cookies.remove("mysmk_token");
-      Cookies.clear()
+      Cookies.clear();
 
       clearToken();
       localStorage.clear();
@@ -34,13 +45,13 @@ axiosClient.interceptors.response.use(
     } else {
       return Promise.reject(error);
     }
-  }
+  },
 );
 
 export const syncToken = () => {
-  axiosClient.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
-    "mysmk_token"
-  )}`;
+  // axiosClient.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(
+  //   "mysmk_token"
+  // )}`;
 };
 
 export const clearToken = () => {
