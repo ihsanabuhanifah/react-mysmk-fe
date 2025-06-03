@@ -27,7 +27,7 @@ export function useListHasilUjian() {
 
   syncToken();
 
-  let { data, isFetching } = useQuery(
+  let { data, isFetching,refetch } = useQuery(
     ["/santri/hasil-ujian", params],
     () => axios.get("/santri/hasil-ujian", { params }).then((res) => res.data),
     {
@@ -69,5 +69,6 @@ export function useListHasilUjian() {
     loadMapel,
     dataKelas,
     loadKelas,
+    refetch
   };
 }

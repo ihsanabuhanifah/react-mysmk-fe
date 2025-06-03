@@ -18,7 +18,7 @@ export function takeExam(id) {
 
 export const useExam = (id) => {
   let [params, setParams] = useState({ page: 1, pageSize: 10, status: "", judul_ujian: '', nama_mapel: '' });
-  const { isLoading, data, isFetching } = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["/santri/exam/list", params],
     () => getExam(params),
     {
@@ -37,7 +37,7 @@ export const useExam = (id) => {
     }
   )
 
-  return { isLoading, data, isFetching, params, setParams, dataMapel, loadMapel };
+  return { isLoading, data, isFetching, params, setParams, dataMapel, loadMapel, refetch };
 };
 
 export const useTakeExam = () => {

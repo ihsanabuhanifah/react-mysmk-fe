@@ -9,7 +9,7 @@ import FilterUjian from "./filterUjian";
 
 export default function UjianSiswa() {
   const [examActive, setExamActive] = useState(null);
-  const { data, setParams, isFetching, dataMapel, params } =
+  const { data, setParams, isFetching, dataMapel, params, refetch } =
     useExam(examActive);
   const { customToast } = useToast();
   let [visible, setVisible] = React.useState(false);
@@ -36,7 +36,7 @@ export default function UjianSiswa() {
       </Sidebar>
       <div className="mt-4 w-full px-5">
         <section className="grid grid-cols-4 gap-4">
-          <div className="col-span-4 md:col-span-3">
+          <div className="col-span-4 md:col-span-2">
             <Input
               fluid
               loading={false}
@@ -53,7 +53,20 @@ export default function UjianSiswa() {
               placeholder="Search for judul ujian"
             />
           </div>
-          <div className="col-span-4 md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
+            <Button
+              content={"Refetch"}
+              type="button"
+              fluid
+              icon={() => <Icon name="refresh" />}
+              size="medium"
+              color="blue"
+              onClick={() => {
+                refetch()
+              }}
+            />
+          </div>
+          <div className="col-span-2 md:col-span-1">
             <Button
               content={"Filter"}
               type="button"

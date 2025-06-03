@@ -35,6 +35,7 @@ export default function HasilUjian() {
     dataKelas,
     handlePageSize,
     handlePage,
+    refetch,
   } = useListHasilUjian();
   const [sMapel, setSMapel] = useState("Semua Mapel");
   let [visible, setVisible] = React.useState(false);
@@ -78,7 +79,7 @@ export default function HasilUjian() {
       </Sidebar>
       <div className="mt-4 w-full px-5">
         <section className="grid grid-cols-4 gap-4">
-          <div className="col-span-4 md:col-span-3">
+          <div className="col-span-4 md:col-span-2">
             <Input
               fluid
               loading={false}
@@ -88,7 +89,21 @@ export default function HasilUjian() {
               placeholder="Search for judul ujian"
             />
           </div>
-          <div className="col-span-4 md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
+            <Button
+              content={"Refetch"}
+              type="button"
+              fluid
+              icon={() => <Icon name="refresh" />}
+              size="medium"
+              color="blue"
+              onClick={() => {
+                refetch();
+              }}
+            />
+          </div>
+
+          <div className="col-span-2 md:col-span-1">
             <Button
               content={"Filter"}
               type="button"
@@ -120,10 +135,10 @@ export default function HasilUjian() {
               <Table.HeaderCell>Nama Guru</Table.HeaderCell>
               <Table.HeaderCell>Kelas</Table.HeaderCell>
               <Table.HeaderCell>Bertingkat</Table.HeaderCell>
-               <Table.HeaderCell>Status</Table.HeaderCell>
-                             <Table.HeaderCell>Durasi</Table.HeaderCell>
-                             <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
-                             <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
+              <Table.HeaderCell>Status</Table.HeaderCell>
+              <Table.HeaderCell>Durasi</Table.HeaderCell>
+              <Table.HeaderCell>Ujian dibuka</Table.HeaderCell>
+              <Table.HeaderCell>Ujian ditutup</Table.HeaderCell>
               <Table.HeaderCell>Tahun Ajaran</Table.HeaderCell>
             </Table.Header>
             <Table.Body>
@@ -167,18 +182,20 @@ export default function HasilUjian() {
                         }
                       />
                     </Table.Cell>
-                      <Table.Cell>
-                                          <LabelTingkat status={value?.status} />
-                                        </Table.Cell>
-                                        <Table.Cell>{value?.ujian?.durasi} Menit</Table.Cell>
-                                        <Table.Cell>
-                                         {dayjs(value.waktu_mulai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-                    }
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                         {dayjs(value.waktu_selesai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-                    }
-                                        </Table.Cell>
+                    <Table.Cell>
+                      <LabelTingkat status={value?.status} />
+                    </Table.Cell>
+                    <Table.Cell>{value?.ujian?.durasi} Menit</Table.Cell>
+                    <Table.Cell>
+                      {dayjs(value.waktu_mulai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {dayjs(value.waktu_selesai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
+                    </Table.Cell>
                     <Table.Cell>
                       {value.tahun_ajaran.nama_tahun_ajaran}
                     </Table.Cell>

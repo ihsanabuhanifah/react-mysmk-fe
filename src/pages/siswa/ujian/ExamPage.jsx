@@ -105,7 +105,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       }
 
       // Calculate answered questions
-      const answered = dataSoal.filter(item => item.jawaban !== "").length;
+      const answered = dataSoal.filter(item => item.jawaban !== "" && item.jawaban !== null).length;
       setAnsweredCount(answered);
       
       setPayload((state) => {
@@ -121,17 +121,28 @@ export default function ExamPage({ examActive, setExamActive }) {
   usePreventCheating(handleViolation);
 
   const updateAnswerCount = (newPayload) => {
-    const answered = newPayload?.data?.filter(item => item.jawaban !== "").length;
+    const answered = newPayload?.data?.filter(item => item.jawaban !== "" && item.jawaban !== null).length;
     setAnsweredCount(answered);
   };
 
-  useEffect(()=> {
-updateAnswerCount(payload)
-  },[payload])
+  useEffect(() => {
+    updateAnswerCount(payload);
+  }, [payload]);
+
+  const isQuestionAnswered = (item) => {
+    if (!payload?.data ) return false;
+
+  
+    const answer = payload?.data?.filter((i)=>i.id === item.id)
+
+    console.log("an", item.id)
+    console.log("pa", payload.data)
+    console.log("soal", soal)
+    return !!answer[0]?.jawaban
+  };
 
 
-  console.log("data", data)
-
+  
   if (isFetching || data?.data?.soal === undefined) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
@@ -141,8 +152,6 @@ updateAnswerCount(payload)
       </div>
     );
   }
-
-  
 
   return (
     <div
@@ -221,7 +230,7 @@ updateAnswerCount(payload)
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-green-600 px-4 py-1">
+      {/* <div className="bg-green-600 px-4 py-1">
         <Progress
           value={answeredCount}
           total={soal.length}
@@ -229,7 +238,7 @@ updateAnswerCount(payload)
           size="tiny"
           className="m-0"
         />
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
@@ -246,16 +255,12 @@ updateAnswerCount(payload)
                     "flex h-12 w-12 items-center justify-center rounded-lg border-2 text-lg font-medium transition-all",
                     {
                       "border-green-600 bg-blue-100 text-blue-700": index === activeSoal,
-                      "border-green-500 bg-green-100 text-green-700": !!payload?.data?.[index]?.jawaban,
-                      "border-gray-300 hover:border-green-300": !payload?.data?.[index]?.jawaban && index !== activeSoal,
+                      "border-green-500 bg-green-100 text-green-700": isQuestionAnswered(item),
+                      "border-gray-300 hover:border-green-300": !isQuestionAnswered(item) && index !== activeSoal,
                     }
                   )}
                 >
-
-                  
-                  {index + 1}{payload?.data?.[index]?.jawaban}
-
-                  
+                  {index + 1}
                 </button>
               ))}
             </div>
@@ -298,7 +303,7 @@ updateAnswerCount(payload)
 
         {/* Question Content */}
         <div className="flex-1 overflow-auto p-6">
-          <div className=" rounded-lg bg-white p-8 shadow-sm">
+          <div className="rounded-lg bg-white p-8 shadow-sm">
             {soal.map((item, index) => {
               const soals = JSON.parse(item.soal);
               
@@ -308,7 +313,7 @@ updateAnswerCount(payload)
                     <div className="mr-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-lg font-bold text-green-700">
                       {index + 1}
                     </div>
-                    <div className="flex-1 min-w-0"> {/* Added min-w-0 for flexbox text overflow */}
+                    <div className="flex-1 min-w-0">
                       {index === activeSoal && item.tipe === "PG" && (
                         <Pg
                           item={item}
