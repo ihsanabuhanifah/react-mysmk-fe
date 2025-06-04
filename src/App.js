@@ -85,6 +85,7 @@ import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 import { SocketProvider } from "./SocketProvider";
 import UjianBerjalan from "./pages/guru/exam/UjianBerjalan";
 import UjianHariIni from "./pages/guru/exam/UjianHariIni";
+import Raport from "./pages/guru/raport";
 
 function App() {
   return (
@@ -161,6 +162,7 @@ function App() {
             {/* <Route path="daftar-siswa/siswa/profile/" element={<ProfileSiswa />} /> */}
             <Route path="absensi" element={<Jadwal />} />
             <Route path="monitor/harian" element={<Harian />} />
+             <Route path="raport" element={<Raport />} />
             <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
             <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
             <Route path="absensi/jadwal" element={<ListJadwal />} />

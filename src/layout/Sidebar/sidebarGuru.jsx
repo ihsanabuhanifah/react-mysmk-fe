@@ -47,9 +47,9 @@ export default function SidebarGuru({ setSidebar }) {
           path: "dashboard",
           title: "Dashboard",
           icon: <MdOutlineDashboard className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Monitoring",
@@ -59,23 +59,23 @@ export default function SidebarGuru({ setSidebar }) {
           path: "monitor/harian",
           title: "Monitor KBM",
           icon: <MdLaptopChromebook className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "daftar-siswa",
           path: "daftar-siswa",
           title: "Daftar Kelas",
           icon: <MdOutlineSupervisorAccount className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "halaqoh-siswa",
           path: "halaqoh-siswa",
           title: "Daftar Halaqoh",
           icon: <MdPeople className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Attendance",
@@ -85,30 +85,30 @@ export default function SidebarGuru({ setSidebar }) {
           path: "kehadiran-guru",
           title: "Absensi Guru",
           icon: <MdFingerprint className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "absensi",
           path: "absensi",
           title: "Absensi KBM",
           icon: <MdLaptopMac className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: `halaqoh/absensi/${formatTahun(date)}`,
           path: "halaqoh",
           title: "Absensi Halaqoh",
           icon: <MdLaptopChromebook className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "pengampu/halaqoh/absensi",
           path: "pengampu",
           title: "Absensi Pengampu",
           icon: <MdCheck className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Academic",
@@ -118,38 +118,44 @@ export default function SidebarGuru({ setSidebar }) {
           path: "bank-soal",
           title: "Bank Soal",
           icon: <MdFormatAlignCenter className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "exam",
           path: "exam",
           title: "Assesmen",
           icon: <MdKeyboard className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "ujian-berjalan",
           path: "ujian-berjalan",
           title: "Ujian Berjalan",
           icon: <MdLaptopMac className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
-         {
+        {
           to: "ujian-hari-ini",
           path: "ujian-hari-ini",
           title: "Ujian Hari Ini",
           icon: <MdPhoneInTalk className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "hasil-belajar",
           path: "hasil-belajar",
           title: "Hasil Belajar",
           icon: <MdDocumentScanner className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
-         
-      ]
+         {
+          to: "raport",
+          path: "raport",
+          title: "Raport",
+          icon: <MdDocumentScanner className="h-5 w-5" />,
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Activities",
@@ -159,23 +165,23 @@ export default function SidebarGuru({ setSidebar }) {
           path: "sholat",
           title: "Sholat",
           icon: <MdNavigation className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "pelanggaran",
           path: "pelanggaran",
           title: "Pelanggaran",
           icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "prestasi",
           path: "prestasi",
           title: "Prestasi",
           icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Permissions",
@@ -185,16 +191,16 @@ export default function SidebarGuru({ setSidebar }) {
           path: "perizinan-pulang",
           title: "Pulang",
           icon: <MdPhoneForwarded className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "perizinan-kunjungan",
           path: "perizinan-kunjungan",
           title: "Kunjungan",
           icon: <MdPhoneInTalk className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Reports",
@@ -204,9 +210,9 @@ export default function SidebarGuru({ setSidebar }) {
           path: "laporan-guru-piket",
           title: "Laporan Guru Piket",
           icon: <MdCreate className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+          roles: ["Guru"],
+        },
+      ],
     },
     {
       category: "Others",
@@ -216,21 +222,18 @@ export default function SidebarGuru({ setSidebar }) {
           path: "fitur-siswa-pkl",
           title: "Fitur Siswa PKL",
           icon: <MdApartment className="h-5 w-5" />,
-          roles: ["Guru"]
+          roles: ["Guru"],
         },
         {
           to: "chat",
           path: "chat",
           title: "Chat",
           icon: <MdChatBubble className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
-    }
+          roles: ["Guru"],
+        },
+      ],
+    },
   ];
-
-  
-
 
   return (
     <div className="flex h-full flex-col bg-white shadow-lg">
@@ -253,7 +256,7 @@ export default function SidebarGuru({ setSidebar }) {
       </div>
 
       {/* Navigation - Scrollable Area */}
-      <div id="scrollbar" className="flex-1 overflow-y-auto ">
+      <div id="scrollbar" className="flex-1 overflow-y-auto">
         <nav className="px-2 py-4">
           {navigationItems.map((section) => (
             <div key={section.category} className="mb-4">
@@ -261,19 +264,20 @@ export default function SidebarGuru({ setSidebar }) {
                 {section.category}
               </h3>
               <div className="space-y-1 whitespace-nowrap">
-                {section.items.map((item) => (
-                  checkRole(roles, "Guru") && (
-                    <NavButton
-                      key={item.to}
-                      to={item.to}
-                      path={item.path}
-                      title={item.title}
-                      icon={item.icon}
-                      handleSidebar={handleSidebar}
-                      isActive={url === item.path}
-                    />
-                  )
-                ))}
+                {section.items.map(
+                  (item) =>
+                    checkRole(roles, "Guru") && (
+                      <NavButton
+                        key={item.to}
+                        to={item.to}
+                        path={item.path}
+                        title={item.title}
+                        icon={item.icon}
+                        handleSidebar={handleSidebar}
+                        isActive={url === item.path}
+                      />
+                    ),
+                )}
               </div>
             </div>
           ))}
@@ -307,18 +311,15 @@ function NavButton({ to, path, title, icon, handleSidebar, isActive }) {
       onClick={handleClick}
       className={`flex w-full items-center rounded-lg px-4 py-3 text-sm transition-colors ${
         isActive
-          ? "bg-[#00BFBF] text-white font-medium"
+          ? "bg-[#00BFBF] font-medium text-white"
           : "text-gray-600 hover:bg-gray-50"
       }`}
     >
-      <div className={isActive ? "text-white" : "text-gray-500"}>
-        {icon}
-      </div>
+      <div className={isActive ? "text-white" : "text-gray-500"}>{icon}</div>
       <span className="ml-3">{title}</span>
     </button>
   );
 }
-
 
 export function LogoutButton({ title, logo, onClick }) {
   return (
