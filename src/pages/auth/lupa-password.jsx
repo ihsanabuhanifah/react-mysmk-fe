@@ -24,7 +24,7 @@ export default function LupaPassword() {
     try {
       const result = await postLupaPassword(values);
 
-      console.log(result);
+
       setPesan(result?.data?.msg);
       return toast.success(result.data?.status, {
         position: "top-right",

@@ -16,7 +16,7 @@ const LoginSchema = Yup.object().shape({
     .min(8, "Konfirmasi Password minimal 8 karakter")
     .oneOf(
       [Yup.ref("newPassword")],
-      "Password dan Password Konfirmasi tidak sama"
+      "Password dan Password Konfirmasi tidak sama",
     )
     .required("Password Wajib diisi"),
 });
@@ -33,10 +33,7 @@ export default function ResetPassword() {
 
   const onSubmit = async (values, { setErrors }) => {
     try {
-      console.log(values);
       const result = await postResetPassword(id, token, values);
-
-      console.log(result);
 
       toast.success(result.data?.status, {
         position: "top-right",

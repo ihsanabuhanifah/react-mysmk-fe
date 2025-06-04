@@ -1,12 +1,4 @@
-import {
-  Input,
-
-  Select,
-  Form,
-  Button,
- 
-  Icon
-} from "semantic-ui-react";
+import { Input, Select, Form, Button, Icon } from "semantic-ui-react";
 import InputRangeDate from "../../../components/inputDateRange";
 import { Formik, setNestedObjectValues } from "formik";
 import { getOptionsText } from "../../../utils/format";
@@ -19,10 +11,10 @@ import useList from "../../../hook/useList";
 export default function FilterRekap({ filter, setFilter, setVisible }) {
   const { dataGuru, dataKelas, dataMapel, dataTa } = useList();
 
-  const onSubmit = (values, {resetForm}) => {
+  const onSubmit = (values, { resetForm }) => {
     setFilter(values);
     setVisible(false);
-    resetForm()
+    resetForm();
   };
 
   // let initialValues = {
@@ -39,7 +31,7 @@ export default function FilterRekap({ filter, setFilter, setVisible }) {
     <Formik initialValues={filter} enableReinitialize onSubmit={onSubmit}>
       {({ values, setValues, resetForm, handleSubmit, setFieldValue }) => (
         <Form onSubmit={handleSubmit}>
-          <section className="p-5 bg-gray-50 border shadow-2xl h-screen space-y-5 relative">
+          <section className="relative h-screen space-y-5 border bg-gray-50 p-5 shadow-2xl">
             <div className="flex items-center justify-between">
               <button
                 type="b"
@@ -55,14 +47,14 @@ export default function FilterRekap({ filter, setFilter, setVisible }) {
                 onClick={() => {
                   resetForm();
                   setValues({
-                    dariTanggal: '',
-                    sampaiTanggal: '',
-                    nama_mapel: '',
-                    nama_guru: '',
-                    nama_kelas: '',
-                    nama_siswa: '',
-                    status_kehadiran: '',
-                    tahun_ajaran: '',
+                    dariTanggal: "",
+                    sampaiTanggal: "",
+                    nama_mapel: "",
+                    nama_guru: "",
+                    nama_kelas: "",
+                    nama_siswa: "",
+                    status_kehadiran: "",
+                    tahun_ajaran: "",
                   });
                 }}
                 className="text-lg"
@@ -88,7 +80,6 @@ export default function FilterRekap({ filter, setFilter, setVisible }) {
               />
             </div>
 
-            {console.log('ljhjg',values)}
             <div className="text-left">
               <Form.Field
                 control={Input}
@@ -235,8 +226,14 @@ export default function FilterRekap({ filter, setFilter, setVisible }) {
             {/* <div>
             <InputRangeDate />
           </div> */}
-            <div className="absolute bottom-2 xl:bottom-12 right-2 left-2">
-              <Button   icon={()=> <Icon name='filter'  />} type="submit" content="Terapkan" fluid color="teal" />
+            <div className="absolute bottom-2 left-2 right-2 xl:bottom-12">
+              <Button
+                icon={() => <Icon name="filter" />}
+                type="submit"
+                content="Terapkan"
+                fluid
+                color="teal"
+              />
             </div>
           </section>
         </Form>

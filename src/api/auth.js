@@ -31,7 +31,7 @@ export function getRoleMe() {
 
 export function saveToken(token) {
   syncToken();
-  console.log(token);
+
   return axios.put("/guru/token/save", {
     token,
   });

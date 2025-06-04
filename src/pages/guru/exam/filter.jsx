@@ -82,7 +82,7 @@ export default function Filter({
                 children: "Nama Guru",
               }}
               onChange={(event, data) => {
-                console.log("data", data);
+            
                 handlePayload("teacher_id", data?.value);
               }}
               placeholder="Pilih"

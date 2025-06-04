@@ -54,7 +54,7 @@ export default function Kehadiran() {
           const { latitude, longitude } = position.coords;
 
           setUserLocation({ latitude, longitude });
-          console.log("jalan", latitude, longitude);
+        
         },
 
         (error) => {

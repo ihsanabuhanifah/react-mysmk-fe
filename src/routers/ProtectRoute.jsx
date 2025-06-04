@@ -18,9 +18,6 @@ export default function ProtectRoute({ children, userRole }) {
       select: (response) => {
         const role = response?.data?.role;
 
-        console.log('role', role)
-      
-      
         if (!userRole.includes(role)) {
           Cookies.remove("mysmk_token");
           return <Navigate to="/login" />;
@@ -29,7 +26,7 @@ export default function ProtectRoute({ children, userRole }) {
       onSuccess: () => {
         setLoading(false);
       },
-    }
+    },
   );
   if (isLoading) {
     return <LoadingPage></LoadingPage>;

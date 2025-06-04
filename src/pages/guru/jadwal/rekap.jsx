@@ -54,7 +54,7 @@ export default function RekapAbsensi() {
 
   const handleEvent = (event) => {
 
-    console.log('ee' , event)
+
     if (event.key === "x") {
       console.log("ok", event);
     }

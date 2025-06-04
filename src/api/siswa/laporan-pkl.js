@@ -1,4 +1,3 @@
-
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
@@ -10,7 +9,7 @@ import html2pdf from "html2pdf.js";
 import dayjs from "dayjs";
 import "dayjs/locale/id";
 
-const imageKop = ""
+const imageKop = "";
 export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/santri/laporan-harian-pkl/list", { params });
@@ -43,16 +42,16 @@ export const useLokasiPkl = () => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      refetchOnWindowFocus : false,
+      refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 60 * 5,
-    }
+    },
   );
   return {
     data,
     isFetching,
     isLoading,
     page,
-   
+
     setPage,
     pageSize,
     setPageSize,
@@ -83,9 +82,9 @@ export const useLaporanPklList = () => {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-      refetchOnWindowFocus : false,
+      refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 60 * 5,
-    }
+    },
   );
   return {
     setParams,
@@ -107,7 +106,7 @@ export const useTugasPklList = () => {
     dariTanggal: null,
     sampaiTanggal: null,
   };
-  console.log("jalan");
+
   const {
     params,
     setParams,
@@ -117,7 +116,7 @@ export const useTugasPklList = () => {
     handlePage,
     filterParams,
   } = usePagination(defParams);
-  console.log("jalan");
+
   const { isLoading, data, isFetching } = useQuery(
     ["/santri/tugas-pkl/list", filterParams],
     () => getTugasPkl(filterParams),
@@ -125,9 +124,9 @@ export const useTugasPklList = () => {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
-  console.log("daaaaaaa", data);
+
   return {
     setParams,
     handleFilter,
@@ -150,7 +149,7 @@ export const useLaporanPklDetail = (id) => {
       enabled: id !== undefined,
       select: (response) => response.data.data,
       keepPreviousData: true,
-    }
+    },
   );
   return { data, isLoading, isFetching };
 };
@@ -162,7 +161,7 @@ export const useTugasPklDetail = (id) => {
       enabled: id !== undefined,
       select: (response) => response.data.data,
       keepPreviousData: true,
-    }
+    },
   );
   return { data, isLoading, isFetching };
 };
@@ -179,17 +178,14 @@ export const useCreateLaporanPkl = () => {
     (payload) => createLaporanPkl(payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
         navigate("/siswa/laporan-pkl");
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.Error.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -206,16 +202,13 @@ export const useUpdateLaporanPkl = (id) => {
     (payload) => axios.put(`/santri/laporan-harian-pkl/update/${id}`, payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries("/santri/laporan-harian-pkl/list");
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -232,16 +225,13 @@ export const useCreateLaporanDiniyyah = () => {
     (payload) => createLaporanDiniyyah(payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries(["/santri/laporan-diniyyah/detailPkl/"]);
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.Error.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -257,16 +247,13 @@ export const useCreateTugasPkl = () => {
     (payload) => createTugasPkl(payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries(["/santri/tugas-pkl/detail/"]);
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.Error.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -282,7 +269,7 @@ export const useLaporanPklDiniyyahDetail = (id) => {
     {
       enabled: id !== undefined,
       select: (response) => response.data.data,
-    }
+    },
   );
   return { data, isLoading, isFetching };
 };
@@ -298,16 +285,13 @@ export const useUpdateLaporanDiniyyah = (id) => {
     (payload) => axios.put(`/santri/laporan-diniyyah/update/${id}`, payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries("/santri/laporan-diniyyah/detail");
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -322,7 +306,7 @@ export const useJawabanPklDetail = (id) => {
     {
       enabled: id !== undefined,
       select: (response) => response.data.data,
-    }
+    },
   );
   return { data, isLoading, isFetching };
 };
@@ -338,16 +322,13 @@ export const useUpdateJawabanTugasPkl = (id) => {
     (payload) => axios.put(`/santri/jawaban-tugas-pkl/update/${id}`, payload),
     {
       onSuccess: (response) => {
-        console.log(response);
         successToast(response);
         queryClient.invalidateQueries("/santri/laporan-diniyyah/detail");
       },
       onError: (err) => {
-        console.log(err, "err");
-        console.log(err.config.response, "err ddd");
         warningToast(err);
       },
-    }
+    },
   );
   return { mutate, isLoading };
 };
@@ -366,10 +347,9 @@ export const useDownloadPdf = () => {
         responseType: "json",
       }),
     {
-      
       onSuccess: (response) => {
         const data = response.data.data;
-console.log(data)
+
         // Generate HTML untuk PDF
         const generateHtml = (data) => {
           return `
@@ -405,7 +385,7 @@ console.log(data)
                               <td style="padding: 8px; border: 1px solid black;">${laporan.isi_laporan || "Belum memiliki data"}</td>
                               <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.tanggal || "-"}</td>
                               <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.status || "-"}</td>
-                            </tr>`
+                            </tr>`,
                           )
                           .join("")
                       : `<tr><td colspan="5" style="text-align: center; padding: 8px;">Tidak ada data laporan PKL.</td></tr>`
@@ -436,7 +416,8 @@ console.log(data)
                     data.length > 0
                       ? data
                           .map((laporan, index) =>
-                            laporan.laporan_diniyyah_harian && laporan.laporan_diniyyah_harian.length > 0
+                            laporan.laporan_diniyyah_harian &&
+                            laporan.laporan_diniyyah_harian.length > 0
                               ? laporan.laporan_diniyyah_harian
                                   .map(
                                     (diniyyah, diniIndex) => `
@@ -453,10 +434,10 @@ console.log(data)
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_ashar || "-"}</td>
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_magrib || "-"}</td>
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_isya || "-"}</td>
-                                    </tr>`
+                                    </tr>`,
                                   )
                                   .join("")
-                              : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data diniyyah untuk hari ini.</td></tr>`
+                              : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data diniyyah untuk hari ini.</td></tr>`,
                           )
                           .join("")
                       : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data laporan diniyyah.</td></tr>`
@@ -466,7 +447,6 @@ console.log(data)
             </div>
           `;
         };
-        
 
         const content = generateHtml(data);
 
@@ -494,13 +474,11 @@ console.log(data)
         console.error("Error saat mendownload PDF:", err);
         warningToast("Gagal mendownload PDF.");
       },
-    }
+    },
   );
 
   return { mutate, isLoading, filterParams, setParams, params };
 };
-
-
 
 export const useDownloadPdfBulanan = () => {
   const { successToast, warningToast } = useToast();
@@ -512,7 +490,6 @@ export const useDownloadPdfBulanan = () => {
       }),
     {
       onSuccess: (response) => {
-        console.log(response.data);
 
         // Generate HTML for PDF with inline CSS
         const generateHtml = (data) => {
@@ -562,7 +539,7 @@ export const useDownloadPdfBulanan = () => {
                         <td>${laporan.isi_laporan}</td>
                         <td>${laporan.tanggal_dibuat}</td>
                       </tr>
-                    `
+                    `,
                     )
                     .join("")}
                 </tbody>
@@ -587,7 +564,7 @@ export const useDownloadPdfBulanan = () => {
         console.error("Error saat mendownload PDF:", err);
         warningToast("Gagal mendownload PDF.");
       },
-    }
+    },
   );
 
   return { mutate, isLoading };

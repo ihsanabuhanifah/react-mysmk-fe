@@ -19,16 +19,10 @@ export const useUpdateProfile = (id) => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
-
-// export function useNilaiSiswa(id) {
-//   syncToken();
-//   console.log(id);
-//   return axios.get(`guru/siswa/hasil-belajar/${id}` );
-// }
 
 const getNilaiSiswa = async (id) => {
   const response = await axios.get(`guru/siswa/hasil-belajar/${id}`);
@@ -38,7 +32,7 @@ const getNilaiSiswa = async (id) => {
 export function useNilaiSiswa(id) {
   const { data, isLoading, error } = useQuery(
     ["guru/siswa/hasil-belajar", id],
-    () => getNilaiSiswa(id)
+    () => getNilaiSiswa(id),
   );
   return { data, isLoading, error };
 }
@@ -49,10 +43,10 @@ export function useNilaiSiswa(id) {
 
 const getNilaiDetail = async (mapelId, siswaId) => {
   const response = await axios.get(
-    `/guru/siswa/detail-hasil-belajar/${mapelId}/${siswaId}`
+    `/guru/siswa/detail-hasil-belajar/${mapelId}/${siswaId}`,
   );
   return response.data; // Pastikan hanya data yang dikembalikan
-}
+};
 
 export function useNilaiDetail(mapelId, siswaId) {
   const { data, isLoading, error } = useQuery(
@@ -60,18 +54,8 @@ export function useNilaiDetail(mapelId, siswaId) {
     () => getNilaiDetail(mapelId, siswaId),
     {
       enabled: !!mapelId && !!siswaId,
-      staleTime : 1000 * 60 * 60 * 24,
-    }
+      staleTime: 1000 * 60 * 60 * 24,
+    },
   );
   return { data, isLoading, error };
 }
-
-// export function useNilaiDetail(mapelId, siswaId) {
-//   return useQuery(["nilaiDetailSiswa", mapelId, siswaId], async () => {
-//     const { data } = await axios.get(
-//       `/guru/siswa/detail-hasil-belajar/${mapelId}/${siswaId}`
-//     );
-//     console.log("Data detail nilai siswa:", data);
-//     return data;
-//   });
-// }

@@ -29,7 +29,6 @@ export function useRoomHandling(socket, roomId, data, handleJoinRoom) {
 
     // Rejoin saat page visible kembali
     const handleVisibilityChange = () => {
-      console.log("Visibility changed:", document.visibilityState);
       if (document.visibilityState === "visible") {
         handleJoinRoom();
       } else {

@@ -41,7 +41,7 @@ export const useDeleteFile = () => {
 
       onError: (error) => {
 
-        console.log('err')
+
         warningToast(error);
       },
     }

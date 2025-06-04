@@ -139,7 +139,6 @@ export function updateBankSoal(id, values) {
 }
 
 export function createExam(payload) {
-  console.log("pay", payload);
   syncToken();
   return axios.post("/guru/ujian/create", payload);
 }

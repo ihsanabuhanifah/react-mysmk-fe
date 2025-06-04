@@ -112,7 +112,7 @@ export default function FormSoal({ id = null }) {
     try {
       let response;
 
-      // return console.log('va', values)
+     
       if (id === undefined || id === null) {
         response = await createBankSoal(values);
         resetForm();
@@ -214,7 +214,7 @@ export default function FormSoal({ id = null }) {
     if (!socket) return;
 
     socket.on("simpan.reply", (data) => {
-      console.log("Data", data);
+
     });
 
     return () => {
@@ -412,26 +412,7 @@ export default function FormSoal({ id = null }) {
                       />
                     )}
                   </div>
-                  {/* <Form.Field
-                      control={TextArea}
-                      label={`Soal`}
-                      placeholder="soal"
-                      name={`payload[${index}]soal.soal`}
-                      onChange={(e, data) => {
-                        console.log("e", e);
-
-                        setFieldValue(`payload[${index}]soal.soal`, data.value);
-                      }}
-                      onBlur={handleBlur}
-                      value={value?.soal.soal === null ? "" : value?.soal.soal}
-                      disabled={isSubmitting}
-                      fluid
-                      type="text"
-                      error={
-                        errors?.payload?.[index]?.soal.soal !== undefined &&
-                        errors?.payload?.[index]?.soal.soal
-                      }
-                    /> */}
+                
 
                   {value.tipe === "PG" && (
                     <div className="space-y-5">

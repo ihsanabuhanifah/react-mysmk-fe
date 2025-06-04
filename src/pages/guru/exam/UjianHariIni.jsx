@@ -274,7 +274,6 @@ export default function UjianHariIni() {
                               };
                             });
 
-                            console.log("pem", penilaianOpen);
                             setPenilaianOpen(true);
                           }}
                         />

@@ -52,7 +52,6 @@ function ModalView({ open, setOpen, preview }) {
             />
           </section>
 
-          {console.log('ore', preview)}
 
           {preview.tipe === "PG" && (
             <>

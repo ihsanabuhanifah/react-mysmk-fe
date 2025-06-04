@@ -35,12 +35,12 @@ export default function DetailLaporan() {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
       select: (response) => {
-        console.log('data detail', response.data.data);
+      
         return response.data.data;
 
       },
       onSuccess: (data) => {
-        console.log("data suksus", data);
+       
         // data.soal = JSON.parse(data.soal);
 
 

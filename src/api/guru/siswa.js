@@ -8,7 +8,7 @@ export function listJadwal(params) {
 
 export function listSiswa(params) {
   syncToken();
-  console.log(params);
+
   return axios.get("guru/siswa/list", { params });
 }
 

@@ -10,14 +10,14 @@ import {
   Header,
   Divider,
   TextArea,
-  Icon
+  Icon,
 } from "semantic-ui-react";
 import { DeleteButton } from "../../../components";
 import { ReactSelectAsync, FormLabel } from "../../../components";
 
 import { getOptions } from "../../../utils/format";
 import dayjs from "dayjs";
-import useList from "../../../hook/useList"
+import useList from "../../../hook/useList";
 
 export default function FormFiturPkl({
   values,
@@ -34,7 +34,7 @@ export default function FormFiturPkl({
   mode,
   setIsOpen,
 }) {
-  const { dataTa ,dataGuru} = useList();
+  const { dataTa, dataGuru } = useList();
 
   return (
     <Segment>
@@ -45,9 +45,9 @@ export default function FormFiturPkl({
           {values?.data?.map((value, index) => (
             <div
               key={index}
-              className="grid grid-cols-3 gap-2 border p-5 mt-3 shadow-md"
+              className="mt-3 grid grid-cols-3 gap-2 border p-5 shadow-md"
             >
-              <div className="col-span-3 flex justify-end ">
+              <div className="col-span-3 flex justify-end">
                 <DeleteButton
                   disabled={values.data.length <= 1}
                   onClick={() => {
@@ -60,7 +60,6 @@ export default function FormFiturPkl({
                   size="small"
                 />
               </div>
-              
 
               <div className="col-span-3 lg:col-span-1">
                 <FormLabel
@@ -75,12 +74,8 @@ export default function FormFiturPkl({
                     value={value?.nama_siswa}
                     loadOptions={listSiswaPklOptions}
                     onChange={(data) => {
-                      console.log(data);
                       setFieldValue(`data[${index}]nama_siswa`, data);
-                      setFieldValue(
-                        `data[${index}]student_id`,
-                        data.value
-                      );
+                      setFieldValue(`data[${index}]student_id`, data.value);
                     }}
                     // error={
                     //   errors?.data?.[index]?.student_id &&
@@ -94,207 +89,197 @@ export default function FormFiturPkl({
                 </FormLabel>
               </div>
               <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="Perusahaan PKL Santri"
-                        placeholder="Ketikan Perusahaan PKL Santri"
-                        name={`data[${index}].nama_perusahaan`}
-                        value={value?.nama_perusahaan}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
+                <Form.Field
+                  control={Input}
+                  label="Perusahaan PKL Santri"
+                  placeholder="Ketikan Perusahaan PKL Santri"
+                  name={`data[${index}].nama_perusahaan`}
+                  value={value?.nama_perusahaan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
 
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="Nomer Telepon Santri"
-                        placeholder="Ketikan Nomer Telepon Santri"
-                        name={`data[${index}].no_hp`}
-                        value={value?.no_hp}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="Nomer Telepon Santri"
+                  placeholder="Ketikan Nomer Telepon Santri"
+                  name={`data[${index}].no_hp`}
+                  value={value?.no_hp}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
 
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="Alamat"
-                        placeholder="Ketikan Alamat Santri"
-                        name={`data[${index}].alamat`}
-                        value={value?.alamat}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="provinsi"
-                        placeholder="Ketikan provinsi Santri"
-                        name={`data[${index}].provinsi`}
-                        value={value?.provinsi}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="kota"
-                        placeholder="Ketikan kota Santri"
-                        name={`data[${index}].kota`}
-                        value={value?.kota}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="kecamatan"
-                        placeholder="Ketikan kecamatan Santri"
-                        name={`data[${index}].kecamatan`}
-                        value={value?.kecamatan}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="desa"
-                        placeholder="Ketikan desa Santri"
-                        name={`data[${index}].desa`}
-                        value={value?.desa}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="rt"
-                        placeholder="Ketikan rt Santri"
-                        name={`data[${index}].rt`}
-                        value={value?.rt}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="rw"
-                        placeholder="Ketikan rw Santri"
-                        name={`data[${index}].rw`}
-                        value={value?.rw}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="Penangung Jawab Perusahaan"
-                        placeholder="Ketikan Penangung Jawab Perusahaan"
-                        name={`data[${index}].penanggung_jawab_perusahaan`}
-                        value={value?.penanggung_jawab_perusahaan}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="kodepos"
-                        placeholder="Ketikan kodepos Santri"
-                        name={`data[${index}].kodepos`}
-                        value={value?.kodepos}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Select}
-                        value={value?.pembimbing_id}
-                        options={getOptions(
-                          dataGuru?.data,
-                          "nama_guru"
-                        )}
-                        label={{
-                          children: "Pilih Pembimbing ",
-                          htmlFor: `data[${index}]pembimbing_id`,
-                          name: `data[${index}]pembimbing_id`,
-                        }}
-                        onChange={(event, data) => {
-                          setFieldValue(
-                            `data[${index}]pembimbing_id`,
-                            data?.value
-                          );
-                        }}
-                        placeholder="Pilih Pembimbing"
-                        search
-                        searchInput={{
-                          id: `data[${index}]pembimbing_id`,
-                          name: `data[${index}]pembimbing_id`,
-                        }}
-                      />
-
-
-
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="latitude"
-                        placeholder="Ketikan latitude Santri"
-                        name={`data[${index}].latitude`}
-                        value={value?.latitude}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-                    <section className="col-span-3 lg:col-span-1">
-                      <Form.Field
-                        control={Input}
-                        label="longtitude"
-                        placeholder="Ketikan longtitude Santri"
-                        name={`data[${index}].longtitude`}
-                        value={value?.longtitude}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        fluid
-                        type="text"
-                      />
-                    </section>
-              
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="Alamat"
+                  placeholder="Ketikan Alamat Santri"
+                  name={`data[${index}].alamat`}
+                  value={value?.alamat}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="provinsi"
+                  placeholder="Ketikan provinsi Santri"
+                  name={`data[${index}].provinsi`}
+                  value={value?.provinsi}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="kota"
+                  placeholder="Ketikan kota Santri"
+                  name={`data[${index}].kota`}
+                  value={value?.kota}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="kecamatan"
+                  placeholder="Ketikan kecamatan Santri"
+                  name={`data[${index}].kecamatan`}
+                  value={value?.kecamatan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="desa"
+                  placeholder="Ketikan desa Santri"
+                  name={`data[${index}].desa`}
+                  value={value?.desa}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="rt"
+                  placeholder="Ketikan rt Santri"
+                  name={`data[${index}].rt`}
+                  value={value?.rt}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="rw"
+                  placeholder="Ketikan rw Santri"
+                  name={`data[${index}].rw`}
+                  value={value?.rw}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="Penangung Jawab Perusahaan"
+                  placeholder="Ketikan Penangung Jawab Perusahaan"
+                  name={`data[${index}].penanggung_jawab_perusahaan`}
+                  value={value?.penanggung_jawab_perusahaan}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="kodepos"
+                  placeholder="Ketikan kodepos Santri"
+                  name={`data[${index}].kodepos`}
+                  value={value?.kodepos}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Select}
+                  value={value?.pembimbing_id}
+                  options={getOptions(dataGuru?.data, "nama_guru")}
+                  label={{
+                    children: "Pilih Pembimbing ",
+                    htmlFor: `data[${index}]pembimbing_id`,
+                    name: `data[${index}]pembimbing_id`,
+                  }}
+                  onChange={(event, data) => {
+                    setFieldValue(`data[${index}]pembimbing_id`, data?.value);
+                  }}
+                  placeholder="Pilih Pembimbing"
+                  search
+                  searchInput={{
+                    id: `data[${index}]pembimbing_id`,
+                    name: `data[${index}]pembimbing_id`,
+                  }}
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="latitude"
+                  placeholder="Ketikan latitude Santri"
+                  name={`data[${index}].latitude`}
+                  value={value?.latitude}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
+              <section className="col-span-3 lg:col-span-1">
+                <Form.Field
+                  control={Input}
+                  label="longtitude"
+                  placeholder="Ketikan longtitude Santri"
+                  name={`data[${index}].longtitude`}
+                  value={value?.longtitude}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fluid
+                  type="text"
+                />
+              </section>
             </div>
           ))}
           <Segment basic textAlign="center">
@@ -312,7 +297,7 @@ export default function FormFiturPkl({
                       nama_perusahaan: "",
                       // guru_id: "",
                       // nama_guru: "",
-              
+
                       pembimbing_id: "",
                       // nama_pembimbing: "",
                       penanggung_jawab_perusahaan: "",
@@ -338,13 +323,13 @@ export default function FormFiturPkl({
             )}
           </Segment>
 
-          <div className="grid grid-cols-3 gap-5 ">
-            <div className="col-start-1 lg:col-start-3 grid col-span-3  grid-cols-2  gap-x-5">
+          <div className="grid grid-cols-3 gap-5">
+            <div className="col-span-3 col-start-1 grid grid-cols-2 gap-x-5 lg:col-start-3">
               <Button
                 content={"Batal"}
                 type="button"
                 fluid
-                icon={()=> <Icon name='cancel'/>}
+                icon={() => <Icon name="cancel" />}
                 basic
                 onClick={() => {
                   // setValues(initialValue);

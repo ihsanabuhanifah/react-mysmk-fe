@@ -56,7 +56,7 @@ function PenilaianPage() {
             exam_result: item.exam_result,
             last_result: item.last_result,
             is_lulus: item.is_lulus,
-            status : 'finish'
+            status: "finish",
           };
         } else {
           return {};
@@ -70,8 +70,6 @@ function PenilaianPage() {
   });
 
   const { handleSubmit, setFieldValue, values } = formik;
-
-  console.log("va", values);
 
   return (
     <LayoutPage title={"Penilaian"}>
@@ -91,7 +89,7 @@ function PenilaianPage() {
         style={{
           zoom: "80%",
         }}
-        className="grid grid-cols-6 gap-5 mb-5"
+        className="mb-5 grid grid-cols-6 gap-5"
       >
         <Button
           content={"Remidial"}
@@ -219,15 +217,14 @@ function PenilaianPage() {
                                   0,
                                   Math.min(
                                     100,
-                                    Number(e.target.value.replace(",", "."))
-                                  )
+                                    Number(e.target.value.replace(",", ".")),
+                                  ),
                                 );
 
                                 setFieldValue(
                                   `data[${index}]exam_result`,
-                                  value
+                                  value,
                                 );
-                               
 
                                 if (value > 74) {
                                   setFieldValue(`data[${index}]is_lulus`, 1);
@@ -237,7 +234,7 @@ function PenilaianPage() {
 
                                 setFieldValue(
                                   `data[${index}]last_result`,
-                                  data?.data[index].exam_result
+                                  data?.data[index].exam_result,
                                 );
                                 setFieldValue(`data[${index}]is_change`, true);
                               }}
@@ -269,7 +266,7 @@ function PenilaianPage() {
                                 mapel: mapel,
                               });
 
-                              console.log("item", item);
+                             
                               setItem(item);
                               setJawaban(() => {
                                 if (!!item.jawaban === false) {

@@ -29,8 +29,6 @@ const profileSchema = Yup.object().shape({
 export default function ProfileEdit() {
   const { profile , profileFetching} = useList()
 
-  console.log("pro", profile)
-
   const { upload, isLoading: isLoadUpload } = useUploadFile(profile?.siswa);
 
   const initialState = {
@@ -48,7 +46,7 @@ export default function ProfileEdit() {
 
   const onSubmit = async (values, { setErrors }) => {
     values.tanggal_lahir = format(parseISO(values.tanggal_lahir), "yyyy-MM-dd");
-    console.log(values);
+  
     mutate(values);
   };
 

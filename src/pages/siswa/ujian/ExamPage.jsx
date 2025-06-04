@@ -8,7 +8,14 @@ import Pg from "./Pg";
 import TF from "./TF";
 import ES from "./ES";
 import clsx from "clsx";
-import { Button, Icon, Dimmer, Loader, Modal, Progress } from "semantic-ui-react";
+import {
+  Button,
+  Icon,
+  Dimmer,
+  Loader,
+  Modal,
+  Progress,
+} from "semantic-ui-react";
 import ModalKonfirmasi from "../../../components/ModalKonfrimasi";
 import LV from "./LV";
 import Timer from "./Timer";
@@ -105,9 +112,11 @@ export default function ExamPage({ examActive, setExamActive }) {
       }
 
       // Calculate answered questions
-      const answered = dataSoal.filter(item => item.jawaban !== "" && item.jawaban !== null).length;
+      const answered = dataSoal.filter(
+        (item) => item.jawaban !== "" && item.jawaban !== null,
+      ).length;
       setAnsweredCount(answered);
-      
+
       setPayload((state) => {
         return { ...state, data: dataSoal };
       });
@@ -121,7 +130,9 @@ export default function ExamPage({ examActive, setExamActive }) {
   usePreventCheating(handleViolation);
 
   const updateAnswerCount = (newPayload) => {
-    const answered = newPayload?.data?.filter(item => item.jawaban !== "" && item.jawaban !== null).length;
+    const answered = newPayload?.data?.filter(
+      (item) => item.jawaban !== "" && item.jawaban !== null,
+    ).length;
     setAnsweredCount(answered);
   };
 
@@ -130,19 +141,13 @@ export default function ExamPage({ examActive, setExamActive }) {
   }, [payload]);
 
   const isQuestionAnswered = (item) => {
-    if (!payload?.data ) return false;
+    if (!payload?.data) return false;
 
-  
-    const answer = payload?.data?.filter((i)=>i.id === item.id)
+    const answer = payload?.data?.filter((i) => i.id === item.id);
 
-    console.log("an", item.id)
-    console.log("pa", payload.data)
-    console.log("soal", soal)
-    return !!answer[0]?.jawaban
+    return !!answer[0]?.jawaban;
   };
 
-
-  
   if (isFetching || data?.data?.soal === undefined) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
@@ -171,7 +176,7 @@ export default function ExamPage({ examActive, setExamActive }) {
       {mouse && cutDown > 0 && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
           <div className="text-center">
-            <div className="text-6xl font-bold text-red-500 animate-pulse">
+            <div className="animate-pulse text-6xl font-bold text-red-500">
               {cutDown}
             </div>
             <div className="mt-4 text-2xl font-medium text-white">
@@ -200,14 +205,16 @@ export default function ExamPage({ examActive, setExamActive }) {
       {/* Header Section */}
       <div className="flex items-center justify-between bg-green-700 p-4 text-white shadow-md">
         <div className="flex items-center space-x-4">
-          <div className="text-xl font-bold">{localStorage.getItem("mapel")}</div>
+          <div className="text-xl font-bold">
+            {localStorage.getItem("mapel")}
+          </div>
           {data?.data?.tipe_ujian === "closed" && (
             <div className="rounded bg-red-500 px-3 py-1 text-sm font-medium">
               Mode Pengawasan Ketat
             </div>
           )}
         </div>
-        
+
         <div className="flex items-center space-x-6">
           <div className="text-right">
             <div className="text-sm font-medium">Sisa Waktu</div>
@@ -245,7 +252,9 @@ export default function ExamPage({ examActive, setExamActive }) {
         {/* Question Navigation */}
         <div className="w-64 border-r bg-white p-4 shadow-sm">
           <div className="mb-6">
-            <h3 className="mb-3 text-lg font-semibold text-gray-800">Navigasi Soal</h3>
+            <h3 className="mb-3 text-lg font-semibold text-gray-800">
+              Navigasi Soal
+            </h3>
             <div className="grid grid-cols-5 gap-2">
               {soal.map((item, index) => (
                 <button
@@ -254,10 +263,13 @@ export default function ExamPage({ examActive, setExamActive }) {
                   className={clsx(
                     "flex h-12 w-12 items-center justify-center rounded-lg border-2 text-lg font-medium transition-all",
                     {
-                      "border-green-600 bg-blue-100 text-blue-700": index === activeSoal,
-                      "border-green-500 bg-green-100 text-green-700": isQuestionAnswered(item),
-                      "border-gray-300 hover:border-green-300": !isQuestionAnswered(item) && index !== activeSoal,
-                    }
+                      "border-green-600 bg-blue-100 text-blue-700":
+                        index === activeSoal,
+                      "border-green-500 bg-green-100 text-green-700":
+                        isQuestionAnswered(item),
+                      "border-gray-300 hover:border-green-300":
+                        !isQuestionAnswered(item) && index !== activeSoal,
+                    },
                   )}
                 >
                   {index + 1}
@@ -286,7 +298,7 @@ export default function ExamPage({ examActive, setExamActive }) {
               <Icon name="save" className="!mr-2" />
               Simpan Sementara
             </Button>
-            
+
             <Button
               fluid
               color="blue"
@@ -306,14 +318,17 @@ export default function ExamPage({ examActive, setExamActive }) {
           <div className="rounded-lg bg-white p-8 shadow-sm">
             {soal.map((item, index) => {
               const soals = JSON.parse(item.soal);
-              
+
               return (
-                <div key={index} className={index === activeSoal ? "block" : "hidden"}>
+                <div
+                  key={index}
+                  className={index === activeSoal ? "block" : "hidden"}
+                >
                   <div className="mb-6 flex items-start">
                     <div className="mr-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-lg font-bold text-green-700">
                       {index + 1}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="min-w-0 flex-1">
                       {index === activeSoal && item.tipe === "PG" && (
                         <Pg
                           item={item}
@@ -325,7 +340,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                           }}
                         />
                       )}
-                      
+
                       {index === activeSoal && item.tipe === "TF" && (
                         <TF
                           item={item}
@@ -337,7 +352,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                           }}
                         />
                       )}
-                      
+
                       {index === activeSoal && item.tipe === "ES" && (
                         <ES
                           tipe={data?.data?.tipe_ujian}
@@ -350,7 +365,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                           }}
                         />
                       )}
-                      
+
                       {index === activeSoal && item.tipe === "LV" && (
                         <LV
                           tipe={data?.data?.tipe_ujian}
@@ -365,7 +380,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="mt-8 flex justify-between border-t pt-6">
                     <Button
                       disabled={activeSoal === 0}
@@ -374,7 +389,7 @@ export default function ExamPage({ examActive, setExamActive }) {
                     >
                       <Icon name="arrow left" /> Sebelumnya
                     </Button>
-                    
+
                     <Button
                       disabled={activeSoal === soal.length - 1}
                       onClick={() => setActiveSoal(activeSoal + 1)}
@@ -410,7 +425,9 @@ export default function ExamPage({ examActive, setExamActive }) {
           });
         }}
         title={"Konfirmasi Pengumpulan Jawaban"}
-        content={"Apakah Anda yakin ingin mengakhiri ujian dan mengumpulkan jawaban? Pastikan semua soal telah terjawab."}
+        content={
+          "Apakah Anda yakin ingin mengakhiri ujian dan mengumpulkan jawaban? Pastikan semua soal telah terjawab."
+        }
       />
     </div>
   );

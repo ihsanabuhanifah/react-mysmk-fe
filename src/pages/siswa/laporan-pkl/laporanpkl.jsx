@@ -39,8 +39,6 @@ const LaporanPkl = () => {
     params: downloadPdfParams,
     setParams: setDownloadPdfParams,
   } = useDownloadPdf();
-  console.log(downloadPdfParams);
-  console.log(downloadPdfFilterParams);
 
   const { mutate: downloadPdfBulanan, isLoading: downloadPdfBulananLoading } =
     useDownloadPdfBulanan();
@@ -60,16 +58,11 @@ const LaporanPkl = () => {
   let navigate = useNavigate();
   const today = dayjs().format("YYYY-MM-DD");
   const hasSubmittedToday = data?.data.some((item) => item.tanggal === today);
-  // console.log(params);
-  // console.log(params.sampaiTanggal, "dari tanggal");
-  // console.log(params);
-  // console.log(filterParams);
-  // console.log(params?.status_kehadiran);
+
   const handleSidebar = () => {
     setVisible(!visible);
   };
   const handleDateChange = (e, value) => {
-    console.log(value, "dddddddddddddddddd");
     if (value.name === "sampaiTanggal") {
       if (value >= params.dariTanggal) {
         setParams((params) => ({
@@ -78,7 +71,7 @@ const LaporanPkl = () => {
         }));
       } else {
         alert(
-          `to year harus lebih besar dari dariTanggal ( ${params.dariTanggal} )`
+          `to year harus lebih besar dari dariTanggal ( ${params.dariTanggal} )`,
         );
       }
     }
@@ -164,8 +157,8 @@ const LaporanPkl = () => {
       </Sidebar>
 
       <div>
-        <div className="flex flex-col gap-y-4 pb-10 w-full h-full pl-2 pr-5">
-          <div className="grid sm:grid-cols-1 md:grid-cols-8 pt-5 gap-5">
+        <div className="flex h-full w-full flex-col gap-y-4 pb-10 pl-2 pr-5">
+          <div className="grid gap-5 pt-5 sm:grid-cols-1 md:grid-cols-8">
             <Button
               color="green"
               size="medium"
@@ -188,10 +181,8 @@ const LaporanPkl = () => {
                   downloadPdfParams &&
                   downloadPdfParams?.bulan === "Semua Bulan"
                 ) {
-                  console.log("jalan");
                   downloadPdfBulanan();
                 } else {
-                  console.log("jalan2");
                   mutate();
                 }
               }}
@@ -251,14 +242,14 @@ const LaporanPkl = () => {
             ) : data && data.data.length > 0 ? (
               <TableLaporan data={data.data} />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
+              <div className="flex h-full w-full items-center justify-center">
                 <h2 className="text-4xl font-semibold">
                   Anda Belum Memiliki Laporan
                 </h2>
               </div>
             )}
           </div>
-          <div className="w-full justify-center mt-4">
+          <div className="mt-4 w-full justify-center">
             <Pagination
               handlePage={handlePage}
               handlePageSize={handlePageSize}

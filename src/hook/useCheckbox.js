@@ -9,21 +9,19 @@ const useCheckbox = () => {
         return [...state, id];
       });
     } else {
-      console.log("masuk sini");
       let filter = payload.filter((item) => item !== id);
       setPayload(filter);
     }
   };
 
- const isChecked = (id) => {
-    return payload.includes(id)
- }
+  const isChecked = (id) => {
+    return payload.includes(id);
+  };
   return {
     handleCheck,
     isChecked,
     payload,
-    setPayload
-    
+    setPayload,
   };
 };
 

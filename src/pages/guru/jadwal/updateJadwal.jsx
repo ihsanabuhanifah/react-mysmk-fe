@@ -3,7 +3,6 @@ import LayoutPage from "../../../module/layoutPage";
 import useList from "../../../hook/useList";
 import { Formik } from "formik";
 
-
 import { toast } from "react-toastify";
 import { DeleteButton } from "../../../components";
 
@@ -111,14 +110,14 @@ export function UpdateJadwal() {
                 {values?.data?.map((value, index) => {
                   return (
                     <>
-                      <div className="col-span-3 flex justify-end ">
+                      <div className="col-span-3 flex justify-end">
                         <DeleteButton
                           disabled={values.data.length <= 1}
                           onClick={() => {
                             let filtered = values.data.filter(
                               (i, itemIndex) => {
                                 return itemIndex !== index;
-                              }
+                              },
                             );
 
                             setFieldValue("data", filtered);
@@ -126,7 +125,7 @@ export function UpdateJadwal() {
                           size="small"
                         />
                       </div>
-                      <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
+                      <div className="grid grid-cols-3 gap-x-5 gap-y-2 p-5 shadow-md">
                         <section>
                           <Form.Dropdown
                             selection
@@ -165,7 +164,7 @@ export function UpdateJadwal() {
                             onChange={(event, data) => {
                               setFieldValue(
                                 `data[${index}]teacher_id`,
-                                data?.value
+                                data?.value,
                               );
                             }}
                             placeholder="Pilih Guru"
@@ -189,7 +188,7 @@ export function UpdateJadwal() {
                             onChange={(event, data) => {
                               setFieldValue(
                                 `data[${index}]kelas_id`,
-                                data?.value
+                                data?.value,
                               );
                             }}
                             placeholder="Pilih Kelas"
@@ -223,13 +222,10 @@ export function UpdateJadwal() {
                             onChange={(e, data) => {
                               setFieldValue(
                                 `data[${index}]semester`,
-                                data.value
+                                data.value,
                               );
 
-                              setFieldValue(
-                                `data[${index}]mapel_id`,
-                                ""
-                              );
+                              setFieldValue(`data[${index}]mapel_id`, "");
                             }}
                             // error={
                             //   errors?.absensi_kehadiran?.[index]?.kehadiran
@@ -241,16 +237,18 @@ export function UpdateJadwal() {
                           />
                         </section>
 
-                        {console.log('va', value.mapel_id)}
-                       
-
-                       
                         <section>
                           <Form.Field
-                          disabled={!!value?.semester === false}
+                            disabled={!!value?.semester === false}
                             control={Select}
                             value={value?.mapel_id}
-                            options={getOptions(dataMapel?.data?.filter((item)=> Number(item.kategori) === value?.semester), "nama_mapel")}
+                            options={getOptions(
+                              dataMapel?.data?.filter(
+                                (item) =>
+                                  Number(item.kategori) === value?.semester,
+                              ),
+                              "nama_mapel",
+                            )}
                             label={{
                               children: "Mata Pelajaran",
                               htmlFor: `data[${index}]mapel_id`,
@@ -259,7 +257,7 @@ export function UpdateJadwal() {
                             onChange={(event, data) => {
                               setFieldValue(
                                 `data[${index}]mapel_id`,
-                                data?.value
+                                data?.value,
                               );
                             }}
                             placeholder="Pilih Mata Pelajaran"
@@ -329,7 +327,7 @@ export function UpdateJadwal() {
                             onChange={(e, data) => {
                               setFieldValue(
                                 `data[${index}]jumlah_jam`,
-                                data.value
+                                data.value,
                               );
                             }}
                             // error={
@@ -341,14 +339,14 @@ export function UpdateJadwal() {
                             value={value?.jumlah_jam}
                           />
                         </section>
-                        
+
                         <section>
                           <Form.Field
                             control={Select}
                             value={value?.ta_id}
                             options={getOptions(
                               dataTa?.data,
-                              "nama_tahun_ajaran"
+                              "nama_tahun_ajaran",
                             )}
                             label={{
                               children: "Tahun Pelajaran",
@@ -372,7 +370,7 @@ export function UpdateJadwal() {
                 })}
               </div>
               <div>
-                <div className="flex items-center justify-center w-full my-5">
+                <div className="my-5 flex w-full items-center justify-center">
                   <Button
                     basic
                     fluid
@@ -391,7 +389,7 @@ export function UpdateJadwal() {
                           mapel_id: "",
                           jam_ke: "",
                           jumlah_jam: "",
-                          semester:  values?.data?.[0]?.semestar,
+                          semester: values?.data?.[0]?.semestar,
                           ta_id: values?.data?.[0]?.ta_id,
                           student: "",
                           status: 1,

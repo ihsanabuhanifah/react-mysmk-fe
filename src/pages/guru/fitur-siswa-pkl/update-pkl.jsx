@@ -1,18 +1,17 @@
-
-import React, { useEffect, useState } from 'react';
-import useList from '../../../hook/useList';
-import LayoutPage from '../../../module/layoutPage';
-import { Formik } from 'formik';
+import React, { useEffect, useState } from "react";
+import useList from "../../../hook/useList";
+import LayoutPage from "../../../module/layoutPage";
+import { Formik } from "formik";
 import { Form, Select, Button, Icon, Header, Input } from "semantic-ui-react";
 import { ReactSelectAsync, FormLabel } from "../../../components";
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { toast } from 'react-toastify';
-import { listSiswaPklOptions } from '../../../api/list';
-import { getOptions } from '../../../utils/format';
-import { useNavigate, useParams } from 'react-router-dom';
-import { updateSiswaPkl, detailSiswaPkl } from '../../../api/guru/fitur-pkl';
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { toast } from "react-toastify";
+import { listSiswaPklOptions } from "../../../api/list";
+import { getOptions } from "../../../utils/format";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateSiswaPkl, detailSiswaPkl } from "../../../api/guru/fitur-pkl";
 import * as Yup from "yup";
-import axios from 'axios';
+import axios from "axios";
 
 let siswapklSchema = Yup.object().shape({
   student_id: Yup.string().required("wajib pilih"),
@@ -36,8 +35,7 @@ export default function UpdatePkl() {
   // const navigate = useNavigate();
   const { id } = useParams();
   const queryClient = useQueryClient();
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
 
   let { data, isFetching } = useQuery(
     //query key
@@ -49,30 +47,25 @@ export default function UpdatePkl() {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id !== undefined,
       select: (response) => {
-        console.log('data detail', response.data.data);
         return response.data.data;
-
       },
       onSuccess: (data) => {
-        console.log("data suksus", data);
         // data.soal = JSON.parse(data.soal);
-
-
       },
-    }
+    },
   );
 
   useEffect(() => {
-    if(!!data === true){
+    if (!!data === true) {
       setInitialState({
         ...data,
-        nama_siswa : {
-          value : data.student_id,
-          label : data.siswa.nama_siswa
-        }
+        nama_siswa: {
+          value: data.student_id,
+          label: data.siswa.nama_siswa,
+        },
       });
     }
-  }, [data])
+  }, [data]);
 
   const [initialState, setInitialState] = useState({
     id: data?.id,
@@ -100,9 +93,6 @@ export default function UpdatePkl() {
     longtitude: data?.longtitude,
     latitude: data?.latitude,
   });
-
-
-
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -158,8 +148,6 @@ export default function UpdatePkl() {
     }
   };
 
-
-
   // const onSubmit = async (values, { resetForm }) => {
   //   try {
   //     const response = await updateSiswaPkl(id, values);
@@ -202,27 +190,27 @@ export default function UpdatePkl() {
   //   }
   // };
 
-
-
   let { dataKelas, dataGuru } = useList();
 
-
   return (
-    <LayoutPage title={'Update Tempat Santri'} isLoading={isFetching}>
-      <section className='md:mt-5 px-2'>
-        <Header>
-          {"Form Update Tempat PKL santri"}
-        </Header>
-        <div className="flex flex-row justify-start items-center" onClick={() => navigate('/guru/fitur-siswa-pkl')}>
-            <Icon
-              name="arrow left"
-              size="large"
-
-              className="cursor-pointer"
-            />
-            <p className="text-xl  font-semibold text-black cursor-pointer">Kembali</p>
-          </div>
-        <Formik initialValues={initialState} enableReinitialize onSubmit={onSubmit} validationSchema={siswapklSchema}>
+    <LayoutPage title={"Update Tempat Santri"} isLoading={isFetching}>
+      <section className="px-2 md:mt-5">
+        <Header>{"Form Update Tempat PKL santri"}</Header>
+        <div
+          className="flex flex-row items-center justify-start"
+          onClick={() => navigate("/guru/fitur-siswa-pkl")}
+        >
+          <Icon name="arrow left" size="large" className="cursor-pointer" />
+          <p className="cursor-pointer text-xl font-semibold text-black">
+            Kembali
+          </p>
+        </div>
+        <Formik
+          initialValues={initialState}
+          enableReinitialize
+          onSubmit={onSubmit}
+          validationSchema={siswapklSchema}
+        >
           {({
             values,
             errors,
@@ -233,13 +221,13 @@ export default function UpdatePkl() {
             isSubmitting,
             setFieldTouched,
             setFieldValue,
-            resetForm
+            resetForm,
           }) => (
             <Form onSubmit={handleSubmit}>
-              {console.log('err fatih', errors)}
-              {console.log('err touched', touched)}
+              {console.log("err fatih", errors)}
+              {console.log("err touched", touched)}
               {/* {JSON.stringify(values)} */}
-              <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
+              <div className="grid grid-cols-3 gap-x-5 gap-y-2 p-5 shadow-md">
                 <div className="col-span-3 lg:col-span-1">
                   <FormLabel
                     error={errors?.student_id && touched?.student_id}
@@ -252,16 +240,11 @@ export default function UpdatePkl() {
                       onChange={(data) => {
                         // console.log('data siswa', data);
                         setFieldValue(`nama_siswa`, data);
-                        setFieldValue(
-                          `student_id`,
-                          data.value
-                        );
+                        setFieldValue(`student_id`, data.value);
                       }}
                       error={
-                        errors?.student_id !== undefined &&
-                        touched?.student_id
+                        errors?.student_id !== undefined && touched?.student_id
                       }
-
                       placeholder="Nama Siswa"
                       additional={{
                         page: 1,
@@ -271,7 +254,6 @@ export default function UpdatePkl() {
                 </div>
 
                 <section className="col-span-3 lg:col-span-1">
-
                   <Form.Field
                     control={Input}
                     label="Perusahaan PKL Santri"
@@ -288,7 +270,7 @@ export default function UpdatePkl() {
                     }
                   />
                   {touched.nama_perusahaan && errors.nama_perusahaan && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.nama_perusahaan}
                     </div>
                   )}
@@ -305,13 +287,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.no_hp !== undefined &&
-                      touched?.no_hp
-                    }
+                    error={errors?.no_hp !== undefined && touched?.no_hp}
                   />
                   {touched.no_hp && errors.no_hp && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.no_hp}
                     </div>
                   )}
@@ -328,13 +307,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.alamat !== undefined &&
-                      touched?.alamat
-                    }
+                    error={errors?.alamat !== undefined && touched?.alamat}
                   />
                   {touched.alamat && errors.alamat && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.alamat}
                     </div>
                   )}
@@ -350,13 +326,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.provinsi !== undefined &&
-                      touched?.provinsi
-                    }
+                    error={errors?.provinsi !== undefined && touched?.provinsi}
                   />
                   {touched.provinsi && errors.provinsi && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.provinsi}
                     </div>
                   )}
@@ -372,13 +345,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.kota !== undefined &&
-                      touched?.kota
-                    }
+                    error={errors?.kota !== undefined && touched?.kota}
                   />
                   {touched.kota && errors.kota && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.kota}
                     </div>
                   )}
@@ -395,12 +365,11 @@ export default function UpdatePkl() {
                     fluid
                     type="text"
                     error={
-                      errors?.kecamatan !== undefined &&
-                      touched?.kecamatan
+                      errors?.kecamatan !== undefined && touched?.kecamatan
                     }
                   />
                   {touched.kecamatan && errors.kecamatan && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.kecamatan}
                     </div>
                   )}
@@ -416,13 +385,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.desa !== undefined &&
-                      touched?.desa
-                    }
+                    error={errors?.desa !== undefined && touched?.desa}
                   />
                   {touched.desa && errors.desa && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.desa}
                     </div>
                   )}
@@ -438,13 +404,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.rt !== undefined &&
-                      touched?.rt
-                    }
+                    error={errors?.rt !== undefined && touched?.rt}
                   />
                   {touched.rt && errors.rt && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.rt}
                     </div>
                   )}
@@ -460,13 +423,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.rw !== undefined &&
-                      touched?.rw
-                    }
+                    error={errors?.rw !== undefined && touched?.rw}
                   />
                   {touched.rw && errors.rw && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.rw}
                     </div>
                   )}
@@ -487,11 +447,12 @@ export default function UpdatePkl() {
                       touched?.penanggung_jawab_perusahaan
                     }
                   />
-                  {touched.penanggung_jawab_perusahaan && errors.penanggung_jawab_perusahaan && (
-                    <div className="ui pointing red basic label ">
-                      {errors.penanggung_jawab_perusahaan}
-                    </div>
-                  )}
+                  {touched.penanggung_jawab_perusahaan &&
+                    errors.penanggung_jawab_perusahaan && (
+                      <div className="ui pointing red basic label">
+                        {errors.penanggung_jawab_perusahaan}
+                      </div>
+                    )}
                 </section>
                 <section className="col-span-3 lg:col-span-1">
                   <Form.Field
@@ -504,13 +465,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.kode_pos !== undefined &&
-                      touched?.kode_pos
-                    }
+                    error={errors?.kode_pos !== undefined && touched?.kode_pos}
                   />
                   {touched.kode_pos && errors.kode_pos && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.kode_pos}
                     </div>
                   )}
@@ -548,20 +506,14 @@ export default function UpdatePkl() {
                   <Form.Field
                     control={Select}
                     value={values?.pembimbing_id}
-                    options={getOptions(
-                      dataGuru?.data,
-                      "nama_guru"
-                    )}
+                    options={getOptions(dataGuru?.data, "nama_guru")}
                     label={{
                       children: "Pilih Pembimbing ",
                       htmlFor: `pembimbing_id`,
                       name: `pembimbing_id`,
                     }}
                     onChange={(event, data) => {
-                      setFieldValue(
-                        `pembimbing_id`,
-                        data?.value
-                      );
+                      setFieldValue(`pembimbing_id`, data?.value);
                     }}
                     placeholder="Pilih Pembimbing"
                     search
@@ -575,12 +527,10 @@ export default function UpdatePkl() {
                     }
                   />
                   {touched.pembimbing_id && errors.pembimbing_id && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.pembimbing_id}
                     </div>
                   )}
-
-
                 </section>
                 <section className="col-span-3 lg:col-span-1">
                   <Form.Field
@@ -593,13 +543,10 @@ export default function UpdatePkl() {
                     onBlur={handleBlur}
                     fluid
                     type="text"
-                    error={
-                      errors?.latitude !== undefined &&
-                      touched?.latitude
-                    }
+                    error={errors?.latitude !== undefined && touched?.latitude}
                   />
                   {touched.latitude && errors.latitude && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.latitude}
                     </div>
                   )}
@@ -616,17 +563,15 @@ export default function UpdatePkl() {
                     fluid
                     type="text"
                     error={
-                      errors?.longtitude !== undefined &&
-                      touched?.longtitude
+                      errors?.longtitude !== undefined && touched?.longtitude
                     }
                   />
                   {touched.longtitude && errors.longtitude && (
-                    <div className="ui pointing red basic label ">
+                    <div className="ui pointing red basic label">
                       {errors.longtitude}
                     </div>
                   )}
                 </section>
-
               </div>
 
               <div>

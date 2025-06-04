@@ -55,10 +55,9 @@ export default function DaftarSiswa() {
     {
       refetchOnWindowFocus: false,
       select: (response) => {
-        console.log(response.data)
         return response.data;
       },
-    }
+    },
   );
 
   let { isLoadingDownload, handleDownload } = useDownload({
@@ -69,9 +68,9 @@ export default function DaftarSiswa() {
   });
 
   const handleEvent = (event) => {
-    console.log("ee", event);
+  
     if (event.key === "x") {
-      console.log("ok", event);
+      console.log("event", event);
     }
   };
 
@@ -118,8 +117,8 @@ export default function DaftarSiswa() {
           setVisible={setVisible}
         />
       </Sidebar>
-      <section onKeyPress={handleEvent} className=" pb-10 ">
-        <section className="grid grid-cols-6 gap-5 ">
+      <section onKeyPress={handleEvent} className="pb-10">
+        <section className="grid grid-cols-6 gap-5">
           <div className="col-span-6 lg:col-span-3 xl:col-span-3">
             <Input
               fluid
@@ -235,7 +234,9 @@ export default function DaftarSiswa() {
                       /> */}
                       <EditButton
                         onClick={() =>
-                          window.open(`daftar-siswa/update-siswa/${value?.siswa?.id}`)
+                          window.open(
+                            `daftar-siswa/update-siswa/${value?.siswa?.id}`,
+                          )
                         }
                       />
                       <DeleteButton

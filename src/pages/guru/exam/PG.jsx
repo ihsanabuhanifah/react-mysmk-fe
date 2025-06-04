@@ -25,7 +25,7 @@ export default function Pg({ soals, jawaban, item, nomor }) {
               disabled
               value={item.jawaban === jawabanSiswa?.jawaban ? item.point : 0}
               onChange={(e) => {
-                console.log("jalaj");
+             
               }}
             />
           </div>

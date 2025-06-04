@@ -39,7 +39,7 @@ export const useLaporanPklList = () => {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
   return {
     setParams,
@@ -57,14 +57,12 @@ export const useLaporanPklList = () => {
 
 export function createLaporanPkl(payload) {
   syncToken();
-  console.log(payload);
 
   return axiosClient.post("/guru/laporan-harian-pkl/create", payload);
 }
 export function updateLaporanPkl(id, values) {
   syncToken();
-  // let payload = values.payload[0];
-  console.log("update pkl tes", values);
+
   return axiosClient.put(`guru/laporan-harian-pkl/update/${id}`, values);
 }
 
@@ -75,7 +73,7 @@ export function deleteLaporanPkl(id) {
 
 export function detailLaporanPkl(id) {
   syncToken();
-  console.log("api detail");
+
   return axiosClient.get(`guru/laporan-harian-pkl/detail/${id}`);
 }
 
@@ -101,7 +99,7 @@ export function detailLaporanPkl(id) {
 //     {
 //       onSuccess: (response) => {
 //         console.log('berhasil');
-        
+
 //         const data = response.data.data;
 //         console.log(data);
 //         // Generate HTML for PDF with inline CSS
@@ -195,7 +193,7 @@ export const useDownloadPdf = () => {
   const defParams = {
     bulan: null,
     tahun: 2024,
-    studentId : null
+    studentId: null,
   };
 
   const { filterParams, setParams, params } = usePagination(defParams);
@@ -206,10 +204,9 @@ export const useDownloadPdf = () => {
         responseType: "json",
       }),
     {
-      
       onSuccess: (response) => {
         const data = response.data.data;
-console.log(data)
+        console.log(data);
         // Generate HTML untuk PDF
         const generateHtml = (data) => {
           return `
@@ -245,7 +242,7 @@ console.log(data)
                               <td style="padding: 8px; border: 1px solid black;">${laporan.isi_laporan || "Belum memiliki data"}</td>
                               <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.tanggal || "-"}</td>
                               <td style="padding: 8px; text-align: center; border: 1px solid black;">${laporan.status || "-"}</td>
-                            </tr>`
+                            </tr>`,
                           )
                           .join("")
                       : `<tr><td colspan="5" style="text-align: center; padding: 8px;">Tidak ada data laporan PKL.</td></tr>`
@@ -276,7 +273,8 @@ console.log(data)
                     data.length > 0
                       ? data
                           .map((laporan, index) =>
-                            laporan.laporan_diniyyah_harian && laporan.laporan_diniyyah_harian.length > 0
+                            laporan.laporan_diniyyah_harian &&
+                            laporan.laporan_diniyyah_harian.length > 0
                               ? laporan.laporan_diniyyah_harian
                                   .map(
                                     (diniyyah, diniIndex) => `
@@ -293,10 +291,10 @@ console.log(data)
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_ashar || "-"}</td>
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_magrib || "-"}</td>
                                       <td style="padding: 8px; text-align: center; border: 1px solid black;">${diniyyah.sholat_isya || "-"}</td>
-                                    </tr>`
+                                    </tr>`,
                                   )
                                   .join("")
-                              : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data diniyyah untuk hari ini.</td></tr>`
+                              : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data diniyyah untuk hari ini.</td></tr>`,
                           )
                           .join("")
                       : `<tr><td colspan="12" style="text-align: center; padding: 8px;">Tidak ada data laporan diniyyah.</td></tr>`
@@ -306,7 +304,6 @@ console.log(data)
             </div>
           `;
         };
-        
 
         const content = generateHtml(data);
 
@@ -334,12 +331,11 @@ console.log(data)
         console.error("Error saat mendownload PDF:", err);
         warningToast("Gagal mendownload PDF.");
       },
-    }
+    },
   );
 
   return { mutate, isLoading, filterParams, setParams, params };
 };
-
 
 // export const useDownloadPdfBulanan = (id) => {
 //   const { successToast, warningToast } = useToast();
@@ -492,7 +488,7 @@ export const useDownloadPdfBulanan = () => {
                         <td>${laporan.isi_laporan}</td>
                         <td>${laporan.tanggal_dibuat}</td>
                       </tr>
-                    `
+                    `,
                     )
                     .join("")}
                 </tbody>
@@ -517,7 +513,7 @@ export const useDownloadPdfBulanan = () => {
         console.error("Error saat mendownload PDF:", err);
         warningToast("Gagal mendownload PDF.");
       },
-    }
+    },
   );
 
   return { mutate, isLoading };

@@ -62,7 +62,7 @@ const LaporanDiniyyah = () => {
   const { mutate, isLoading } = useCreateLaporanDiniyyah();
   const { isLoading: updateIsLoading, mutate: updateMutate } =
     useUpdateLaporanDiniyyah(data?.id);
-  console.log(data && data ? "ok" : "no");
+
   const handleSubmit = (values) => {
     if (data !== null) {
       updateMutate(values);
@@ -71,7 +71,6 @@ const LaporanDiniyyah = () => {
     }
   };
 
-  console.log(data, "data");
   const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState({
     dzikir_pagi: false,
@@ -119,7 +118,7 @@ const LaporanDiniyyah = () => {
           className="cursor-pointer pb-4"
         />
       </div>
-      <div className="flex flex-col gap-y-4 overflow-y-auto pb-12 w-full h-full pl-2 pr-5 mb-2">
+      <div className="mb-2 flex h-full w-full flex-col gap-y-4 overflow-y-auto pb-12 pl-2 pr-5">
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -191,7 +190,6 @@ const LaporanDiniyyah = () => {
                   </SemanticForm.Group>
 
                   <SemanticForm.Group widths="equal">
-                    
                     <SemanticForm.Field>
                       <label>Dari Ayat</label>
                       <Field
@@ -253,8 +251,6 @@ const LaporanDiniyyah = () => {
                         placeholder="Isi keterangan"
                         value={values.sholat_dzuhur}
                         onChange={(e, data) => {
-                          console.log(e);
-                          console.log(data.value);
                           setFieldValue("sholat_dzuhur", data.value);
                         }}
                       />
@@ -273,8 +269,6 @@ const LaporanDiniyyah = () => {
                         placeholder="Isi keterangan"
                         value={values.sholat_ashar}
                         onChange={(e, data) => {
-                          console.log(e);
-                          console.log(data.value);
                           setFieldValue("sholat_ashar", data.value);
                         }}
                       />
@@ -292,8 +286,6 @@ const LaporanDiniyyah = () => {
                         placeholder="Isi keterangan"
                         value={values.sholat_magrib}
                         onChange={(e, data) => {
-                          console.log(e);
-                          console.log(data.value);
                           setFieldValue("sholat_magrib", data.value);
                         }}
                       />
@@ -311,8 +303,6 @@ const LaporanDiniyyah = () => {
                       placeholder="Isi keterangan"
                       value={values.sholat_isya}
                       onChange={(e, data) => {
-                        console.log(e);
-                        console.log(data.value);
                         setFieldValue("sholat_isya", data.value);
                       }}
                     />
@@ -327,7 +317,7 @@ const LaporanDiniyyah = () => {
 
                   <h1 className="text-gray-500">Laporan Dzikir Pagi Petang</h1>
 
-                  <div className="w-full flex justify-between items-center px-0 md:px-6">
+                  <div className="flex w-full items-center justify-between px-0 md:px-6">
                     <SemanticForm.Field>
                       <Checkbox
                         label="Dzikir Pagi"
@@ -347,7 +337,9 @@ const LaporanDiniyyah = () => {
                       />
                     </SemanticForm.Field>
                   </div>
-                  <h5 className="text-yellow-600 italic">*Buatlah Laporan dengan Sebenar-benarnya </h5>
+                  <h5 className="italic text-yellow-600">
+                    *Buatlah Laporan dengan Sebenar-benarnya{" "}
+                  </h5>
                   <Button
                     className="mt-2 w-[100%]"
                     style={{ marginBottom: "20px", marginTop: "15px" }}
@@ -365,8 +357,6 @@ const LaporanDiniyyah = () => {
           )}
         </Formik>
       </div>
-
-  
     </LayoutSiswa>
   );
 };

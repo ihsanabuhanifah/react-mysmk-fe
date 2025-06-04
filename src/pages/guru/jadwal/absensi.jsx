@@ -327,7 +327,7 @@ export default function Absensi() {
                     <input
                       type="checkbox"
                       onChange={(e) => {
-                        console.log("e", e.target.checked);
+
                         if (e.target.checked) {
                           let kehadiran = [];
                           // eslint-disable-next-line array-callback-return

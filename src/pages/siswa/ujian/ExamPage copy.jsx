@@ -81,8 +81,6 @@ export default function ExamPage({ examActive, setExamActive }) {
 
   // submit otomatis
 
-
-
   useEffect(() => {
     if (!!data?.data?.soal === true) {
       let res = JSON.parse(data.data.soal);
@@ -139,8 +137,6 @@ export default function ExamPage({ examActive, setExamActive }) {
     <div
       onMouseLeave={() => {
         if (data?.data?.tipe_ujian === "closed") {
-          
-
           setMouse(true); // Start countdown on mouse leave
         }
       }}
@@ -320,7 +316,6 @@ export default function ExamPage({ examActive, setExamActive }) {
                 loading={submit.isLoading}
                 disabled={submit.isLoading}
                 onClick={() => {
-                  console.log("open", open);
                   setOpen(true);
                 }}
                 icon={() => <Icon name="save" />}

@@ -60,7 +60,7 @@ export const useTakeExam = () => {
       },
 
       onError: (error) => {
-        console.log("err", error.response);
+
         warningToast(error);
       },
     }

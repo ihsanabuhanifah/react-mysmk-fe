@@ -115,7 +115,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
 
   const onSubmit = async (values, { resetForm }) => {
     mutate(values);
-    // console.log(values)
+  
   };
 
   if (isLoading) {

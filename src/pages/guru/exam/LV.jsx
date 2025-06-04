@@ -5,14 +5,9 @@ import Editor from "../../../components/Editor";
 import LiveCodingPlayground from "./LiveCoding";
 
 export default function LV({ soals, jawaban, item, nomor, setPayload }) {
-  console.log("jawa", jawaban);
-
-  //   console.log('soal', soals)
-  //   console.log("jawaban", jawaban);
-
   const jawabanSiswa = handleViewJawaban(jawaban, item.id);
 
-  console.log("jawaban siswa", jawabanSiswa);
+
   return (
     <>
       <div className="space-y-5">
@@ -34,7 +29,7 @@ export default function LV({ soals, jawaban, item, nomor, setPayload }) {
                   jawaban.filter((x) => x?.id === jawabanSiswa?.id)?.[0]?.point
                 }
                 onChange={(e) => {
-                  console.log("jalaj");
+
                   setPayload((state) => {
                     const filter = state.filter(
                       (x) => x.id !== jawabanSiswa.id,

@@ -112,7 +112,6 @@ export default function Chat({
   // Enhanced send message handler
   const enhancedSendMessage = async () => {
     try {
-      console.log(message.trim(), !attachment, isSending, isUploading);
       if (!message.trim() || isSending || isUploading) return;
 
       let fileUrl = null;
@@ -120,7 +119,7 @@ export default function Chat({
         fileUrl = await uploadFile(attachment);
       }
 
-      console.log("fi;e", fileUrl);
+
 
       handleSendMessage(fileUrl);
 

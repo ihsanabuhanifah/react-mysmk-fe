@@ -8,12 +8,10 @@ import { Dimmer, Loader, Message, MessageHeader } from "semantic-ui-react";
 import clsx from "clsx";
 import { debounce } from "lodash";
 
-
 // import uploadToCloudinary from "./upload";
 // import uploadToCloudinary from "./upload";
 
 export default function Editor({ value, handleChange, error, ...props }) {
-
   const reactQuillRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,17 +23,14 @@ export default function Editor({ value, handleChange, error, ...props }) {
     input.onchange = async () => {
       if (input !== null && input.files !== null) {
         setIsLoading(true);
-        console.log("input", input);
+
         const file = input.files[0];
         const image = await resizeFile(file);
 
-        console.log("file", file);
-        console.log("image", image);
         try {
           const res = await uploadFile(image);
 
-          console.log("url", res.data.url);
-
+         
           const url = res.data.url;
           const quill = reactQuillRef.current;
           if (quill) {
@@ -60,10 +55,6 @@ export default function Editor({ value, handleChange, error, ...props }) {
   //   });
   // }, []);
 
-  
-
-
-
   return (
     <>
       {isLoading && (
@@ -77,7 +68,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
 
             zIndex: 50,
           }}
-          className="fixed flex items-center justify-center "
+          className="fixed flex items-center justify-center"
         >
           <div>
             <Dimmer
@@ -97,7 +88,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
         ref={reactQuillRef}
         theme="snow"
         className={clsx(`quill-editor`, {
-          " border  border-[#E0B4B4]": error,
+          "border border-[#E0B4B4]": error,
         })}
         placeholder="Start writing..."
         modules={{
@@ -179,7 +170,7 @@ export const resizeFile = async (file, rotate) => {
       (uri) => {
         resolve(uri);
       },
-      "file"
+      "file",
     );
   });
 };

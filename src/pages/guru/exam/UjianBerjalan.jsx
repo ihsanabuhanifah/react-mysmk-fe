@@ -93,7 +93,6 @@ export default function UjianBerjalan() {
     },
   });
 
- 
   return (
     <LayoutPage title="List Ujian Berjalan" isLoading={isFetching}>
       {analisiOpen && (
@@ -172,7 +171,7 @@ export default function UjianBerjalan() {
               type="button"
               icon={() => <Icon name="refresh" />}
               size="medium"
-               color="facebook"
+              color="facebook"
               onClick={() => {
                 refetch();
               }}
@@ -251,11 +250,10 @@ export default function UjianBerjalan() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                           setUpdateOpen(true)
-                            setIdUpdate(value.id)
+                            setUpdateOpen(true);
+                            setIdUpdate(value.id);
                           }}
                         />
-                       
                       </span>
                     </Table.Cell>
                     <Table.Cell>
@@ -289,7 +287,6 @@ export default function UjianBerjalan() {
                               };
                             });
 
-                            console.log("pem", penilaianOpen);
                             setPenilaianOpen(true);
                           }}
                         />

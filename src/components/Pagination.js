@@ -1,7 +1,13 @@
 import React from "react";
 import { Dropdown, Pagination as SemanticPagination } from "semantic-ui-react";
 
-const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) => {
+const Pagination = ({
+  handlePageSize,
+  handlePage,
+  pagination,
+  page,
+  pageSize,
+}) => {
   function getPage(totalItems, currentPage, pageSize) {
     currentPage = currentPage;
 
@@ -26,7 +32,10 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
       }
     }
 
-    const pages = Array.from({ length: endPage + 1 - startPage }, (_, i) => startPage + i);
+    const pages = Array.from(
+      { length: endPage + 1 - startPage },
+      (_, i) => startPage + i,
+    );
 
     return {
       totalItems: totalItems,
@@ -42,7 +51,7 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
   let pages = getPage(
     pagination?.total || 0,
     pagination?.page || 1,
-    pagination?.pageSize || 10
+    pagination?.pageSize || 10,
   );
 
   const pageOptions = [
@@ -55,18 +64,15 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
   ];
 
   return (
-    <div className="flex items-center justify-between mt-6">
+    <div className="mt-6 flex items-center justify-between">
       <div>
         <Dropdown
           placeholder="Page Size"
           selection
           options={pageOptions}
           value={pageSize}
-          onChange={(e, { value }) =>{
-            console.log(e)
-            console.log(e.target.value)
-            console.log(value)
-            handlePageSize(value)
+          onChange={(e, { value }) => {
+            handlePageSize(value);
           }}
         />
         <p className="pt-2">dari {pagination?.total} data</p>
@@ -77,8 +83,8 @@ const Pagination = ({ handlePageSize, handlePage, pagination, page, pageSize }) 
           activePage={page}
           totalPages={pages.totalPages}
           onPageChange={(e, { activePage }) => {
-            console.log(activePage)
-            handlePage(activePage)
+          
+            handlePage(activePage);
           }}
         />
       </div>

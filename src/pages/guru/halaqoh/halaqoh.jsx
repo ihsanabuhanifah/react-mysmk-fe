@@ -125,7 +125,6 @@ export default function AbsensiHalaqoh() {
   let [tanggalActive, setTanggalActive] = React.useState(tanggal);
   let [halaqoh] = useSearchParams();
   let waktu_halaqoh = halaqoh.get("halaqoh");
-  console.log(waktu_halaqoh);
   let [waktu, setWaktu] = React.useState(waktu_halaqoh);
 
   React.useEffect(() => {
@@ -149,7 +148,7 @@ export default function AbsensiHalaqoh() {
 
   let parameter = {
     page,
-    pageSize : 20,
+    pageSize: 20,
     waktu: waktu,
     dariTanggal: tanggal,
     sampaiTanggal: tanggal,
@@ -164,10 +163,9 @@ export default function AbsensiHalaqoh() {
       keepPreviousData: true,
       select: (response) => response.data,
       onSuccess: (data) => {
+        let session = sessionStorage.getItem(`halaqoh_${tanggal}`);
 
-        let session = sessionStorage.getItem(`halaqoh_${tanggal}`)
-
-        if(session === undefined || session === null){
+        if (session === undefined || session === null) {
           setIniitalState({
             ...initialState,
             tanggal: data?.halaqoh?.rows?.[0]?.tanggal,
@@ -175,7 +173,7 @@ export default function AbsensiHalaqoh() {
             waktu: data?.halaqoh?.rows?.[0]?.waktu,
             absensi_kehadiran: data?.halaqoh?.rows,
           });
-        }else{
+        } else {
           session = JSON.parse(session);
           setIniitalState({
             ...initialState,
@@ -185,9 +183,8 @@ export default function AbsensiHalaqoh() {
             absensi_kehadiran: session?.absensi_kehadiran,
           });
         }
-      
       },
-    }
+    },
   );
 
   let { data: dataBelumAbsen, isLoading: isLoadingBelumAbsen } = useQuery(
@@ -201,7 +198,7 @@ export default function AbsensiHalaqoh() {
       select: (response) => {
         return response.data;
       },
-    }
+    },
   );
 
   const creeteJadwal = async () => {
@@ -243,9 +240,9 @@ export default function AbsensiHalaqoh() {
     try {
       const response = await updateAbsensiHalaqoh(values);
       queryClient.invalidateQueries("absensi");
-      
+
       queryClient.invalidateQueries("notifikasi_absensi_halaqoh");
-      sessionStorage.removeItem(`halaqoh_${tanggal}`)
+      sessionStorage.removeItem(`halaqoh_${tanggal}`);
       return toast.success(response?.data?.msg, {
         position: "top-right",
         autoClose: 1000,
@@ -270,16 +267,18 @@ export default function AbsensiHalaqoh() {
     }
   };
 
-  let sessionTes = sessionStorage.getItem(
-    `halaqoh_${tanggal}`
-  );
+  let sessionTes = sessionStorage.getItem(`halaqoh_${tanggal}`);
 
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
-       {sessionTes !== null ? (<p className="text-red-500 text-lg font-bold">Belum Di Simpen ke Database</p>) : null} 
-      <div className="space-x-5 ">
-        <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
-          <div className=" col-span-1 lg:col-span-2">
+      {sessionTes !== null ? (
+        <p className="text-lg font-bold text-red-500">
+          Belum Di Simpen ke Database
+        </p>
+      ) : null}
+      <div className="space-x-5">
+        <section className="grid grid-cols-1 gap-5 lg:grid-cols-5 2xl:grid-cols-6">
+          <div className="col-span-1 lg:col-span-2">
             <Form.Field
               control={Input}
               label="Tanggal"
@@ -292,7 +291,7 @@ export default function AbsensiHalaqoh() {
               type="date"
             />
           </div>
-          <div className="col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+          <div className="col-span-1 block items-center justify-center pt-0 lg:flex lg:pt-4">
             <Dropdown
               selection
               search
@@ -308,7 +307,7 @@ export default function AbsensiHalaqoh() {
             />
           </div>
 
-          <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+          <div className="col-span-1 block items-center justify-center pt-0 lg:flex lg:pt-4">
             <Button
               content={"Filter"}
               type="button"
@@ -321,7 +320,7 @@ export default function AbsensiHalaqoh() {
               }}
             />
           </div>
-          <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+          <div className="col-span-1 block items-center justify-center pt-0 lg:flex lg:pt-4">
             <Button
               content={"Buat Absensi"}
               type="submit"
@@ -334,7 +333,7 @@ export default function AbsensiHalaqoh() {
               onClick={creeteJadwal}
             />
           </div>
-          <div className=" col-span-1 block lg:flex items-center justify-center pt-0 lg:pt-4">
+          <div className="col-span-1 block items-center justify-center pt-0 lg:flex lg:pt-4">
             <Button
               content={"Rekap Halaqoh"}
               type="button"
@@ -349,7 +348,7 @@ export default function AbsensiHalaqoh() {
           </div>
         </section>
       </div>
-      <section className="mt-5 h-full " padded>
+      <section className="mt-5 h-full" padded>
         <Formik
           initialValues={initialState}
           validationSchema={AbsensiSchema}
@@ -367,7 +366,7 @@ export default function AbsensiHalaqoh() {
             isSubmitting,
           }) => (
             <form onSubmit={handleSubmit}>
-              <h4 className="text-lg font-poopins">
+              <h4 className="font-poopins text-lg">
                 Absensi untuk Halaqoh :{" "}
                 <span className="uppercase">{waktu}</span>
               </h4>
@@ -416,39 +415,39 @@ export default function AbsensiHalaqoh() {
                                   onChange={(e, data) => {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]status_kehadiran`,
-                                      data.value
+                                      data.value,
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]kehadiran`,
-                                      data
+                                      data,
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]tipe`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]dari_surat`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]dari_ayat`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]sampai_surat`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]sampai_ayat`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]total_halaman`,
-                                      ""
+                                      "",
                                     );
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]keterangan`,
-                                      ""
+                                      "",
                                     );
 
                                     sessionStorageSet(tanggal, values);
@@ -461,8 +460,6 @@ export default function AbsensiHalaqoh() {
                                   }
                                   value={formatValue(value?.status_kehadiran)}
                                 />
-
-                                
 
                                 {errors?.absensi_kehadiran?.[index]?.kehadiran
                                   ?.alasan !== undefined && (
@@ -485,7 +482,7 @@ export default function AbsensiHalaqoh() {
                                   onChange={(e, data) => {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]tipe`,
-                                      data.value
+                                      data.value,
                                     );
                                     sessionStorageSet(tanggal, values);
                                   }}
@@ -515,14 +512,13 @@ export default function AbsensiHalaqoh() {
                                   // value={absen?.nama_guru}
                                   options={getOptions(
                                     dataAlquran?.data,
-                                    "nama_surat"
+                                    "nama_surat",
                                   )}
                                   onChange={(event, data) => {
-                                    console.log(data);
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]dari_surat`,
-                                      data.value
-                                     );
+                                      data.value,
+                                    );
                                     sessionStorageSet(tanggal, values);
                                   }}
                                   placeholder="Dari Surat"
@@ -557,7 +553,7 @@ export default function AbsensiHalaqoh() {
                                   onChange={(e, data) => {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]dari_ayat`,
-                                      data.value
+                                      data.value,
                                     );
                                     sessionStorageSet(tanggal, values);
                                   }}
@@ -596,14 +592,14 @@ export default function AbsensiHalaqoh() {
                                   // value={absen?.nama_guru}
                                   options={getOptions(
                                     dataAlquran?.data,
-                                    "nama_surat"
+                                    "nama_surat",
                                   )}
                                   onChange={(event, data) => {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]sampai_surat`,
-                                      data?.value
+                                      data?.value,
                                     );
-                                    sessionStorageSet(tanggal, values)
+                                    sessionStorageSet(tanggal, values);
                                   }}
                                   placeholder="Sampai Surat"
                                   search
@@ -637,7 +633,7 @@ export default function AbsensiHalaqoh() {
                                   onChange={(e, data) => {
                                     setFieldValue(
                                       `absensi_kehadiran[${index}]sampai_ayat`,
-                                      data.value
+                                      data.value,
                                     );
                                     sessionStorageSet(tanggal, values);
                                   }}
@@ -676,7 +672,7 @@ export default function AbsensiHalaqoh() {
                                 onChange={(e, data) => {
                                   setFieldValue(
                                     `absensi_kehadiran[${index}]total_halaman`,
-                                    data.value
+                                    data.value,
                                   );
                                   sessionStorageSet(tanggal, values);
                                 }}
@@ -713,7 +709,7 @@ export default function AbsensiHalaqoh() {
                               onChange={(e, data) => {
                                 setFieldValue(
                                   `absensi_kehadiran[${index}]keterangan`,
-                                  data.value
+                                  data.value,
                                 );
                                 sessionStorageSet(tanggal, values);
                               }}
@@ -744,7 +740,7 @@ export default function AbsensiHalaqoh() {
                 )}
               </div>
               <section className="">
-                <h3 className="text-2xl font-poppins">
+                <h3 className="font-poppins text-2xl">
                   List Musyrif Belum Absensi
                 </h3>
                 <Table celled selectable>

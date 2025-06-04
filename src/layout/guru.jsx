@@ -36,11 +36,11 @@ export default function Guru() {
   const handleJoinRoom = async () => {
     try {
       const result = await joinRoom(roomId, {
-        email: data.email,
-        name: data.name,
-        id: data.id,
+        email: data?.email,
+        name: data?.name,
+        id: data?.id,
       });
-      console.log(result);
+
     } catch (error) {
       console.error("Failed to join room:", error);
     }
@@ -200,7 +200,7 @@ export default function Guru() {
           </div>
         </div>
       </main>
-      {console.log("se", selectedUser)}
+
     { <MessagePopup
         selectedUser={selectedUser}
         socket={socket}

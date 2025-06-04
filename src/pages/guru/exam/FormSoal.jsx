@@ -54,12 +54,12 @@ let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
 
-export default function FormExam({id, copy}) {
+export default function FormExam({ id, copy }) {
   let [open, setOpen] = useState(false);
   let [preview, setPreview] = useState({});
   const { dataMapel, dataKelas, dataTa } = useList();
   let [urutan, setUrutan] = useState(0);
- 
+
   let queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
@@ -76,19 +76,15 @@ export default function FormExam({id, copy}) {
       select: (response) => {
         return response.data.detail_ujian;
       },
-      refetchOnWindowFocus : false,
+      refetchOnWindowFocus: false,
       onSuccess: (data) => {
-       
-
         setInitialState({
           payload: [
             {
               jenis_ujian: data.jenis_ujian,
               judul_ujian: data.judul_ujian,
               mapel_id: data.mapel_id,
-              kelas_id: copy === true
-                ? ""
-                : data.kelas_id,
+              kelas_id: copy === true ? "" : data.kelas_id,
               waktu_mulai: addSevenHours(data.waktu_mulai),
               waktu_selesai: addSevenHours(data.waktu_selesai),
               status: data.status,
@@ -140,7 +136,7 @@ export default function FormExam({id, copy}) {
     {
       // refetchInterval: 1000 * 60 * 60,
       enabled: id ? !!dataExam?.mapel_id === true : true,
-      refetchOnWindowFocus : false,
+      refetchOnWindowFocus: false,
       select: (response) => {
         return response.data;
       },
@@ -293,7 +289,6 @@ export default function FormExam({id, copy}) {
     ) {
       mutate.mutate(values.payload[0], {
         onSuccess: (res) => {
-          console.log("res", res);
           setUrutan(res.data.data);
         },
       });
@@ -307,7 +302,13 @@ export default function FormExam({id, copy}) {
   return (
     <LayoutPage
       isLoading={isLoadingSoal}
-      title={id === undefined ? "Form Tambah Ujian" :  copy ? "Form Copy Ujian":"Form Update Ujian"}
+      title={
+        id === undefined
+          ? "Form Tambah Ujian"
+          : copy
+            ? "Form Copy Ujian"
+            : "Form Update Ujian"
+      }
     >
       {open && <ModalView open={open} setOpen={setOpen} preview={preview} />}
       <div

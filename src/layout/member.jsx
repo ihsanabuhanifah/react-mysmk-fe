@@ -61,7 +61,7 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
         !selectedUser
       ) {
         // You could add a notification system here
-        console.log("New message from:", messageData.senderName);
+
       }
     };
 
@@ -88,7 +88,7 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
     try {
       if (!message.trim() || !selectedUser || !socket) return;
 
-      console.log("file", file);
+
 
       setIsSending(true);
 
@@ -103,7 +103,7 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
         file: file,
       };
 
-      console.log("masuk sini");
+
 
       socket.emit("kirim-pesan", { data: messageData }, (response) => {
         setIsSending(false);

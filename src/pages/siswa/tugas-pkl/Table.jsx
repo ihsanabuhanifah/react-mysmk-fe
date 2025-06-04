@@ -53,10 +53,9 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
   const { data: jawabanDetail, isFetching } = useJawabanPklDetail(tugasPklId, {
     enabled: modalOpen || modalBellOpen,
   });
-  console.log(jawabanDetail, "ini");
 
   const { mutate, isLoading: updateLoading } = useUpdateJawabanTugasPkl(
-    jawabanDetail && jawabanDetail.id
+    jawabanDetail && jawabanDetail.id,
   );
   useEffect(() => {
     // Mengecek setiap item dalam data apakah tenggat waktu sudah terlewati
@@ -135,7 +134,7 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
                         <input
                           {...field}
                           placeholder="Masukkan link di sini..."
-                          className="border rounded px-3 py-2 w-full focus:ring focus:ring-blue-200"
+                          className="w-full rounded border px-3 py-2 focus:ring focus:ring-blue-200"
                         />
                       )}
                     </Field>
@@ -183,10 +182,10 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
                       jawabanDetail.status === "gagal"
                         ? "red"
                         : jawabanDetail.status === "selesai"
-                        ? "green"
-                        : jawabanDetail.status === "revisi"
-                        ? "orange"
-                        : "black", // Default color for other statuses
+                          ? "green"
+                          : jawabanDetail.status === "revisi"
+                            ? "orange"
+                            : "black", // Default color for other statuses
                   }}
                 >
                   {jawabanDetail.status || "Tidak ada status"}
@@ -231,7 +230,7 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
                 <Table.Cell>{item.tugas || "-"}</Table.Cell>
                 <Table.Cell>{item.deskripsi_tugas || "-"}</Table.Cell>
                 <Table.Cell>
-                  <span className="text-red-600 font-semibold">
+                  <span className="font-semibold text-red-600">
                     {formatTanggalIndoJam(item.batas_waktu) || "-"}
                   </span>
                 </Table.Cell>

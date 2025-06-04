@@ -14,7 +14,7 @@ import {
   Header,
   Divider,
   TextArea,
-  Icon
+  Icon,
 } from "semantic-ui-react";
 import { DeleteButton } from "../../../components";
 import { ReactSelectAsync, FormLabel } from "../../../components";
@@ -45,10 +45,8 @@ export default function FormSholat({
       keepPreviousData: true,
       staleTime: 60 * 1000 * 60 * 12, // 12 jam,
       select: (response) => response.data,
-    }
+    },
   );
-
-  console.log(values);
 
   return (
     <Segment>
@@ -59,9 +57,9 @@ export default function FormSholat({
           {values?.sholat?.map((value, index) => (
             <div
               key={index}
-              className="grid grid-cols-1 lg:grid-cols-3 gap-2 border p-5 mt-3 shadow-md"
+              className="mt-3 grid grid-cols-1 gap-2 border p-5 shadow-md lg:grid-cols-3"
             >
-              <div className="col-span-3 flex justify-end ">
+              <div className="col-span-3 flex justify-end">
                 <DeleteButton
                   disabled={values.sholat.length <= 1}
                   onClick={() => {
@@ -75,29 +73,28 @@ export default function FormSholat({
                 />
               </div>
               <div className="col-span-3 lg:col-span-1">
-             <Form.Field
-                control={Input}
-                label="Tanggal"
-                placeholder="Tanggal"
-                name={`sholat[${index}]tanggal`}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={dayjs(value?.tanggal).format("YYYY-MM-DD")}
-                disabled={isSubmitting}
-                fluid
-                error={
-                  errors.sholat?.[index]?.tanggal &&
-                  touched.sholat?.[index]?.tanggal && {
-                    content: `${errors?.sholat?.[index]?.tanggal}`,
-                    pointing: "above",
-                    color: "red",
-                    basic: true,
+                <Form.Field
+                  control={Input}
+                  label="Tanggal"
+                  placeholder="Tanggal"
+                  name={`sholat[${index}]tanggal`}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={dayjs(value?.tanggal).format("YYYY-MM-DD")}
+                  disabled={isSubmitting}
+                  fluid
+                  error={
+                    errors.sholat?.[index]?.tanggal &&
+                    touched.sholat?.[index]?.tanggal && {
+                      content: `${errors?.sholat?.[index]?.tanggal}`,
+                      pointing: "above",
+                      color: "red",
+                      basic: true,
+                    }
                   }
-                }
-                type="date"
-              />
-
-             </div>
+                  type="date"
+                />
+              </div>
               <div className="col-span-3 lg:col-span-1">
                 <FormLabel
                   error={
@@ -217,7 +214,6 @@ export default function FormSholat({
                 basic
                 fluid
                 type="button"
-               
                 onClick={() => {
                   setFieldValue("sholat", [
                     ...values.sholat,
@@ -230,22 +226,20 @@ export default function FormSholat({
                     },
                   ]);
                 }}
-                
                 color="teal"
                 content="Tambah"
-                
                 labelPosition="left"
               />
             )}
           </Segment>
 
-          <div className="grid grid-cols-3 gap-5 ">
-            <div className="col-start-1 lg:col-start-3 grid col-span-3  grid-cols-2  gap-x-5">
+          <div className="grid grid-cols-3 gap-5">
+            <div className="col-span-3 col-start-1 grid grid-cols-2 gap-x-5 lg:col-start-3">
               <Button
                 content={"Batal"}
                 type="button"
                 fluid
-                icon={()=> <Icon name='cancel'/>}
+                icon={() => <Icon name="cancel" />}
                 basic
                 onClick={() => {
                   // setValues(initialValue);
@@ -260,7 +254,7 @@ export default function FormSholat({
                 content={mode === "update" ? "Perbahrui" : "Simpan"}
                 type="submit"
                 fluid
-                icon={()=> <Icon name='save'/>}
+                icon={() => <Icon name="save" />}
                 basic
                 size="medium"
                 color="teal"

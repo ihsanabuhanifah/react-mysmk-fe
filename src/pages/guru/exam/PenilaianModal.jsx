@@ -79,7 +79,6 @@ function PenilaianModal({ view }) {
 
   const { handleSubmit, setFieldValue, values } = formik;
 
-  console.log("va", values);
 
   return (
     <>
@@ -290,7 +289,7 @@ function PenilaianModal({ view }) {
                                   mapel: mapel,
                                 });
 
-                                console.log("item", item);
+
                                 setItem(item);
                                 setJawaban(() => {
                                   if (!!item.jawaban === false) {

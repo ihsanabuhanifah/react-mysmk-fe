@@ -54,7 +54,7 @@ export const LabelStatus = ({ status }) => {
   if (status?.toUpperCase() === "PTS") {
     return <Label size="tiny" content="PTS" color="olive" as={"a"} />;
   }
-  if (status?.toUpperCase() === "PAS" || status ==="SAS") {
+  if (status?.toUpperCase() === "PAS" || status === "SAS") {
     return <Label size="tiny" content="PAS" color="green" as={"a"} />;
   }
   if (status?.toUpperCase() === "US") {
@@ -96,8 +96,6 @@ export const LabelDurasi = ({ status }) => {
     return item.value === Number(status);
   });
 
-  console.log("re", result, status);
-
   return (
     <Label
       size="tiny"
@@ -115,24 +113,22 @@ export const LabelKeterangan = ({ status }) => {
   if (status === 1) {
     return <Label size="green" content={"LULUS"} as={"a"} />;
   }
-  if (status === 'Ya') {
+  if (status === "Ya") {
     return <Label size="green" content={"Ya"} as={"a"} />;
   }
 
   return <Label size="tiny" content={status} color="red" as={"a"} />;
 };
 
-
 export const LabelTingkat = ({ status }) => {
-  
   if (status > 0) {
     return <Label size="green" content={`Ya (${status})`} as={"a"} />;
   }
-  
+
   if (status === "open") {
     return <Label size="tiny" content="Open" color="green" as={"a"} />;
   }
-  
+
   if (status === "draft") {
     return <Label size="tiny" content="Draft" color="brown" as={"a"} />;
   }

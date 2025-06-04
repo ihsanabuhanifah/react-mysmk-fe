@@ -18,10 +18,10 @@ const DropzoneFile = ({ handleDrop }) => {
 
         setIsLoading(true);
         try {
-          console.log("acceptedFiles[0]", acceptedFiles[0]);
+
           
           const res = await uploadFile(acceptedFiles[0]);
-          console.log("res", res);
+       
           handleDrop(res.data.url);
         } catch (error) {
           console.error("Upload failed:", error);

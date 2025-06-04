@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 export const useZUStore = create((set) => ({
   profile: null,
@@ -7,8 +7,8 @@ export const useZUStore = create((set) => ({
 
   setProfile: (payload) => set((state) => ({ profile: payload })),
   setProfileGuru: (payload) => set((state) => ({ profileGuru: payload })),
-  setShowNotif: (payload) => set((state) => {
-    console.log('dipanggil')
-    return {showNotif: !state.showNotif}
-  })
-}))
+  setShowNotif: (payload) =>
+    set((state) => {
+      return { showNotif: !state.showNotif };
+    }),
+}));

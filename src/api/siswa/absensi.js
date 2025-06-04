@@ -13,7 +13,7 @@ export function useTidakHadir() {
     ['/tidakhadir'],
     () => axios.get('/santri/tidakhadir', { params }).then((res) => {
 
-      console.log('res', res)
+     
       return res.data
     }),
     {

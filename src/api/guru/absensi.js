@@ -20,17 +20,17 @@ export function listJadwalAll(params) {
 
 export function listAbsensi(params) {
   syncToken();
-  console.log(params);
+
   return axios.get("guru/absensi/list", { params });
 }
 export function rekapAbsensi(params) {
   syncToken();
-  console.log(params);
+
   return axios.get("guru/absensi/rekap", { params });
 }
 export function rekapAgenda(params) {
   syncToken();
-  console.log(params);
+
   return axios.get("guru/agenda/rekap", { params });
 }
 
@@ -54,7 +54,7 @@ export async function updateAbsensi(values) {
       };
       data = absensi;
       absensi_kehadiran.push(absensi);
-    })
+    }),
   );
 
   values.absensi_kehadiran = absensi_kehadiran;
@@ -109,7 +109,7 @@ export const useKehadiran = ({ tanggal }) => {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
 
   return { isLoading, data, isFetching };
@@ -134,7 +134,7 @@ export const useSubmitDatang = ({ tanggal }) => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -159,7 +159,7 @@ export const useSubmitPulang = ({ tanggal }) => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -185,7 +185,7 @@ export const useSubmitIzin = ({ tanggal, status, keterangan }) => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -212,7 +212,7 @@ export const useSubmitByAdmin = ({ tanggal, status, keterangan, values }) => {
       onError: (error) => {
         warningToast(error);
       },
-    }
+    },
   );
   return mutate;
 };
@@ -226,14 +226,14 @@ export const useAbsensiHarian = () => {
   let [params, setParams] = useState({
     tanggal: dayjs(new Date()).format("YYYY-MM-DD"),
   });
-  const { isLoading, data, isFetching , refetch} = useQuery(
+  const { isLoading, data, isFetching, refetch } = useQuery(
     ["/guru/absensi/harian", params],
     () => listAbsensiHarian(params),
     {
       keepPreviousData: true,
       select: (response) => response.data,
       staleTime: 60 * 1000 * 10,
-    }
+    },
   );
 
   return { isLoading, data, isFetching, setParams, params, refetch };

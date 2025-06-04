@@ -18,8 +18,6 @@ const ImageUploader = ({ setFieldValue, index, values, setMemorize }) => {
       const res = await imageParse(file);
       const soal = res.data.text;
 
-      console.log("soal", soal);
-
       await setFieldValue(`payload[${index}].point`, 10);
       await setFieldValue(`payload[${index}].tipe`, "PG");
       await setFieldValue(`payload[${index}].soal`, {

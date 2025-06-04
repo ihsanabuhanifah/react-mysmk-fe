@@ -127,13 +127,13 @@ export default function FiturPkl() {
   //   };
 
   const handleEvent = (event) => {
-    console.log("ee", event);
+
     if (event.key === "x") {
-      console.log("ok", event);
+    
     }
   };
 
-  console.log("data", data);
+  
   return (
     <LayoutPage title={"List Tempat PKL"}>
       <ModalAlert

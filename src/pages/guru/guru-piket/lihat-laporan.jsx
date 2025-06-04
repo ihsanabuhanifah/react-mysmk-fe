@@ -189,7 +189,7 @@ export default function LihatLaporanGuruPiket() {
                         setFieldValue("laporan.guru.isSemuaHadir", true);
                         setFieldValue("laporan.guru.absen", []);
 
-                        console.log(values?.laporan?.guru?.isSemuaHadir);
+
                       }}
                       label="Tidak"
                     ></Radio>

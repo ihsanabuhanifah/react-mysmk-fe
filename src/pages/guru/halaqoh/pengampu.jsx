@@ -27,7 +27,7 @@ import { formatHari } from "../../../utils";
 import { toast } from "react-toastify";
 import FilterRekap from "./filter";
 import { encodeURlFormat } from "../../../utils";
-import {  showFormattedDate, handleViewNull } from "../../../utils/waktu";
+import { showFormattedDate, handleViewNull } from "../../../utils/waktu";
 import {
   listAbsenPengampu,
   updateAbsensiPengampu,
@@ -96,7 +96,7 @@ export default function PengampuHalaqoh() {
     {
       keepPreviousData: true,
       select: (response) => response.data,
-    }
+    },
   );
 
   const onSubmit = async (values) => {
@@ -129,8 +129,6 @@ export default function PengampuHalaqoh() {
       });
     }
   };
-
-  console.log(identitas);
 
   return (
     <LayoutPage title="Absensi Pengampu Halaqoh">
@@ -172,7 +170,7 @@ export default function PengampuHalaqoh() {
           <div className="space-y-5">
             <Form onSubmit={handleSubmit}>
               <section className="" style={{ maxWidth: "100%" }} padded>
-                <section className="grid grid-cols-1 lg:grid-cols-5 2xl:grid-cols-6 gap-5">
+                <section className="grid grid-cols-1 gap-5 lg:grid-cols-5 2xl:grid-cols-6">
                   <div className="col-span-6 lg:col-span-1 2xl:col-span-1">
                     <Dropdown
                       selection
@@ -266,7 +264,9 @@ export default function PengampuHalaqoh() {
                       {values?.rows?.map((value, index) => (
                         <Table.Row key={index}>
                           <Table.Cell>{index + 1}</Table.Cell>
-                          <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
+                          <Table.Cell>
+                            {showFormattedDate(value?.tanggal)}
+                          </Table.Cell>
 
                           <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                           <Table.Cell>
@@ -281,21 +281,19 @@ export default function PengampuHalaqoh() {
                                   name={`rows[${index}]status_kehadiran`}
                                   onBlur={handleBlur}
                                   onChange={(e, data) => {
-                                    
                                     setFieldValue(
                                       `rows[${index}]status_kehadiran`,
-                                      data.value
-                                    );
-                                    
-                                    setFieldValue(
-                                      `rows[${index}]is_absen`,
-                                      true
+                                      data.value,
                                     );
 
-                                    console.log(e.target.value);
+                                    setFieldValue(
+                                      `rows[${index}]is_absen`,
+                                      true,
+                                    );
+
                                     setFieldValue(
                                       `rows[${index}]kehadiran.id`,
-                                      data.value
+                                      data.value,
                                     );
                                   }}
                                   error={
@@ -331,7 +329,7 @@ export default function PengampuHalaqoh() {
                                   onChange={(e) => {
                                     setFieldValue(
                                       `rows[${index}]keterangan`,
-                                      e.target.value
+                                      e.target.value,
                                     );
                                   }}
                                 />

@@ -54,8 +54,6 @@ const UpdateLaporan = () => {
   const { isLoading: isLoadingUpdate, mutate } = useUpdateLaporanPkl(id);
   const [file, setFile] = useState("");
   const navigate = useNavigate();
-  console.log(data && data);
-  console.log(isFetching);
   const onSubmit = async (values) => {
     mutate(values);
   };
