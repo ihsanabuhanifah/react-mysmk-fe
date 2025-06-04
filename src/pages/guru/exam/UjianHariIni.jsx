@@ -68,7 +68,7 @@ export default function UjianHariIni() {
     },
   });
   return (
-    <LayoutPage title="List Ujian Berjalan" isLoading={isFetching}>
+    <LayoutPage title="List Ujian Hari Ini" isLoading={isFetching}>
       {analisiOpen && (
         <ModalPage open={analisiOpen} setOpen={setAnalisisOpen}>
           <AnalisisPage view={view} />
