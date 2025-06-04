@@ -1,7 +1,5 @@
-import React from 'react';
-import { PieChart, Pie, Tooltip, Cell, Legend, ResponsiveContainer } from 'recharts';
-import ResizableBox from './ResizableBox';
 
+import { PieChart, Pie, Tooltip, Cell, Legend, ResponsiveContainer } from 'recharts';
 const COLORS = ['#00C49F', '#FF0000', '#FFBB28', '#0088FE', '#800080', '#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const RADIAN = Math.PI / 180;

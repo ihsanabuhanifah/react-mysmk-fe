@@ -1,7 +1,6 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
 import { useState } from "react";
 import { listMapel } from "../list";

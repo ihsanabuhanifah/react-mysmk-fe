@@ -11,7 +11,6 @@ import "katex/dist/katex.min.css";
 import {
   Jadwal,
   Absensi,
-  Dashboard,
   Kunjungan,
   Pulang,
   Pelanggaran,
@@ -76,8 +75,6 @@ import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
 import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 import LiveCoding from "./pages/guru/Live-Coding";
-import ReactLivePlayground from "./pages/guru/reactjs";
-import Monitoring from "./pages/screen";
 import LiveMySQL from "./pages/guru/Live-MySQL";
 import TugasPklPage from "./pages/siswa/tugas-pkl/page";
 import JurnalSantri from "./pages/guru/fitur-siswa-pkl/jurnal";
@@ -151,7 +148,7 @@ function App() {
             }
           >
             <Route path="dashboard" element={<DashboardGuru />} />
-            <Route path="monitoring" element={<Monitoring />} />
+           
             <Route path="materi" element={<Materi />} />
             <Route path="kehadiran-guru" element={<Kehadiran />} />
             <Route path="daftar-siswa" element={<DaftarSiswa />} />

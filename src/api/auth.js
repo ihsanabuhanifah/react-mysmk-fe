@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation} from "react-query";
 import axios from "./axiosClient";
 import { syncToken } from "./axiosClient";
 import useToast from "../hook/useToast";
@@ -54,7 +54,6 @@ export const useAuthMe = () => {
 };
 
 export const useRegisterWali = () => {
-  let queryClient = useQueryClient();
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(
     (payload) => {

@@ -1,18 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
 import {
   pgOptions,
   pointOptions,
   tfOptions,
   tipeSoalOptions,
 } from "../../../utils/options";
-import { Input, Form, Select, Button, Icon, TextArea } from "semantic-ui-react";
-import { DeleteButton, AddButton, FormLabel } from "../../../components";
+import { Input, Form, Select, Button, Icon } from "semantic-ui-react";
+import { DeleteButton, FormLabel } from "../../../components";
 import { toast } from "react-toastify";
 import { getOptions } from "../../../utils/format";
 import useList from "../../../hook/useList";
-import { Formik, FormikProvider, useFormik } from "formik";
+import {  FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 
 import {
@@ -55,7 +54,7 @@ let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
 
-export default function FormSoal({ id }) {
+export default function FormSoal({ id = null }) {
   const { socket } = useContext(SocketContext);
   const [memorize, setMemorize] = useState(false);
 
@@ -73,9 +72,9 @@ export default function FormSoal({ id }) {
       enabled: id !== null,
       staleTime: 1000 * 60 * 10,
       select: (response) => {
-        let data = response.data.soal;
+        let data = response?.data?.soal;
 
-        data.soal = JSON.parse(data.soal);
+        data.soal = JSON.parse(data?.soal);
         setInitialState({
           payload: [data],
         });

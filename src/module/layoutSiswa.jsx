@@ -1,11 +1,7 @@
-import React, { useEffect } from "react";
-import { IoNotifications } from "react-icons/io5";
-import { useListNotif } from "../api/siswa/exam";
-import { useZUStore } from "../zustand/zustore";
+
 
 export default function LayoutSiswa({ title, children }) {
-  const { data, isFetched } = useListNotif();
-  const { setShowNotif, showNotif } = useZUStore((state) => state);
+
 
 
 

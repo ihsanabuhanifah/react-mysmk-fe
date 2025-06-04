@@ -1,10 +1,8 @@
-import React from "react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { clearToken } from "../api/axiosClient";
 function ModalLogout({ open, setOpen }) {
-  const navigate = useNavigate();
+
 
   return (
     <Modal

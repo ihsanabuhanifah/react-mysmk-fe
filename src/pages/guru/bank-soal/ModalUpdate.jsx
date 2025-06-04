@@ -12,15 +12,7 @@ import {
 import FormExam from "./FormSoal";
 import FormSoal from "./FormSoal";
 
-function ModalUpdateSoal({
-  open,
-  setOpen,
-  id,
-  copy
-  
-}) {
-
-
+function ModalUpdateSoal({ open, setOpen, id, copy }) {
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -28,22 +20,17 @@ function ModalUpdateSoal({
       open={open}
       size="large"
     >
-     
-
       <ModalContent>
-        <FormSoal id={id} copy={copy}/>
+        <FormSoal id={id} copy={copy} />
       </ModalContent>
 
       <ModalActions>
         <Button color="red" onClick={() => setOpen(false)}>
           <Icon name="remove" /> Batal
         </Button>
-
-      
       </ModalActions>
     </Modal>
   );
 }
 
 export default ModalUpdateSoal;
-

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 
 import Notifikasi from "../module/notifikasi";
@@ -11,18 +11,10 @@ import { IoIosNotifications } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
 import { syncToken } from "../api/axiosClient";
-
-import { useQuery } from "react-query";
-import { getProfile } from "../api/guru/profile";
-import { useZUStore } from "../zustand/zustore";
-import { LoadingPage } from "../components";
 import { SocketContext } from "../SocketProvider";
 import { useRoomHandling } from "../hook/useRoomHandling";
-import useForceFullscreen, {
-  useFullscreenDetector,
-} from "../hook/useFullScreebDetector";
+import useForceFullscreen from "../hook/useFullScreebDetector";
 import MessagePopup from "../pages/siswa/MessagePopUp";
-import { usePreventCheating } from "../hook/usePreventCheating";
 const roomId = "SMKMQ-ROOM";
 export default function Guru() {
   React.useEffect(() => {
@@ -31,14 +23,14 @@ export default function Guru() {
   });
   syncToken();
   const { identitas: data } = useList();
- 
+
   const containerRef = useRef(null);
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);
   let [showNotif, setShowNotf] = useShowNotif();
   let { jumlah } = useNotif();
 
-  const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
+  const { socket, joinRoom } =
     useContext(SocketContext);
 
   const handleJoinRoom = async () => {
@@ -67,7 +59,7 @@ export default function Guru() {
   //     alert(`Pelanggaran terdeteksi: ${type}`);
   //     // Kirim log ke server jika diperlukan
   //   };
-  
+
   //   usePreventCheating(handleViolation);
 
   return (
@@ -75,7 +67,7 @@ export default function Guru() {
       ref={containerRef}
       className="h-screen overflow-hidden text-gray-700 antialiased"
     >
-      <MessagePopup socket={socket} userId={data?.id}/>
+      <MessagePopup socket={socket} userId={data?.id} />
       <header className="w-fullx grid h-[8%] grid-cols-10 items-center gap-x-5 border lg:h-1/12 xl:hidden xl:h-1/12">
         <div className="relative col-span-4 flex h-full w-full items-center pl-5 lg:pl-2 xl:col-span-2 xl:pl-5 2xl:pl-10">
           <img
@@ -85,9 +77,11 @@ export default function Guru() {
             alt={LogoMySMK}
           />
         </div>
-        {isFullscreen
-          ? "Anda sedang dalam fullscreen"
-          : <ForceFullscreenModal/>}
+        {isFullscreen ? (
+          "Anda sedang dalam fullscreen"
+        ) : (
+          <ForceFullscreenModal />
+        )}
 
         <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-5 xl:col-span-2">
           <button
@@ -180,14 +174,14 @@ export default function Guru() {
 
 // className={`w-full h-full flex z-10 fixed top-0 bottom-0 xl:w-3/12  xl:relative text-white`}
 
-
- function ForceFullscreenModal({ onRequestFullscreen }) {
+function ForceFullscreenModal({ onRequestFullscreen }) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90 text-white">
-      <div className="text-center px-6">
-        <h1 className="text-2xl font-bold mb-4">Aplikasi membutuhkan mode fullscreen</h1>
+      <div className="px-6 text-center">
+        <h1 className="mb-4 text-2xl font-bold">
+          Aplikasi membutuhkan mode fullscreen
+        </h1>
         <p className="mb-6">Silakan aktifkan fullscreen untuk melanjutkan.</p>
-        
       </div>
     </div>
   );

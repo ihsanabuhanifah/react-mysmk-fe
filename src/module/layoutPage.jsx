@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BackButton } from "../components/buttonAksi/editButton";
 import { LoadingPage } from "../components";
 
 export default function LayoutPage({ title, children, isLoading }) {
-  const navigate = useNavigate();
+
 
 
   if(isLoading){
@@ -24,7 +22,7 @@ export default function LayoutPage({ title, children, isLoading }) {
           className="h-[95%]  bg-white border-t-2  w-full px-2 lg:px-5 pb-10 pt-5 overflow-auto  "
         >
 
-          {/* <BackButton onClick={() => navigate(-1)}/> */}
+          
           
           {children}
         </div>

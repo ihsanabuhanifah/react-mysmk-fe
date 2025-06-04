@@ -1,4 +1,3 @@
-import axios from "axios";
 import axiosClient, { syncToken } from "../axiosClient";
 
 export function listTugasPkl(params) {
@@ -12,12 +11,6 @@ export function createTugasPkl(payload) {
 
   return axiosClient.post("/guru/tugas-pkl/create", payload);
 }
-// export function updateTugasPkl({ id, status, pesan }) {
-//   syncToken();
-//   // let payload = values.payload[0];
-//   console.log("update pkl tes", status);
-//   return axiosClient.put(`jawaban-tugas-pkl/update/${id}`, { status, pesan });
-// }
 
 export function updateTugasPkl(id, values) {
   syncToken();

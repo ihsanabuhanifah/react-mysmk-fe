@@ -1,4 +1,4 @@
-import { Dimmer, Loader, Image, Segment } from "semantic-ui-react";
+import { Dimmer, Loader } from "semantic-ui-react";
 export default function LoadingPage() {
   return (
     <div className="h-screen w-screen flex items-center justify-center">

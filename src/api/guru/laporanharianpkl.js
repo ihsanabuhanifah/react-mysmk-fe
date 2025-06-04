@@ -2,8 +2,6 @@ import axios from "axios";
 import axiosClient, { syncToken } from "../axiosClient";
 import useToast from "../../hook/useToast";
 import { useMutation, useQuery } from "react-query";
-
-import { saveAs } from "file-saver";
 import { usePagination } from "../../hook/usePagination";
 import dayjs from "dayjs";
 import { html2pdf } from "html2pdf.js";
@@ -16,50 +14,6 @@ export function getLaporanPkl(params) {
   syncToken();
   return axios.get("/guru/laporan-harian-pkl/list", { params });
 }
-
-// export const useLaporanPklList = () => {
-//   let defParams = {
-//     page: 1,
-//     pageSize: 10,
-//     dariTanggal: null,
-//     sampaiTanggal: null,
-//     status_kehadiran: null,
-//     keyword: "",
-//   };
-//   const {
-//     params,
-//     setParams,
-//     handleFilter,
-//     handleClear,
-//     handlePageSize,
-//     handlePage,
-//     filterParams,
-//   } = usePagination(defParams);
-//   console.log(filterParams);
-
-//   const { isLoading, data, isFetching } = useQuery(
-//     ["/guru/laporan-harian-pkl/list", filterParams],
-//     () => listLaporanPkl(filterParams),
-//     {
-//       keepPreviousData: true,
-//       select: (response) => response.data,
-//       staleTime: 60 * 1000 * 10,
-//     }
-//   );
-//   return {
-//     setParams,
-//     handleFilter,
-//     handleClear,
-//     handlePageSize,
-//     handlePage,
-//     filterParams,
-//     data,
-//     isFetching,
-//     isLoading,
-//     params,
-//   };
-// };
-
 export const useLaporanPklList = () => {
   let defParams = {
     page: 1,

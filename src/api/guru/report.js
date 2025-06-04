@@ -3,9 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-
 import useToast from "../../hook/useToast";
-import { useState } from "react";
 import { usePagination } from "../../hook/usePagination";
 export function listUjian(params) {
   return axios.get("/guru/ujian/list", { params });
@@ -57,25 +55,6 @@ export const useListReport = () => {
     page: 1,
     pageSize: 10,
   });
-
-  // const handlePayload = (nama, value) => {
-  //   setPayload((pay) => {
-  //     return {
-  //       ...pay,
-  //       [nama]: value,
-  //     };
-  //   });
-  // };
-
-  // const handleParams = () => {
-  //   setParams((params) => {
-  //     return {
-
-  //       ...payload,
-
-  //     };
-  //   });
-  // };
 
   const { isLoading, data, isFetching } = useQuery(
     ["/guru/nilai/list/teacher", [filterParams]],

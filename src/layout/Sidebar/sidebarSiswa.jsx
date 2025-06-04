@@ -3,17 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { MdClose, MdLaptopMac } from "react-icons/md";
 import {
   IoChatbubbleOutline,
-  IoChatbubblesOutline,
   IoCheckmarkDoneOutline,
   IoDocumentTextOutline,
   IoPencilOutline,
   IoPerson,
   IoShieldOutline,
   IoStatsChart,
-  IoPencil, 
 } from "react-icons/io5";
-
-
 
 import LogoMySMK from "../../image/MySMK.png";
 import ImageWithFallback from "../../components/ImageWithFallback";
@@ -22,14 +18,14 @@ import { LogoutButton } from "./sidebarGuru";
 import { ModalLogout } from "../../components";
 
 export default function SidebarSiswa({ setSidebar }) {
-  let date = new Date();
+ 
   const [isSelect, setIsSelect] = useState(false);
   const { profile } = useZUStore((state) => state);
 
   const handleSiderbar = () => {
     setSidebar(false);
   };
-    const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
@@ -43,10 +39,9 @@ export default function SidebarSiswa({ setSidebar }) {
 
   return (
     <>
-
-<ModalLogout open={open} setOpen={setOpen} />
+      <ModalLogout open={open} setOpen={setOpen} />
       {/* tablet */}
-      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1 ">
+      <div className="relative mb-2 flex h-20 w-full items-center justify-between px-1">
         <div className="mt-12 h-24 w-24 flex-col items-center">
           <img
             className="absolute"
@@ -55,11 +50,9 @@ export default function SidebarSiswa({ setSidebar }) {
             alt={LogoMySMK}
           />
         </div>
-         <button className="lg:hidden" onClick={handleSiderbar}>
-                  <MdClose className="h-10 w-10" />
-                </button>
-
-        
+        <button className="lg:hidden" onClick={handleSiderbar}>
+          <MdClose className="h-10 w-10" />
+        </button>
       </div>
 
       {/* laptop */}
@@ -131,7 +124,7 @@ export default function SidebarSiswa({ setSidebar }) {
                   }`}
                 />
               }
-              active={url2 === 'edit'? "text-[#18a558]" : "text-gray-400"}
+              active={url2 === "edit" ? "text-[#18a558]" : "text-gray-400"}
             />
             <NavButton
               cls="list xl:hidden"
@@ -146,7 +139,7 @@ export default function SidebarSiswa({ setSidebar }) {
                   }`}
                 />
               }
-              active={url2 === 'security'? "text-[#18a558]" : "text-gray-400"}
+              active={url2 === "security" ? "text-[#18a558]" : "text-gray-400"}
             />
           </div>
         )}
@@ -197,11 +190,9 @@ export default function SidebarSiswa({ setSidebar }) {
         <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
-         
           to="laporan-pkl"
           path="laporan-pkl"
           title={"Jurnal Harian"}
-
           logo={
             <IoDocumentTextOutline
               className={`h-6 w-6 ${
@@ -210,14 +201,12 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-         <NavButton
+        <NavButton
           setIsSelect={setIsSelect}
           handleSidebar={handleSiderbar}
           to="rapor"
           path="rapor"
           title={"Rapor"}
-
-          
           logo={
             <IoDocumentTextOutline
               className={`h-6 w-6 ${
@@ -226,8 +215,8 @@ export default function SidebarSiswa({ setSidebar }) {
             />
           }
         />
-       
-          {/* <NavButton
+
+        {/* <NavButton
           handleSidebar={handleSiderbar}
           to="tugas-pkl"
           path="tugas-pkl"
@@ -241,7 +230,7 @@ export default function SidebarSiswa({ setSidebar }) {
           }
         /> */}
       </nav>
-      <div className="mb-4 ml-2 mt-5 block ">
+      <div className="mb-4 ml-2 mt-5 block">
         <LogoutButton
           onClick={() => {
             return setOpen(true);
@@ -267,7 +256,7 @@ function NavButton({
   cls,
   setIsSelect,
   isSelect = false,
-  active
+  active,
 }) {
   let { pathname } = useLocation();
   let url = pathname.split("/")[2];
@@ -304,10 +293,12 @@ function NavButton({
       <div className="flex items-center">
         <div>{logo}</div>
         <p
-          className={`ml-3  whitespace-nowrap text-left font-poppins text-xs ${
+          className={`ml-3 whitespace-nowrap text-left font-poppins text-xs ${
             url === path
               ? "text-[0.85rem] font-black text-[#18a558]"
-              : active? active : "text-gray-400"
+              : active
+                ? active
+                : "text-gray-400"
           } group-hover:font-black group-hover:text-gray-600`}
         >
           {title}
@@ -315,13 +306,13 @@ function NavButton({
       </div>
       {cls
         ? url2 === path && (
-            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+            <div className="h-full w-1 rounded-l-md bg-[#18a558] xl:hidden"></div>
           )
         : url === path && (
-            <div className="h-full xl:hidden w-1 rounded-l-md bg-[#18a558]"></div>
+            <div className="h-full w-1 rounded-l-md bg-[#18a558] xl:hidden"></div>
           )}
       {url === path && (
-        <div className="h-full hidden xl:block w-1 rounded-l-md bg-[#18a558]"></div>
+        <div className="hidden h-full w-1 rounded-l-md bg-[#18a558] xl:block"></div>
       )}
     </button>
   );

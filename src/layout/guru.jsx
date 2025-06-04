@@ -22,8 +22,6 @@ export default function Guru() {
   });
   syncToken();
   const { identitas: data } = useList();
-
-  const [roomUsers, setRoomUsers] = useState([]);
   const [sidebar, setSidebar] = React.useState(false);
   const [notif, setNotif] = React.useState(false);
   const [showPanel, setShowPanel] = useState("members"); // 'notifications', 'members', or 'monitoring'
@@ -32,7 +30,7 @@ export default function Guru() {
 
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const { socket, isConnected, joinedRooms, joinRoom, leaveRoom } =
+  const { socket,joinRoom } =
     useContext(SocketContext);
 
   const handleJoinRoom = async () => {

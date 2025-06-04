@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState, useMemo, useRef } from "react";
 import { SocketContext } from "../SocketProvider";
-import { formatJam, formatWaktu } from "../utils/waktu";
-import { FiSearch, FiUser, FiSend, FiMessageSquare, FiX } from "react-icons/fi";
+import { formatJam } from "../utils/waktu";
+import { FiSearch, FiUser, FiMessageSquare } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Chat from "./Chat";
 

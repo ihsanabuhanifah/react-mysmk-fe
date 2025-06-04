@@ -1,6 +1,5 @@
 
 
-import axios from "axios";
 import axiosClient, { syncToken } from "../axiosClient";
 import { usePagination } from "../../hook/usePagination";
 import { useQuery } from "react-query";

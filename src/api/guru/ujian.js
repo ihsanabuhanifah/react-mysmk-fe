@@ -3,7 +3,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
-import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
 import { usePagination } from "../../hook/usePagination";
 export function listUjian(params) {

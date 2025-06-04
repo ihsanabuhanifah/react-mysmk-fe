@@ -12,32 +12,28 @@ const ImageUploader = ({ setFieldValue, index, values, setMemorize }) => {
   const uploadImage = async (file) => {
     setStatus("Memproses gambar...");
     setUploadProgress(30);
-    setMemorize(true)
+    setMemorize(true);
 
     try {
       const res = await imageParse(file);
       const soal = res.data.text;
 
-    
-      setFieldValue(`payload[${index}].point`, 10);
-      setFieldValue(`payload[${index}].tipe`, "PG");
-      setFieldValue(`payload[${index}].jawaban`, soal?.jawaban);
-      setFieldValue(`payload[${index}].soal`, {
+      console.log("soal", soal);
+
+      await setFieldValue(`payload[${index}].point`, 10);
+      await setFieldValue(`payload[${index}].tipe`, "PG");
+      await setFieldValue(`payload[${index}].soal`, {
         ...values.payload[index].soal,
-        soal : `<div>${soal?.pertanyaan?.replace(/\n/g, '<br>')}</div>`,
-        tipe : "PG",
+        soal: `<div>${soal?.pertanyaan?.replace(/\n/g, "<br>")}</div>`,
+        tipe: "PG",
         a: soal?.pilihan.A || "-",
         b: soal?.pilihan.B || "-",
         c: soal?.pilihan.C || "-",
         d: soal?.pilihan.D || "-",
         e: soal?.pilihan.E || "-",
       });
-      //   setFieldValue(`payload[${index}].soal.soal`, soal?.pertanyaan);
-      //   setFieldValue(`payload[${index}].soal.a`, soal?.pilihan?.A || "-");
-      //   setFieldValue(`payload[${index}].soal.b`, soal?.pilihan?.B || "-");
-      //   setFieldValue(`payload[${index}].soal.c`, soal?.pilihan?.C || "-");
-      //   setFieldValue(`payload[${index}].soal.d`, soal?.pilihan?.D || "-");
-      //   setFieldValue(`payload[${index}].soal.e`, soal?.pilihan?.E || "-");
+
+      await setFieldValue(`payload[${index}].jawaban`, soal?.jawaban);
 
       //   setFieldValue(`payload[${index}]`, {
 
@@ -63,7 +59,7 @@ const ImageUploader = ({ setFieldValue, index, values, setMemorize }) => {
       setStatus("Gagal memproses gambar. Coba lagi.");
       setUploadProgress(0);
     } finally {
-        setMemorize(false)
+      setMemorize(false);
     }
   };
 

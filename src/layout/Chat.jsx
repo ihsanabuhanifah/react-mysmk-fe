@@ -1,21 +1,9 @@
+import { useEffect, useState, useRef, useCallback } from "react";
+import { formatWaktu } from "../utils/waktu";
 import {
-  useContext,
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
-import { SocketContext } from "../SocketProvider";
-import { formatJam, formatWaktu } from "../utils/waktu";
-import {
-  FiSearch,
-  FiUser,
   FiSend,
   FiMessageSquare,
   FiX,
-  FiImage,
-  FiVideo,
   FiPaperclip,
   FiMaximize,
   FiMinimize,
@@ -123,11 +111,8 @@ export default function Chat({
 
   // Enhanced send message handler
   const enhancedSendMessage = async () => {
-
-    
     try {
-
-      console.log(message.trim(), !attachment , isSending ,isUploading)
+      console.log(message.trim(), !attachment, isSending, isUploading);
       if (!message.trim() || isSending || isUploading) return;
 
       let fileUrl = null;
@@ -224,29 +209,31 @@ export default function Chat({
                   <>
                     {getMessagesWithUser(selectedUser.id).map((msg, index) => (
                       <>
-                       <div  key={index}
-                          className={`flex ${msg.senderId === data.id ? "justify-end" : "justify-start"}`}>
-                         {msg.file && (
-                          <div
-                            className="mb-2 cursor-pointer"
-                            onClick={() => handlePreviewClick(msg)}
-                          >
-                            {msg.file ? (
-                              <img
-                                src={msg.file}
-                                alt="Attachment"
-                                className="max-h-40 rounded-md object-cover"
-                              />
-                            ) : (
-                              <img
-                                src={msg.file}
-                                alt="Attachment"
-                                className="max-h-40 rounded-md object-cover"
-                              />
-                            )}
-                          </div>
-                        )}
-                       </div>
+                        <div
+                          key={index}
+                          className={`flex ${msg.senderId === data.id ? "justify-end" : "justify-start"}`}
+                        >
+                          {msg.file && (
+                            <div
+                              className="mb-2 cursor-pointer"
+                              onClick={() => handlePreviewClick(msg)}
+                            >
+                              {msg.file ? (
+                                <img
+                                  src={msg.file}
+                                  alt="Attachment"
+                                  className="max-h-40 rounded-md object-cover"
+                                />
+                              ) : (
+                                <img
+                                  src={msg.file}
+                                  alt="Attachment"
+                                  className="max-h-40 rounded-md object-cover"
+                                />
+                              )}
+                            </div>
+                          )}
+                        </div>
                         <div
                           key={index}
                           className={`flex ${msg.senderId === data.id ? "justify-end" : "justify-start"}`}
@@ -394,11 +381,10 @@ export default function Chat({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={`fixed inset-0 z-[10000] flex items-center justify-center bg-black bg-opacity-90 ${isFullscreenPreview ? "" : "p-4"}`}
-
           >
             <motion.div
               ref={previewRef}
-             className={`relative ${isFullscreenPreview ? "h-screen w-screen" : "max-h-[90vh] max-w-4xl"}`}
+              className={`relative ${isFullscreenPreview ? "h-screen w-screen" : "max-h-[90vh] max-w-4xl"}`}
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
@@ -415,7 +401,6 @@ export default function Chat({
                   alt="Preview"
                   className={`${isFullscreenPreview ? "h-full w-full object-contain" : "max-h-[80vh] max-w-full rounded-md"}`}
                 />
-               
               )}
 
               <div className="absolute right-4 top-4 flex space-x-2">

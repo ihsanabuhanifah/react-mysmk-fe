@@ -1,10 +1,8 @@
 //guru
 
-import { useMutation, useQueryClient } from "react-query";
-import axios from "../axiosClient";
+import { useMutation } from "react-query";
 import axiosClientStorage from "../axiosClientStorage";
 import { syncToken } from "../axiosClient";
-import { toast } from "react-toastify";
 import useToast from "../../hook/useToast";
 
 export const useUploadFile = () => {
