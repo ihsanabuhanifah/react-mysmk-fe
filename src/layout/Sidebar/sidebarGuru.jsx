@@ -134,6 +134,13 @@ export default function SidebarGuru({ setSidebar }) {
           icon: <MdLaptopMac className="h-5 w-5" />,
           roles: ["Guru"]
         },
+         {
+          to: "ujian-hari-ini",
+          path: "ujian-hari-ini",
+          title: "Ujian Hari Ini",
+          icon: <MdPhoneInTalk className="h-5 w-5" />,
+          roles: ["Guru"]
+        },
         {
           to: "hasil-belajar",
           path: "hasil-belajar",

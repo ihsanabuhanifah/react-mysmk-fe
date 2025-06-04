@@ -374,3 +374,66 @@ export const useListUjianBerjalan = () => {
     refetch
   };
 };
+
+
+export function listUjianHariIni(params) {
+  return axios.get("/guru/ujian/list/hari-ini", { params });
+}
+
+
+
+export const useListUjianHariIni = () => {
+  const {
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handlePayload,
+    handleSearch,
+  } = usePagination({
+    teacher_id: "",
+    kelas_id: "",
+    mapel_id: "",
+    ta_id: "",
+    page: 1,
+    pageSize: 10,
+    jenis_ujian: "",
+  });
+
+  let { data, isLoading, isFetching, refetch } = useQuery(
+    //query key
+    ["/ujian/list/hari-ini", [filterParams]],
+    //axios function,triggered when page/pageSize change
+    () => listUjianHariIni(filterParams),
+    //configuration
+    {
+      // refetchInterval: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 60 * 5,
+      select: (response) => {
+        return response.data;
+      },
+    },
+  );
+
+  return {
+    isLoading,
+    data,
+    isFetching,
+    params,
+    keyword,
+    setParams,
+    handleFilter,
+    handleClear,
+    handlePageSize,
+    handlePage,
+    filterParams,
+    handleSearch,
+    handlePayload,
+    refetch
+  };
+};
