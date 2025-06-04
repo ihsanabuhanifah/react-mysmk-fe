@@ -1,51 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import {
-  Table,
-  Button,
-  Form,
-  Select,
-  Icon,
-  Tab,
-  Sidebar,
-  Menu,
-} from "semantic-ui-react";
-import { useQuery } from "react-query";
+import { Table, Button, Icon, Sidebar, Menu } from "semantic-ui-react";
 import { TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
 import {
   // eslint-disable-next-line no-unused-vars
-  ModalFilter,
   EditButton,
-  DeleteButton,
   // eslint-disable-next-line no-unused-vars
-  ViewButton,
   ModalAlert,
 } from "../../../components";
-
-import usePage from "../../../hook/usePage";
 import { PaginationTable } from "../../../components";
-
 import { useQueryClient } from "react-query";
-import {
-  deleteUjian,
-  listUjian,
-  useListUjian,
-  useListUjianBerjalan,
-  useListUjianHariIni,
-} from "../../../api/guru/ujian";
+import { deleteUjian, useListUjianHariIni } from "../../../api/guru/ujian";
 import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 import ModalPage from "../../../components/ModalPage";
 import {
-  LabelKeterangan,
   LabelStatus,
   LabelTingkat,
   LabelTipeUjian,
 } from "../../../components/Label";
 import useList from "../../../hook/useList";
-import { CopyButton } from "../../../components/buttonAksi/editButton";
 import Filter from "./filter";
 import AnalisisPage from "./AnalisisPage";
 import PenilaianModal from "./PenilaianModal";
@@ -68,12 +44,12 @@ export default function UjianHariIni() {
     data,
     isFetching,
     params,
-  
+
     handleFilter,
     handleClear,
     handlePageSize,
     handlePage,
-  
+
     handlePayload,
     refetch,
   } = useListUjianHariIni();
@@ -83,7 +59,7 @@ export default function UjianHariIni() {
     showAlertDelete,
     setShowAlertDelete,
     deleteLoading,
-    confirmDelete,
+
     onConfirmDelete,
   } = useDelete({
     afterDeleted: () => queryClient.invalidateQueries("/ujian/list"),
@@ -91,11 +67,6 @@ export default function UjianHariIni() {
       return deleteUjian(id);
     },
   });
-
-  {
-    console.log("role", roles);
-  }
-
   return (
     <LayoutPage title="List Ujian Berjalan" isLoading={isFetching}>
       {analisiOpen && (
@@ -172,9 +143,9 @@ export default function UjianHariIni() {
             <Button
               content={"Refresh"}
               type="button"
-              icon={() => <Icon name="filter" />}
+              icon={() => <Icon name="refresh" />}
               size="medium"
-              color="teal"
+              color="facebook"
               onClick={() => {
                 refetch();
               }}
@@ -253,8 +224,8 @@ export default function UjianHariIni() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                           setUpdateOpen(true)
-                            setIdUpdate(value.id)
+                            setUpdateOpen(true);
+                            setIdUpdate(value.id);
                           }}
                         />
                         {/* <DeleteButton

@@ -1,17 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
-import {
-  Table,
-  Button,
-  Form,
-  Select,
-  Icon,
-  Tab,
-  Sidebar,
-  Menu,
-} from "semantic-ui-react";
-import { useQuery } from "react-query";
+import { Table, Button, Icon, Sidebar, Menu } from "semantic-ui-react";
 import { TableLoading } from "../../../components";
 import useDelete from "../../../hook/useDelete";
 import {
@@ -33,7 +22,6 @@ import dayjs from "dayjs";
 import ModalKonfirmasi from "./ModalKonfirmasi";
 import ModalPage from "../../../components/ModalPage";
 import {
-  LabelKeterangan,
   LabelStatus,
   LabelTingkat,
   LabelTipeUjian,
@@ -46,17 +34,16 @@ import PenilaianModal from "./PenilaianModal";
 import ModalUpdateUjian from "./ModalUpdateUjian";
 
 export default function ListExam() {
-  const navigate = useNavigate();
   let [visible, setVisible] = React.useState(false);
   let [open, setOpen] = useState(false);
   let { roles } = useList();
   let [analisiOpen, setAnalisisOpen] = useState(false);
   let [penilaianOpen, setPenilaianOpen] = useState(false);
-  let [updateOpen, setUpdateOpen] = useState(false)
-  let [copyOpen, setCopyOpen] = useState(false)
+  let [updateOpen, setUpdateOpen] = useState(false);
+  let [copyOpen, setCopyOpen] = useState(false);
   let [payload, setPayload] = useState({});
   let [view, setView] = useState({ id: null });
-  let [idUpdate, setIdUpdate] = useState(undefined)
+  let [idUpdate, setIdUpdate] = useState(undefined);
 
   const {
     isLoading,
@@ -72,6 +59,7 @@ export default function ListExam() {
     filterParams,
     handleSearch,
     handlePayload,
+    refetch,
   } = useListUjian();
 
   let queryClient = useQueryClient();
@@ -88,10 +76,6 @@ export default function ListExam() {
     },
   });
 
-  {
-    console.log("role", roles);
-  }
-
   return (
     <LayoutPage title="List Assesmen" isLoading={isFetching}>
       {analisiOpen && (
@@ -107,10 +91,19 @@ export default function ListExam() {
       )}
 
       {updateOpen && (
-        <ModalUpdateUjian id={idUpdate} open={updateOpen} setOpen={setUpdateOpen}/>
+        <ModalUpdateUjian
+          id={idUpdate}
+          open={updateOpen}
+          setOpen={setUpdateOpen}
+        />
       )}
-       {copyOpen && (
-        <ModalUpdateUjian  copy id={idUpdate} open={copyOpen} setOpen={setCopyOpen}/>
+      {copyOpen && (
+        <ModalUpdateUjian
+          copy
+          id={idUpdate}
+          open={copyOpen}
+          setOpen={setCopyOpen}
+        />
       )}
       <Sidebar
         as={Menu}
@@ -155,9 +148,8 @@ export default function ListExam() {
               color="teal"
               icon={() => <Icon name="add" />}
               onClick={() => {
-
-                setUpdateOpen(true)
-                setIdUpdate(undefined)
+                setUpdateOpen(true);
+                setIdUpdate(undefined);
                 // navigate("tambah", {
                 //   replace: true,
                 // });
@@ -165,8 +157,18 @@ export default function ListExam() {
               content="Tambah "
             />
           </div>
+         
           <div>
-            {" "}
+             <Button
+              content={"Refresh"}
+              type="button"
+              icon={() => <Icon name="refresh" />}
+              size="medium"
+              color="facebook"
+              onClick={() => {
+                refetch();
+              }}
+            />
             <Button
               content={"Filter"}
               type="button"
@@ -216,9 +218,9 @@ export default function ListExam() {
                     <Table.Cell>{value?.mapel?.nama_mapel}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
                     <Table.Cell>
-                      
-                      {value?.judul_ujian.slice(0, 20)}{value?.judul_ujian?.length > 20 ? "..." : ""}
-                      </Table.Cell>
+                      {value?.judul_ujian.slice(0, 20)}
+                      {value?.judul_ujian?.length > 20 ? "..." : ""}
+                    </Table.Cell>
                     <Table.Cell>
                       {<LabelStatus status={value?.jenis_ujian} />}
                     </Table.Cell>
@@ -230,12 +232,14 @@ export default function ListExam() {
                     </Table.Cell>
                     <Table.Cell>{value?.durasi} Menit</Table.Cell>
                     <Table.Cell>
-                     {dayjs(value.waktu_mulai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-}
+                      {dayjs(value.waktu_mulai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
-                     {dayjs(value.waktu_selesai).subtract(7, 'hour').format("DD-MM-YY HH:mm:ss")
-}
+                      {dayjs(value.waktu_selesai)
+                        .subtract(7, "hour")
+                        .format("DD-MM-YY HH:mm:ss")}
                     </Table.Cell>
                     <Table.Cell>
                       <LabelTingkat
@@ -249,26 +253,23 @@ export default function ListExam() {
                         {" "}
                         <EditButton
                           onClick={() => {
-                            setUpdateOpen(true)
-                            setIdUpdate(value.id)
+                            setUpdateOpen(true);
+                            setIdUpdate(value.id);
                             // navigate(`update/${value.id}`, {
                             //   replace: true,
                             // });
                           }}
                         />
                         <DeleteButton
-                          disabled={
-                           
-                            value.teacher_id !== roles?.teacher_id
-                          }
+                          disabled={value.teacher_id !== roles?.teacher_id}
                           onClick={() => {
                             confirmDelete(value?.id);
                           }}
                         />
                         <CopyButton
                           onClick={() => {
-                            setCopyOpen(true)
-                            setIdUpdate(value.id)
+                            setCopyOpen(true);
+                            setIdUpdate(value.id);
                           }}
                         />
                       </span>
@@ -304,7 +305,7 @@ export default function ListExam() {
                               };
                             });
 
-                            console.log('pem', penilaianOpen)
+                            console.log("pem", penilaianOpen);
                             setPenilaianOpen(true);
                           }}
                         />

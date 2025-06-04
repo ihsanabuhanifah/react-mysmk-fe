@@ -36,7 +36,7 @@ export const useListUjian = () => {
     jenis_ujian: "",
   });
 
-  let { data, isLoading, isFetching } = useQuery(
+  let { data, isLoading, isFetching, refetch } = useQuery(
     //query key
     ["/ujian/list", [filterParams]],
     //axios function,triggered when page/pageSize change
@@ -66,6 +66,7 @@ export const useListUjian = () => {
     filterParams,
     handleSearch,
     handlePayload,
+    refetch
   };
 };
 

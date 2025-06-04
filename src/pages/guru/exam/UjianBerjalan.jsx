@@ -93,10 +93,7 @@ export default function UjianBerjalan() {
     },
   });
 
-  {
-    console.log("role", roles);
-  }
-
+ 
   return (
     <LayoutPage title="List Ujian Berjalan" isLoading={isFetching}>
       {analisiOpen && (
@@ -173,9 +170,9 @@ export default function UjianBerjalan() {
             <Button
               content={"Refresh"}
               type="button"
-              icon={() => <Icon name="filter" />}
+              icon={() => <Icon name="refresh" />}
               size="medium"
-              color="teal"
+               color="facebook"
               onClick={() => {
                 refetch();
               }}
@@ -258,19 +255,7 @@ export default function UjianBerjalan() {
                             setIdUpdate(value.id)
                           }}
                         />
-                        {/* <DeleteButton
-                          disabled={value.teacher_id !== roles?.teacher_id}
-                          onClick={() => {
-                            confirmDelete(value?.id);
-                          }}
-                        />
-                        <CopyButton
-                          onClick={() => {
-                            navigate(`copy/${value.id}`, {
-                              replace: true,
-                            });
-                          }}
-                        /> */}
+                       
                       </span>
                     </Table.Cell>
                     <Table.Cell>
