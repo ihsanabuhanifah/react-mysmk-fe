@@ -4,6 +4,38 @@ import { FiSearch, FiUser, FiAlertCircle, FiCheckCircle, FiLogIn, FiLogOut, FiSe
 import { motion, AnimatePresence } from "framer-motion";
 import useList from "../hook/useList";
 
+export   const activityConfig = {
+    enter: {
+      icon: <FiLogIn className="text-green-500" />,
+      bg: "bg-green-50",
+      text: "text-green-700"
+    },
+    exit: {
+      icon: <FiLogOut className="text-red-500" />,
+      bg: "bg-red-50",
+      text: "text-red-700"
+    },
+    start: {
+      icon: <FiAlertCircle className="text-blue-500" />,
+      bg: "bg-blue-50",
+      text: "text-blue-700"
+    },
+    complete: {
+      icon: <FiCheckCircle className="text-green-600" />,
+      bg: "bg-green-200",
+      text: "text-green-900"
+    },
+    progress: {
+      icon: <FiCheckCircle className="text-green-600" />,
+      bg: "bg-yellow-100",
+      text: "text-yellow-800"
+    },
+    other: {
+      icon: <FiUser className="text-gray-500" />,
+      bg: "bg-gray-50",
+      text: "text-gray-700"
+    }
+  };
 const RoomCatatan = ({ roomId, data }) => {
   const [activities, setActivities] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,38 +118,7 @@ const RoomCatatan = ({ roomId, data }) => {
     return 'other';
   };
 
-  const activityConfig = {
-    enter: {
-      icon: <FiLogIn className="text-green-500" />,
-      bg: "bg-green-50",
-      text: "text-green-700"
-    },
-    exit: {
-      icon: <FiLogOut className="text-red-500" />,
-      bg: "bg-red-50",
-      text: "text-red-700"
-    },
-    start: {
-      icon: <FiAlertCircle className="text-blue-500" />,
-      bg: "bg-blue-50",
-      text: "text-blue-700"
-    },
-    complete: {
-      icon: <FiCheckCircle className="text-green-600" />,
-      bg: "bg-green-200",
-      text: "text-green-900"
-    },
-    progress: {
-      icon: <FiCheckCircle className="text-green-600" />,
-      bg: "bg-green-100",
-      text: "text-green-800"
-    },
-    other: {
-      icon: <FiUser className="text-gray-500" />,
-      bg: "bg-gray-50",
-      text: "text-gray-700"
-    }
-  };
+
 
   return (
     <section className="bg-white rounded-xl shadow-sm p-4 h-full border border-gray-100 flex flex-col">
