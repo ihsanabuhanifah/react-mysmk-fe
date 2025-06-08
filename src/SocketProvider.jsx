@@ -9,6 +9,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [joinedRooms, setJoinedRooms] = useState([]);
+  const [activityIntervals, setActivityIntervals] = useState({});
 
   const socketOptions = useMemo(
     () => ({
@@ -20,7 +21,7 @@ export const SocketProvider = ({ children }) => {
     [],
   );
 
-  // Fungsi untuk join room
+  // Fungsi untuk join room dengan aktivitas tracking
   const joinRoom = (roomId, userData) => {
     if (!socket) return Promise.reject("Socket not connected");
 
@@ -30,11 +31,26 @@ export const SocketProvider = ({ children }) => {
         {
           roomId,
           user: {
-            ...userData, // data tambahan
+            id: userData.id,
+            name: userData.name,
+            role: userData.role,
+            // tambahkan properti user lainnya jika diperlukan
           },
         },
         (response) => {
           if (response.success) {
+            setJoinedRooms((prev) => [...prev, roomId]);
+            
+            // Mulai mengirim aktivitas setiap 25 detik
+            const interval = setInterval(() => {
+              socket.emit("user-activity", { roomId, userId: userData.id });
+            }, 25000);
+            
+            setActivityIntervals(prev => ({
+              ...prev,
+              [roomId]: interval
+            }));
+            
             resolve(response);
           } else {
             reject(response.error);
@@ -49,21 +65,66 @@ export const SocketProvider = ({ children }) => {
     if (!socket || !isConnected) return false;
 
     return new Promise((resolve, reject) => {
-      socket.emit("leave-room", roomId, (response) => {
-        if (response.success) {
-          setJoinedRooms((prev) => prev.filter((id) => id !== roomId));
-          resolve(response);
-        } else {
-          reject(response.error);
-        }
-      });
+      socket.emit(
+        "leave-room", 
+        { roomId, userId: socket.id }, // Sesuaikan dengan server implementation
+        (response) => {
+          if (response.success) {
+            setJoinedRooms((prev) => prev.filter((id) => id !== roomId));
+            
+            // Hentikan interval aktivitas untuk room ini
+            if (activityIntervals[roomId]) {
+              clearInterval(activityIntervals[roomId]);
+              setActivityIntervals(prev => {
+                const newIntervals = {...prev};
+                delete newIntervals[roomId];
+                return newIntervals;
+              });
+            }
+            
+            resolve(response);
+          } else {
+            reject(response.error);
+          }
+        },
+      );
     });
+  };
+
+  // Fungsi untuk mengirim pesan
+  const sendMessage = (roomId, messageData) => {
+    if (!socket || !isConnected) return false;
+    
+    socket.emit("kirim-pesan", { 
+      data: {
+        ...messageData,
+        roomId,
+        senderId: socket.id, // atau userId dari state/context
+        timestamp: new Date().toISOString()
+      }
+    });
+    
+    // Juga kirim aktivitas
+    socket.emit("user-activity", { roomId, userId: socket.id });
+  };
+
+  // Fungsi untuk mengirim catatan
+  const sendNote = (roomId, noteData) => {
+    if (!socket || !isConnected) return false;
+    
+    socket.emit("catatan", {
+      ...noteData,
+      roomId,
+      userId: socket.id // atau userId dari state/context
+    });
+    
+    // Juga kirim aktivitas
+    socket.emit("user-activity", { roomId, userId: socket.id });
   };
 
   useEffect(() => {
     let newSocket;
     try {
-
       newSocket = io(process.env.REACT_APP_API_URL, socketOptions);
       setSocket(newSocket);
 
@@ -75,6 +136,12 @@ export const SocketProvider = ({ children }) => {
       newSocket.on("disconnect", () => {
         console.log("Socket disconnected");
         setIsConnected(false);
+        
+        // Hentikan semua interval aktivitas
+        Object.values(activityIntervals).forEach(interval => {
+          clearInterval(interval);
+        });
+        setActivityIntervals({});
         setJoinedRooms([]);
       });
 
@@ -82,11 +149,26 @@ export const SocketProvider = ({ children }) => {
         console.error("Connection error:", err);
       });
 
-      // Listen untuk event room khusus
-      newSocket.on("room-message", (data) => {
-        console.log("Message from room:", data);
-        // Di sini Anda bisa menambahkan handler untuk pesan room
+      // Listen untuk event room update
+      newSocket.on("room-update", (data) => {
+        console.log("Room update:", data);
+        if (data.type === "user-left" || data.type === "user-timeout") {
+          // Update UI jika ada user yang keluar
+        }
       });
+
+      // Listen untuk pesan baru
+      newSocket.on("kirim-pesan.reply", (data) => {
+        console.log("New message:", data);
+        // Handle new message
+      });
+
+      // Listen untuk catatan baru
+      newSocket.on("catatan.reply", (data) => {
+        console.log("New note:", data);
+        // Handle new note
+      });
+
     } catch (error) {
       console.error("Failed to initialize socket:", error);
     }
@@ -96,9 +178,16 @@ export const SocketProvider = ({ children }) => {
         newSocket.off("connect");
         newSocket.off("disconnect");
         newSocket.off("connect_error");
-        newSocket.off("room-message");
+        newSocket.off("room-update");
+        newSocket.off("kirim-pesan.reply");
+        newSocket.off("catatan.reply");
         newSocket.close();
       }
+      
+      // Hentikan semua interval saat unmount
+      Object.values(activityIntervals).forEach(interval => {
+        clearInterval(interval);
+      });
     };
   }, [socketOptions]);
 
@@ -109,8 +198,10 @@ export const SocketProvider = ({ children }) => {
       joinedRooms,
       joinRoom,
       leaveRoom,
+      sendMessage,
+      sendNote,
     }),
-    [socket, isConnected, joinedRooms],
+    [socket, isConnected, joinedRooms, activityIntervals],
   );
 
   return (

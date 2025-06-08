@@ -41,17 +41,22 @@ export default function Guru() {
         id: data?.id,
       });
 
+      console.log("res", result)
+
     } catch (error) {
       console.error("Failed to join room:", error);
     }
   };
 
   useEffect(() => {
+
+    console.log('sic', socket)
+    console.log("ata", data)
     if (!socket && !data) return;
     handleJoinRoom();
   }, [socket, data]);
 
-  useRoomHandling(socket, roomId, data, handleJoinRoom);
+  // useRoomHandling(socket, roomId, data, handleJoinRoom);
 
   return (
     <div className="h-screen overflow-hidden text-gray-700 antialiased">

@@ -215,7 +215,9 @@ const RoomMembers = ({ roomId, data, selectedUser, setSelectedUser }) => {
                         </button>
                       </div>
                       <p className="text-xs text-gray-500">
-                        Joined at {formatJam(member.joinedAt)}
+                        Last at {formatJam(member.lastActive)}
+
+                        {console.log("member", member)}
                       </p>
                     </div>
                   </motion.div>

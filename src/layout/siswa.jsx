@@ -53,7 +53,7 @@ export default function Guru() {
     handleJoinRoom();
   }, [socket, data]);
 
-  useRoomHandling(socket, roomId, data, handleJoinRoom);
+  // useRoomHandling(socket, roomId, data, handleJoinRoom);
   const isFullscreen = useForceFullscreen(containerRef);
   //  const handleViolation = (type) => {
   //     alert(`Pelanggaran terdeteksi: ${type}`);
