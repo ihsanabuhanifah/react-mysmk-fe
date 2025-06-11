@@ -11,18 +11,16 @@ import { TableLoading } from "../../../components";
 import LayoutPage from "../../../module/layoutPage";
 import { useParams } from "react-router-dom";
 import { LabelKeterangan, LabelStatus } from "../../../components/Label";
-
 import { formatWaktu } from "../../../utils/waktu";
-
 import useCheckbox from "../../../hook/useCheckbox";
 import Checkbox from "../../../components/Checkbox";
-
 import { TableWrapper } from "../../../components/TableWrap";
 import ModalPenilaian from "./ModalPenilaian";
 import { FormikProvider, useFormik } from "formik";
 import useList from "../../../hook/useList";
 import Monitoing from "./Monitoring";
 import { roomId } from "../../../layout/guru";
+import * as XLSX from 'xlsx'; // Import library xlsx
 
 function PenilaianModal({ view }) {
   let { id, mapel } = useParams();
@@ -79,6 +77,33 @@ function PenilaianModal({ view }) {
 
   const { handleSubmit, setFieldValue, values } = formik;
 
+  // Fungsi untuk export ke Excel
+  const exportToExcel = () => {
+    if (!data?.data) return;
+
+    const worksheetData = data.data.map((item, index) => ({
+      No: index + 1,
+      "Nama Siswa": item.siswa.nama_siswa,
+      "Mata Pelajaran": mapel,
+      "Jam Mulai": formatWaktu(item.jam_mulai),
+      "Jam Selesai": formatWaktu(item.jam_submit),
+      "Status": item.status,
+      "Nilai Ujian": item.exam ? JSON.parse(item.exam).toString() : "-",
+      "Nilai Akhir": item.exam_result,
+      "Keterangan": item.keterangan || "-",
+      "Lulus": item.is_lulus ? "Lulus" : "Tidak Lulus"
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Penilaian");
+
+    // Generate nama file
+    const fileName = `Penilaian_${mapel}_${new Date().toISOString().split('T')[0]}.xlsx`;
+
+    // Download file
+    XLSX.writeFile(workbook, fileName);
+  };
 
   return (
     <>
@@ -138,6 +163,17 @@ function PenilaianModal({ view }) {
         />
 
         <Button
+          content={"Download Excel"}
+          type="button"
+          fluid
+          disabled={isFetching || !data?.data}
+          icon={() => <Icon name="download" />}
+          size="medium"
+          color="green"
+          onClick={exportToExcel}
+        />
+
+        <Button
           content={"Refresh"}
           type="button"
           fluid
@@ -151,6 +187,8 @@ function PenilaianModal({ view }) {
           }}
         />
       </section>
+      {/* ... (kode sisanya tetap sama) ... */}
+
       <section
         className="grid grid-cols-12 gap-5 overflow-hidden"
         style={{
