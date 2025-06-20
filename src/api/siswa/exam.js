@@ -16,7 +16,24 @@ export function takeExam(id) {
 }
 
 export const useExam = (id) => {
-  let [params, setParams] = useState({ page: 1, pageSize: 10, status: "", judul_ujian: '', nama_mapel: '' });
+ const [params, setParams] = useState({ 
+    page: 1, 
+    pageSize: 12, 
+    status: "", 
+    judul_ujian: '', 
+    nama_mapel: '' 
+  });
+  const handlePageChange = (e, { activePage }) => {
+      setParams(prev => ({ ...prev, page: activePage }));
+    };
+  
+    const handlePageSizeChange = (e, { value }) => {
+
+      console.log("value", value);
+      setParams(prev => ({ ...prev, pageSize: value, page: 1 }));
+    };
+
+  
   const { isLoading, data, isFetching, refetch } = useQuery(
     ["/santri/exam/list", params],
     () => getExam(params),
@@ -36,7 +53,7 @@ export const useExam = (id) => {
     }
   )
 
-  return { isLoading, data, isFetching, params, setParams, dataMapel, loadMapel, refetch };
+  return { isLoading, data, isFetching, params, setParams, dataMapel, loadMapel, refetch,  handlePageChange, handlePageSizeChange };
 };
 
 export const useTakeExam = () => {

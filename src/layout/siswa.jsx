@@ -77,11 +77,11 @@ export default function Guru() {
             alt={LogoMySMK}
           />
         </div>
-        {isFullscreen ? (
+        {/* {isFullscreen ? (
           "Anda sedang dalam fullscreen"
         ) : (
           <ForceFullscreenModal />
-        )}
+        )} */}
 
         <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-5 xl:col-span-2">
           <button
