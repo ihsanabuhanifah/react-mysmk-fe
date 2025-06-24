@@ -93,14 +93,14 @@ const LoginPpdb = () => {
               <div className="w-full px-4 py-12 sm:px-6 sm:py-16 lg:w-1/2 lg:px-8 lg:py-24 mt-12">
                 <div className="relative w-full max-w-[609px]">
                   <div className="flex flex-col">
-                    <p className="text-2xl font-medium mt-12">Masuk Aplikasi</p>
+                    <p className="text-2xl font-medium mt-12">Masuk Portal PPDB</p>
                     <p className="text-lg">
-                      Silahkan masuk untuk mengikuti rangkaian proses PSB secara
+                      Silahkan masuk untuk mengikuti rangkaian proses PPDB secara
                       Online
                     </p>
                   </div>
 
-                  <div className="lg:mt-11">
+                  <div className="lg:mt-2">
                     <p className="text-lg font-normal">
                       Email atau No Handphone
                     </p>
@@ -185,7 +185,7 @@ const LoginPpdb = () => {
                       </div>
                     </div>
                     <Link
-                      to="/landingpage/register"
+                      to="/ppdb/register"
                       className="my-16 w-full flex justify-center md:mr-18"
                     >
                       <p className="text-base text-gray-500 text-center -ml-16">

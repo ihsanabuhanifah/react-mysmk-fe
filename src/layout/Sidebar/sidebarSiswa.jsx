@@ -12,7 +12,6 @@ import {
 } from "react-icons/io5";
 
 import LogoMySMK from "../../image/MySMK.png";
-import ImageWithFallback from "../../components/ImageWithFallback";
 import { useZUStore } from "../../zustand/zustore";
 import { LogoutButton } from "./sidebarGuru";
 import { ModalLogout } from "../../components";
@@ -58,11 +57,11 @@ export default function SidebarSiswa({ setSidebar }) {
       {/* laptop */}
       <div className="mb-3 mr-2 flex items-center gap-x-2 rounded-lg bg-[#18a558] p-2">
         <div className="h-10 w-10 rounded-full bg-gray-200">
-          <ImageWithFallback
+          {/* <ImageWithFallback
             src={profile?.user?.image}
             alt="You"
             fallbackSrc="/blankprofile.jpg"
-          />
+          /> */}
         </div>
 
         <div>

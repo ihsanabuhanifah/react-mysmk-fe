@@ -11,8 +11,7 @@ import { syncToken } from "../api/axiosClient";
 import SidebarPpdb from "../layout/Sidebar/sideBarPpdb";
 import { useQuery } from "react-query";
 import { getProfile } from "../api/siswa/profile";
-import { useDispatch } from "react-redux";
-import { setProfile } from "../redux/actions";
+
 import { IoLogOutOutline } from "react-icons/io5";
 import ModalLogoutPpdb from "../components/ModalLogoutPpdb";
 import { getProfileCalonSantri } from "../api/ppdb/profile";
@@ -27,7 +26,7 @@ const Loading = () => (
 export default function Ppdb() {
   let { pathname } = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+ 
   const id = "1";
   React.useEffect(() => {
     document.title = "MySMK";
@@ -39,9 +38,9 @@ export default function Ppdb() {
     [`/ppdb/detail-calsan/{id}`],
     () => getProfileCalonSantri(id),
     {
-      onSuccess: (response) => {
-        dispatch(setProfile(response));
-      },
+      // onSuccess: (response) => {
+      //   dispatch(setProfile(response));
+      // },
       refetchOnWindowFocus: false,
       select: (response) => {
         return response.data.calon_santri;

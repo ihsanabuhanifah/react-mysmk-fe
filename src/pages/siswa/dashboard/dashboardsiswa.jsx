@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import { Loader } from "semantic-ui-react";
 import { useTidakHadir } from "../../../api/siswa/absensi";
-=======
-import { useSelector } from "react-redux";
->>>>>>> 8aa5b9d538dc49f828db37398416771cb74ea830
 import LayoutSiswa from "../../../module/layoutSiswa";
 import { useZUStore } from "../../../zustand/zustore";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -38,7 +34,6 @@ export default function DashboardSiswa() {
 
   return (
     <LayoutSiswa title="Dashboard">
-<<<<<<< HEAD
       <>
        
         {isFetching ? (
@@ -122,10 +117,6 @@ export default function DashboardSiswa() {
           </div>
         )}
       </>
-=======
-      ini dashboard
-      <p>data: {santriProfile.nama_siswa}</p>
->>>>>>> 8aa5b9d538dc49f828db37398416771cb74ea830
     </LayoutSiswa>
   );
 }

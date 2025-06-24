@@ -27,7 +27,7 @@ const DashboardPpdb = () => {
 
     if (isError && error?.response?.status === 403) {
       alert("Anda Tidak Memiliki Akses ke Halaman Dashboard");
-      navigate("/landingpage/login");
+      navigate("/ppdb/login");
     }
   }, [isError, error, navigate]);
 

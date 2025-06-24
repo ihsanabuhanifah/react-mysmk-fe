@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NavPpdb = () => {
   const Links = [
-    { name: "Home", link: "/landingpage" },
+    { name: "Home", link: "/ppdb" },
     { name: "Jurusan", link: "#" },
     { name: "Biaya", link: "/" },
     { name: "Persyaratan", link: "/" },
@@ -91,14 +91,14 @@ const NavPpdb = () => {
               {index === 1 && dropdownOpen && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white md:bg-white bg-green-500 border border-gray-200 rounded-lg shadow-lg dropdown">
                   <ul className="py-2">
-                    <Link to="/landingpage/jurusan-rpl">
+                    <Link to="/ppdb/jurusan-rpl">
                       <li className="px-4 py-2 hover:bg-green-100 cursor-pointer">
                         <span className="text-green-500 font-semibold">
                           RPL
                         </span>
                       </li>
                     </Link>
-                    <Link to="/landingpage/jurusan-tkj">
+                    <Link to="/ppdb/jurusan-tkj">
                       <li className="px-4 py-2 hover:bg-green-100 cursor-pointer">
                         <span className="text-green-500 font-semibold">
                           TKJ
@@ -113,7 +113,7 @@ const NavPpdb = () => {
 
           {/* Add Login/Register Buttons */}
           <li className="md:ml-8 text-xl md:my-0 my-7">
-            <Link to="/landingpage/login">
+            <Link to="/ppdb/login">
               <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 duration-300">
                 Login
               </button>

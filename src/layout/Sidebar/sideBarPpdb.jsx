@@ -19,14 +19,14 @@ import {
   getProfileCalonSantri,
   useProfileCalonSantri,
 } from "../../api/ppdb/profile"; // Ensure correct path
-import { setProfile } from "../../redux/actions"; // Ensure correct path
+
 import ProfileImage from "../../image/ppdb/profile.png";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 export default function SidebarPpdb({ setSidebar }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const dispatch = useDispatch();
+ 
   const { profileData } = useProfileCalonSantri();
   const [isSelect, setIsSelect] = useState(false);
 
@@ -44,7 +44,7 @@ export default function SidebarPpdb({ setSidebar }) {
         // Ganti dengan ID yang sesuai, misalnya dari state atau props
         const id = useParams;
         const response = await getProfileCalonSantri(id);
-        dispatch(setProfile(response.data));
+
         setLoading(false);
       } catch (err) {
         setError(err);
@@ -53,7 +53,7 @@ export default function SidebarPpdb({ setSidebar }) {
     };
 
     fetchProfile();
-  }, [dispatch]);
+  }, []);
 
   return (
     <>

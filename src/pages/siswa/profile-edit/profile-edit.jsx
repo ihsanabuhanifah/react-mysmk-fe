@@ -11,8 +11,7 @@ import { LoadingPage } from "../../../components";
 import { IoPencilOutline } from "react-icons/io5";
 import Editor from "../../../components/Editor";
 import useUploadFile from "../../../hook/useUpload";
-import ImageWithFallback from "../../../components/ImageWithFallback";
-import { useZUStore } from "../../../zustand/zustore";
+
 import useList from "../../../hook/useList";
 
 const profileSchema = Yup.object().shape({

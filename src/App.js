@@ -85,6 +85,27 @@ import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 import { SocketProvider } from "./SocketProvider";
 import UjianBerjalan from "./pages/guru/exam/UjianBerjalan";
 import UjianHariIni from "./pages/guru/exam/UjianHariIni";
+
+//PPDB
+import DaftarCalonSiswa from "./pages/guru/daftar-calonsantri";
+import LandingPage from "./pages/ppdb/Landing-page/";
+import LoginPpdb from "./pages/ppdb/login";
+import RegisterPpdb from "./pages/ppdb/register/register";
+import DashboardPpdb from "./pages/ppdb/dashboard/dashboardppdb";
+import ProtectRoutePpdb from "./routers/ProtectRoutePpdb";
+import PendaftaranCalonSantri from "./pages/ppdb/pendaftaran/pendaftaran";
+import Ppdb from "./layout/ppdb";
+import BiodataUpdatePPdb from "./pages/ppdb/biodata-edit/biodata-edit";
+import BiodataPpdb from "./pages/ppdb/biodata";
+import BerkasPpdb from "./pages/ppdb/berkas/berkasPpdb";
+import JurusanRpl from "./pages/ppdb/Landing-page/jurusan-rpl";
+import JurusanTkj from "./pages/ppdb/Landing-page/jurusan-tkj";
+import DetailPembayaran from "./pages/ppdb/detail-pembayaran/detail-pembayaran";
+import Ujian from "./pages/ppdb/exam/exam";
+import Transfer from "./pages/ppdb/transfer/transfer";
+import BuktiTransfer from "./pages/ppdb/bukti-transfer/bukti_transfer";
+import ListPembayaran from "./pages/guru/list-pembayaran";
+import EditPembayaran from "./pages/guru/list-pembayaran/edit-pembayaran";
 import DaftarUlang from "./pages/ppdb/daftar-ulang/daftar-ulang";
 import Wawancara from "./pages/ppdb/wawancara/wawancara";
 import Pengumuman from "./pages/ppdb/pengumuman-hasil/pengumuman";
@@ -93,6 +114,8 @@ import DetailCalonSantri from "./pages/guru/daftar-calonsantri/detailCalon";
 import EditWawancara from "./pages/guru/list-wawancara/edit-wawancara";
 import UjianPpdb from "./pages/ppdb/exam/exam";
 import ExamPagePpdb from "./pages/ppdb/exam/ExamPage";
+//PPDB
+
 
 function App() {
   return (
@@ -305,8 +328,39 @@ function App() {
             <Route path="hasil-ujian" element={<HasilUjian />} />
             <Route path="rapor" element={<Rapor />} />
             <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
+            
           </Route>
 
+          
+ <Route path="/ppdb" element={<LandingPage />} />
+        <Route path="/ppdb/jurusan-rpl" element={<JurusanRpl />} />
+        <Route path="/ppdb/jurusan-tkj" element={<JurusanTkj />} />
+        <Route path="/ppdb/register" element={<RegisterPpdb />} />
+        <Route path="/ppdb/login" element={<LoginPpdb />} />
+        <Route
+          path="/ppdb"
+          element={
+            <ProtectRoutePpdb userRole="Calon Santri">
+              <Ppdb />
+            </ProtectRoutePpdb>
+          }
+        >
+          <Route path="dashboard" element={<DashboardPpdb />} />
+          <Route path="biodata" element={<BiodataPpdb />}>
+            <Route path="update" element={<BiodataUpdatePPdb />} />
+          </Route>
+
+          <Route path="berkas" element={<BerkasPpdb />} />
+          <Route path="transfer" element={<Transfer />} />
+          <Route path="bukti-transfer" element={<BuktiTransfer />} />
+          <Route path="detail-pembayaran/:id" element={<DetailPembayaran />} />
+          <Route path="pendaftaran" element={<PendaftaranCalonSantri />} />
+          <Route path="exam" element={<UjianPpdb />}/>
+          <Route path="exam/:id" element={<ExamPagePpdb />} />
+          <Route path="wawancara" element={<Wawancara />}/>
+          <Route path="hasil-test" element={<Pengumuman />}/>
+          <Route path="daftar-ulang" element={<DaftarUlang />}/>
+        </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SocketProvider>

@@ -81,40 +81,7 @@ const LandingPageRpl = () => {
       });
   }, []);
 
-  // function NextArrowtesti(props) {
-  //   const { className, style, onClick } = props;
-  //   return (
-  //     <div
-  //       className={className}
-  //       style={{ ...style, display: "block", background: "black" }} // Sesuaikan styling
-  //       onClick={onClick}
-  //     />
-  //   );
-  // }
-
-  // function PrevArrowTesti(props) {
-  //   const { className, style, onClick } = props;
-  //   return (
-  //     <div
-  //       className={className}
-  //       style={{ ...style, display: "block", background: "black" }} // Sesuaikan styling
-  //       onClick={onClick}
-  //     />
-  //   );
-  // }
-
-  // const goToPrevious = () => {
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-  //   );
-  // };
-
-  // const goToNext = () => {
-  //   setCurrentIndex((prevIndex) =>
-  //     prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-  //   );
-  // };
-
+  
   const NextArrow = ({ onClick }) => {
     return (
       <div className="arrow next" onClick={onClick}>
@@ -158,23 +125,6 @@ const LandingPageRpl = () => {
     beforeChange: (current, next) => setImageIndex(next),
   };
 
-  // const settings = {
-  //   infinite: false,
-  //   lazyLoad: true,
-  //   speed: 300,
-  //   slidesToShow: Math.min(testimoniData.length, 5),
-  //   slidesToScroll: 1,
-  //   centerMode: true,
-  //   centerPadding: 0,
-  //   nextArrow: (
-  //     <NextArrow
-  //       currentSlide={imageIndex}
-  //       slideCount={testimoniData.length}
-  //     />
-  //   ),
-  //   prevArrow: <PrevArrow />,
-  //   beforeChange: (current, next) => setImageIndex(next),
-  // };
 
   const settingsrifat = {
     dots: true,
