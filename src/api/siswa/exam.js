@@ -29,7 +29,7 @@ export const useExam = (id) => {
   
     const handlePageSizeChange = (e, { value }) => {
 
-      console.log("value", value);
+     
       setParams(prev => ({ ...prev, pageSize: value, page: 1 }));
     };
 
