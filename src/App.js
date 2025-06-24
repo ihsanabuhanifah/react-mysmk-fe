@@ -85,60 +85,69 @@ import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 import { SocketProvider } from "./SocketProvider";
 import UjianBerjalan from "./pages/guru/exam/UjianBerjalan";
 import UjianHariIni from "./pages/guru/exam/UjianHariIni";
+import DaftarUlang from "./pages/ppdb/daftar-ulang/daftar-ulang";
+import Wawancara from "./pages/ppdb/wawancara/wawancara";
+import Pengumuman from "./pages/ppdb/pengumuman-hasil/pengumuman";
+import ListWawancara from "./pages/guru/list-wawancara";
+import DetailCalonSantri from "./pages/guru/daftar-calonsantri/detailCalon";
+import EditWawancara from "./pages/guru/list-wawancara/edit-wawancara";
+import UjianPpdb from "./pages/ppdb/exam/exam";
+import ExamPagePpdb from "./pages/ppdb/exam/ExamPage";
 
 function App() {
   return (
     <div className="font-poppins">
-     <SocketProvider> <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/live-coding" element={<LiveCoding />} />
-        <Route path="/live-sql" element={<LiveMySQL />} />
+      <SocketProvider>
+        {" "}
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/live-coding" element={<LiveCoding />} />
+          <Route path="/live-sql" element={<LiveMySQL />} />
 
-        <Route
-          path="/login"
-          element={
-            <ProtectLogin>
-              <Login />
-            </ProtectLogin>
-          }
-        />
-        <Route
-          path="/register/wali"
-          element={
-            <ProtectLogin>
-              <RegisterWali />
-            </ProtectLogin>
-          }
-        />
-        <Route
-          path="/lupa-password"
-          element={
-            <ProtectLogin>
-              <LupaPassword />
-            </ProtectLogin>
-          }
-        />
-        <Route
-          path="/reset-password/:id/:token"
-          element={
-            <ProtectLogin>
-              <ResetPassword />
-            </ProtectLogin>
-          }
-        />
+          <Route
+            path="/login"
+            element={
+              <ProtectLogin>
+                <Login />
+              </ProtectLogin>
+            }
+          />
+          <Route
+            path="/register/wali"
+            element={
+              <ProtectLogin>
+                <RegisterWali />
+              </ProtectLogin>
+            }
+          />
+          <Route
+            path="/lupa-password"
+            element={
+              <ProtectLogin>
+                <LupaPassword />
+              </ProtectLogin>
+            }
+          />
+          <Route
+            path="/reset-password/:id/:token"
+            element={
+              <ProtectLogin>
+                <ResetPassword />
+              </ProtectLogin>
+            }
+          />
 
-      
           <Route
             path="/guru"
             element={
@@ -148,9 +157,23 @@ function App() {
             }
           >
             <Route path="dashboard" element={<DashboardGuru />} />
-           
             <Route path="materi" element={<Materi />} />
             <Route path="kehadiran-guru" element={<Kehadiran />} />
+            <Route path="daftar-calonsantri" element={<DaftarCalonSiswa />} />
+            <Route
+              path="daftar-calonsantri/detail/:id"
+              element={<DetailCalonSantri />}
+            />
+             <Route path="list-pembayaran" element={<ListPembayaran />} />
+          <Route
+            path="list-pembayaran/konfirmasi-pembayaran/:id"
+            element={<EditPembayaran />}
+          />
+          <Route path="list-wawancara" element={<ListWawancara />} />
+          <Route
+            path="list-wawancara/konfirmasi-wawancara/:id"
+            element={<EditWawancara />}
+          />
             <Route path="daftar-siswa" element={<DaftarSiswa />} />
             <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
             <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
@@ -185,8 +208,8 @@ function App() {
             <Route path="bank-soal/tambah" element={<FormSoal />} />
             <Route path="bank-soal/update/:id" element={<FormSoal />} />
             <Route path="exam" element={<ListExam />} />
-              <Route path="ujian-berjalan" element={<UjianBerjalan />} />
-                <Route path="ujian-hari-ini" element={<UjianHariIni />} />
+            <Route path="ujian-berjalan" element={<UjianBerjalan />} />
+            <Route path="ujian-hari-ini" element={<UjianHariIni />} />
             <Route path="hasil-belajar" element={<HasilBelajarGuru />} />
             <Route path="exam/tambah" element={<FormExam />} />
             <Route
@@ -217,7 +240,6 @@ function App() {
               path="absensi/:kelas_id/:mapel_id/:tanggal"
               element={<Absensi />}
             />
-           
             <Route path="face" element={<ScanKehadiran />} />
             <Route path="fitur-siswa-pkl" element={<FiturPkl />} />
             <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
@@ -284,9 +306,10 @@ function App() {
             <Route path="rapor" element={<Rapor />} />
             <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
           </Route>
-       
-        <Route path="*" element={<NotFound />} />
-      </Routes></SocketProvider>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </SocketProvider>
     </div>
   );
 }

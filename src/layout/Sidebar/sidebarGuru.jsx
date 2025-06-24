@@ -174,8 +174,16 @@ export default function SidebarGuru({ setSidebar }) {
           title: "Prestasi",
           icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
           roles: ["Guru"]
+        },
+          {
+          to: "daftar-calonsantri",
+          path: "daftar-calonsantri",
+          title: "Daftar Calon Santri",
+          icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
+          roles: ["Guru"]
         }
       ]
+      
     },
     {
       category: "Permissions",

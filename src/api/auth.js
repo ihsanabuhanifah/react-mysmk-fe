@@ -12,7 +12,6 @@ export function login(values) {
 
 export function authme() {
   syncToken();
-
   return axios.get("/authme");
 }
 

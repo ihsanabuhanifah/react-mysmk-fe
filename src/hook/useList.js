@@ -13,6 +13,8 @@ import axios from "../api/axiosClient";
 
 import Cookies from "js-cookie";
 import { getProfile, getProfileSiswa } from "../api/guru/profile";
+import { getProfileCalonSantri } from "../api/ppdb/profile";
+
 
 export default function useList() {
   let roles = jwt_decode(Cookies.get("mysmk_token"));
