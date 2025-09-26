@@ -23,7 +23,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
  
   return (
     <div className="space-y-5 text-xl">
-      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
+      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
 
       <div className="relative pl-12">
         <button
@@ -50,7 +53,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           A
         </button>
-        <div>{htmr(`<div>${soals.a}</div>`)}</div>
+        <div>{htmr(`<div>${soals.a?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -78,7 +84,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           B
         </button>
-        <div>{htmr(`<div>${soals.b}</div>`)}</div>
+        <div>{htmr(`<div>${soals.b?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -106,7 +115,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           C
         </button>
-        <div>{htmr(`<div>${soals.c}</div>`)}</div>
+        <div>{htmr(`<div>${soals.c?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -134,7 +146,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           D
         </button>
-        <div>{htmr(`<div>${soals.d}</div>`)}</div>
+        <div>{htmr(`<div>${soals.d?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
       </div>
 
       <div className="relative pl-12">
@@ -162,7 +177,10 @@ export default function Pg({ soals, item, setPayload, payload }) {
         >
           E
         </button>
-        <div>{htmr(`<div>${soals.e}</div>`)}</div>
+        <div>{htmr(`<div>${soals.e?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
       </div>
     </div>
   );

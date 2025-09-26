@@ -11,7 +11,7 @@ import { DeleteButton, FormLabel } from "../../../components";
 import { toast } from "react-toastify";
 import { getOptions } from "../../../utils/format";
 import useList from "../../../hook/useList";
-import {  FormikProvider, useFormik } from "formik";
+import { FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 
 import {
@@ -112,7 +112,6 @@ export default function FormSoal({ id = null }) {
     try {
       let response;
 
-     
       if (id === undefined || id === null) {
         response = await createBankSoal(values);
         resetForm();
@@ -213,9 +212,7 @@ export default function FormSoal({ id = null }) {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("simpan.reply", (data) => {
-
-    });
+    socket.on("simpan.reply", (data) => {});
 
     return () => {
       socket.off("simpan.reply");
@@ -391,7 +388,10 @@ export default function FormSoal({ id = null }) {
                           errors?.payload?.[index]?.soal?.soal
                         }
                         value={
-                          value?.soal.soal === null ? "" : value?.soal.soal
+                          value?.soal?.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          ) ?? ""
                         }
                         handleChange={(content) => {
                           setFieldValue(`payload[${index}]soal.soal`, content);
@@ -403,8 +403,11 @@ export default function FormSoal({ id = null }) {
                           errors?.payload?.[index]?.soal?.soal !== undefined &&
                           errors?.payload?.[index]?.soal?.soal
                         }
-                        value={
-                          value?.soal.soal === null ? "" : value?.soal.soal
+                       value={
+                          value?.soal?.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          ) ?? ""
                         }
                         handleChange={(content) => {
                           setFieldValue(`payload[${index}]soal.soal`, content);
@@ -412,7 +415,6 @@ export default function FormSoal({ id = null }) {
                       />
                     )}
                   </div>
-                
 
                   {value.tipe === "PG" && (
                     <div className="space-y-5">

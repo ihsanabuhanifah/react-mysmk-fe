@@ -50,7 +50,10 @@ export default function LV({ soals, jawaban, item, nomor, setPayload }) {
         </section>
 
         <div className="rounded-md border p-2 text-justify">
-          {htmr(`<div>${soals.soal}</div>`)}
+          {htmr(`<div>${soals.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}
         </div>
 
         <div className="rounded-md border p-2">

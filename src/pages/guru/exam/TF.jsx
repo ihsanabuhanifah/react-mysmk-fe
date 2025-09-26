@@ -28,7 +28,10 @@ export default function TF({ soals, jawaban, item, nomor }) {
         </section>
 
         <div className="rounded-md border p-2 text-justify">
-          {htmr(`<div>${soals.soal}</div>`)}
+          {htmr(`<div>${soals.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}
         </div>
 
         <div className="relative pl-12">

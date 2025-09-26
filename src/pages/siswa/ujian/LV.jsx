@@ -30,7 +30,10 @@ export default function LV({ soals, item, setPayload, payload, tipe }) {
   return (
     <div className="space-y-5">
       <div className="rounded-md border p-2">
-        {htmr(`<div>${soals.soal}</div>`)}
+        {htmr(`<div>${soals.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}
       </div>
 
       <div className="relative">

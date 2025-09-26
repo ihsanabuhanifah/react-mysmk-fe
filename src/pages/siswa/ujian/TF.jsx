@@ -22,7 +22,10 @@ export default function TF({ soals, item, setPayload, payload }) {
   }, []);
   return (
     <div className="space-y-5">
-      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal}</div>`)}</div>
+      <div className="border p-2 rounded-md">{htmr(`<div>${soals.soal?.replace(
+                            "https://storage.devopsgeming.online",
+                            "https://bemysmk.smkmadinatulquran.sch.id",
+                          )}</div>`)}</div>
 
       
 
