@@ -621,6 +621,7 @@ export default function FormSoal({ id = null }) {
                       index={index}
                       setFieldValue={setFieldValue}
                       errors={errors}
+                      memorize={memorize}
                     />
                   )}
                 </section>

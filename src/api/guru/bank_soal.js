@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../axiosClient";
 import { syncToken } from "../axiosClient";
 import { useQuery } from "react-query";
+import { ja } from "date-fns/locale";
 export function listBankSoal(params) {
   syncToken();
   return axios.get("/guru/bank-soal/list", { params });
@@ -111,9 +112,25 @@ export const useListBankSoal = () => {
   };
 };
 
-export function createBankSoal(payload) {
+export function createBankSoal(values) {
+
+  try{
+    console.log(values);
+
+ const payload = values?.payload.map((item)=> {
+    return {
+      ...item, 
+      jawaban: item.jawaban.toString()
+    }
+  })
   syncToken();
-  return axios.post("/guru/bank-soal/create", payload);
+  return axios.post("/guru/bank-soal/create", {
+    payload: payload,
+  });
+
+  }catch(e){
+    console.log(e)
+  }
 }
 
 export function deleteBankSoal(values) {
@@ -133,9 +150,19 @@ export function detailBankSoal(id) {
 
 export function updateBankSoal(id, values) {
   syncToken();
-  let payload = values.payload[0];
+  
 
-  return axios.put(`guru/bank-soal/update/${id}`, payload);
+  
+
+  const payload = values.payload?.map((item)=> {
+    return {
+      ...item, 
+      jawaban: item.jawaban.toString()
+    }
+  })
+
+
+  return axios.put(`guru/bank-soal/update/${id}`, payload[0]);
 }
 
 export function createExam(payload) {

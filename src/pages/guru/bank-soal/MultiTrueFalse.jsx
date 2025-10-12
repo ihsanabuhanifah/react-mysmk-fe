@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { DeleteButton, FormLabel } from "../../../components";
 import Editor from "../../../components/Editor";
+import MemoizedEditor from "../../../components/MemorizeEditor";
 
 // Komponen untuk pilihan dinamis Multi True False
-const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
+const MultiTrueFalseOptions = ({
+  value,
+  index,
+  setFieldValue,
+  errors,
+  memorize,
+}) => {
   const [options, setOptions] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -12,41 +19,54 @@ const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
   useEffect(() => {
     if (!isInitialized && value) {
       const initialOptions = [];
-      const fields = ['a', 'b', 'c', 'd', 'e'];
-      
+      const fields = ["a", "b", "c", "d", "e"];
+
       // Cek dari soal.a, b, c, d, e yang ada value-nya
-      fields.forEach(field => {
-        if (value?.soal?.[field] && value.soal[field] !== null && value.soal[field] !== "") {
+      fields.forEach((field) => {
+        if (
+          value?.soal?.[field] &&
+          value.soal[field] !== null &&
+          value.soal[field] !== ""
+        ) {
           // Cari jawaban yang sesuai dari array jawaban
           const jawabanIndex = initialOptions.length;
           let jawabanValue = false;
-          
+
           if (value?.jawaban) {
             // Jika jawaban adalah string (format backend), split dulu
-            if (typeof value.jawaban === 'string') {
-              const jawabanArray = value.jawaban.split(',');
+            if (typeof value.jawaban === "string") {
+              const jawabanArray = value.jawaban.split(",");
               jawabanValue = jawabanArray[jawabanIndex] === "true";
-            } 
+            }
             // Jika jawaban adalah array (format frontend)
             else if (Array.isArray(value.jawaban)) {
               jawabanValue = value.jawaban[jawabanIndex] === "true";
             }
           }
-          
+
           initialOptions.push({
+            id: `${field}-${Date.now()}-${Math.random()}`, // ID unik
+            field: field, // Simpan field asli (a, b, c, d, e)
             pernyataan: value.soal[field],
-            jawaban: jawabanValue
+            jawaban: jawabanValue,
           });
         }
       });
 
-      // Jika tidak ada data dari value, gunakan default
+      // Jika tidak ada data dari value, buat default dengan ID unik
       if (initialOptions.length > 0) {
         setOptions(initialOptions);
       } else {
-        setOptions([{ pernyataan: "", jawaban: false }]);
+        setOptions([
+          {
+            id: `a-${Date.now()}-${Math.random()}`,
+            field: "a",
+            pernyataan: "",
+            jawaban: false,
+          },
+        ]);
       }
-      
+
       setIsInitialized(true);
     }
   }, [value, isInitialized]);
@@ -55,98 +75,127 @@ const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
   useEffect(() => {
     if (!isInitialized) return;
 
-    // Update soal fields
-    const fields = ['a', 'b', 'c', 'd', 'e'];
-    fields.forEach((field, i) => {
-      if (options[i] && options[i].pernyataan.trim() !== "") {
-        setFieldValue(`payload[${index}].soal.${field}`, options[i].pernyataan);
-      } else {
-        setFieldValue(`payload[${index}].soal.${field}`, null);
+    // Reset semua field soal terlebih dahulu
+    const fields = ["a", "b", "c", "d", "e"];
+    fields.forEach((field) => {
+      setFieldValue(`payload[${index}].soal.${field}`, null);
+    });
+
+    // Update soal fields berdasarkan options yang ada
+    options.forEach((option, i) => {
+      if (option.pernyataan && option.pernyataan.trim() !== "") {
+        setFieldValue(
+          `payload[${index}].soal.${option.field}`,
+          option.pernyataan,
+        );
       }
     });
 
     // Update jawaban - KONVERSI KE STRING untuk backend
-    const jawabanArray = options.map(option => 
-      option.jawaban === true ? "true" : "false"
+    const jawabanArray = options.map((option) =>
+      option.jawaban === true ? "true" : "false",
     );
-    
+
     // Konversi array menjadi string untuk dikirim ke backend
     const jawabanString = jawabanArray.join(",");
     setFieldValue(`payload[${index}].jawaban`, jawabanString);
-
   }, [options, index, setFieldValue, isInitialized]);
 
   const addOption = () => {
-    if (options.length < 5) { // Maksimal sampai e (5 options)
-      setOptions([...options, { pernyataan: "", jawaban: false }]);
+    if (options.length < 5) {
+      // Tentukan field berikutnya yang tersedia
+      const usedFields = options.map((opt) => opt.field);
+      const availableFields = ["a", "b", "c", "d", "e"].filter(
+        (field) => !usedFields.includes(field),
+      );
+
+      if (availableFields.length > 0) {
+        const newField = availableFields[0];
+        setOptions([
+          ...options,
+          {
+            id: `${newField}-${Date.now()}-${Math.random()}`,
+            field: newField,
+            pernyataan: "",
+            jawaban: false,
+          },
+        ]);
+      }
     }
   };
 
-  const removeOption = (optionIndex) => {
+  const removeOption = (optionId) => {
     if (options.length > 1) {
-      const newOptions = options.filter((_, idx) => idx !== optionIndex);
+      const newOptions = options.filter((option) => option.id !== optionId);
       setOptions(newOptions);
     }
   };
 
-  const updateOption = (optionIndex, field, newValue) => {
-    const newOptions = options.map((option, idx) => 
-      idx === optionIndex ? { ...option, [field]: newValue } : option
+  const updateOption = (optionId, field, newValue) => {
+    const newOptions = options.map((option) =>
+      option.id === optionId ? { ...option, [field]: newValue } : option,
     );
     setOptions(newOptions);
   };
 
-  const updateJawaban = (optionIndex, newValue) => {
-    // Validasi: pastikan jawaban tidak kosong
-    if (options[optionIndex]?.pernyataan?.trim() === "") {
+  const updateJawaban = (optionId, newValue) => {
+    const optionToUpdate = options.find((opt) => opt.id === optionId);
+
+    // Validasi: pastikan pernyataan tidak kosong
+    if (optionToUpdate?.pernyataan?.trim() === "") {
       alert("Pernyataan harus diisi terlebih dahulu sebelum memilih jawaban");
       return;
     }
 
-    const newOptions = options.map((option, idx) => 
-      idx === optionIndex ? { ...option, jawaban: newValue } : option
+    const newOptions = options.map((option) =>
+      option.id === optionId ? { ...option, jawaban: newValue } : option,
     );
     setOptions(newOptions);
   };
 
   // Fungsi untuk mendapatkan preview jawaban dalam format string
   const getJawabanPreview = () => {
-    const jawabanArray = options.map(option => 
-      option.jawaban === true ? "true" : "false"
+    const jawabanArray = options.map((option) =>
+      option.jawaban === true ? "true" : "false",
     );
     return jawabanArray.join(",");
   };
 
-  // Debug info untuk melihat data yang diterima
-  console.log("Received value:", value);
-  console.log("Current options:", options);
-  console.log("Is initialized:", isInitialized);
+  // Fungsi untuk mendapatkan field label
+  const getFieldLabel = (field) => {
+    return field.toUpperCase();
+  };
+
+  console.log("o", options);
 
   return (
     <div className="space-y-4">
-    
-
       {options.map((option, optionIndex) => (
-        <div key={optionIndex} className="rounded-lg border p-4">
+        <div key={option.id} className="rounded-lg border p-4">
           <div className="mb-3 flex items-start justify-between">
-            <FormLabel>Pernyataan {optionIndex+1}</FormLabel>
+            <div className="flex items-center space-x-2">
+              <FormLabel>Pernyataan {optionIndex + 1}</FormLabel>
+            </div>
             <DeleteButton
               size="small"
               disabled={options.length <= 1}
-              onClick={() => removeOption(optionIndex)}
+              onClick={() => removeOption(option.id)}
             />
           </div>
 
           <div className="mb-3 grid grid-cols-12 gap-5">
-            <textarea
-              className="col-span-8"
-              placeholder={`Masukkan pernyataan ${String.fromCharCode(65 + optionIndex)}`}
-              value={option.pernyataan}
-              onChange={(e) => {
-                updateOption(optionIndex, "pernyataan", e.target.value);
-              }}
-              rows={3}
-            />
+            <div className="col-span-8">
+             <textarea
+                  value={option.pernyataan}
+                  onChange={(content) => {
+                    updateOption(option.id, "pernyataan", content.target.value);
+                  }}
+                  error={
+                    errors?.payload?.[index]?.soal?.[option.field] !== undefined &&
+                    errors?.payload?.[index]?.soal?.[option.field]
+                  }
+                />
+            </div>
             <div className="col-span-4">
               <Form.Dropdown
                 selection
@@ -158,19 +207,21 @@ const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
                 ]}
                 value={option.jawaban}
                 onChange={(e, data) => {
-                  updateJawaban(optionIndex, data.value);
+                  updateJawaban(option.id, data.value);
                 }}
-                error={errors?.jawaban?.[optionIndex] ? {
-                  content: 'Jawaban harus dipilih',
-                  pointing: 'above'
-                } : null}
+                error={
+                  errors?.payload?.[index]?.jawaban !== undefined && {
+                    content: errors.payload[index].jawaban,
+                    pointing: "above",
+                  }
+                }
               />
             </div>
           </div>
 
           {/* Tampilkan status validasi */}
           {option.pernyataan.trim() === "" && (
-            <div className="mt-2 text-red-500 text-sm">
+            <div className="mt-2 text-sm text-red-500">
               * Pernyataan harus diisi sebelum memilih jawaban
             </div>
           )}
@@ -184,15 +235,8 @@ const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
       </div>
 
       {/* Preview data yang akan dikirim */}
-      <div className="mt-4 p-3 bg-gray-100 rounded-lg">
-        <div className="text-sm font-semibold mb-2">Preview Data:</div>
-        <div className="text-xs">
-          <div><strong>Jawaban (Format Backend):</strong> "{getJawabanPreview()}"</div>
-          <div><strong>Pernyataan terisi:</strong> {options.filter(opt => opt.pernyataan.trim() !== "").length}</div>
-        </div>
-      </div>
 
-      <div className="w-full flex items-center justify-center">
+      <div className="flex w-full items-center justify-center">
         <Button
           type="button"
           size="small"
@@ -200,7 +244,7 @@ const MultiTrueFalseOptions = ({ value, index, setFieldValue, errors }) => {
           onClick={addOption}
           icon="add"
           content="Tambah Pernyataan"
-          disabled={options.length >= 5} // Maksimal 5 options (a-e)
+          disabled={options.length >= 5}
         />
       </div>
     </div>
