@@ -13,6 +13,8 @@ import { saveAs } from "file-saver";
 import { EditButton, LoadingPage } from "../../../components";
 import ModalUpdateUjian from "../bank-soal/ModalUpdate";
 import { FiEdit } from "react-icons/fi";
+import MultipleChoiceView from "./MP";
+import MultiTrueFalseView from "./MTF";
 
 export default function AnalisisPage({ view }) {
   const { isLoading, data } = useAnalisisUjian(view.id);
@@ -58,6 +60,141 @@ export default function AnalisisPage({ view }) {
                     </span>
                   </button>
                 </section>
+
+
+                  {item.tipe === "MTF" && (
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg px-5 pb-5 shadow-lg">
+                    <div className="col-span-2 rounded-xl p-4 shadow-sm">
+                      <MultiTrueFalseView
+                        nomor={index + 1}
+                        soals={JSON.parse(item.soal)}
+                        jawaban={[
+                          {
+                            id: item.id,
+                            tipe: item.tipe,
+                            jawaban: item.jawaban,
+                          },
+                        ]}
+                        item={item}
+                      />
+                    </div>
+                    <div className="col-span-3 space-y-2">
+                      <div className="rounded-xl border shadow-sm">
+                        {/* <DonutChart
+                          title="Analisis Jawaban "
+                          data={[
+                            {
+                              name: `Benar (${data.analisis[index].benar})`,
+                              value: data.analisis[index].benar,
+                            },
+                            {
+                              name: `Salah (${data.analisis[index].salah})`,
+                              value: data.analisis[index].salah,
+                            },
+                            {
+                              name: `Tidak Menjawab (${data.analisis[index].tidakMenjawab})`,
+                              value: data.analisis[index].tidakMenjawab,
+                            },
+                          ]}
+                        /> */}
+                      </div>
+                      <div className="rounded-xl border shadow-sm">
+                        {/* <DonutChart
+                          title="Analisis Pilihan "
+                          data={[
+                            {
+                              name: `Jawaban A (${data.analisis[index].pilihan.a?.count})`,
+                              value: data.analisis[index].pilihan.a?.count,
+                            },
+                            {
+                              name: `Jawaban B (${data.analisis[index].pilihan.b?.count})`,
+                              value: data.analisis[index].pilihan.b?.count,
+                            },
+                            {
+                              name: `Jawaban C (${data.analisis[index].pilihan.c?.count})`,
+                              value: data.analisis[index].pilihan.c?.count,
+                            },
+                            {
+                              name: `Jawaban D (${data.analisis[index].pilihan.d?.count})`,
+                              value: data.analisis[index].pilihan.d?.count,
+                            },
+                            {
+                              name: `Jawaban E (${data?.analisis?.[index]?.pilihan.e?.count})`,
+                              value: data?.analisis?.[index].pilihan.e?.count,
+                            },
+                          ]}
+                        /> */}
+                      </div>
+                    </div>
+                  </section>
+                )}
+
+                  {item.tipe === "MP" && (
+                  <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg px-5 pb-5 shadow-lg">
+                    <div className="col-span-2 rounded-xl p-4 shadow-sm">
+                      <MultipleChoiceView
+                        nomor={index + 1}
+                        soals={JSON.parse(item.soal)}
+                        jawaban={[
+                          {
+                            id: item.id,
+                            tipe: item.tipe,
+                            jawaban: item.jawaban,
+                          },
+                        ]}
+                        item={item}
+                      />
+                    </div>
+                    <div className="col-span-3 space-y-2">
+                      <div className="rounded-xl border shadow-sm">
+                        {/* <DonutChart
+                          title="Analisis Jawaban "
+                          data={[
+                            {
+                              name: `Benar (${data.analisis[index].benar})`,
+                              value: data.analisis[index].benar,
+                            },
+                            {
+                              name: `Salah (${data.analisis[index].salah})`,
+                              value: data.analisis[index].salah,
+                            },
+                            {
+                              name: `Tidak Menjawab (${data.analisis[index].tidakMenjawab})`,
+                              value: data.analisis[index].tidakMenjawab,
+                            },
+                          ]}
+                        /> */}
+                      </div>
+                      <div className="rounded-xl border shadow-sm">
+                        {/* <DonutChart
+                          title="Analisis Pilihan "
+                          data={[
+                            {
+                              name: `Jawaban A (${data.analisis[index].pilihan.a?.count})`,
+                              value: data.analisis[index].pilihan.a?.count,
+                            },
+                            {
+                              name: `Jawaban B (${data.analisis[index].pilihan.b?.count})`,
+                              value: data.analisis[index].pilihan.b?.count,
+                            },
+                            {
+                              name: `Jawaban C (${data.analisis[index].pilihan.c?.count})`,
+                              value: data.analisis[index].pilihan.c?.count,
+                            },
+                            {
+                              name: `Jawaban D (${data.analisis[index].pilihan.d?.count})`,
+                              value: data.analisis[index].pilihan.d?.count,
+                            },
+                            {
+                              name: `Jawaban E (${data?.analisis?.[index]?.pilihan.e?.count})`,
+                              value: data?.analisis?.[index].pilihan.e?.count,
+                            },
+                          ]}
+                        /> */}
+                      </div>
+                    </div>
+                  </section>
+                )}
                 {item.tipe === "PG" && (
                   <section className="mb-5 grid grid-cols-5 gap-5 rounded-lg px-5 pb-5 shadow-lg">
                     <div className="col-span-2 rounded-xl p-4 shadow-sm">

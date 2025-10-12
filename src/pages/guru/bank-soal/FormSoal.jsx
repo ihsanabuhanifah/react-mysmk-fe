@@ -5,6 +5,7 @@ import {
   pointOptions,
   tfOptions,
   tipeSoalOptions,
+  mpOptions,
 } from "../../../utils/options";
 import { Input, Form, Select, Button, Icon } from "semantic-ui-react";
 import { DeleteButton, FormLabel } from "../../../components";
@@ -24,6 +25,9 @@ import Editor from "../../../components/Editor";
 import MemoizedEditor from "../../../components/MemorizeEditor";
 import { SocketContext } from "../../../SocketProvider";
 import ImageUploader from "./ImageUpload";
+import MultiTrueFalseOptions from "./MultiTrueFalse";
+
+// Komponen untuk pilihan dinamis Multi True False
 
 let personalSchema = Yup.object().shape({
   materi: Yup.string().nullable().required("wajib disii"),
@@ -38,21 +42,34 @@ let personalSchema = Yup.object().shape({
     c: Yup.string().nullable(),
     d: Yup.string().nullable(),
     e: Yup.string().nullable(),
+    f: Yup.string().nullable(),
   }),
-  jawaban: Yup.string()
+  jawaban: Yup.mixed()
     .nullable()
     .when("tipe", {
       is: (id) => {
-        if (["ES", "LV"].includes(id) === false) {
+        if (["ES", "LV", "MTF", "MP"].includes(id) === false) {
           return true;
         }
       },
-      then: (id) => Yup.string().nullable().required("wajib pilih"),
+
+      then: Yup.string().nullable().required("wajib pilih"),
     }),
 });
+
 let AbsensiSchema = Yup.object().shape({
   payload: Yup.array().of(personalSchema),
 });
+
+// Update tipeSoalOptions untuk menambahkan Multi True False
+const updatedTipeSoalOptions = [
+  { key: "pg", value: "PG", text: "Pilihan Ganda" },
+  { key: "mp", value: "MP", text: "Multi Pilihan" },
+  { key: "mtf", value: "MTF", text: "Multi True False" }, // Tambahkan ini
+  { key: "es", value: "ES", text: "Essay" },
+  { key: "lv", value: "LV", text: "Lisan/Voice" },
+  { key: "tf", value: "TF", text: "True/False" },
+];
 
 export default function FormSoal({ id = null }) {
   const { socket } = useContext(SocketContext);
@@ -62,19 +79,17 @@ export default function FormSoal({ id = null }) {
 
   const queryClient = useQueryClient();
   let { data, isFetching, refetch } = useQuery(
-    //query key
     ["/bank-soal/update", [id]],
-    //axios function,triggered when page/pageSize change
     () => detailBankSoal(id),
-    //configuration
     {
-      // refetchInterval: 1000 * 60 * 60,
       enabled: id !== null,
       staleTime: 1000 * 60 * 10,
       select: (response) => {
         let data = response?.data?.soal;
 
         data.soal = JSON.parse(data?.soal);
+        // Handle data untuk MTF
+       
         setInitialState({
           payload: [data],
         });
@@ -100,6 +115,7 @@ export default function FormSoal({ id = null }) {
           c: null,
           d: null,
           e: null,
+          options: [{ pernyataan: "", jawaban: true }], // Default untuk MTF
         },
         jawaban: "",
         tipe: "",
@@ -112,14 +128,25 @@ export default function FormSoal({ id = null }) {
     try {
       let response;
 
+      // Format jawaban untuk MTF
+      const formattedValues = {
+        ...values,
+        payload: values.payload.map((item) => {
+        
+          return item;
+        }),
+      };
+
+
+      
+
       if (id === undefined || id === null) {
-        response = await createBankSoal(values);
+        response = await createBankSoal(formattedValues);
         resetForm();
         setInitialState({
           payload: [
             {
               ...values.payload[0],
-
               soal: {
                 soal: "",
                 tipe: values.payload[0].soal.tipe,
@@ -128,15 +155,15 @@ export default function FormSoal({ id = null }) {
                 c: null,
                 d: null,
                 e: null,
+                
               },
               jawaban: "",
-
               point: 10,
             },
           ],
         });
       } else {
-        response = await updateBankSoal(id, values);
+        response = await updateBankSoal(id, formattedValues);
       }
 
       queryClient.invalidateQueries("/bank-soal/list");
@@ -187,7 +214,6 @@ export default function FormSoal({ id = null }) {
 
   const formik = useFormik({
     initialValues: id ? initialState : local ? JSON.parse(local) : initialState,
-    // initialValues : initialState,
     validationSchema: AbsensiSchema,
     enableReinitialize: true,
     onSubmit: onSubmit,
@@ -217,7 +243,7 @@ export default function FormSoal({ id = null }) {
     return () => {
       socket.off("simpan.reply");
     };
-  }, [socket]); // ← Dependency `data` tidak perlu
+  }, [socket]);
 
   return (
     <LayoutPage
@@ -226,7 +252,6 @@ export default function FormSoal({ id = null }) {
     >
       <div className="p-0">
         <FormikProvider values={formik}>
-          {" "}
           <Form onSubmit={handleSubmit}>
             {values?.payload?.map((value, index) => (
               <div className="space-y-5" key={index}>
@@ -241,7 +266,6 @@ export default function FormSoal({ id = null }) {
                               return itemIndex != index;
                             },
                           );
-
                           setFieldValue("payload", filtered);
                         }}
                         size="small"
@@ -342,6 +366,7 @@ export default function FormSoal({ id = null }) {
                       onChange={(e, data) => {
                         setFieldValue(`payload[${index}]tipe`, data.value);
                         setFieldValue(`payload[${index}]soal.tipe`, data.value);
+                        setFieldValue(`payload[${index}]jawaban`, "");
                       }}
                       error={
                         errors?.payload?.[index]?.tipe !== undefined &&
@@ -351,31 +376,65 @@ export default function FormSoal({ id = null }) {
                     />
                   </div>
 
-                  {["ES", "LV"].includes(value.tipe) === false && (
-                    <div>
-                      <Form.Dropdown
-                        selection
-                        search
-                        label={{
-                          children: "Jawaban",
-                          htmlFor: `payload[${index}]jawaban`,
-                          name: `payload[${index}]jawaban`,
-                        }}
-                        placeholder="Pilih"
-                        options={value?.tipe === "TF" ? tfOptions : pgOptions}
-                        id={`payload[${index}]jawaban`}
-                        name={`payload[${index}]jawaban`}
-                        onChange={(e, data) => {
-                          setFieldValue(`payload[${index}]jawaban`, data.value);
-                        }}
-                        error={
-                          errors?.payload?.[index]?.jawaban !== undefined &&
-                          errors?.payload?.[index]?.jawaban
-                        }
-                        value={value?.jawaban}
-                      />
-                    </div>
-                  )}
+                  {["ES", "LV"].includes(value.tipe) === false &&
+                    value.tipe !== "MTF" && (
+                      <div>
+                        {value.tipe === "MP" ? (
+                          <Form.Dropdown
+                            selection
+                            multiple
+                            search
+                            label={{
+                              children: "Jawaban (Multi Pilihan)",
+                              htmlFor: `payload[${index}]jawaban`,
+                              name: `payload[${index}]jawaban`,
+                            }}
+                            placeholder="Pilih jawaban"
+                            options={mpOptions}
+                            id={`payload[${index}]jawaban`}
+                            name={`payload[${index}]jawaban`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${index}]jawaban`,
+                                data.value,
+                              );
+                            }}
+                            error={
+                              errors?.payload?.[index]?.jawaban !== undefined &&
+                              errors?.payload?.[index]?.jawaban
+                            }
+                            value={value?.jawaban || []}
+                          />
+                        ) : (
+                          <Form.Dropdown
+                            selection
+                            search
+                            label={{
+                              children: "Jawaban",
+                              htmlFor: `payload[${index}]jawaban`,
+                              name: `payload[${index}]jawaban`,
+                            }}
+                            placeholder="Pilih"
+                            options={
+                              value?.tipe === "TF" ? tfOptions : pgOptions
+                            }
+                            id={`payload[${index}]jawaban`}
+                            name={`payload[${index}]jawaban`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${index}]jawaban`,
+                                data.value,
+                              );
+                            }}
+                            error={
+                              errors?.payload?.[index]?.jawaban !== undefined &&
+                              errors?.payload?.[index]?.jawaban
+                            }
+                            value={value?.jawaban}
+                          />
+                        )}
+                      </div>
+                    )}
                 </section>
 
                 <section className="rounded-md border p-5 shadow-md">
@@ -403,7 +462,7 @@ export default function FormSoal({ id = null }) {
                           errors?.payload?.[index]?.soal?.soal !== undefined &&
                           errors?.payload?.[index]?.soal?.soal
                         }
-                       value={
+                        value={
                           value?.soal?.soal?.replace(
                             "https://storage.devopsgeming.online",
                             "https://bemysmk.smkmadinatulquran.sch.id",
@@ -416,25 +475,20 @@ export default function FormSoal({ id = null }) {
                     )}
                   </div>
 
-                  {value.tipe === "PG" && (
+                  {/* Tampilkan pilihan untuk PG dan MP */}
+                  {(value.tipe === "PG" || value.tipe === "MP") && (
                     <div className="space-y-5">
                       <section>
                         <FormLabel>Pilihan A</FormLabel>
                         {memorize ? (
                           <MemoizedEditor
                             error={
-                              errors?.payload?.[index]?.soal?.soal !==
-                                undefined &&
-                              errors?.payload?.[index]?.soal?.soal
+                              errors?.payload?.[index]?.soal?.a !== undefined &&
+                              errors?.payload?.[index]?.soal?.a
                             }
-                            value={
-                              value?.soal.soal === null ? "" : value?.soal.soal
-                            }
+                            value={value?.soal.a === null ? "" : value?.soal.a}
                             handleChange={(content) => {
-                              setFieldValue(
-                                `payload[${index}]soal.soal`,
-                                content,
-                              );
+                              setFieldValue(`payload[${index}]soal.a`, content);
                             }}
                           />
                         ) : (
@@ -445,7 +499,6 @@ export default function FormSoal({ id = null }) {
                             }
                             value={value?.soal.a === null ? "" : value?.soal.a}
                             handleChange={(content) => {
-                              console.log("co", content);
                               setFieldValue(`payload[${index}]soal.a`, content);
                             }}
                           />
@@ -513,7 +566,6 @@ export default function FormSoal({ id = null }) {
                               errors?.payload?.[index]?.soal?.d !== undefined &&
                               errors?.payload?.[index]?.soal?.d
                             }
-                            va
                             value={value?.soal.d === null ? "" : value?.soal.d}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.d`, content);
@@ -525,7 +577,6 @@ export default function FormSoal({ id = null }) {
                               errors?.payload?.[index]?.soal?.d !== undefined &&
                               errors?.payload?.[index]?.soal?.d
                             }
-                            va
                             value={value?.soal.d === null ? "" : value?.soal.d}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.d`, content);
@@ -542,7 +593,6 @@ export default function FormSoal({ id = null }) {
                               errors?.payload?.[index]?.soal?.e !== undefined &&
                               errors?.payload?.[index]?.soal?.e
                             }
-                            va
                             value={value?.soal.e === null ? "" : value?.soal.e}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.e`, content);
@@ -554,7 +604,6 @@ export default function FormSoal({ id = null }) {
                               errors?.payload?.[index]?.soal?.e !== undefined &&
                               errors?.payload?.[index]?.soal?.e
                             }
-                            va
                             value={value?.soal.e === null ? "" : value?.soal.e}
                             handleChange={(content) => {
                               setFieldValue(`payload[${index}]soal.e`, content);
@@ -563,6 +612,16 @@ export default function FormSoal({ id = null }) {
                         )}
                       </section>
                     </div>
+                  )}
+
+                  {/* Tampilkan untuk Multi True False */}
+                  {value.tipe === "MTF" && (
+                    <MultiTrueFalseOptions
+                      value={value}
+                      index={index}
+                      setFieldValue={setFieldValue}
+                      errors={errors}
+                    />
                   )}
                 </section>
               </div>
@@ -590,6 +649,11 @@ export default function FormSoal({ id = null }) {
                           c: null,
                           d: null,
                           e: null,
+                          options:
+                            values.payload[values.payload.length - 1].tipe ===
+                            "MTF"
+                              ? [{ pernyataan: "", jawaban: true }]
+                              : undefined,
                         },
                         jawaban: "",
                         tipe: values.payload[values.payload.length - 1].tipe,
@@ -604,6 +668,9 @@ export default function FormSoal({ id = null }) {
                 />
               )}
             </div>
+
+            {console.log("sim", errors)}
+            {console.log("pay", values)}
 
             <div className="mt-5">
               <Button

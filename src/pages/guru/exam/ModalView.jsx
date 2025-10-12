@@ -19,7 +19,9 @@ import { EditButton } from "../../../components";
 import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
+import MultipleChoiceView from "./MP";
 import ModalUpdateSoal from "../bank-soal/ModalUpdate";
+import MultiTrueFalseView from "./MTF";
 
 function ModalView({ open, setOpen, preview }) {
 
@@ -56,6 +58,39 @@ function ModalView({ open, setOpen, preview }) {
           {preview.tipe === "PG" && (
             <>
               <Pg
+                nomor={1}
+                soals={JSON.parse(preview.soal)}
+                jawaban={[
+                  {
+                    id: preview.id,
+                    tipe: preview.tipe,
+                    jawaban: preview.jawaban,
+                  },
+                ]}
+                item={preview}
+              />{" "}
+            </>
+          )}
+ {preview.tipe === "MTF" && (
+            <>
+              <MultiTrueFalseView
+                nomor={1}
+                soals={JSON.parse(preview.soal)}
+                jawaban={[
+                  {
+                    id: preview.id,
+                    tipe: preview.tipe,
+                    jawaban: preview.jawaban,
+                  },
+                ]}
+                item={preview}
+              />{" "}
+            </>
+          )}
+
+           {preview.tipe === "MP" && (
+            <>
+              <MultipleChoiceView
                 nomor={1}
                 soals={JSON.parse(preview.soal)}
                 jawaban={[

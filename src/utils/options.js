@@ -77,6 +77,14 @@ const pageSizeOptions = [
   { key: "100", value: 100, text: "100" },
 ];
 
+const mpOptions = [
+  { key: "a", value: "a", text: "A" },
+  { key: "b", value: "b", text: "B" },
+  { key: "c", value: "c", text: "C" },
+  { key: "d", value: "d", text: "D" },
+  { key: "e", value: "e", text: "E" },
+];
+
 const kategoriOptions = [
   { key: "1", value: "Sekolah", text: "Sekolah" },
   { key: "2", value: "Nasional", text: "Nasional" },
@@ -107,8 +115,10 @@ const tipeSoalOptions = [
   { key: "1", value: "PG", text: "Pilihan Ganda" },
   { key: "2", value: "TF", text: "True False" },
   { key: "3", value: "ES", text: "Essay/Project" },
-  { key: "4", value: "MC", text: "Pilihan Banyak" },
+
   { key: "5", value: "LV", text: "Live Coding" },
+  { key: "6", value: "MP", text: "Multi Pilihan" },
+  { key: "7", value: "MTF", text: "Multi True False" }, // Tambahkan ini
 ];
 const pgOptions = [
   { key: "1", value: "A", text: "A" },
@@ -132,10 +142,9 @@ const jenisOptions = [
 ];
 
 const ujianOptions = [
-  { key: "1", value:1, text: "Ujian Saya" },
+  { key: "1", value: 1, text: "Ujian Saya" },
   { key: "2", value: 0, text: "Semua Ujian" },
 ];
-
 
 const durasiOptions = [
   { key: "15", value: 5, text: "5 Menit" },
@@ -190,4 +199,5 @@ export {
   statusUjianOptions,
   tipeUjianOptions,
   ujianOptions,
+  mpOptions,
 };

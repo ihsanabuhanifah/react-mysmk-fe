@@ -66,6 +66,15 @@ export const LabelStatus = ({ status }) => {
   if (status === "PG") {
     return <Label size="tiny" content="Pilihan Ganda" color="blue" as={"a"} />;
   }
+  if (status === "LV") {
+    return <Label size="tiny" content="Live Coding" color="red" as={"a"} />;
+  }
+  if (status === "MP") {
+    return <Label size="tiny" content="Pilihan Banyak" color="yellow" as={"a"} />;
+  }
+  if (status === "MTF") {
+    return <Label size="tiny" content="Pernyataan" color="green" as={"a"} />;
+  }
   if (status === "TF") {
     return <Label size="tiny" content="True False" color="green" as={"a"} />;
   }

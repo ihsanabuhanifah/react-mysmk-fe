@@ -24,6 +24,8 @@ import useList from "../../../hook/useList";
 import { formatWaktu } from "../../../utils/waktu";
 import { usePreventCheating } from "../../../hook/usePreventCheating";
 import { useExamProtection } from "../../../hook/useExamProtection";
+import MultipleChoice from "./MP";
+import MultiTrueFalseStudent from "./MTF";
 
 const roomId = "SMKMQ-ROOM";
 
@@ -127,7 +129,7 @@ export default function ExamPage({ examActive, setExamActive }) {
     alert(`Pelanggaran terdeteksi: ${type}`);
   };
 
-  usePreventCheating(handleViolation);
+  // usePreventCheating(handleViolation);
 
   const updateAnswerCount = (newPayload) => {
     const answered = newPayload?.data?.filter(
@@ -329,6 +331,30 @@ export default function ExamPage({ examActive, setExamActive }) {
                       {index + 1}
                     </div>
                     <div className="min-w-0 flex-1">
+
+ {index === activeSoal && item.tipe === "MP" && (
+                        <MultipleChoice
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+                       {index === activeSoal && item.tipe === "MTF" && (
+                        <MultiTrueFalseStudent
+                          item={item}
+                          soals={soals}
+                          payload={payload}
+                          setPayload={(newPayload) => {
+                            setPayload(newPayload);
+                            updateAnswerCount(newPayload);
+                          }}
+                        />
+                      )}
+
                       {index === activeSoal && item.tipe === "PG" && (
                         <Pg
                           item={item}

@@ -14,8 +14,10 @@ import Pg from "./PG";
 import TF from "./TF";
 import ES from "./ES";
 import LV from "./LV"
+import MultiTrueFalseView from "./MTF";
 import { useUpdateLastExam } from "../../../api/guru/ujian";
 import useList from "../../../hook/useList";
+import MultipleChoiceView from "./MP";
 
 function ModalPenilaian({
   open,
@@ -77,6 +79,27 @@ function ModalPenilaian({
                       />
                     </section>
                   )}
+
+                   {item.tipe === "MP" && (
+                    <section className="mb-5 border rounded-lg shadow-md p-5">
+                      <MultipleChoiceView
+                        nomor={index + 1}
+                        soals={JSON.parse(item.soal)}
+                        jawaban={payload}
+                        item={item}
+                      />
+                    </section>
+                  )}
+                    {item.tipe === "MTF" && (
+                    <section className="mb-5 border rounded-lg shadow-md p-5">
+                      <MultiTrueFalseView
+                        nomor={index + 1}
+                        soals={JSON.parse(item.soal)}
+                        jawaban={payload}
+                        item={item}
+                      />
+                    </section>
+                  )}
                   {item.tipe === "TF" && (
                     <section className="mb-5 border rounded-lg shadow-md p-5">
                       <TF
@@ -97,7 +120,7 @@ function ModalPenilaian({
                         setPayload={setPayload}
                       />
                     </section>
-                  )}]
+                  )}
                    {item.tipe === "LV" && (
                     <section className="mb-5 border rounded-lg shadow-md p-5">
                       <LV
