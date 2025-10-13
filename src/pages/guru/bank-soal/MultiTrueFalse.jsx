@@ -15,6 +15,8 @@ const MultiTrueFalseOptions = ({
   const [options, setOptions] = useState([]);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  console.log("v", value);
+
   // Inisialisasi options dari value yang ada (hanya sekali)
   useEffect(() => {
     if (!isInitialized && value) {
@@ -77,19 +79,7 @@ const MultiTrueFalseOptions = ({
 
     // Reset semua field soal terlebih dahulu
     const fields = ["a", "b", "c", "d", "e"];
-    fields.forEach((field) => {
-      setFieldValue(`payload[${index}].soal.${field}`, null);
-    });
-
-    // Update soal fields berdasarkan options yang ada
-    options.forEach((option, i) => {
-      if (option.pernyataan && option.pernyataan.trim() !== "") {
-        setFieldValue(
-          `payload[${index}].soal.${option.field}`,
-          option.pernyataan,
-        );
-      }
-    });
+   
 
     // Update jawaban - KONVERSI KE STRING untuk backend
     const jawabanArray = options.map((option) =>
@@ -142,10 +132,7 @@ const MultiTrueFalseOptions = ({
     const optionToUpdate = options.find((opt) => opt.id === optionId);
 
     // Validasi: pastikan pernyataan tidak kosong
-    if (optionToUpdate?.pernyataan?.trim() === "") {
-      alert("Pernyataan harus diisi terlebih dahulu sebelum memilih jawaban");
-      return;
-    }
+   
 
     const newOptions = options.map((option) =>
       option.id === optionId ? { ...option, jawaban: newValue } : option,
@@ -179,22 +166,49 @@ const MultiTrueFalseOptions = ({
             <DeleteButton
               size="small"
               disabled={options.length <= 1}
-              onClick={() => removeOption(option.id)}
+              onClick={() =>{
+                  setFieldValue(
+                      `payload[${index}].soal.${option.field}`,
+                      null,
+                    );
+                 removeOption(option.id)
+              }}
             />
           </div>
 
           <div className="mb-3 grid grid-cols-12 gap-5">
             <div className="col-span-8">
-             <textarea
-                  value={option.pernyataan}
-                  onChange={(content) => {
-                    updateOption(option.id, "pernyataan", content.target.value);
+              {memorize ? (
+                <MemoizedEditor
+                  value={value.soal[option.field]}
+                  handleChange={(content) => {
+                    setFieldValue(
+                      `payload[${index}].soal.${option.field}`,
+                      content,
+                    );
                   }}
                   error={
-                    errors?.payload?.[index]?.soal?.[option.field] !== undefined &&
+                    errors?.payload?.[index]?.soal?.[option.field] !==
+                      undefined &&
                     errors?.payload?.[index]?.soal?.[option.field]
                   }
                 />
+              ) : (
+                <Editor
+                  value={value.soal[option.field]}
+                  handleChange={(content) => {
+                    setFieldValue(
+                      `payload[${index}].soal.${option.field}`,
+                      content,
+                    );
+                  }}
+                  error={
+                    errors?.payload?.[index]?.soal?.[option.field] !==
+                      undefined &&
+                    errors?.payload?.[index]?.soal?.[option.field]
+                  }
+                />
+              )}
             </div>
             <div className="col-span-4">
               <Form.Dropdown
@@ -219,12 +233,7 @@ const MultiTrueFalseOptions = ({
             </div>
           </div>
 
-          {/* Tampilkan status validasi */}
-          {option.pernyataan.trim() === "" && (
-            <div className="mt-2 text-sm text-red-500">
-              * Pernyataan harus diisi sebelum memilih jawaban
-            </div>
-          )}
+         
         </div>
       ))}
 
