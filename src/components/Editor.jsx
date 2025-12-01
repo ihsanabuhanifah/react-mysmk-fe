@@ -65,7 +65,7 @@ export default function Editor({ value, handleChange, error, ...props }) {
 
       // Render KaTeX math
       // katex.render(editorContent, editor.root, {
-      //   throwOnError: false,
+      //   throwOnError: fals
       // });
 
       const latexRegex = /\$(.*?)\$/g;
