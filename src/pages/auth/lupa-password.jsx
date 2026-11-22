@@ -24,9 +24,7 @@ export default function LupaPassword() {
     try {
       const result = await postLupaPassword(values);
 
-
-      setPesan(result?.data?.msg);
-      return toast.success(result.data?.status, {
+      toast.success(result.data?.msg || "Kode telah dikirim", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -36,10 +34,14 @@ export default function LupaPassword() {
         progress: undefined,
         theme: "colored",
       });
+      // Lanjut ke langkah input kode 6 karakter + password baru
+      return navigate(
+        `/reset-password?email=${encodeURIComponent(values.email)}`
+      );
     } catch (err) {
-      setErrors(err.response.data);
-
-      return console.log("periksa koneksi internet anda");
+      setErrors(
+        err?.response?.data || { msg: "Periksa koneksi internet anda" }
+      );
     }
   };
 
@@ -71,9 +73,10 @@ export default function LupaPassword() {
                     </div> */}
                     <div className="mb-5 space-y-5">
                       <h1 className="text-3xl font-black">Lupa Password</h1>
-                      <p className="text-justify">Input Email yang terdaftar untuk meminta perubahan password
-
-</p>
+                      <p className="text-justify">
+                        Masukkan email yang terdaftar. Kami akan mengirimkan kode
+                        6 karakter untuk mengatur ulang password.
+                      </p>
                     </div>
                     {errors.msg !== undefined && (
                       <Message color="red"> {errors.msg}</Message>
@@ -110,7 +113,7 @@ export default function LupaPassword() {
                     />
 
                     <Button
-                      content={isSubmitting ? "Proses" : "Kirim"}
+                      content={isSubmitting ? "Mengirim kode..." : "Kirim Kode"}
                       type="submit"
                       fluid
                       size="medium"

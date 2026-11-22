@@ -20,8 +20,9 @@ export function postLupaPassword(values) {
   return axios.post("/forgot-password", values);
 }
 
-export function postResetPassword(id, token, values) {
-  return axios.post(`reset-password/${id}/${token}`, values);
+// values: { email, token, newPassword }
+export function postResetPassword(values) {
+  return axios.post("/reset-password", values);
 }
 
 export function getRoleMe() {

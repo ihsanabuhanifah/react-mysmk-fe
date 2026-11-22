@@ -1,88 +1,50 @@
 /* eslint-disable no-unused-vars */
-import { Button, Icon } from "semantic-ui-react";
-export function EditButton({ onClick, disabled, size = "small" }) {
+import { Button } from "semantic-ui-react";
+
+/**
+ * Tombol aksi tabel yang seragam di seluruh aplikasi:
+ * tombol kecil, bergaris (basic), ikon berwarna, dengan tooltip.
+ *
+ * Contoh: <AksiButton icon="history" color="grey" title="Riwayat" onClick={...} />
+ * (prop `size` lama diabaikan agar ukuran selalu konsisten)
+ */
+export function AksiButton({ onClick, disabled, icon, color, title, className }) {
   return (
-    <button
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
+    <Button
       type="button"
-    >
-      <Icon size={size} disabled={disabled} name="edit" color="teal" />
-    </button>
+      size="mini"
+      basic
+      icon={icon}
+      color={color}
+      title={title}
+      aria-label={title}
+      disabled={disabled}
+      onClick={onClick}
+      className={className}
+    />
   );
 }
 
-
-export function CopyButton({ onClick, disabled, size = "small" }) {
-  return (
-    <button
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <Icon size={size} disabled={disabled} name="copy" color="teal" />
-    </button>
-  );
-}
-export function AddButton({ onClick, disabled, size = "small" }) {
-  return (
-    <button
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <Icon size={size} disabled={disabled} name="add" color="teal" />
-    </button>
-  );
+export function EditButton({ onClick, disabled, title = "Edit", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="edit" color="teal" />;
 }
 
-export function DeleteButton({ onClick, disabled, size = "small" }) {
-  return (
-    <button
-      compact
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <Icon size={size} disabled={disabled} name="trash" color="red" />
-    </button>
-  );
+export function CopyButton({ onClick, disabled, title = "Salin", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="copy" color="teal" />;
 }
 
-export function ViewButton({ onClick, disabled, size = "small" }) {
-  return (
-    <button
-      compact
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <Icon size={size} disabled={disabled} name="eye" color="blue" />
-    </button>
-  );
+export function AddButton({ onClick, disabled, title = "Tambah", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="add" color="teal" />;
 }
 
-export function BackButton({ onClick, disabled, size = "small" }) {
-  return (
-    <button
-      compact
-      className="bg-none"
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
-      <Icon
-        size={size}
-        
-        disabled={disabled}
-        name="arrow left"
-        color="blue"
-      />
-    </button>
-  );
+export function DeleteButton({ onClick, disabled, title = "Hapus", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="trash alternate" color="red" />;
+}
+
+export function ViewButton({ onClick, disabled, title = "Lihat", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="eye" color="blue" />;
+}
+
+export function BackButton({ onClick, disabled, title = "Kembali", className }) {
+  return <AksiButton {...{ onClick, disabled, title, className }} icon="arrow left" color="blue" />;
 }

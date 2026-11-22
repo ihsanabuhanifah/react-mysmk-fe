@@ -3,25 +3,31 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { formatTahun } from "../../utils";
 import {
   MdClose,
-  MdOutlineDashboard,
-  MdOutlineLibraryBooks,
   MdLogout,
-  MdLaptopMac,
-  MdPeople,
-  MdOutlineSupervisorAccount,
-  MdCheck,
-  MdFormatAlignCenter,
-  MdKeyboard,
+  MdOutlineDashboard,
+  MdMonitor,
+  MdClass,
+  MdGroups,
+  MdEventAvailable,
+  MdMenuBook,
+  MdHowToReg,
   MdFingerprint,
-  MdNavigation,
-  MdPhoneForwarded,
-  MdPhoneInTalk,
-  MdCreate,
-  MdLaptopChromebook,
-  MdChatBubble,
-  MdFaceUnlock,
-  MdApartment,
-  MdDocumentScanner,
+  MdQuiz,
+  MdAssignment,
+  MdToday,
+  MdTimer,
+  MdInsights,
+  MdMosque,
+  MdGavel,
+  MdEmojiEvents,
+  MdDirectionsWalk,
+  MdFamilyRestroom,
+  MdBusinessCenter,
+  MdAssignmentInd,
+  MdUploadFile,
+  MdSchool,
+  MdBadge,
+  MdTune,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
@@ -37,200 +43,82 @@ export default function SidebarGuru({ setSidebar }) {
 
   const handleSidebar = () => setSidebar(false);
 
-  // Group navigation items by category
+  const GURU = ["Guru"];
+  const ADMIN = ["Admin", "Super Administrator"];
+  const ic = "h-5 w-5";
+
+  // path = segmen pertama URL setelah /guru/ (dipakai untuk menandai menu aktif)
   const navigationItems = [
     {
-      category: "Main",
+      category: "Utama",
       items: [
-        {
-          to: "dashboard",
-          path: "dashboard",
-          title: "Dashboard",
-          icon: <MdOutlineDashboard className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "dashboard", path: "dashboard", title: "Dashboard", icon: <MdOutlineDashboard className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Monitoring",
+      category: "Kelas & Santri",
       items: [
-        {
-          to: "monitor/harian",
-          path: "monitor/harian",
-          title: "Monitor KBM",
-          icon: <MdLaptopChromebook className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "daftar-siswa",
-          path: "daftar-siswa",
-          title: "Daftar Kelas",
-          icon: <MdOutlineSupervisorAccount className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "halaqoh-siswa",
-          path: "halaqoh-siswa",
-          title: "Daftar Halaqoh",
-          icon: <MdPeople className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "halaqoh-siswa", path: "halaqoh-siswa", title: "Daftar Halaqoh", icon: <MdGroups className={ic} />, roles: GURU },
+        { to: "monitor/harian", path: "monitor", title: "Monitor KBM", icon: <MdMonitor className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Attendance",
+      category: "Absensi",
       items: [
-        {
-          to: "kehadiran-guru",
-          path: "kehadiran-guru",
-          title: "Absensi Guru",
-          icon: <MdFingerprint className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "absensi",
-          path: "absensi",
-          title: "Absensi KBM",
-          icon: <MdLaptopMac className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: `halaqoh/absensi/${formatTahun(date)}`,
-          path: "halaqoh",
-          title: "Absensi Halaqoh",
-          icon: <MdLaptopChromebook className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "pengampu/halaqoh/absensi",
-          path: "pengampu",
-          title: "Absensi Pengampu",
-          icon: <MdCheck className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "absensi", path: "absensi", title: "Absensi KBM", icon: <MdEventAvailable className={ic} />, roles: GURU },
+        { to: `halaqoh/absensi/${formatTahun(date)}`, path: "halaqoh", title: "Absensi Halaqoh", icon: <MdMenuBook className={ic} />, roles: GURU },
+        { to: "pengampu/halaqoh/absensi", path: "pengampu", title: "Absensi Pengampu", icon: <MdHowToReg className={ic} />, roles: GURU },
+        { to: "kehadiran-guru", path: "kehadiran-guru", title: "Absensi Guru", icon: <MdFingerprint className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Academic",
+      category: "Ujian & Penilaian",
       items: [
-        {
-          to: "bank-soal",
-          path: "bank-soal",
-          title: "Bank Soal",
-          icon: <MdFormatAlignCenter className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "exam",
-          path: "exam",
-          title: "Assesmen",
-          icon: <MdKeyboard className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "ujian-berjalan",
-          path: "ujian-berjalan",
-          title: "Ujian Berjalan",
-          icon: <MdLaptopMac className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-         {
-          to: "ujian-hari-ini",
-          path: "ujian-hari-ini",
-          title: "Ujian Hari Ini",
-          icon: <MdPhoneInTalk className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "hasil-belajar",
-          path: "hasil-belajar",
-          title: "Hasil Belajar",
-          icon: <MdDocumentScanner className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-         
-      ]
+        { to: "bank-soal", path: "bank-soal", title: "Bank Soal", icon: <MdQuiz className={ic} />, roles: GURU },
+        { to: "exam", path: "exam", title: "Assesmen", icon: <MdAssignment className={ic} />, roles: GURU },
+        { to: "ujian-hari-ini", path: "ujian-hari-ini", title: "Ujian Hari Ini", icon: <MdToday className={ic} />, roles: GURU },
+        { to: "ujian-berjalan", path: "ujian-berjalan", title: "Ujian Berjalan", icon: <MdTimer className={ic} />, roles: GURU },
+        { to: "hasil-belajar", path: "hasil-belajar", title: "Hasil Belajar", icon: <MdInsights className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Activities",
+      category: "Kesantrian",
       items: [
-        {
-          to: "sholat",
-          path: "sholat",
-          title: "Sholat",
-          icon: <MdNavigation className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "pelanggaran",
-          path: "pelanggaran",
-          title: "Pelanggaran",
-          icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "prestasi",
-          path: "prestasi",
-          title: "Prestasi",
-          icon: <MdOutlineLibraryBooks className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "sholat", path: "sholat", title: "Sholat", icon: <MdMosque className={ic} />, roles: GURU },
+        { to: "pelanggaran", path: "pelanggaran", title: "Pelanggaran", icon: <MdGavel className={ic} />, roles: GURU },
+        { to: "prestasi", path: "prestasi", title: "Prestasi", icon: <MdEmojiEvents className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Permissions",
+      category: "Perizinan",
       items: [
-        {
-          to: "perizinan-pulang",
-          path: "perizinan-pulang",
-          title: "Pulang",
-          icon: <MdPhoneForwarded className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "perizinan-kunjungan",
-          path: "perizinan-kunjungan",
-          title: "Kunjungan",
-          icon: <MdPhoneInTalk className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "perizinan-pulang", path: "perizinan-pulang", title: "Izin Pulang", icon: <MdDirectionsWalk className={ic} />, roles: GURU },
+        { to: "perizinan-kunjungan", path: "perizinan-kunjungan", title: "Kunjungan", icon: <MdFamilyRestroom className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Reports",
+      category: "PKL & Laporan",
       items: [
-        {
-          to: "laporan-guru-piket",
-          path: "laporan-guru-piket",
-          title: "Laporan Guru Piket",
-          icon: <MdCreate className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
+        { to: "fitur-siswa-pkl", path: "fitur-siswa-pkl", title: "Siswa PKL", icon: <MdBusinessCenter className={ic} />, roles: GURU },
+        { to: "laporan-guru-piket", path: "laporan-guru-piket", title: "Laporan Guru Piket", icon: <MdAssignmentInd className={ic} />, roles: GURU },
+      ],
     },
     {
-      category: "Others",
+      category: "Administrasi",
       items: [
-        {
-          to: "fitur-siswa-pkl",
-          path: "fitur-siswa-pkl",
-          title: "Fitur Siswa PKL",
-          icon: <MdApartment className="h-5 w-5" />,
-          roles: ["Guru"]
-        },
-        {
-          to: "chat",
-          path: "chat",
-          title: "Chat",
-          icon: <MdChatBubble className="h-5 w-5" />,
-          roles: ["Guru"]
-        }
-      ]
-    }
+        { to: "daftar-siswa", path: "daftar-siswa", title: "Daftar Kelas", icon: <MdClass className={ic} />, roles: GURU },
+        { to: "daftar-alumni", path: "daftar-alumni", title: "Daftar Alumni", icon: <MdSchool className={ic} />, roles: GURU },
+        { to: "daftar-guru", path: "daftar-guru", title: "Daftar Guru", icon: <MdBadge className={ic} />, roles: GURU },
+        { to: "data-master", path: "data-master", title: "Data Master", icon: <MdTune className={ic} />, roles: ADMIN },
+        { to: "import-data", path: "import-data", title: "Import Data", icon: <MdUploadFile className={ic} />, roles: ADMIN },
+      ],
+    },
   ];
 
-  
-
+  const canSee = (item) => item.roles.some((r) => checkRole(roles, r));
+  const visibleSections = navigationItems
+    .map((section) => ({ ...section, items: section.items.filter(canSee) }))
+    .filter((section) => section.items.length > 0);
 
   return (
     <div className="flex h-full flex-col bg-white shadow-lg">
@@ -255,24 +143,22 @@ export default function SidebarGuru({ setSidebar }) {
       {/* Navigation - Scrollable Area */}
       <div id="scrollbar" className="flex-1 overflow-y-auto ">
         <nav className="px-2 py-4">
-          {navigationItems.map((section) => (
+          {visibleSections.map((section) => (
             <div key={section.category} className="mb-4">
               <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
                 {section.category}
               </h3>
               <div className="space-y-1 whitespace-nowrap">
                 {section.items.map((item) => (
-                  checkRole(roles, "Guru") && (
-                    <NavButton
-                      key={item.to}
-                      to={item.to}
-                      path={item.path}
-                      title={item.title}
-                      icon={item.icon}
-                      handleSidebar={handleSidebar}
-                      isActive={url === item.path}
-                    />
-                  )
+                  <NavButton
+                    key={item.to}
+                    to={item.to}
+                    path={item.path}
+                    title={item.title}
+                    icon={item.icon}
+                    handleSidebar={handleSidebar}
+                    isActive={url === item.path}
+                  />
                 ))}
               </div>
             </div>

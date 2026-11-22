@@ -1,0 +1,170 @@
+/*
+ * Tampilan tabel modern untuk semua <Table> semantic-ui di aplikasi.
+ * Di-import SETELAH semantic.min.css (lihat src/index.js) agar menimpa gaya bawaan.
+ * Prefix "body" menaikkan specificity tanpa perlu !important.
+ */
+
+:root {
+  --tbl-border: #e5e7eb;
+  --tbl-row-border: #f1f5f9;
+  --tbl-head-bg: #f8fafc;
+  --tbl-head-text: #64748b;
+  --tbl-text: #334155;
+  --tbl-hover: #f0fdfa;
+  --tbl-active: #ccfbf1;
+  --tbl-accent: #00bfbf;
+  --tbl-radius: 12px;
+}
+
+/* ---------- Kontainer ---------- */
+body .ui.table {
+  border: 1px solid var(--tbl-border);
+  border-radius: var(--tbl-radius);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+  color: var(--tbl-text);
+  font-size: 13px;
+  background: #fff;
+}
+
+/* ---------- Header ---------- */
+body .ui.table thead th {
+  background: var(--tbl-head-bg);
+  color: var(--tbl-head-text);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--tbl-border);
+  white-space: nowrap;
+}
+body .ui.table thead tr:first-child > th:first-child {
+  border-top-left-radius: var(--tbl-radius);
+}
+body .ui.table thead tr:first-child > th:last-child {
+  border-top-right-radius: var(--tbl-radius);
+}
+body .ui.sortable.table thead th:hover {
+  background: #f1f5f9;
+}
+
+/* ---------- Sel ---------- */
+body .ui.table td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  border-top: 1px solid var(--tbl-row-border);
+}
+body .ui.table tbody tr:first-child td {
+  border-top: none;
+}
+body .ui.compact.table td,
+body .ui.compact.table th {
+  padding: 8px 12px;
+}
+
+/* Hilangkan garis vertikal (celled) agar lebih bersih */
+body .ui.celled.table tr td,
+body .ui.celled.table tr th {
+  border-left: none;
+}
+
+/* Sudut bawah */
+body .ui.table tbody tr:last-child > td:first-child {
+  border-bottom-left-radius: var(--tbl-radius);
+}
+body .ui.table tbody tr:last-child > td:last-child {
+  border-bottom-right-radius: var(--tbl-radius);
+}
+body .ui.table tfoot th {
+  background: var(--tbl-head-bg);
+  border-top: 1px solid var(--tbl-border);
+}
+
+/* ---------- Interaksi ---------- */
+body .ui.selectable.table tbody tr {
+  transition: background-color 0.12s ease;
+}
+body .ui.selectable.table tbody tr:hover,
+body .ui.table tbody tr td.selectable:hover {
+  background: var(--tbl-hover) !important;
+  color: inherit !important;
+}
+body .ui.table tr.active,
+body .ui.table td.active {
+  background: var(--tbl-active) !important;
+  color: inherit !important;
+}
+body .ui.striped.table tbody tr:nth-child(2n) {
+  background: #fafafa;
+}
+
+/* Warna status baris yang lebih lembut */
+body .ui.table tr.positive,
+body .ui.table td.positive {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+}
+body .ui.table tr.negative,
+body .ui.table td.negative,
+body .ui.table tr.error,
+body .ui.table td.error {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+}
+body .ui.table tr.warning,
+body .ui.table td.warning {
+  background: #fffbeb !important;
+  color: #92400e !important;
+}
+
+/* ---------- Label di dalam tabel ---------- */
+body .ui.table .ui.label {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ---------- Tombol aksi (EditButton, DeleteButton, AksiButton) ---------- */
+body .ui.table .ui.mini.basic.icon.button {
+  margin: 0 2px;
+  border-radius: 8px;
+}
+
+/* ---------- Skeleton loading (TableLoading) ---------- */
+.tbl-skeleton {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 37%, #f1f5f9 63%);
+  background-size: 400% 100%;
+  animation: tbl-shimmer 1.3s ease infinite;
+}
+@keyframes tbl-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ---------- Pagination ---------- */
+body .ui.pagination.menu {
+  border-radius: 10px;
+  box-shadow: none;
+  border: 1px solid var(--tbl-border);
+}
+body .ui.pagination.menu .item {
+  min-width: 2.4em;
+  justify-content: center;
+  color: var(--tbl-text);
+}
+body .ui.pagination.menu .active.item {
+  background: var(--tbl-accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- Mobile: tabel bisa di-scroll horizontal ---------- */
+@media only screen and (max-width: 767px) {
+  body .ui.table:not(.unstackable) {
+    border-radius: 10px;
+  }
+  body .ui.table tbody tr {
+    border-bottom: 1px solid var(--tbl-row-border);
+  }
+}

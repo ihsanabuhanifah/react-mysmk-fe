@@ -92,6 +92,9 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "overrides": {
+    "react-error-overlay": "6.0.9"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",

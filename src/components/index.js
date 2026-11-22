@@ -3,7 +3,13 @@ import { Select, ReactSelectAsync } from "./select";
 import { Button } from "./button";
 import { TableLoading } from "./TableLoading";
 import { FormLabel } from "./FormLabel";
-import { EditButton, DeleteButton, ViewButton , AddButton} from "./buttonAksi/editButton";
+import {
+  EditButton,
+  DeleteButton,
+  ViewButton,
+  AddButton,
+  AksiButton,
+} from "./buttonAksi/editButton";
 import ModalAlert from "./ModalAlert";
 import ModalFilter from "./Modal";
 import ModalLogout from "./ModalLogout";
@@ -26,6 +32,7 @@ export {
   ModalAlert,
   ModalLogout,
   LoadingPage,
-  PaginationTable, 
+  PaginationTable,
   AddButton,
+  AksiButton,
 };

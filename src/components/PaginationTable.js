@@ -1,65 +1,64 @@
-
 import { Select, Pagination, Icon } from "semantic-ui-react";
+
+const PAGE_SIZE_OPTIONS = [10, 25, 50, 100, 250, 1000].map((v) => ({
+  key: v,
+  value: v,
+  text: `${v} / halaman`,
+}));
+
 export default function PaginationTable({
   page,
   pageSize,
   setPage,
   setPageSize,
-  totalPages,
-  count
+  totalPages, // sebenarnya total data (angka) atau array hasil group count
+  count,
 }) {
   let total = 0;
-
-  if (typeof totalPages === "object") {
-    totalPages?.map((item) => {
-      total = total + item.count;
+  if (Array.isArray(totalPages)) {
+    totalPages.forEach((item) => {
+      total += Number(item?.count) || 0;
     });
   } else {
-    total = totalPages;
+    total = Number(totalPages ?? count) || 0;
   }
+
+  const size = Number(pageSize) || 10;
+  const current = Number(page) || 1;
+  const pages = Math.max(Math.ceil(total / size), 1);
+  const from = total === 0 ? 0 : (current - 1) * size + 1;
+  const to = Math.min(current * size, total);
+
   return (
-    <div className="grid w-full grid-cols-1 items-center justify-between gap-5 overflow-x-auto py-2 md:flex lg:flex lg:overflow-visible xl:flex xl:overflow-visible 2xl:overflow-visible">
-      <div className="flex items-center space-x-2">
+    <div className="mt-3 flex flex-col gap-3 py-2 md:flex-row md:items-center md:justify-between">
+      <div className="flex items-center gap-3 text-sm text-gray-600">
         <Select
+          compact
+          value={size}
+          options={PAGE_SIZE_OPTIONS}
           onChange={(e, value) => {
             setPageSize(value.value);
+            setPage?.(1);
           }}
-          compact
-          value={pageSize}
-          placeholder="Select Page"
-          options={[
-            { key: 1, value: 10, text: 10  },
-            { key: 2, value: 25, text: 25 },
-            { key: 3, value: 50, text: 50 },
-            { key: 4, value: 100, text: 100 },
-            { key: 5, value: 250, text: 250 },
-            { key: 6, value: 1000, text: 1000 },
-          ]}
         />
-
-        <p>
-          Menampilkan {count < pageSize ? count : pageSize} dari {count} data
-        </p>
+        <span>
+          Menampilkan <b className="text-gray-800">{from}–{to}</b> dari{" "}
+          <b className="text-gray-800">{total}</b> data
+        </span>
       </div>
-      <div className="">
+      <div className="overflow-x-auto">
         <Pagination
-          compact
+          size="small"
+          activePage={current}
           onPageChange={(e, value) => {
             setPage(value.activePage);
           }}
-          defaultActivePage={page}
           ellipsisItem={null}
-          firstItem={{
-            content: <Icon name="angle double left" />,
-            icon: true,
-          }} 
-          lastItem={{
-            content: <Icon name="angle double right" />,
-            icon: true,
-          }}
+          firstItem={{ content: <Icon name="angle double left" />, icon: true }}
+          lastItem={{ content: <Icon name="angle double right" />, icon: true }}
           prevItem={{ content: <Icon name="angle left" />, icon: true }}
           nextItem={{ content: <Icon name="angle right" />, icon: true }}
-          totalPages={Math.ceil(total / pageSize)}
+          totalPages={pages}
         />
       </div>
     </div>

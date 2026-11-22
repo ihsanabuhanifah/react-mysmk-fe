@@ -1,6 +1,7 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/login";
+import Home from "./pages/landing";
 import LupaPassword from "./pages/auth/lupa-password";
 import ResetPassword from "./pages/auth/reset-password";
 import Guru from "./layout/guru";
@@ -85,6 +86,11 @@ import TugasPklNilai from "./pages/guru/tugas-laporan-pkl/nilai";
 import { SocketProvider } from "./SocketProvider";
 import UjianBerjalan from "./pages/guru/exam/UjianBerjalan";
 import UjianHariIni from "./pages/guru/exam/UjianHariIni";
+import ImportData from "./pages/guru/import-data";
+import PindahKelas from "./pages/guru/daftar-siswa/pindah-kelas";
+import DaftarAlumni from "./pages/guru/daftar-alumni";
+import DaftarGuru from "./pages/guru/daftar-guru";
+import DataMaster from "./pages/guru/data-master";
 
 function App() {
   return (
@@ -130,7 +136,7 @@ function App() {
           }
         />
         <Route
-          path="/reset-password/:id/:token"
+          path="/reset-password"
           element={
             <ProtectLogin>
               <ResetPassword />
@@ -153,6 +159,10 @@ function App() {
             <Route path="kehadiran-guru" element={<Kehadiran />} />
             <Route path="daftar-siswa" element={<DaftarSiswa />} />
             <Route path="daftar-siswa/tambah-kelas" element={<CreateSiswa />} />
+            <Route path="daftar-siswa/pindah-kelas" element={<PindahKelas />} />
+            <Route path="daftar-alumni" element={<DaftarAlumni />} />
+            <Route path="daftar-guru" element={<DaftarGuru />} />
+            <Route path="data-master" element={<DataMaster />} />
             <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
             <Route
               path="daftar-siswa/update-siswa/:id"
@@ -202,6 +212,7 @@ function App() {
               element={<PengampuHalaqoh />}
             />
             <Route path="sholat" element={<Sholat />} />
+            <Route path="import-data" element={<ImportData />} />
             <Route path="laporan-guru-piket" element={<ListGuruPiketToday />} />
             <Route path="absensi/rekap-kehadiran" element={<RekapAbsensi />} />
             <Route path="absensi/rekap-agenda" element={<Agenda />} />
@@ -293,11 +304,3 @@ function App() {
 
 export default App;
 
-const Home = () => {
-  return (
-    <div>
-      <p>Home</p>
-      <Link to="/login">login</Link>
-    </div>
-  );
-};
