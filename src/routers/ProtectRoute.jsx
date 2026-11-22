@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { authme } from "../api/auth";
 import { useQuery } from "react-query";
 import { LoadingPage } from "../components";
+import { logout } from "../api/tokenManager";
 export default function ProtectRoute({ children, userRole }) {
   const auth = Cookies.get("mysmk_token");
   let [loading, setLoading] = React.useState(true);
@@ -19,9 +20,9 @@ export default function ProtectRoute({ children, userRole }) {
         const role = response?.data?.role;
 
         if (!userRole.includes(role)) {
-          Cookies.remove("mysmk_token");
-          Cookies.remove("mysmk_refresh");
-          return <Navigate to="/login" />;
+          // cabut refresh token di server, hapus sesi lokal, lalu ke /login
+          logout();
+          return null;
         }
       },
       onSuccess: () => {
