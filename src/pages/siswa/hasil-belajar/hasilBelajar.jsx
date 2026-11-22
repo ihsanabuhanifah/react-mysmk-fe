@@ -1,4 +1,6 @@
 import React from 'react'
+import useClientPagination from "../../../hook/useClientPagination";
+import PaginationTable from "../../../components/PaginationTable";
 import LayoutSiswa from '../../../module/layoutSiswa'
 import { Button, Icon, Input, Menu, Sidebar, Table } from 'semantic-ui-react'
 import { TableLoading } from '../../../components'
@@ -12,6 +14,9 @@ export default function HasilBelajar() {
 	const navigate = useNavigate()
 	const { data, isFetching, setParams, dataTa, params } = useGetHasilBelajar()
   let [visible, setVisible] = React.useState(false);
+
+	const pg = useClientPagination(data?.data);
+
 
 	return (
 		<LayoutSiswa title="Hasil Belajar">
@@ -83,9 +88,9 @@ export default function HasilBelajar() {
 					</Table.Header>
 					<Table.Body>
 						<TableLoading count={10} isLoading={isFetching} data={data?.data} messageEmpty="Data tidak ditemukan">
-							{data?.data.map((value, i) => (
+							{pg.items.map((value, i) => (
 								<Table.Row key={i}>
-									<Table.Cell>{i + 1}</Table.Cell>
+									<Table.Cell>{pg.nomor(i)}</Table.Cell>
 									<Table.Cell>{value?.nama_mapel}</Table.Cell>
 									<Table.Cell>{value?.hasil_belajar[0]?.tahun_ajaran?.nama_tahun_ajaran}</Table.Cell>
 									<Table.Cell>{value?.hasil_belajar[0]?.rata_nilai_tugas ?? '-'}</Table.Cell>
@@ -104,6 +109,7 @@ export default function HasilBelajar() {
 						</TableLoading>
 					</Table.Body>
 				</Table>
+				<PaginationTable {...pg.paginationProps} />
 			</div>
 		</LayoutSiswa>
 	)

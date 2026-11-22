@@ -1,4 +1,5 @@
 import React from "react";
+import PaginationTable from "../../../components/PaginationTable";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import LayoutPage from "../../../module/layoutPage";
@@ -51,7 +52,7 @@ let prestasiArraySchema = Yup.object().shape({
   prestasi: Yup.array().of(prestasiSchema),
 });
 export default function Prestasi() {
-  let [page] = React.useState(1);
+  let [page, setPage] = React.useState(1);
   let [pageSize, setPageSize] = React.useState(10);
   let [nama, setNama] = React.useState("");
   let debouncedName = useDebounce(nama, 600);
@@ -263,7 +264,7 @@ export default function Prestasi() {
                         {data?.data?.rows?.map((value, index) => (
                           <Table.Row key={index}>
                             <Table.Cell >
-                              {index + 1}
+                              {(page - 1) * pageSize + index + 1}
                             </Table.Cell>
                             <Table.Cell>
                               <span className="capitalize">
@@ -337,6 +338,13 @@ export default function Prestasi() {
                     </Table.Body>
                    
                   </Table>
+                  <PaginationTable
+                    page={page}
+                    pageSize={pageSize}
+                    setPage={setPage}
+                    setPageSize={setPageSize}
+                    totalPages={data?.data?.count}
+                  />
                 </div>
               </div>
             </section>

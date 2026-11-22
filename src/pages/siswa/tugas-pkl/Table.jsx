@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import useClientPagination from "../../../hook/useClientPagination";
+import PaginationTable from "../../../components/PaginationTable";
 import { Table, Segment, Button, Modal, Form, Icon } from "semantic-ui-react";
 import {
   useJawabanPklDetail,
@@ -36,6 +38,7 @@ export function formatTanggalIndoJam(tanggalISO) {
 }
 
 const TugasPklTable = ({ data, submitFunction, isLoading }) => {
+  const pg = useClientPagination(data);
   const [modalOpen, setModalOpen] = useState(false);
   const [tugasPklId, setTugasPklId] = useState(null); // Tambahkan state untuk tugasPklId
   const [isTenggatLewat, setIsTenggatLewat] = useState({});
@@ -216,7 +219,7 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {data.map((item, index) => {
+          {pg.items.map((item, index) => {
             // const jawabanStatus = jawabanDetail?.find(
             //   (jawaban) => jawaban.tugas_pkl_id === item.id
             // )?.status;
@@ -290,6 +293,7 @@ const TugasPklTable = ({ data, submitFunction, isLoading }) => {
           })}
         </Table.Body>
       </Table>
+      <PaginationTable {...pg.paginationProps} />
     </Segment>
   );
 };

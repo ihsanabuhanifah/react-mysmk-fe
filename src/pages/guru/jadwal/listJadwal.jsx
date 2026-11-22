@@ -8,18 +8,24 @@ import { formatHari, checkRole } from "../../../utils";
 import { dayOptions } from ".";
 import { TableLoading } from "../../../components";
 import useList from "../../../hook/useList";
+import usePage from "../../../hook/usePage";
+import PaginationTable from "../../../components/PaginationTable";
 export default function ListJadwal() {
   let [hari, setHari] = React.useState(formatHari(new Date()));
   let navigate = useNavigate();
+  const { page, pageSize, setPage, setPageSize } = usePage();
+  React.useEffect(() => setPage(1), [hari, setPage]);
   const parameter = {
     ...(hari !== "semua" && {
       hari,
     }),
+    page,
+    pageSize,
   };
   const { roles } = useList();
   let { data, isLoading } = useQuery(
     //query key
-    ["jadwal", parameter],
+    ["jadwal-semua", parameter],
     //axios function,triggered when page/pageSize change
     () => listJadwalAll(parameter),
     //configuration
@@ -94,7 +100,7 @@ export default function ListJadwal() {
             >
               {data?.data?.rows?.map((value, index) => (
                 <Table.Row key={index}>
-                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{(page - 1) * pageSize + index + 1}</Table.Cell>
                   <Table.Cell>
                     <span className="capitalize">{value?.hari}</span>
                   </Table.Cell>
@@ -134,6 +140,13 @@ export default function ListJadwal() {
             </TableLoading>
           </Table.Body>
         </Table>
+        <PaginationTable
+          page={page}
+          pageSize={pageSize}
+          setPage={setPage}
+          setPageSize={setPageSize}
+          totalPages={data?.data?.count}
+        />
       </section>
     </LayoutPage>
   );

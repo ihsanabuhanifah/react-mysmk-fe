@@ -1,4 +1,6 @@
 import React from "react";
+import useClientPagination from "../../../hook/useClientPagination";
+import PaginationTable from "../../../components/PaginationTable";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { halaqohManualCreate } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
@@ -268,6 +270,9 @@ export default function AbsensiHalaqoh() {
   };
 
   let sessionTes = sessionStorage.getItem(`halaqoh_${tanggal}`);
+
+  const pgBelum = useClientPagination(dataBelumAbsen?.halaqoh);
+
 
   return (
     <LayoutPage title={"Absensi Halaqoh"}>
@@ -758,12 +763,12 @@ export default function AbsensiHalaqoh() {
                     <TableLoading
                       count={8}
                       isLoading={isLoadingBelumAbsen}
-                      data={dataBelumAbsen?.data}
+                      data={dataBelumAbsen?.halaqoh}
                       messageEmpty={"Tidak Ada Guru Belum Absen"}
                     >
-                      {dataBelumAbsen?.halaqoh?.map((value, index) => (
+                      {pgBelum.items.map((value, index) => (
                         <Table.Row key={index}>
-                          <Table.Cell>{index + 1}</Table.Cell>
+                          <Table.Cell>{pgBelum.nomor(index)}</Table.Cell>
                           <Table.Cell>
                             {showFormattedDate(value?.tanggal)}
                           </Table.Cell>
@@ -779,6 +784,7 @@ export default function AbsensiHalaqoh() {
                     </TableLoading>
                   </Table.Body>
                 </Table>
+                <PaginationTable {...pgBelum.paginationProps} />
               </section>
             </form>
           )}

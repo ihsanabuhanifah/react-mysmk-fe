@@ -1,4 +1,7 @@
 import React from "react";
+import usePage from "../../../hook/usePage";
+import useClientPagination from "../../../hook/useClientPagination";
+import PaginationTable from "../../../components/PaginationTable";
 import { useNavigate } from "react-router-dom";
 import { belumAbsen, listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
@@ -17,6 +20,8 @@ export default function Jadwal() {
 
   let queryClient = useQueryClient();
   let [hari, setHari] = React.useState(formatHari(new Date()));
+  const { page, pageSize, setPage, setPageSize } = usePage();
+  React.useEffect(() => setPage(1), [hari, setPage]);
   const parameter = {
     ...(hari !== "semua" && {
       hari,
@@ -25,9 +30,9 @@ export default function Jadwal() {
 
   let { data, isLoading } = useQuery(
     //query key
-    ["jadwal", parameter],
+    ["jadwal-saya", parameter, page, pageSize],
     //axios function,triggered when page/pageSize change
-    () => listJadwal(parameter),
+    () => listJadwal({ ...parameter, page, pageSize }),
     //configuration
     {
       refetchInterval: 1000 * 60 * 60,
@@ -49,6 +54,8 @@ export default function Jadwal() {
       },
     }
   );
+
+  const pgBelum = useClientPagination(dataBelumAbsen?.data);
 
   const [loading, setLoading] = React.useState(false);
 
@@ -194,7 +201,7 @@ export default function Jadwal() {
               >
                 {data?.data?.rows?.map((value, index) => (
                   <Table.Row key={index}>
-                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>{(page - 1) * pageSize + index + 1}</Table.Cell>
                     <Table.Cell>
                       <span className="capitalize">{value?.hari}</span>
                     </Table.Cell>
@@ -228,6 +235,13 @@ export default function Jadwal() {
               </TableLoading>
             </Table.Body>
           </Table>
+          <PaginationTable
+            page={page}
+            pageSize={pageSize}
+            setPage={setPage}
+            setPageSize={setPageSize}
+            totalPages={data?.data?.count}
+          />
         </section>
 
         <section>
@@ -250,9 +264,9 @@ export default function Jadwal() {
                 data={dataBelumAbsen?.data}
                 messageEmpty={"Tidak Ada Guru Belum Absen"}
               >
-                {dataBelumAbsen?.data?.map((value, index) => (
+                {pgBelum.items.map((value, index) => (
                   <Table.Row key={index}>
-                    <Table.Cell>{index + 1}</Table.Cell>
+                    <Table.Cell>{pgBelum.nomor(index)}</Table.Cell>
                     <Table.Cell>{showFormattedDate(value?.tanggal)}</Table.Cell>
                     <Table.Cell>{value?.teacher?.nama_guru}</Table.Cell>
                     <Table.Cell>{value?.kelas?.nama_kelas}</Table.Cell>
@@ -262,6 +276,13 @@ export default function Jadwal() {
               </TableLoading>
             </Table.Body>
           </Table>
+          <PaginationTable
+            page={pgBelum.page}
+            pageSize={pgBelum.pageSize}
+            setPage={pgBelum.setPage}
+            setPageSize={pgBelum.setPageSize}
+            totalPages={pgBelum.total}
+          />
         </section>
       </div>
     </LayoutPage>

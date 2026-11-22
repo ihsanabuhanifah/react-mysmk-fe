@@ -1,4 +1,6 @@
 import LayoutPage from "../../../module/layoutPage";
+import useClientPagination from "../../../hook/useClientPagination";
+import PaginationTable from "../../../components/PaginationTable";
 import { useEffect, useState } from "react";
 import { Form, Tab, Table, Input, Icon, Button } from "semantic-ui-react";
 import { useKehadiran, useSubmitDatang } from "../../../api/guru/absensi";
@@ -94,6 +96,9 @@ export default function Kehadiran() {
     tanggal: tanggalActive,
   });
   const datang = useSubmitDatang({ tanggal: tanggalActive });
+
+  const pg = useClientPagination(data?.data);
+
 
   return (
     <LayoutPage title="Kehadiran Guru">
@@ -279,7 +284,7 @@ export default function Kehadiran() {
               data={data?.data}
               messageEmpty={"Absensi Kehadiran Tanggal ini tidak ditemukan"}
             >
-              {data?.data?.map((item, index) => (
+              {pg.items.map((item, index) => (
                 <Table.Row key={index}>
                   {checkRole(roles, "Admin") && (
                     <Table.Cell>
@@ -294,7 +299,7 @@ export default function Kehadiran() {
                       />
                     </Table.Cell>
                   )}
-                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{pg.nomor(index)}</Table.Cell>
                   <Table.Cell>{showFormattedDate(item.tanggal)}</Table.Cell>
                   <Table.Cell>{item.teacher.nama_guru}</Table.Cell>
                   <Table.Cell>{item.jam_datang || "-"}</Table.Cell>
@@ -326,6 +331,7 @@ export default function Kehadiran() {
             </TableLoading>
           </Table.Body>
         </Table>
+        <PaginationTable {...pg.paginationProps} />
       </section>
     </LayoutPage>
   );
