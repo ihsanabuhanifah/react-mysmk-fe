@@ -1,5 +1,5 @@
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
-import Cookies from "js-cookie";
+import { logout } from "../api/tokenManager";
 import { clearToken } from "../api/axiosClient";
 function ModalLogout({ open, setOpen }) {
 
@@ -25,11 +25,9 @@ function ModalLogout({ open, setOpen }) {
           color="green"
           inverted
           onClick={() => {
-            Cookies.remove("mysmk_token");
-
             clearToken();
-            localStorage.clear();
-            window.location.replace("/login");
+            // cabut refresh token di server, hapus cookie, kembali ke /login
+            logout();
           }}
         >
           <Icon name="checkmark" /> Yakin

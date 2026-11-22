@@ -20,6 +20,7 @@ export default function ProtectRoute({ children, userRole }) {
 
         if (!userRole.includes(role)) {
           Cookies.remove("mysmk_token");
+          Cookies.remove("mysmk_refresh");
           return <Navigate to="/login" />;
         }
       },

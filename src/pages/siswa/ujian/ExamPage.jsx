@@ -3,6 +3,7 @@ import {
   useProgressExam,
   useSubmitExam,
   useTakeExam,
+  autosaveProgressExam,
 } from "../../../api/siswa/exam";
 import Pg from "./Pg";
 import TF from "./TF";
@@ -41,6 +42,10 @@ export default function ExamPage({ examActive, setExamActive }) {
   const [activeSoal, setActiveSoal] = useState(0);
   const [payload, setPayload] = useState({ id: examActive });
   const [answeredCount, setAnsweredCount] = useState(0);
+  // autosave (lihat efek autosave di bawah)
+  const AUTOSAVE_MS = 60 * 1000;
+  const payloadRef = React.useRef({ id: examActive });
+  const terakhirDisimpan = React.useRef(null);
 
   const progess = useProgressExam();
   const submit = useSubmitExam();
@@ -76,8 +81,10 @@ export default function ExamPage({ examActive, setExamActive }) {
         id: data?.data?.id,
         userId: identitas?.id,
       });
-      progess.mutate(payload);
-      window.location.reload();
+      // simpan progress dulu, baru reload (sebelumnya request bisa terputus oleh reload)
+      progess.mutate(payload, {
+        onSettled: () => window.location.reload(),
+      });
     } else {
       clearInterval(interval);
     }
@@ -119,11 +126,35 @@ export default function ExamPage({ examActive, setExamActive }) {
       ).length;
       setAnsweredCount(answered);
 
+      // patokan autosave: jawaban yang baru dimuat dari server = sudah tersimpan
+      terakhirDisimpan.current = JSON.stringify(dataSoal);
+
       setPayload((state) => {
         return { ...state, data: dataSoal };
       });
     }
   }, [data, isFetching]);
+
+  // Autosave hemat beban server (tanpa toast):
+  // dicek tiap 60 detik, dan HANYA dikirim bila jawaban berubah sejak simpan terakhir.
+  // Maksimal 1 request/menit per siswa; siswa yang tidak mengubah jawaban = 0 request.
+  useEffect(() => {
+    payloadRef.current = payload;
+  }, [payload]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const p = payloadRef.current;
+      if (!p?.id || !Array.isArray(p?.data) || p.data.length === 0) return;
+      const isi = JSON.stringify(p.data);
+      if (isi === terakhirDisimpan.current) return;
+      autosaveProgressExam(p)
+        .then(() => {
+          terakhirDisimpan.current = isi;
+        })
+        .catch(() => {});
+    }, AUTOSAVE_MS);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleViolation = (type) => {
     alert(`Pelanggaran terdeteksi: ${type}`);

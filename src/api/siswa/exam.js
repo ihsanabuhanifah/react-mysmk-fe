@@ -85,6 +85,14 @@ export const useTakeExam = () => {
   return mutate;
 };
 
+// Autosave progress tanpa toast (dipanggil berkala saat siswa mengerjakan)
+export function autosaveProgressExam(payload) {
+  return axios.put(`/santri/exam/progress`, {
+    id: payload.id,
+    data: payload.data,
+  });
+}
+
 export const useProgressExam = () => {
   const { successToast, warningToast } = useToast();
   const mutate = useMutation(

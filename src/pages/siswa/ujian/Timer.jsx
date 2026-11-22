@@ -3,21 +3,25 @@ import { useEffect, useState } from "react";
 export default function Timer({ data, payload, setModalAutoSubmit, submit }) {
   let [waktu, setWaktu] = useState(0);
 
+  // waktu_tersisa bisa 0 (waktu habis) -> tetap dipakai agar auto submit berjalan
+  const adaWaktu =
+    data?.data?.waktu_tersisa !== undefined && data?.data?.waktu_tersisa !== null;
+
   useEffect(()=> {
-    if (!!data?.data?.waktu_tersisa === true) {
-        setWaktu(data?.data?.waktu_tersisa);
+    if (adaWaktu) {
+        setWaktu(Math.max(Number(data?.data?.waktu_tersisa) || 0, 0));
       }
-  },[data])
+  },[data, adaWaktu])
   useEffect(() => {
     const interval = setInterval(() => {
       setWaktu((w) => {
-        if (!!data?.data?.waktu_tersisa === true) {
+        if (adaWaktu) {
           if (w <= 0) {
             setModalAutoSubmit(true); // Tampilkan modal auto submit
             clearInterval(interval); // Hentikan interval untuk mencegah pengurangan waktu lebih lanjut
             setTimeout(() => {
               submit.mutate(payload, {
-                onSuccess: () => {
+                onSettled: () => {
                   window.location.reload();
                 },
               });
@@ -32,7 +36,7 @@ export default function Timer({ data, payload, setModalAutoSubmit, submit }) {
     return () => {
       return clearInterval(interval);
     };
-  }, [data?.data?.waktu_tersisa, payload, submit]);
+  }, [data?.data?.waktu_tersisa, adaWaktu, payload, submit]);
 
   return <span className="text-lg font-semibold">{convertSeconds(waktu)}</span>;
 }

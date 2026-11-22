@@ -1,6 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import qs from "qs";
+import { attachRefreshInterceptor } from "./tokenManager";
 
 const headers = {
   Accept: "application/json",
@@ -28,23 +29,9 @@ axiosClient.interceptors.request.use(
   },
 );
 
-axiosClient.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (401 === error?.response?.status) {
-      Cookies.remove("mysmk_token");
-      Cookies.clear();
-
-      clearToken();
-      localStorage.clear();
-      window.location.replace("/login");
-    } else {
-      return Promise.reject(error);
-    }
-  },
-);
+// 401 -> tukar refresh token otomatis lalu ulangi request; gagal -> ke /login
+// (lihat api/tokenManager.js)
+attachRefreshInterceptor(axiosClient);
 
 export const syncToken = () => {
   // axiosClient.defaults.headers["X-Authorization"] = `Bearer ${Cookies.get(

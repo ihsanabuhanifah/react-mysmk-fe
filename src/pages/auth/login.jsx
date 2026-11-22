@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { login } from "../../api/auth";
 import Cookies from "js-cookie";
+import { setTokens } from "../../api/tokenManager";
 import { useNavigate } from "react-router-dom";
 import LoginImage from "../../image/login.png";
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
@@ -42,9 +43,8 @@ export default function Login() {
       console.log(values);
       const result = await login(values);
       console.log(result);
-      Cookies.set("mysmk_token", result.data.token, {
-        expires: 7,
-      });
+      // simpan access token + refresh token
+      setTokens(result.data.token, result.data.refreshToken);
 
       if (["Guru", "Admin"].includes(result.data.role) ) {
         return navigate("/guru/dashboard");

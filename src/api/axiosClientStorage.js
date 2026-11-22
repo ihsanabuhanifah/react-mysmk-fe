@@ -1,13 +1,15 @@
 import axios from "axios";
-import Cookies from "js-cookie";  
+import Cookies from "js-cookie";
 import qs from "qs";
+import { attachRefreshInterceptor } from "./tokenManager";
 
 const headers = {
   Accept: "application/json",
   "X-Authorization": `Bearer ${Cookies.get("mysmk_token")}`,
 };
 const axiosClientStorage = axios.create({
-  baseURL: "https://bemysmk.smkmadinatulquran.sch.id",
+  // sebelumnya selalu ke server produksi; kini mengikuti .env (fallback produksi)
+  baseURL: process.env.REACT_APP_API_STORAGE_URL || "https://bemysmk.smkmadinatulquran.sch.id",
  
 
 
@@ -31,23 +33,8 @@ axiosClientStorage.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-axiosClientStorage.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (401 === error?.response?.status) {
-      Cookies.remove("mysmk_token");
-      Cookies.clear()
-
-      clearToken();
-      localStorage.clear();
-      window.location.replace("/login");
-    } else {
-      return Promise.reject(error);
-    }
-  }
-);
+// 401 -> tukar refresh token otomatis lalu ulangi request; gagal -> ke /login
+attachRefreshInterceptor(axiosClientStorage);
 
 
 
