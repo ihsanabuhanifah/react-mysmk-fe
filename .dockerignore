@@ -1,0 +1,10 @@
+node_modules
+build
+.git
+.github
+.vscode
+.DS_Store
+npm-debug.log*
+# .env sengaja TIDAK diabaikan: dibutuhkan saat build (REACT_APP_*), tidak ikut ke image akhir
+.env.local
+.env.*.local

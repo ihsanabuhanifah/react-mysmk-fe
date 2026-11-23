@@ -1,0 +1,19 @@
+# Frontend MySMK (React + Apache di dalam container). Jalankan di VPS dari folder repo ini:
+#   GITHUB_SHA=$(git rev-parse HEAD) docker compose up -d --build
+# Apache di host meneruskan https://mysmk... ke 127.0.0.1:3000.
+services:
+  web:
+    build:
+      context: .
+      args:
+        GITHUB_SHA: ${GITHUB_SHA:-local}
+    container_name: mysmk-web
+    restart: unless-stopped
+    # hanya bisa diakses dari server itu sendiri (lewat Apache host), bukan langsung dari internet
+    ports:
+      - "3000:80"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
