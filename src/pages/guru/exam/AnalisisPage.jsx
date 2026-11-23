@@ -6,7 +6,7 @@ import TF from "./TF";
 import ES from "./ES";
 import DonutChart from "../../../components/Chart/Donut";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import { useRef, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { saveAs } from "file-saver";

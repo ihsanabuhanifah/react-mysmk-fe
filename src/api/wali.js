@@ -145,3 +145,8 @@ export function useSimpanIzin(jenis) {
     { onSuccess: () => qc.invalidateQueries(["wali/izin", jenis]) }
   );
 }
+
+// Ganti password (semua role). Server mencabut semua sesi setelah berhasil.
+export function useGantiPassword() {
+  return useMutation((payload) => axios.put("/password/update", payload));
+}

@@ -28,7 +28,8 @@ module.exports = {
 
       webpackConfig.module.rules.push({
         test: /\.m?js$/,
-        exclude: /node_modules\/(?!@monaco-editor)/,
+        // paket modern (class fields dsb.) yang perlu ditranspile agar bisa dibaca webpack 4
+        exclude: /node_modules\/(?!(@monaco-editor|fast-png|iobuffer|jspdf|html2pdf\.js|axios)\/)/,
         include: /node_modules/,
         type: "javascript/auto",
         use: {
@@ -41,7 +42,12 @@ module.exports = {
               "@babel/plugin-proposal-private-methods",
               "@babel/plugin-proposal-class-properties",
               "@babel/plugin-proposal-private-property-in-object",
-              "@babel/plugin-proposal-logical-assignment-operators"
+              "@babel/plugin-proposal-logical-assignment-operators",
+              // sintaks modern yang belum dikenali parser webpack 4
+              "@babel/plugin-transform-nullish-coalescing-operator",
+              "@babel/plugin-transform-numeric-separator",
+              "@babel/plugin-transform-optional-catch-binding",
+              "@babel/plugin-transform-class-static-block"
 
             ],
           },
