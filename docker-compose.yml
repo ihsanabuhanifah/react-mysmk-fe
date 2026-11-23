@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     # hanya bisa diakses dari server itu sendiri (lewat Apache host), bukan langsung dari internet
     ports:
-      - "3000:80"
+      - "127.0.0.1:3000:80"
     logging:
       driver: json-file
       options:
