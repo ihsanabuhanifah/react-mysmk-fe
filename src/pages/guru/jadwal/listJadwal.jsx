@@ -123,7 +123,7 @@ export default function ListJadwal() {
                         fluid
                         size="small"
                         color="teal"
-                        onClick={() => navigate(`/guru/absensi/jadwal/update/${value.id}`)}
+                        onClick={() => navigate(`/guru/jadwal/update/${value.id}`)}
                       />
                       <Button
                         icon={() => <Icon name="delete" />}

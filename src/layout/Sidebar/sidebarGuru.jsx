@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { formatTahun } from "../../utils";
 import {
   MdClose,
-  MdLogout,
+  MdPushPin,
+  MdOutlinePushPin,
   MdOutlineDashboard,
   MdMonitor,
   MdClass,
@@ -30,18 +31,18 @@ import {
   MdTune,
   MdHistory,
   MdSupervisorAccount,
+  MdCalendarMonth,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
-import { ModalLogout } from "../../components";
 import useList from "../../hook/useList";
 
-export default function SidebarGuru({ setSidebar }) {
+// collapsed = hanya ikon (desktop, saat tidak di-hover & tidak dikunci)
+export default function SidebarGuru({ setSidebar, collapsed = false, pinned = false, onTogglePin }) {
   let date = new Date();
   const { roles } = useList();
   const { pathname } = useLocation();
   const url = pathname.split("/")[2];
-  const [open, setOpen] = React.useState(false);
 
   const handleSidebar = () => setSidebar(false);
 
@@ -62,6 +63,7 @@ export default function SidebarGuru({ setSidebar }) {
       items: [
         { to: "halaqoh-siswa", path: "halaqoh-siswa", title: "Daftar Halaqoh", icon: <MdGroups className={ic} />, roles: GURU },
         { to: "monitor/harian", path: "monitor", title: "Monitor KBM", icon: <MdMonitor className={ic} />, roles: GURU },
+        { to: "jadwal", path: "jadwal", title: "Jadwal Pelajaran", icon: <MdCalendarMonth className={ic} />, roles: GURU },
       ],
     },
     {
@@ -126,7 +128,6 @@ export default function SidebarGuru({ setSidebar }) {
 
   return (
     <div className="flex h-full flex-col bg-white shadow-lg">
-      <ModalLogout open={open} setOpen={setOpen} />
 
       {/* Mobile Header */}
       <div className="flex items-center justify-between border-b p-4 lg:hidden">
@@ -139,9 +140,27 @@ export default function SidebarGuru({ setSidebar }) {
         </button>
       </div>
 
-      {/* Desktop Logo */}
-      <div className="hidden items-center justify-center border-b p-4 lg:flex">
-        <img className="h-14 object-contain" src={LogoMySMK} alt="MySMK Logo" />
+      {/* Desktop Logo + pengunci */}
+      <div className="relative hidden h-[88px] items-center justify-center border-b p-4 xl:flex">
+        {collapsed ? (
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00BFBF] text-sm font-bold text-white">
+            MS
+          </span>
+        ) : (
+          <>
+            <img className="h-14 object-contain" src={LogoMySMK} alt="MySMK Logo" />
+            <button
+              type="button"
+              onClick={onTogglePin}
+              title={pinned ? "Lepas kunci (sidebar menutup otomatis)" : "Kunci sidebar agar tetap terbuka"}
+              className={`absolute right-2 top-2 rounded-full p-1.5 ${
+                pinned ? "bg-[#00BFBF] text-white" : "text-gray-500 hover:bg-[#E6F9F9] hover:text-[#008080]"
+              }`}
+            >
+              {pinned ? <MdPushPin className="h-4 w-4" /> : <MdOutlinePushPin className="h-4 w-4" />}
+            </button>
+          </>
+        )}
       </div>
 
       {/* Navigation - Scrollable Area */}
@@ -149,7 +168,11 @@ export default function SidebarGuru({ setSidebar }) {
         <nav className="px-2 py-4">
           {visibleSections.map((section) => (
             <div key={section.category} className="mb-4">
-              <h3 className="mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <h3
+                className={`mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-gray-500 ${
+                  collapsed ? "xl:invisible xl:h-0 xl:mb-0" : ""
+                }`}
+              >
                 {section.category}
               </h3>
               <div className="space-y-1 whitespace-nowrap">
@@ -162,6 +185,7 @@ export default function SidebarGuru({ setSidebar }) {
                     icon={item.icon}
                     handleSidebar={handleSidebar}
                     isActive={url === item.path}
+                    collapsed={collapsed}
                   />
                 ))}
               </div>
@@ -169,22 +193,11 @@ export default function SidebarGuru({ setSidebar }) {
           ))}
         </nav>
       </div>
-
-      {/* Logout - Fixed at Bottom */}
-      <div className="border-t p-4">
-        <button
-          onClick={() => setOpen(true)}
-          className="flex w-full items-center rounded-lg px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
-        >
-          <MdLogout className="h-5 w-5 text-gray-500" />
-          <span className="ml-3 font-medium">Logout</span>
-        </button>
-      </div>
     </div>
   );
 }
 
-function NavButton({ to, path, title, icon, handleSidebar, isActive }) {
+function NavButton({ to, path, title, icon, handleSidebar, isActive, collapsed }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -195,7 +208,10 @@ function NavButton({ to, path, title, icon, handleSidebar, isActive }) {
   return (
     <button
       onClick={handleClick}
+      title={title}
       className={`flex w-full items-center rounded-lg px-4 py-3 text-sm transition-colors ${
+        collapsed ? "xl:justify-center xl:px-0" : ""
+      } ${
         isActive
           ? "bg-[#00BFBF] text-white font-medium"
           : "text-gray-600 hover:bg-gray-50"
@@ -204,7 +220,7 @@ function NavButton({ to, path, title, icon, handleSidebar, isActive }) {
       <div className={isActive ? "text-white" : "text-gray-500"}>
         {icon}
       </div>
-      <span className="ml-3">{title}</span>
+      <span className={`ml-3 ${collapsed ? "xl:hidden" : ""}`}>{title}</span>
     </button>
   );
 }

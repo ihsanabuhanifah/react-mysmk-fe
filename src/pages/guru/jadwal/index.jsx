@@ -2,6 +2,7 @@ import React from "react";
 import usePage from "../../../hook/usePage";
 import useClientPagination from "../../../hook/useClientPagination";
 import PaginationTable from "../../../components/PaginationTable";
+import TabSwitch from "../../../components/TabSwitch";
 import { useNavigate } from "react-router-dom";
 import { belumAbsen, listJadwal } from "../../../api/guru/absensi";
 import LayoutPage from "../../../module/layoutPage";
@@ -56,6 +57,8 @@ export default function Jadwal() {
   );
 
   const pgBelum = useClientPagination(dataBelumAbsen?.data);
+  const [tab, setTab] = React.useState("jadwal");
+  const jumlahBelum = dataBelumAbsen?.data?.length || 0;
 
   const [loading, setLoading] = React.useState(false);
 
@@ -162,22 +165,18 @@ export default function Jadwal() {
                 }}
               />
             </div>
-            <div >
-              <Button
-                content={"Jadwal"}
-                type="submit"
-                fluid
-                icon={() => <Icon name="add" />}
-                loading={loading}
-                size="medium"
-                color="linkedin"
-                disabled={loading}
-                onClick={() => {
-                  return navigate("/guru/absensi/jadwal");
-                }}
-              />
-            </div>
           </section>
+          <div className="mt-5 mb-3">
+            <TabSwitch
+              active={tab}
+              onChange={setTab}
+              tabs={[
+                { key: "jadwal", label: "Jadwal Saya" },
+                { key: "belum", label: "Guru Belum Absensi", count: jumlahBelum },
+              ]}
+            />
+          </div>
+          <div className={tab === "jadwal" ? "" : "hidden"}>
           <Table celled selectable>
             <Table.Header>
               <Table.Row>
@@ -242,10 +241,10 @@ export default function Jadwal() {
             setPageSize={setPageSize}
             totalPages={data?.data?.count}
           />
+          </div>
         </section>
 
-        <section>
-          <h3 className="text-2xl font-poppins">List Guru Belum Absensi</h3>
+        <section className={tab === "belum" ? "" : "hidden"}>
           <Table celled selectable>
             <Table.Header>
               <Table.Row>

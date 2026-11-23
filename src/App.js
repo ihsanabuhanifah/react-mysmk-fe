@@ -186,11 +186,12 @@ function App() {
             <Route path="monitor/harian" element={<Harian />} />
             <Route path="halaqoh-siswa" element={<HalaqohSiswa />} />
             <Route path="halaqoh-siswa/tambah" element={<AddSiswaHalaqoh />} />
-            <Route path="absensi/jadwal" element={<ListJadwal />} />
-            <Route path="absensi/jadwal/tambah" element={<CreateJadwal />} />
+            <Route path="jadwal" element={<ListJadwal />} />
+            <Route path="jadwal/tambah" element={<CreateJadwal />} />
+            <Route path="jadwal/update/:id" element={<UpdateJadwal />} />
             <Route
-              path="absensi/jadwal/update/:id"
-              element={<UpdateJadwal />}
+              path="absensi/jadwal/*"
+              element={<Navigate to="/guru/jadwal" replace />}
             />
             <Route path="perizinan-kunjungan" element={<Kunjungan />} />
             <Route path="perizinan-pulang" element={<Pulang />} />

@@ -1,422 +1,230 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Form, Select, Button, Icon, Message } from "semantic-ui-react";
 import LayoutPage from "../../../module/layoutPage";
 import useList from "../../../hook/useList";
-import { Formik } from "formik";
-
-
-import { toast } from "react-toastify";
 import { DeleteButton } from "../../../components";
-
-import { dayOptions } from ".";
 import { getOptions } from "../../../utils/format";
-import { Form, Select, Button, Icon } from "semantic-ui-react";
 import { createJadwalHandle } from "../../../api/guru/absensi";
+import { dayOptions } from ".";
+
+const toastOpt = { position: "top-right", autoClose: 2000, theme: "colored" };
+const angka = (n) => Array.from({ length: n }, (_, i) => ({ key: i + 1, value: i + 1, text: i + 1 }));
+const hariOptions = dayOptions.filter((d) => d.value !== "semua");
+
+const headerKosong = { hari: "", kelas_id: "", semester: "", ta_id: "" };
+const barisKosong = (jam_ke = "") => ({ teacher_id: "", mapel_id: "", jam_ke, jumlah_jam: 2 });
+
+// jam berikutnya = jam_ke + jumlah_jam dari baris terakhir
+const jamBerikutnya = (rows) => {
+  const last = rows[rows.length - 1];
+  if (!last?.jam_ke || !last?.jumlah_jam) return "";
+  const next = Number(last.jam_ke) + Number(last.jumlah_jam);
+  return next <= 12 ? next : "";
+};
+
 export function CreateJadwal() {
-  const [initialState, setInitialState] = React.useState({
-    data: [
-      {
-        hari: "",
-        kelas_id: "",
-        teacher_id: "",
-        mapel_id: "",
-        jam_ke: "",
-        jumlah_jam: "",
-        semester: "",
-        ta_id: "",
-        student: "",
-        status: 1,
-      },
-    ],
-  });
+  const navigate = useNavigate();
+  const { dataKelas, dataGuru, dataMapel, dataTa } = useList();
+  const [header, setHeader] = React.useState(headerKosong);
+  const [rows, setRows] = React.useState([barisKosong(1)]);
+  const [konflik, setKonflik] = React.useState([]);
+  const [saving, setSaving] = React.useState(false);
 
-  const onSubmit = async (values, { resetForm }) => {
+  const setH = (key, value) => {
+    // mapel tergantung semester → kosongkan mapel kalau semester berubah
+    if (key === "semester" && value !== header.semester) {
+      setRows((r) => r.map((x) => ({ ...x, mapel_id: "" })));
+    }
+    setHeader((h) => ({ ...h, [key]: value }));
+  };
+  const setR = (index, key, value) =>
+    setRows((r) => r.map((x, i) => (i === index ? { ...x, [key]: value } : x)));
+
+  const mapelOptions = getOptions(
+    dataMapel?.data?.filter((m) => Number(m.kategori) === Number(header.semester)),
+    "nama_mapel"
+  );
+  const guruOptions = getOptions(dataGuru?.data, "nama_guru");
+  const headerLengkap = Object.values(header).every(Boolean);
+  const konflikBaris = (i) => konflik.filter((k) => k.baris === i + 1);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    if (!headerLengkap) {
+      return toast.warn("Lengkapi hari, kelas, semester, dan tahun ajaran", toastOpt);
+    }
+    setSaving(true);
+    setKonflik([]);
     try {
-      const response = await createJadwalHandle(values);
-
-      toast.success(response?.data?.msg, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
-      resetForm();
-      setInitialState({
-        data: [
-          {
-            hari: "",
-            kelas_id: "",
-            teacher_id: "",
-            mapel_id: "",
-            jam_ke: "",
-            jumlah_jam: "",
-            semester: "",
-            ta_id: "",
-            student: "",
-            status: 1,
-          },
-        ],
-      });
+      const data = rows.map((r) => ({ ...header, ...r, student: "", status: 1 }));
+      const response = await createJadwalHandle({ data });
+      toast.success(response?.data?.msg, toastOpt);
+      // header tetap, supaya bisa langsung lanjut kelas/hari berikutnya
+      setRows([barisKosong(1)]);
     } catch (err) {
       if (err?.response?.status === 422) {
-        return toast.warn(err?.response?.data?.msg, {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        setKonflik(err?.response?.data?.konflik || []);
+        toast.warn(err?.response?.data?.msg, toastOpt);
+      } else {
+        toast.error("Ada Kesalahan", toastOpt);
       }
-
-      return toast.error("Ada Kesalahan", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    } finally {
+      setSaving(false);
     }
   };
-  let { dataKelas, dataGuru, dataMapel, dataTa } = useList();
+
   return (
     <LayoutPage title={"Tambah Jadwal"}>
-      <section>
-        <Formik
-          initialValues={initialState}
-          //   validationSchema={laporanSchema}
-          enableReinitialize
-          onSubmit={onSubmit}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            setFieldValue,
-            isSubmitting,
-          }) => (
-            <Form onSubmit={handleSubmit}>
-              <div className="space-y-5">
-                {values?.data?.map((value, index) => {
-                  return (
-                    <>
-                      <div className="col-span-3 flex justify-end ">
-                        <DeleteButton
-                          disabled={values.data.length <= 1}
-                          onClick={() => {
-                            let filtered = values.data.filter(
-                              (i, itemIndex) => {
-                                return itemIndex !== index;
-                              }
-                            );
+      <Form onSubmit={onSubmit}>
+        <section className="rounded-lg border border-[#80DFDF] bg-[#E6F9F9] p-5 mb-5">
+          <p className="mb-3 font-semibold text-[#008080]">
+            Buatlah jadwal per kelas per hari
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-x-5 gap-y-2">
+            <Form.Dropdown
+              selection
+              search
+              label="Hari"
+              placeholder="Pilih Hari"
+              options={hariOptions}
+              value={header.hari}
+              onChange={(e, d) => setH("hari", d.value)}
+            />
+            <Form.Field
+              control={Select}
+              search
+              label="Kelas"
+              placeholder="Pilih Kelas"
+              options={getOptions(dataKelas?.data, "nama_kelas")}
+              value={header.kelas_id}
+              onChange={(e, d) => setH("kelas_id", d.value)}
+            />
+            <Form.Dropdown
+              selection
+              label="Semester"
+              placeholder="Pilih"
+              options={angka(6)}
+              value={header.semester}
+              onChange={(e, d) => setH("semester", d.value)}
+            />
+            <Form.Field
+              control={Select}
+              search
+              label="Tahun Pelajaran"
+              placeholder="Pilih Tahun Pelajaran"
+              options={getOptions(dataTa?.data, "nama_tahun_ajaran")}
+              value={header.ta_id}
+              onChange={(e, d) => setH("ta_id", d.value)}
+            />
+          </div>
+        </section>
 
-                            setFieldValue("data", filtered);
-                          }}
-                          size="small"
-                        />
-                      </div>
-                      <div className="grid grid-cols-3 gap-y-2 gap-x-5 shadow-md p-5">
-                        <section>
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Hari",
-                              htmlFor: `data[${index}]hari`,
-                              name: `data[${index}]hari`,
-                            }}
-                            options={dayOptions}
-                            id={`data[${index}]hari`}
-                            name={`data[${index}]hari`}
-                            onChange={(e, data) => {
-                              setFieldValue(`data[${index}]hari`, data.value);
-                            }}
-                            // error={
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan !== undefined &&
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan
-                            // }
-                            placeholder="Pilih Hari"
-                            value={value?.hari}
-                          />
-                        </section>
-                        <section>
-                          <Form.Field
-                            control={Select}
-                            value={value?.teacher_id}
-                            options={getOptions(dataGuru?.data, "nama_guru")}
-                            label={{
-                              children: "Guru",
-                              htmlFor: `data[${index}]teacher_id`,
-                              name: `data[${index}]teacher_id`,
-                            }}
-                            onChange={(event, data) => {
-                              setFieldValue(
-                                `data[${index}]teacher_id`,
-                                data?.value
-                              );
-                            }}
-                            placeholder="Pilih Guru"
-                            search
-                            searchInput={{
-                              id: `data[${index}]teacher_id`,
-                              name: `data[${index}]teacher_id`,
-                            }}
-                          />
-                        </section>
-                        <section>
-                          <Form.Field
-                            control={Select}
-                            value={value?.kelas_id}
-                            options={getOptions(dataKelas?.data, "nama_kelas")}
-                            label={{
-                              children: "Kelas",
-                              htmlFor: `data[${index}]kelas_id`,
-                              name: `data[${index}]kelas_id`,
-                            }}
-                            onChange={(event, data) => {
-                              setFieldValue(
-                                `data[${index}]kelas_id`,
-                                data?.value
-                              );
-                            }}
-                            placeholder="Pilih Kelas"
-                            search
-                            searchInput={{
-                              id: `data[${index}]kelas_id`,
-                              name: `data[${index}]kelas_id`,
-                            }}
-                          />
-                        </section>
-                        <section>
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Semester",
-                              htmlFor: `data[${index}]semester`,
-                              name: `data[${index}]semester`,
-                            }}
-                            placeholder="Pilih"
-                            options={[
-                              { key: "1", value: 1, text: 1 },
-                              { key: "2", value: 2, text: 2 },
-                              { key: "3", value: 3, text: 3 },
-                              { key: "4", value: 4, text: 4 },
-                              { key: "5", value: 5, text: 5 },
-                              { key: "6", value: 6, text: 6 },
-                            ]}
-                            id={`data[${index}]semester`}
-                            name={`data[${index}]semester`}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `data[${index}]semester`,
-                                data.value
-                              );
+        {konflik.some((k) => k.baris === 0) && (
+          <Message warning content={konflik.find((k) => k.baris === 0)?.pesan} />
+        )}
 
-                              setFieldValue(
-                                `data[${index}]mapel_id`,
-                                ""
-                              );
-                            }}
-                            // error={
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan !== undefined &&
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan
-                            // }
-                            value={value?.semester}
-                          />
-                        </section>
-
-                        {console.log('va', value.mapel_id)}
-                       
-
-                       
-                        <section>
-                          <Form.Field
-                          disabled={!!value?.semester === false}
-                            control={Select}
-                            value={value?.mapel_id}
-                            options={getOptions(dataMapel?.data?.filter((item)=> Number(item.kategori) === value?.semester), "nama_mapel")}
-                            label={{
-                              children: "Mata Pelajaran",
-                              htmlFor: `data[${index}]mapel_id`,
-                              name: `data[${index}]mapel_id`,
-                            }}
-                            onChange={(event, data) => {
-                              setFieldValue(
-                                `data[${index}]mapel_id`,
-                                data?.value
-                              );
-                            }}
-                            placeholder="Pilih Mata Pelajaran"
-                            search
-                            searchInput={{
-                              id: `data[${index}]mapel_id`,
-                              name: `data[${index}]mapel_id`,
-                            }}
-                          />
-                        </section>
-                        <section>
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Jam Ke",
-                              htmlFor: `data[${index}]jam_ke`,
-                              name: `data[${index}]jam_ke`,
-                            }}
-                            placeholder="Pilih"
-                            options={[
-                              { key: "1", value: 1, text: 1 },
-                              { key: "2", value: 2, text: 2 },
-                              { key: "3", value: 3, text: 3 },
-                              { key: "4", value: 4, text: 4 },
-                              { key: "5", value: 5, text: 5 },
-                              { key: "6", value: 6, text: 6 },
-                              { key: "7", value: 7, text: 7 },
-                              { key: "8", value: 8, text: 8 },
-                            ]}
-                            id={`data[${index}]jam_ke`}
-                            name={`data[${index}]jam_ke`}
-                            onChange={(e, data) => {
-                              setFieldValue(`data[${index}]jam_ke`, data.value);
-                            }}
-                            // error={
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan !== undefined &&
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan
-                            // }
-                            value={value?.jam_ke}
-                          />
-                        </section>
-                        <section>
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Jumlah Jam",
-                              htmlFor: `data[${index}]jumlah_jam`,
-                              name: `data[${index}]jumlah_jam`,
-                            }}
-                            placeholder="Pilih"
-                            options={[
-                              { key: "1", value: 1, text: 1 },
-                              { key: "2", value: 2, text: 2 },
-                              { key: "3", value: 3, text: 3 },
-                              { key: "4", value: 4, text: 4 },
-                              { key: "5", value: 5, text: 5 },
-                              { key: "6", value: 6, text: 6 },
-                              { key: "7", value: 7, text: 7 },
-                              { key: "8", value: 8, text: 8 },
-                            ]}
-                            id={`data[${index}]jumlah_jam`}
-                            name={`data[${index}]jumlah_jam`}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `data[${index}]jumlah_jam`,
-                                data.value
-                              );
-                            }}
-                            // error={
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan !== undefined &&
-                            //   errors?.absensi_kehadiran?.[index]?.kehadiran
-                            //     ?.alasan
-                            // }
-                            value={value?.jumlah_jam}
-                          />
-                        </section>
-                        
-                        <section>
-                          <Form.Field
-                            control={Select}
-                            value={value?.ta_id}
-                            options={getOptions(
-                              dataTa?.data,
-                              "nama_tahun_ajaran"
-                            )}
-                            label={{
-                              children: "Tahun Pelajaran",
-                              htmlFor: `data[${index}]ta_id`,
-                              name: `data[${index}]ta_id`,
-                            }}
-                            onChange={(event, data) => {
-                              setFieldValue(`data[${index}]ta_id`, data?.value);
-                            }}
-                            placeholder="Pilih Mata Pelajaran"
-                            search
-                            searchInput={{
-                              id: `data[${index}]ta_id`,
-                              name: `data[${index}]ta_id`,
-                            }}
-                          />
-                        </section>
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-              <div>
-                <div className="flex items-center justify-center w-full my-5">
-                  <Button
-                    basic
+        <section className="space-y-3">
+          <div className="hidden md:grid grid-cols-12 gap-3 px-3 text-sm font-semibold text-gray-600">
+            <div className="col-span-1">No</div>
+            <div className="col-span-4">Guru</div>
+            <div className="col-span-3">Mata Pelajaran</div>
+            <div className="col-span-2">Jam Ke</div>
+            <div className="col-span-1">Jml Jam</div>
+          </div>
+          {rows.map((row, index) => (
+            <div
+              key={index}
+              className={`rounded-lg border p-3 ${konflikBaris(index).length ? "border-red-300 bg-red-50" : "border-gray-200"}`}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+                <div className="col-span-1 font-semibold">{index + 1}</div>
+                <div className="md:col-span-4">
+                  <Form.Field
+                    control={Select}
+                    search
                     fluid
-                    type="button"
-                    color="teal"
-                    content="Tambah"
-                    icon="add"
-                    labelPosition="left"
-                    onClick={() => {
-                      setFieldValue("data", [
-                        ...values?.data,
-                        {
-                          hari: values?.data?.[0]?.hari,
-                          kelas_id: values?.data?.[0]?.kelas_id,
-                          teacher_id: "",
-                          mapel_id: "",
-                          jam_ke: "",
-                          jumlah_jam: "",
-                          semester:  values?.data?.[0]?.semestar,
-                          ta_id: values?.data?.[0]?.ta_id,
-                          student: "",
-                          status: 1,
-                        },
-                      ]);
-                    }}
-                  >
-                    Tambah
-                  </Button>
+                    placeholder="Pilih Guru"
+                    options={guruOptions}
+                    value={row.teacher_id}
+                    onChange={(e, d) => setR(index, "teacher_id", d.value)}
+                  />
                 </div>
-                <Button
-                  content={isSubmitting ? "Menyimpan" : "Simpan"}
-                  type="submit"
-                  fluid
-                  icon={() => <Icon name="save" />}
-                  loading={isSubmitting}
-                  size="medium"
-                  color="teal"
-                  disabled={isSubmitting}
-                />
+                <div className="md:col-span-3">
+                  <Form.Field
+                    control={Select}
+                    search
+                    fluid
+                    disabled={!header.semester}
+                    placeholder={header.semester ? "Pilih Mapel" : "Pilih semester dulu"}
+                    options={mapelOptions}
+                    value={row.mapel_id}
+                    onChange={(e, d) => setR(index, "mapel_id", d.value)}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Form.Dropdown
+                    selection
+                    fluid
+                    placeholder="Jam ke"
+                    options={angka(12)}
+                    value={row.jam_ke}
+                    onChange={(e, d) => setR(index, "jam_ke", d.value)}
+                  />
+                </div>
+                <div className="md:col-span-1">
+                  <Form.Dropdown
+                    selection
+                    fluid
+                    placeholder="Jml"
+                    options={angka(8)}
+                    value={row.jumlah_jam}
+                    onChange={(e, d) => setR(index, "jumlah_jam", d.value)}
+                  />
+                </div>
+                <div className="md:col-span-1 flex justify-end">
+                  <DeleteButton
+                    disabled={rows.length <= 1}
+                    size="small"
+                    onClick={() => setRows((r) => r.filter((_, i) => i !== index))}
+                  />
+                </div>
               </div>
-            </Form>
-          )}
-        </Formik>
-      </section>
+              {konflikBaris(index).map((k, i) => (
+                <p key={i} className="mt-2 text-sm text-red-600">
+                  {k.pesan}
+                </p>
+              ))}
+            </div>
+          ))}
+        </section>
+
+        <div className="my-5">
+          <Button
+            basic
+            fluid
+            type="button"
+            color="teal"
+            icon="add"
+            labelPosition="left"
+            content="Tambah Baris"
+            onClick={() => setRows((r) => [...r, barisKosong(jamBerikutnya(r))])}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <Button type="button" fluid content="Kembali" onClick={() => navigate("/guru/jadwal")} />
+          <Button
+            type="submit"
+            fluid
+            color="teal"
+            icon={() => <Icon name="save" />}
+            content={saving ? "Menyimpan" : `Simpan ${rows.length} Jadwal`}
+            loading={saving}
+            disabled={saving}
+          />
+        </div>
+      </Form>
     </LayoutPage>
   );
 }

@@ -3,8 +3,7 @@ import { Outlet } from "react-router-dom";
 import Notifikasi from "../module/notifikasi";
 import LogoMySMK from "../image/MySMK.png";
 import SidebarGuru from "./Sidebar/sidebarGuru";
-import { MdMenu } from "react-icons/md";
-import useShowNotif from "../hook/useShowNotif";
+import { MdMenu, MdClose } from "react-icons/md";
 import { IoIosNotifications, IoIosPeople, IoIosEye } from "react-icons/io";
 import useNotif from "../hook/useNotif";
 import useList from "../hook/useList";
@@ -14,6 +13,7 @@ import RoomMembers from "./member";
 import { useRoomHandling } from "../hook/useRoomHandling";
 import RoomCatatan from "./monitoring";
 import MessagePopup from "../pages/guru/MessagePopup";
+import UserMenu from "../components/UserMenu";
 export const roomId = "SMKMQ-ROOM";
 
 export default function Guru() {
@@ -23,9 +23,24 @@ export default function Guru() {
   syncToken();
   const { identitas: data } = useList();
   const [sidebar, setSidebar] = React.useState(false);
-  const [notif, setNotif] = React.useState(false);
-  const [showPanel, setShowPanel] = useState("members"); // 'notifications', 'members', or 'monitoring'
-  let [showNotif, setShowNotf] = useShowNotif();
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [showPanel, setShowPanel] = useState("notifications"); // 'notifications', 'members', or 'monitoring'
+  const [hover, setHover] = useState(false);
+  const [pinned, setPinned] = useState(() => {
+    try {
+      return localStorage.getItem("mysmk_sidebar_pinned") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const togglePin = () =>
+    setPinned((p) => {
+      try {
+        localStorage.setItem("mysmk_sidebar_pinned", p ? "0" : "1");
+      } catch {}
+      return !p;
+    });
+  const expanded = pinned || hover;
   let { jumlah } = useNotif();
 
   const [selectedUser, setSelectedUser] = useState(null);
@@ -72,14 +87,10 @@ export default function Guru() {
 
         <div className="relative col-span-6 flex h-full w-full items-center justify-end space-x-5 xl:col-span-2">
           <button
-            onClick={() => {
-              setNotif(!notif);
-            }}
+            onClick={() => setNotifOpen((o) => !o)}
             className={`relative`}
           >
-            <IoIosNotifications
-              className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
-            />
+            <IoIosNotifications className="h-8 w-8" />
             {jumlah > 0 && (
               <div
                 style={{ fontSize: "8px" }}
@@ -89,7 +100,7 @@ export default function Guru() {
               </div>
             )}
           </button>
-          <div className="hidden h-10 w-10 rounded-full bg-green-200 xl:block xl:h-12 xl:w-12"></div>
+          <UserMenu compact />
           <div className="block h-10 w-10 xl:hidden xl:h-12 xl:w-12">
             <button
               className="mb-5"
@@ -103,59 +114,82 @@ export default function Guru() {
         </div>
       </header>
       <main className="lg:h-11/12 xl:h-11/12 flex h-[92%] xl:h-full">
+        {/* Sidebar: mobile = laci; desktop = ikon saja, melebar saat hover, bisa dikunci */}
         <div
-          className={`h-full w-full border-r-2 bg-[#46C7C7] text-white shadow-lg xl:bg-white xl:text-gray-700 ${
-            !sidebar
-              ? "-z-50 -translate-x-full transform xl:-translate-x-0"
-              : "z-10 -translate-x-0 transform transition duration-500"
-          } fixed bottom-0 top-0 h-full xl:relative xl:w-[15%]`}
-        >
-          <SidebarGuru setSidebar={setSidebar} />
-        </div>
-        <div
-          className={`content relative h-full w-full overflow-auto xl:overflow-hidden ${
-            showNotif ? "xl:w-[85%]" : "xl:w-[85%]"
+          className={`fixed inset-y-0 left-0 z-40 w-full transform transition-transform duration-300 sm:w-72 ${
+            sidebar ? "translate-x-0" : "-translate-x-full"
+          } xl:relative xl:z-30 xl:flex-shrink-0 xl:translate-x-0 xl:transition-all ${
+            pinned ? "xl:w-64" : "xl:w-[72px]"
           }`}
         >
-          <div className="bg-[#00BFBF]">
-            <button
-              onClick={() => {
-                return setShowNotf(!showNotif);
-              }}
-              className={`absolute right-5 top-1 z-50 hidden rounded-full p-2 xl:block ${
-                showNotif ? "bg-red-400" : ""
-              }`}
-            >
-              <IoIosNotifications
-                className={`h-8 w-8 ${showNotif ? "text-white" : ""}`}
-              />
-              {jumlah > 0 && (
-                <div
-                  style={{ fontSize: "8px" }}
-                  className="absolute right-2 top-1 z-10 h-4 w-4 rounded-full bg-red-400 pt-1 text-white"
-                >
-                  {jumlah}
-                </div>
-              )}
-            </button>
+          <div
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+            className={`h-full w-full border-r bg-white xl:absolute xl:inset-y-0 xl:left-0 xl:transition-all xl:duration-200 ${
+              expanded ? "xl:w-64" : "xl:w-[72px]"
+            } ${hover && !pinned ? "xl:shadow-2xl" : ""}`}
+          >
+            <SidebarGuru
+              setSidebar={setSidebar}
+              collapsed={!expanded}
+              pinned={pinned}
+              onTogglePin={togglePin}
+            />
           </div>
+        </div>
+
+        <div className="content relative h-full min-w-0 flex-1 overflow-auto xl:overflow-hidden">
+          <div className="absolute right-20 top-2 z-30 hidden xl:block">
+            <UserMenu />
+          </div>
+          <button
+            onClick={() => setNotifOpen((o) => !o)}
+            title="Notifikasi"
+            className={`absolute right-5 top-2 z-30 hidden rounded-full p-2 xl:block ${
+              notifOpen ? "bg-[#00BFBF] text-white" : "hover:bg-[#E6F9F9]"
+            }`}
+          >
+            <IoIosNotifications className="h-8 w-8" />
+            {jumlah > 0 && (
+              <div
+                style={{ fontSize: "8px" }}
+                className="absolute right-2 top-1 z-10 h-4 w-4 rounded-full bg-red-400 pt-1 text-white"
+              >
+                {jumlah}
+              </div>
+            )}
+          </button>
           <div id="sidebar" className="h-full w-full">
             <Outlet data={data} />
           </div>
         </div>
-        <div
-          className={`h-full w-full bg-[#46C7C7] pl-0 text-white xl:bg-white xl:pl-2 xl:text-gray-700 ${
-            !notif
-              ? "-translate-y-full transform xl:-translate-y-0"
-              : "-translate-y-0 transform transition duration-500"
-          } fixed bottom-0 top-0 z-10 h-full ${
-            !showNotif ? "xl:w-[20%]" : "xl:hidden"
-          } xl:relative`}
+
+        {/* Panel notifikasi: tertutup default, terbuka saat lonceng diklik */}
+        {notifOpen && (
+          <div
+            className="fixed inset-0 z-40"
+            style={{ background: "rgba(0,0,0,0.2)" }}
+            onClick={() => setNotifOpen(false)}
+          />
+        )}
+        <aside
+          className={`fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-white text-gray-700 shadow-2xl transition-transform duration-300 sm:w-[380px] ${
+            notifOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
-          {/* Toggle Buttons - Now with 3 tabs */}
-          <div className="mt-1 flex border-b">
+          <div className="flex items-center justify-between border-b px-4 py-3">
+            <span className="text-lg font-semibold">Notifikasi</span>
             <button
-              className={`flex-1 py-2 ${showPanel === "notifications" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              onClick={() => setNotifOpen(false)}
+              className="rounded-full p-1 text-gray-500 hover:bg-gray-100"
+              title="Tutup"
+            >
+              <MdClose className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="flex border-b">
+            <button
+              className={`flex-1 py-2 ${showPanel === "notifications" ? "bg-[#00BFBF] text-white" : "bg-gray-100"}`}
               onClick={() => setShowPanel("notifications")}
             >
               <div className="flex items-center justify-center gap-2">
@@ -169,7 +203,7 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === "members" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              className={`flex-1 py-2 ${showPanel === "members" ? "bg-[#00BFBF] text-white" : "bg-gray-100"}`}
               onClick={() => setShowPanel("members")}
             >
               <div className="flex items-center justify-center gap-2">
@@ -178,7 +212,7 @@ export default function Guru() {
               </div>
             </button>
             <button
-              className={`flex-1 py-2 ${showPanel === "monitoring" ? "bg-[#46C7C7] text-white" : "bg-gray-100"}`}
+              className={`flex-1 py-2 ${showPanel === "monitoring" ? "bg-[#00BFBF] text-white" : "bg-gray-100"}`}
               onClick={() => setShowPanel("monitoring")}
             >
               <div className="flex items-center justify-center gap-2">
@@ -187,12 +221,8 @@ export default function Guru() {
               </div>
             </button>
           </div>
-
-          {/* Content Panel */}
-          <div className="h-[calc(100%-45px)] overflow-y-auto">
-            {showPanel === "notifications" && (
-              <Notifikasi setNotif={setNotif} />
-            )}
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            {showPanel === "notifications" && <Notifikasi setNotif={setNotifOpen} />}
             {showPanel === "members" && (
               <RoomMembers
                 selectedUser={selectedUser}
@@ -203,7 +233,7 @@ export default function Guru() {
             )}
             {showPanel === "monitoring" && <RoomCatatan roomId={roomId} />}
           </div>
-        </div>
+        </aside>
       </main>
 
     { <MessagePopup

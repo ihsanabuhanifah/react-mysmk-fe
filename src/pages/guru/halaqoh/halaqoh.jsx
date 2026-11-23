@@ -1,6 +1,7 @@
 import React from "react";
 import useClientPagination from "../../../hook/useClientPagination";
 import PaginationTable from "../../../components/PaginationTable";
+import TabSwitch from "../../../components/TabSwitch";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { halaqohManualCreate } from "../../../api/guru/absensi";
 import { useQuery, useQueryClient } from "react-query";
@@ -272,6 +273,8 @@ export default function AbsensiHalaqoh() {
   let sessionTes = sessionStorage.getItem(`halaqoh_${tanggal}`);
 
   const pgBelum = useClientPagination(dataBelumAbsen?.halaqoh);
+  const [tab, setTab] = React.useState("absensi");
+  const jumlahBelum = dataBelumAbsen?.halaqoh?.length || 0;
 
 
   return (
@@ -353,6 +356,16 @@ export default function AbsensiHalaqoh() {
           </div>
         </section>
       </div>
+      <div className="mt-5">
+        <TabSwitch
+          active={tab}
+          onChange={setTab}
+          tabs={[
+            { key: "absensi", label: "Absensi Santri" },
+            { key: "belum", label: "Musyrif Belum Absensi", count: jumlahBelum },
+          ]}
+        />
+      </div>
       <section className="mt-5 h-full" padded>
         <Formik
           initialValues={initialState}
@@ -371,6 +384,7 @@ export default function AbsensiHalaqoh() {
             isSubmitting,
           }) => (
             <form onSubmit={handleSubmit}>
+              <div className={tab === "absensi" ? "" : "hidden"}>
               <h4 className="font-poopins text-lg">
                 Absensi untuk Halaqoh :{" "}
                 <span className="uppercase">{waktu}</span>
@@ -744,10 +758,8 @@ export default function AbsensiHalaqoh() {
                   />
                 )}
               </div>
-              <section className="">
-                <h3 className="font-poppins text-2xl">
-                  List Musyrif Belum Absensi
-                </h3>
+              </div>
+              <section className={tab === "belum" ? "" : "hidden"}>
                 <Table celled selectable>
                   <Table.Header>
                     <Table.Row>

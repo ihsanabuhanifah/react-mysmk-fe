@@ -354,7 +354,7 @@ function Perhatian({ perhatian, navigate }) {
     perhatian.guru_nonaktif_berjadwal > 0 && {
       text: `${perhatian.guru_nonaktif_berjadwal} guru nonaktif masih punya jadwal aktif`,
       aksi: "Lihat jadwal",
-      to: "/guru/absensi/jadwal",
+      to: "/guru/jadwal",
     },
     perhatian.pindah_belum_diblokir > 0 && {
       text: `${perhatian.pindah_belum_diblokir} siswa pindah sekolah akunnya masih aktif`,
