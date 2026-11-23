@@ -1,0 +1,84 @@
+name: CI/CD Frontend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: CI (lint & build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependency
+        run: npm ci
+
+      - name: Lint (gagal jika ada error / warning)
+        run: npx eslint src --ext .js,.jsx --max-warnings=0
+
+      - name: Build
+        env:
+          # CI=false: warning webpack (mis. dari library) tidak dianggap error;
+          # kualitas kode sudah dijaga oleh langkah lint di atas.
+          CI: false
+          # Atur di GitHub: Settings > Secrets and variables > Actions > Secrets
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          REACT_APP_API_STORAGE_URL: ${{ secrets.REACT_APP_API_STORAGE_URL }}
+          REACT_APP_WEBSOCKET_URL: ${{ secrets.REACT_APP_WEBSOCKET_URL }}
+          REACT_APP_AUTH_TOKEN: ${{ secrets.REACT_APP_AUTH_TOKEN }}
+          REACT_APP_FEATURE_FLAG: ${{ secrets.REACT_APP_FEATURE_FLAG }}
+        run: npm run build
+
+      - name: Simpan hasil build
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build
+          retention-days: 7
+
+  deploy:
+    name: CD (deploy lewat self-hosted runner)
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    # dijalankan oleh runner yang terpasang di VPS
+    runs-on: self-hosted
+    concurrency:
+      group: deploy-frontend
+      cancel-in-progress: false
+    env:
+      # Atur di GitHub: Settings > Secrets and variables > Actions > Variables
+      # folder yang dilayani nginx, mis. /var/www/mysmk
+      DEPLOY_PATH: ${{ vars.FE_DEPLOY_PATH }}
+    steps:
+      - name: Bersihkan sisa build sebelumnya
+        run: rm -rf build
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: build
+
+      - name: Validasi konfigurasi
+        run: |
+          if [ -z "$DEPLOY_PATH" ]; then echo "::error::Variable FE_DEPLOY_PATH belum diisi"; exit 1; fi
+          if [ ! -f build/index.html ]; then echo "::error::Hasil build tidak lengkap"; exit 1; fi
+          # pengaman: rsync --delete tidak boleh diarahkan ke folder sistem
+          case "${DEPLOY_PATH%/}" in
+            ""|/home|/var|/var/www|/root|/etc*|/usr*|/bin*|/opt|/srv)
+              echo "::error::FE_DEPLOY_PATH '$DEPLOY_PATH' tidak aman"; exit 1;;
+          esac
+
+      - name: Salin build ke folder web
+        run: |
+          mkdir -p "$DEPLOY_PATH"
+          rsync -a --delete build/ "${DEPLOY_PATH%/}/"

@@ -72,8 +72,6 @@ export default function Pelanggaran() {
         ta_id: "",
         tahun_ajaran: null,
         nama_siswa: null,
-
-        tahun_ajaran: null,
         tipe: "",
         kategori: "",
         point: "",
@@ -325,7 +323,6 @@ export default function Pelanggaran() {
                                           penindak: value?.penindakan,
                                           semester: value?.semester,
                                           ta_id: value?.tahun_ajaran?.id,
-                                          tahun_ajaran: value?.tahun_ajaran?.id,
                                           nama_siswa: {
                                             value: value?.siswa?.id,
                                             label: value?.siswa?.nama_siswa,

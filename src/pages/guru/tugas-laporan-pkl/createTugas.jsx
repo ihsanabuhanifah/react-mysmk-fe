@@ -47,7 +47,6 @@ export default function CreateTugasPkl() {
             enabled: id !== undefined,
             select: (response) => {
                 return response.data.data;
-                console.log(response.data.data)
             },
             onSuccess: (data) => {
                 console.log("dar", data);

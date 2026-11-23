@@ -24,8 +24,7 @@ export function Select({
     }
   );
   let clDiv = clsx("lock w-full relative  ", {
-    "border border-red-400": error === true,
-    "border border-red-400": errors !== undefined,
+    "border border-red-400": error === true || errors !== undefined,
     "w-full": width === true,
   });
 

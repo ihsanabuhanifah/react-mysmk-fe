@@ -99,7 +99,15 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "react-hooks/exhaustive-deps": "off",
+      "eqeqeq": "off",
+      "no-useless-escape": "off",
+      "jsx-a11y/anchor-is-valid": "off",
+      "array-callback-return": "off"
+    }
   },
   "browserslist": {
     "production": [

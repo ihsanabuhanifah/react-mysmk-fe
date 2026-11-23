@@ -294,7 +294,6 @@ export default function FormPelanggaran({
                       ta_id: "",
                       tahun_ajaran: null,
                       nama_siswa: null,
-                      tahun_ajaran: null,
                       tipe: "",
                       kategori: "",
                       point: "",

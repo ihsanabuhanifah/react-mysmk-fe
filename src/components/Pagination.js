@@ -9,10 +9,6 @@ const Pagination = ({
   pageSize,
 }) => {
   function getPage(totalItems, currentPage, pageSize) {
-    currentPage = currentPage;
-
-    pageSize = pageSize;
-
     let totalPages = Math.ceil(totalItems / pageSize);
 
     let startPage, endPage;
