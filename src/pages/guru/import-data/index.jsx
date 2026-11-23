@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, Input, Message, Table, Label } from "semantic-ui-react";
 import { MdCloudUpload, MdFileDownload, MdInsertDriveFile } from "react-icons/md";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import LayoutPage from "../../../module/layoutPage";
 import useList from "../../../hook/useList";
 import { getReferensiImport, postImportData } from "../../../api/guru/importData";
@@ -97,6 +98,22 @@ function TypeButton({ type, active, onClick }) {
 }
 
 function ImportPanel({ type }) {
+  if (type.redirect) return <RedirectPanel type={type} />;
+  return <ImportForm type={type} />;
+}
+
+function RedirectPanel({ type }) {
+  const navigate = useNavigate();
+  return (
+    <div className="rounded-lg border border-gray-200 bg-white p-5">
+      <h3 className="m-0 text-lg font-bold">{type.title}</h3>
+      <p className="mt-2 text-sm text-gray-600">{type.desc}</p>
+      <Button color="green" icon="arrow right" labelPosition="right" content="Buka Impor Wali" onClick={() => navigate(type.redirect)} />
+    </div>
+  );
+}
+
+function ImportForm({ type }) {
   const [file, setFile] = React.useState(null);
   const [password, setPassword] = React.useState("");
   const [uploading, setUploading] = React.useState(false);

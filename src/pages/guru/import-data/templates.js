@@ -96,21 +96,12 @@ export const IMPORT_TYPES = [
   {
     key: "wali",
     title: "Wali Santri",
-    endpoint: "/import/wali",
     step: 6,
-    desc: "Membuat akun wali dan menghubungkannya ke siswa lewat NISN. Siswa harus sudah diimport lebih dulu; baris dengan NISN tidak ditemukan akan dilewati.",
-    columns: [
-      { header: "No", note: "Nomor urut (tidak disimpan)", example: "1" },
-      { header: "Nama", note: "Nama wali", example: "Abdullah" },
-      { header: "Email", note: "Email login, harus unik", example: "abdullah@gmail.com" },
-      { header: "Password", note: "Password awal", example: "12345678" },
-      { header: "Status", note: "Diabaikan (otomatis active), boleh dikosongkan", example: "" },
-      { header: "Roles", note: "ID role, wali = 8 (Wali Siswa)", example: "8" },
-      { header: "Role", note: "Isi: Wali Siswa", example: "Wali Siswa" },
-      { header: "NISN Siswa", note: "NISN anak (harus sudah ada di data siswa)", example: "0101234567" },
-      { header: "Hubungan", note: "ayah / ibu / wali", example: "ayah" },
-    ],
-    refs: ["roles", "siswa"],
+    // impor wali dipindah ke halaman Daftar Wali (pratinjau, NISN opsional, password otomatis)
+    redirect: "/guru/daftar-wali?impor=1",
+    desc: "Impor wali sekarang dilakukan di halaman Daftar Wali: ada pratinjau & validasi per baris, NISN boleh dikosongkan (dihubungkan ke santri nanti), dan password dibuat otomatis lalu bisa diunduh.",
+    columns: [],
+    refs: [],
   },
   {
     key: "rombel",

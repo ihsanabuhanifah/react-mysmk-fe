@@ -5,6 +5,7 @@
 import React from "react";
 import { Table, Input, Button, Modal, Message, Label, Form, Dropdown, Menu, Icon } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import LayoutPage from "../../../module/layoutPage";
 import { TableLoading } from "../../../components";
@@ -53,7 +54,12 @@ function DaftarWaliTable() {
 
   // modal yang sedang terbuka
   const [tambah, setTambah] = React.useState(false);
-  const [impor, setImpor] = React.useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [impor, setImpor] = React.useState(searchParams.get("impor") === "1");
+  const tutupImpor = () => {
+    setImpor(false);
+    if (searchParams.has("impor")) setSearchParams({}, { replace: true });
+  };
   const [hubung, setHubung] = React.useState(null); // row
   const [ubah, setUbah] = React.useState(null); // row
   const [konfirmasi, setKonfirmasi] = React.useState(null); // { jenis: "putuskan"|"reset", row }
@@ -241,7 +247,7 @@ function DaftarWaliTable() {
         }}
       />
       <KredensialModal data={kredensial} onClose={() => setKredensial(null)} />
-      <ImportWaliModal open={impor} onClose={() => setImpor(false)} onDone={refresh} />
+      <ImportWaliModal open={impor} onClose={tutupImpor} onDone={refresh} />
     </LayoutPage>
   );
 }
