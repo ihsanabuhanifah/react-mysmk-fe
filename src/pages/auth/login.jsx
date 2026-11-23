@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import LoginImage from "../../image/login.png";
 import { Form, Button, Image, Input, Select, Message } from "semantic-ui-react";
 import Layout from "./Layout";
+import { VERSION_TEXT } from "../../utils/appVersion";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email().required("Wajib di isi"),
@@ -37,6 +38,7 @@ export default function Login() {
     { key: 6, value: 6, text: "Wali Kelas" },
     { key: 7, value: 7, text: "Keuangan" },
     { key: 9, value: 9, text: "Santri" },
+    { key: 8, value: 8, text: "Wali Santri" },
   ];
   const onSubmit = async (values, { setErrors }) => {
     try {
@@ -56,6 +58,9 @@ export default function Login() {
       console.log(result.data.role);
       if (['siswa', 'santri'].includes(result.data.role.toLowerCase())) {
         return navigate("/siswa/dashboard");
+      }
+      if (result.data.role === "Wali Siswa") {
+        return navigate("/wali/dashboard");
       }
     } catch (err) {
       setErrors(err.response.data);
@@ -191,6 +196,7 @@ export default function Login() {
           </Form>
         )}
       </Formik>
+      <p className="mt-6 text-center text-xs text-gray-400">MySMK · {VERSION_TEXT}</p>
     </Layout>
   );
 }

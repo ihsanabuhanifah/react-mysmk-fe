@@ -1,0 +1,41 @@
+# Konfigurasi Apache untuk MySMK (React SPA + PWA)
+# Butuh: mod_rewrite, mod_headers, dan "AllowOverride All" pada folder web.
+
+# --- Routing SPA: semua URL yang bukan file/folder nyata -> index.html ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# --- Cache ---
+<IfModule mod_headers.c>
+  # Service worker & halaman utama: selalu cek versi terbaru (agar update langsung terbaca)
+  <FilesMatch "^(sw\.js|index\.html|manifest\.json|version\.json)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+
+  # Aset build ber-hash (/static/js, /static/css, /static/media): aman disimpan 1 tahun
+  <FilesMatch "\.[0-9a-f]{8}\.(chunk\.)?(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Ikon PWA
+  <FilesMatch "^(icon-.*|apple-touch-icon)\.png$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# --- Tipe file ---
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType application/javascript .js
+</IfModule>
+
+# --- Kompresi ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

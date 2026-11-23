@@ -28,6 +28,7 @@ import {
   MdSchool,
   MdBadge,
   MdTune,
+  MdHistory,
 } from "react-icons/md";
 import { checkRole } from "../../utils";
 import LogoMySMK from "../../image/MySMK.png";
@@ -111,6 +112,7 @@ export default function SidebarGuru({ setSidebar }) {
         { to: "daftar-guru", path: "daftar-guru", title: "Daftar Guru", icon: <MdBadge className={ic} />, roles: GURU },
         { to: "data-master", path: "data-master", title: "Data Master", icon: <MdTune className={ic} />, roles: ADMIN },
         { to: "import-data", path: "import-data", title: "Import Data", icon: <MdUploadFile className={ic} />, roles: ADMIN },
+        { to: "audit-log", path: "audit-log", title: "Audit Log", icon: <MdHistory className={ic} />, roles: ADMIN },
       ],
     },
   ];

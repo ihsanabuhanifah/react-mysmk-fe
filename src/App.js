@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/auth/login";
 import Home from "./pages/landing";
 import LupaPassword from "./pages/auth/lupa-password";
@@ -49,6 +49,16 @@ import NotFound from "./pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectRoute from "./routers/ProtectRoute";
+import LayoutWali from "./layout/wali";
+import DashboardWali from "./pages/wali/dashboard";
+import KehadiranWali from "./pages/wali/kehadiran";
+import HalaqohWali from "./pages/wali/halaqoh";
+import NilaiWali, { NilaiDetailWali } from "./pages/wali/nilai";
+import CatatanWali from "./pages/wali/catatan";
+import IzinWali from "./pages/wali/izin";
+import PengumumanWali from "./pages/wali/pengumuman";
+import ProfilWali from "./pages/wali/profil";
+import AuditLog from "./pages/guru/audit-log";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import PenilaianPage from "./pages/guru/exam/PenilaianPage";
@@ -163,6 +173,7 @@ function App() {
             <Route path="daftar-alumni" element={<DaftarAlumni />} />
             <Route path="daftar-guru" element={<DaftarGuru />} />
             <Route path="data-master" element={<DataMaster />} />
+            <Route path="audit-log" element={<AuditLog />} />
             <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
             <Route
               path="daftar-siswa/update-siswa/:id"
@@ -296,6 +307,26 @@ function App() {
             <Route path="rapor/:id_mapel/:ta_id" element={<RaporDetail />} />
           </Route>
        
+        <Route
+          path="/wali"
+          element={
+            <ProtectRoute userRole="Wali Siswa">
+              <LayoutWali />
+            </ProtectRoute>
+          }
+        >
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardWali />} />
+          <Route path="kehadiran" element={<KehadiranWali />} />
+          <Route path="halaqoh" element={<HalaqohWali />} />
+          <Route path="nilai" element={<NilaiWali />} />
+          <Route path="nilai/:mapel_id/:kelas_id/:ta_id" element={<NilaiDetailWali />} />
+          <Route path="catatan" element={<CatatanWali />} />
+          <Route path="kunjungan" element={<IzinWali jenis="kunjungan" />} />
+          <Route path="pulang" element={<IzinWali jenis="pulang" />} />
+          <Route path="pengumuman" element={<PengumumanWali />} />
+          <Route path="profil" element={<ProfilWali />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes></SocketProvider>
     </div>

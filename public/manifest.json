@@ -1,6 +1,9 @@
 {
-  "short_name": "MYSMK",
-  "name": "SMK MADINATULQURAN",
+  "id": "/",
+  "short_name": "MySMK",
+  "name": "MySMK - SMK Madinatul Quran",
+  "description": "Aplikasi sekolah SMK Madinatul Quran untuk guru, santri, dan wali santri.",
+  "lang": "id",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +11,32 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "icon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any"
     },
     {
-      "src": "logo512.png",
+      "src": "icon-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/login",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "portrait",
+  "theme_color": "#18a558",
+  "background_color": "#ffffff",
+  "shortcuts": [
+    { "name": "Beranda Wali", "url": "/wali/dashboard", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Izin Kunjungan", "url": "/wali/kunjungan", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
 }

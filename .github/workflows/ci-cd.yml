@@ -45,6 +45,8 @@ jobs:
           name: build
           path: build
           retention-days: 7
+          # .htaccess (konfigurasi Apache) adalah file tersembunyi -> wajib ikut
+          include-hidden-files: true
 
   deploy:
     name: CD (deploy lewat self-hosted runner)
@@ -71,7 +73,7 @@ jobs:
       - name: Validasi konfigurasi
         run: |
           if [ -z "$DEPLOY_PATH" ]; then echo "::error::Variable FE_DEPLOY_PATH belum diisi"; exit 1; fi
-          if [ ! -f build/index.html ]; then echo "::error::Hasil build tidak lengkap"; exit 1; fi
+          if [ ! -f build/index.html ] || [ ! -f build/.htaccess ]; then echo "::error::Hasil build tidak lengkap (index.html / .htaccess)"; exit 1; fi
           # pengaman: rsync --delete tidak boleh diarahkan ke folder sistem
           case "${DEPLOY_PATH%/}" in
             ""|/home|/var|/var/www|/root|/etc*|/usr*|/bin*|/opt|/srv)
