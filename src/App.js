@@ -59,6 +59,7 @@ import IzinWali from "./pages/wali/izin";
 import PengumumanWali from "./pages/wali/pengumuman";
 import ProfilWali from "./pages/wali/profil";
 import AuditLog from "./pages/guru/audit-log";
+import DaftarWali from "./pages/guru/daftar-wali";
 import ProtectLogin from "./routers/ProtectLogin";
 import Kehadiran from "./pages/guru/kehadiran";
 import PenilaianPage from "./pages/guru/exam/PenilaianPage";
@@ -174,6 +175,7 @@ function App() {
             <Route path="daftar-guru" element={<DaftarGuru />} />
             <Route path="data-master" element={<DataMaster />} />
             <Route path="audit-log" element={<AuditLog />} />
+            <Route path="daftar-wali" element={<DaftarWali />} />
             <Route path="daftar-siswa/detail/:id" element={<DetailSiswa />} />
             <Route
               path="daftar-siswa/update-siswa/:id"

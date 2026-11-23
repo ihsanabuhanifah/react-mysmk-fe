@@ -193,6 +193,16 @@ export default function Login() {
                 Lupa Password ?
               </button>
             </div>
+            <p className="mt-4 text-center text-sm text-gray-500">
+              Orang tua / wali santri belum punya akun?{" "}
+              <button
+                type="button"
+                onClick={() => navigate("/register/wali")}
+                className="font-semibold text-[#18a558] hover:underline"
+              >
+                Daftar sebagai wali santri
+              </button>
+            </p>
           </Form>
         )}
       </Formik>
