@@ -110,7 +110,7 @@ export default function SidebarGuru({ setSidebar, collapsed = false, pinned = fa
     {
       category: "Administrasi",
       items: [
-        { to: "daftar-siswa", path: "daftar-siswa", title: "Daftar Kelas", icon: <MdClass className={ic} />, roles: GURU },
+        { to: "daftar-siswa", path: "daftar-siswa", title: "Daftar Siswa", icon: <MdClass className={ic} />, roles: GURU },
         { to: "daftar-alumni", path: "daftar-alumni", title: "Daftar Alumni", icon: <MdSchool className={ic} />, roles: GURU },
         { to: "daftar-guru", path: "daftar-guru", title: "Daftar Guru", icon: <MdBadge className={ic} />, roles: GURU },
         { to: "data-master", path: "data-master", title: "Data Master", icon: <MdTune className={ic} />, roles: ADMIN },

@@ -13,6 +13,8 @@ export const useUpdateProfile = (id) => {
     {
       onSuccess: (response) => {
         queryClient.invalidateQueries(`/guru/siswa/detail/${id}`);
+        // nama/NIS/NISN tampil di tabel Daftar Siswa
+        queryClient.invalidateQueries("siswa/list");
         successToast(response);
       },
 

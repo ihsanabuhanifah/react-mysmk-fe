@@ -13,11 +13,13 @@ import useToast from "../../../../hook/useToast"; // Import useToast
 import { useUpdateProfile } from "./profile";
 import { LoadingPage } from "../../../../components";
 
-const FormikComponent = ({ onSuccess, onError }) => {
+// siswaId: dipakai saat form dibuka di modal (Daftar Siswa); tanpa itu id diambil dari URL
+// onSuccess: dipanggil setelah update berhasil (mis. untuk menutup modal)
+const FormikComponent = ({ siswaId, onSuccess, inModal = false }) => {
   const params = useParams();
+  const id = siswaId ?? params.id;
 
-  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(params.id);
-  const { id } = useParams();
+  const { mutate, isLoading: isLoadingUpdate } = useUpdateProfile(id);
   const queryClient = useQueryClient();
   const { successToast, warningToast } = useToast(); // Destructure custom toasts
 
@@ -42,8 +44,8 @@ const FormikComponent = ({ onSuccess, onError }) => {
 
   const validationSchema = Yup.object().shape({
     nama_siswa: Yup.string().required("Nama siswa wajib diisi"),
-    nik: Yup.string().required("NIK wajib diisi"),
-    nis: Yup.string().required("NIS wajib diisi"),
+    nik: Yup.string().optional(),
+    nis: Yup.string().optional(),
     nisn: Yup.string().required("NISN wajib diisi"),
     tempat_lahir: Yup.string().required("Tempat lahir wajib diisi"),
     tanggal_lahir: Yup.date().required("Tanggal lahir wajib diisi").nullable(),
@@ -114,8 +116,7 @@ const FormikComponent = ({ onSuccess, onError }) => {
   
 
   const onSubmit = async (values, { resetForm }) => {
-    mutate(values);
-  
+    mutate(values, { onSuccess: () => onSuccess?.() });
   };
 
   if (isLoading) {
@@ -140,9 +141,9 @@ const FormikComponent = ({ onSuccess, onError }) => {
         touched,
       }) => (
         <Form onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-y-2 shadow-md p-5">
-            <div className="flex">
-              <div className="flex flex-col gap-y-4 w-full pr-4">
+          <div className={`flex flex-col gap-y-2 ${inModal ? "" : "shadow-md p-5"}`}>
+            <div className="flex flex-col md:flex-row gap-y-6">
+              <div className="flex flex-col gap-y-4 w-full md:pr-4">
                 {/* <div>
                   <p>content</p>
                 </div> */}
@@ -292,8 +293,8 @@ const FormikComponent = ({ onSuccess, onError }) => {
                 </section>
                
               </div>
-              <div className="border-l-2 border-gray-300 mx-4"></div>
-              <div className="flex flex-col gap-y-4 w-full pl-4">
+              <div className="hidden md:block border-l-2 border-gray-300 mx-4"></div>
+              <div className="flex flex-col gap-y-4 w-full md:pl-4">
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Data Pelengkap</h3>
                   <div className="border-b-2 border-gray-300"></div>

@@ -117,7 +117,7 @@ export default function PindahKelas() {
       )
     : anggotaKelas;
 
-  // Dari tombol "Siswa Baru" di Daftar Kelas: ?asal=baru -> langsung ke daftar siswa baru
+  // Dari tombol "Siswa Baru" di Daftar Siswa: ?asal=baru -> langsung ke daftar siswa baru
   const [searchParams] = useSearchParams();
   const autoAsal = React.useRef(false);
   React.useEffect(() => {
@@ -746,7 +746,7 @@ export default function PindahKelas() {
 
       <div className="mt-8">
         <Button basic type="button" onClick={() => navigate("/guru/daftar-siswa")}>
-          ← Kembali ke Daftar Kelas
+          ← Kembali ke Daftar Siswa
         </Button>
       </div>
     </LayoutPage>

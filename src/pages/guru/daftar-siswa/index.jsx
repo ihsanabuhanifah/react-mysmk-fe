@@ -32,9 +32,12 @@ import {
 import useDebounce from "../../../hook/useDebounce";
 import useList from "../../../hook/useList";
 import RiwayatKelasModal from "./RiwayatKelasModal";
+import EditSiswaModal from "./EditSiswaModal";
 
 export default function DaftarSiswa() {
   const [riwayatId, setRiwayatId] = React.useState(null);
+  // siswa yang sedang diedit di modal: { id, nama }
+  const [editSiswa, setEditSiswa] = React.useState(null);
   let [visible, setVisible] = React.useState(false);
   let navigate = useNavigate();
   const { roles } = useList();
@@ -154,6 +157,8 @@ export default function DaftarSiswa() {
       setVisible={setVisible}
     >
       <RiwayatKelasModal studentId={riwayatId} onClose={() => setRiwayatId(null)} />
+
+      <EditSiswaModal siswa={editSiswa} onClose={() => setEditSiswa(null)} />
 
       <Modal
         size="tiny"
@@ -375,9 +380,10 @@ export default function DaftarSiswa() {
                     <div className="flex items-center gap-1 whitespace-nowrap">
                       <EditButton
                         onClick={() =>
-                          window.open(
-                            `daftar-siswa/update-siswa/${value?.siswa?.id}`,
-                          )
+                          setEditSiswa({
+                            id: value?.siswa?.id,
+                            nama: value?.siswa?.nama_siswa,
+                          })
                         }
                       />
                       <AksiButton
