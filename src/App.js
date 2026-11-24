@@ -38,9 +38,8 @@ import {
   CreateSiswa,
   EditSiswa,
   FiturPkl,
-  UpdateLaporanPkl,
   CreatePkl,
-  DetailLaporanPkl,
+  LaporanPklGuru,
   TugasLaporanPkl,
 } from "./pages/guru";
 
@@ -74,16 +73,12 @@ import RaporDetail from "./pages/siswa/rapor/raporDetail";
 import ExamPage from "./pages/siswa/ujian/ExamPage";
 import HasilBelajarGuru from "./pages/guru/hasil-belajar";
 import LaporanPkl from "./pages/siswa/laporan-pkl/laporanpkl";
-import CreateLaporanPkl from "./pages/siswa/laporan-pkl/create";
 import HasilUjian from "./pages/siswa/hasil-ujian";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
 import Materi from "./pages/materi/page";
 import Harian from "./pages/guru/jadwal/harian";
 import ScanKehadiran from "./pages/guru/scan-kehadiran";
-import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
-import UpdateLaporan from "./pages/siswa/laporan-pkl/updateLaporan";
-import LaporanDiniyyah from "./pages/siswa/laporan-pkl/laporanDiniyyah";
 import HasilBelajar from "./pages/guru/hasil-belajar";
 import LiveCoding from "./pages/guru/Live-Coding";
 import LiveMySQL from "./pages/guru/Live-MySQL";
@@ -239,15 +234,7 @@ function App() {
             <Route path="fitur-siswa-pkl/tambah" element={<CreatePkl />} />
             <Route path="fitur-siswa-pkl/update/:id" element={<UpdatePkl />} />
             <Route path="fitur-siswa-pkl/jurnal" element={<JurnalSantri />} />
-            <Route path="laporan-pkl" element={<LaporanPkl />} />
-            <Route
-              path="laporan-pkl/update/:id"
-              element={<UpdateLaporanPkl />}
-            />
-            <Route
-              path="laporan-pkl/detail/:id"
-              element={<DetailLaporanPkl />}
-            />
+            <Route path="laporan-pkl" element={<LaporanPklGuru />} />
             <Route path="tugas-laporan-pkl" element={<TugasLaporanPkl />} />
             <Route
               path="tugas-laporan-pkl/tambah"
@@ -272,17 +259,6 @@ function App() {
           >
             <Route path="dashboard" element={<DashboardSiswa />} />
             <Route path="laporan-pkl" element={<LaporanPkl />} />
-            <Route path="laporan-pkl/create" element={<CreateLaporanPkl />} />
-            <Route path="laporan-pkl/detail/:id" element={<DetailLaporan />} />
-            <Route path="laporan-pkl/update/:id" element={<UpdateLaporan />} />
-            <Route
-              path="laporan-pkl/laporan-diniyyah/:id"
-              element={<LaporanDiniyyah />}
-            />
-            <Route
-              path="laporan-pkl/laporan-diniyyah/:id"
-              element={<LaporanDiniyyah />}
-            />
             <Route path="tugas-pkl" element={<TugasPklPage />} />
             fitur-pkl-santri
             <Route path="ujian" element={<UjianSiswa />} />

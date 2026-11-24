@@ -30,9 +30,7 @@ import { EditSiswa } from "./daftar-siswa/edit-siswa";
 // import { ProfileSiswa } from "./daftar-siswa/siswa/profile";
 import CreatePkl from "./fitur-siswa-pkl/create-pkl";
 import UpdatePkl from "./fitur-siswa-pkl/update-pkl";
-import CreateLaporanPkl from "./laporan-pkl";
-import UpdateLaporanPkl from "./laporan-pkl/UpdateLaporanPkl";
-import DetailLaporanPkl from "./laporan-pkl/DetailLaporanPkl";
+import LaporanPklGuru from "./laporan-pkl";
 import TugasLaporanPkl from "./tugas-laporan-pkl/index";
 import FiturPkl from "./fitur-siswa-pkl";
 
@@ -68,9 +66,7 @@ export {
   EditSiswa,
   FiturPkl,
   CreatePkl,
-  CreateLaporanPkl,
-  UpdateLaporanPkl,
-  DetailLaporanPkl,
+  LaporanPklGuru,
   TugasLaporanPkl,
   UpdatePkl,
 

@@ -16,12 +16,10 @@ import {
   useDownloadPdfBulanan,
   useLaporanPklList,
 } from "../../../api/siswa/laporan-pkl";
-import Card from "./Card";
-import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import Pagination from "../../../components/Pagination";
-import TugasPklTable from "./Table";
 import TableLaporan from "./Table";
+import { DetailLaporanModal, FormLaporanModal, DiniyyahModal } from "./LaporanModals";
 
 const Statusoptions = [
   { key: "hadir", value: "hadir", text: "Hadir" },
@@ -54,8 +52,10 @@ const LaporanPkl = () => {
     filterParams,
     params,
   } = useLaporanPklList();
-  console.log(data);
-  let navigate = useNavigate();
+  // modal yang sedang terbuka
+  const [detailId, setDetailId] = useState(null);
+  const [formModal, setFormModal] = useState(null); // { mode: "create" } | { mode: "edit", id }
+  const [diniyyah, setDiniyyah] = useState(null); // item laporan
   const today = dayjs().format("YYYY-MM-DD");
   const hasSubmittedToday = data?.data.some((item) => item.tanggal === today);
 
@@ -93,6 +93,18 @@ const LaporanPkl = () => {
 
   return (
     <LayoutSiswa title="Jurnal Pkl">
+      <DetailLaporanModal id={detailId} onClose={() => setDetailId(null)} />
+      {formModal && (
+        <FormLaporanModal
+          key={formModal.id || "baru"}
+          mode={formModal.mode}
+          id={formModal.id}
+          onClose={() => setFormModal(null)}
+        />
+      )}
+      {diniyyah && (
+        <DiniyyahModal key={diniyyah.id} laporan={diniyyah} onClose={() => setDiniyyah(null)} />
+      )}
       <Sidebar
         as={Menu}
         animation="overlay"
@@ -163,7 +175,7 @@ const LaporanPkl = () => {
               color="green"
               size="medium"
               disabled={hasSubmittedToday}
-              onClick={() => navigate("/siswa/laporan-pkl/create")}
+              onClick={() => setFormModal({ mode: "create" })}
             >
               Buat Laporan
             </Button>
@@ -240,7 +252,12 @@ const LaporanPkl = () => {
                 </Segment>
               ))
             ) : data && data.data.length > 0 ? (
-              <TableLaporan data={data.data} />
+              <TableLaporan
+                data={data.data}
+                onDetail={(item) => setDetailId(item.id)}
+                onEdit={(item) => setFormModal({ mode: "edit", id: item.id })}
+                onDiniyyah={(item) => setDiniyyah(item)}
+              />
             ) : (
               <div className="flex h-full w-full items-center justify-center">
                 <h2 className="text-4xl font-semibold">

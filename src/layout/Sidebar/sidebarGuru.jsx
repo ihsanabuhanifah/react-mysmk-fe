@@ -104,6 +104,7 @@ export default function SidebarGuru({ setSidebar, collapsed = false, pinned = fa
       category: "PKL & Laporan",
       items: [
         { to: "fitur-siswa-pkl", path: "fitur-siswa-pkl", title: "Siswa PKL", icon: <MdBusinessCenter className={ic} />, roles: GURU },
+        { to: "laporan-pkl", path: "laporan-pkl", title: "Jurnal PKL Santri", icon: <MdMenuBook className={ic} />, roles: GURU },
         { to: "laporan-guru-piket", path: "laporan-guru-piket", title: "Laporan Guru Piket", icon: <MdAssignmentInd className={ic} />, roles: GURU },
       ],
     },

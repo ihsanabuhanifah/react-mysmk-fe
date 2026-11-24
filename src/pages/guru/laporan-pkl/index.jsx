@@ -13,6 +13,19 @@ import { encodeURlFormat } from "../../../utils";
 import dayjs from "dayjs";
 import { formatTanggalIndo } from "../../../utils/formatTanggal";
 import { LabelStatus } from "../../../components/Label";
+import LaporanPklDetailModal from "../../../components/LaporanPklDetail";
+import { detailLaporanPkl } from "../../../api/guru/laporanharianpkl";
+
+function DetailLaporanGuruModal({ id, onClose }) {
+    const { data, isLoading, isError } = useQuery(
+        ["guru/laporan-harian-pkl/detail", id],
+        () => detailLaporanPkl(id),
+        { enabled: !!id, refetchOnWindowFocus: false, select: (r) => r.data.data }
+    );
+    return (
+        <LaporanPklDetailModal open={!!id} onClose={onClose} data={data} isLoading={isLoading} isError={isError} />
+    );
+}
 
 
 const Statusoptions = [
@@ -58,6 +71,8 @@ export default function LaporanPkl() {
         let [visible, setVisible] = useState(false);
         const [filter, setFilter] = useState({});
         let navigate = useNavigate();
+        // id laporan yang detailnya sedang dibuka di modal
+        const [detailId, setDetailId] = useState(null);
       const today = dayjs().format("YYYY-MM-DD");
       
       // const [visible, setVisible] = useState(false);
@@ -166,6 +181,7 @@ export default function LaporanPkl() {
 
     return (
         <LayoutPage title={"Jurnal Pkl Santri"} >
+            <DetailLaporanGuruModal id={detailId} onClose={() => setDetailId(null)} />
 
             <Sidebar
                 as={Menu}
@@ -309,7 +325,7 @@ export default function LaporanPkl() {
                                     <Table.Cell>
                                        
 
-                                        <Button content={'Detail'} size="tiny" color="blue" onClick={() => navigate(`/guru/laporan-pkl/detail/${value.id}`, { replace: true })}></Button>
+                                        <Button content={'Detail'} size="tiny" color="blue" onClick={() => setDetailId(value.id)}></Button>
                                     </Table.Cell>
                                 </Table.Row>
                             ))}
