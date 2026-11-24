@@ -1,7 +1,7 @@
 // Daftar Wali Santri (khusus admin)
 // Alur:
-//  A. Wali daftar sendiri (/register/wali) -> tab "Menunggu" -> admin klik "Hubungkan" -> wali bisa login
-//  B. Admin "Tambah Wali" (opsional langsung pilih santri) -> password awal tampil sekali -> berikan ke wali
+//  Wali tidak bisa daftar sendiri. Admin "Tambah Wali" / Impor Excel (opsional langsung pilih santri)
+//  -> password awal tampil sekali -> berikan ke wali. Wali tanpa santri ada di tab "Menunggu" -> "Hubungkan".
 import React from "react";
 import { Table, Input, Button, Modal, Message, Label, Form, Dropdown, Menu, Icon } from "semantic-ui-react";
 import { useQuery, useQueryClient } from "react-query";
@@ -265,15 +265,11 @@ function AlurInfo() {
       {buka && (
         <ol className="mb-0 mt-2 pl-5 text-sm">
           <li>
-            <b>Wali daftar sendiri</b> di halaman <code>/register/wali</code> (mengisi NISN & nama anak) → muncul di tab{" "}
-            <b>Menunggu dihubungkan</b>.
+            Wali <b>tidak bisa mendaftar sendiri</b>. Admin menambahkan lewat <b>Tambah Wali</b> (satu per satu) atau{" "}
+            <b>Impor Excel</b> (banyak sekaligus). Password awal tampil sekali / bisa diunduh, kirimkan ke wali.
           </li>
           <li>
-            Admin klik <b>Hubungkan</b>, cocokkan dengan NISN/nama yang diisi wali, pilih santri yang benar.
-          </li>
-          <li>
-            <b>Atau admin menambahkan langsung</b> lewat <b>Tambah Wali</b> (satu per satu) atau <b>Impor Excel</b> (banyak sekaligus).
-            Santri boleh dipilih nanti. Password awal tampil sekali / bisa diunduh, kirimkan ke wali.
+            Bila santri belum dipilih, wali muncul di tab <b>Menunggu dihubungkan</b> → klik <b>Hubungkan</b> dan pilih santri yang benar.
           </li>
           <li>
             Wali login di halaman login dengan memilih <b>Wali Santri</b>. Satu santri boleh punya beberapa wali (ayah & ibu), satu

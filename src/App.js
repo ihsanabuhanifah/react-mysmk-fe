@@ -79,7 +79,6 @@ import HasilUjian from "./pages/siswa/hasil-ujian";
 import AnalisisPage from "./pages/guru/exam/AnalisisPage";
 import { UpdateJadwal } from "./pages/guru/jadwal/updateJadwal";
 import Materi from "./pages/materi/page";
-import RegisterWali from "./pages/auth/RegisterWali";
 import Harian from "./pages/guru/jadwal/harian";
 import ScanKehadiran from "./pages/guru/scan-kehadiran";
 import DetailLaporan from "./pages/siswa/laporan-pkl/detailLaporan";
@@ -127,14 +126,6 @@ function App() {
           element={
             <ProtectLogin>
               <Login />
-            </ProtectLogin>
-          }
-        />
-        <Route
-          path="/register/wali"
-          element={
-            <ProtectLogin>
-              <RegisterWali />
             </ProtectLogin>
           }
         />
