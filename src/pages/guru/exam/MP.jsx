@@ -11,12 +11,14 @@ export default function MultipleChoiceView({ soals, jawaban, item, nomor }) {
     );
   }
 
-  const jawabanSiswa = handleViewJawaban(jawaban, item.id);
-  const jawabanBenar = Array.isArray(item.jawaban)
-    ? item.jawaban
-    : typeof item.jawaban === "string"
-    ? [item.jawaban]
-    : [];
+  // Kunci di DB berupa string "c,b"; jawaban siswa berupa array ["c","a"].
+  // Normalisasi keduanya sama seperti backend (utils/penilaianUjian.js).
+  const jawabanBenar = keArray(item.jawaban);
+  const siswaRaw = handleViewJawaban(jawaban, item.id);
+  const jawabanSiswa = {
+    ...siswaRaw,
+    jawaban: siswaRaw?.jawaban === undefined ? undefined : keArray(siswaRaw.jawaban),
+  };
 
   // ✅ Log aman (tidak akan error meskipun undefined)
   console.log("Jawaban benar:", jawabanBenar);
@@ -32,7 +34,10 @@ export default function MultipleChoiceView({ soals, jawaban, item, nomor }) {
       const jawabanSiswaArray = jawabanSiswa.jawaban;
       const jawabanBenarArray = jawabanBenar;
 
-      if (jawabanSiswaArray.length !== jawabanBenarArray.length) {
+      if (
+        jawabanBenarArray.length === 0 ||
+        jawabanSiswaArray.length !== jawabanBenarArray.length
+      ) {
         return 0;
       }
 
@@ -150,10 +155,25 @@ export default function MultipleChoiceView({ soals, jawaban, item, nomor }) {
           Keterangan:
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <LegendBox color="green-500" text="Jawaban benar dan dipilih siswa" icon="✓" />
-          <LegendBox color="green-200 border-green-300 text-green-700" text="Jawaban benar tapi tidak dipilih" icon="✓" />
-          <LegendBox color="red-500" text="Jawaban salah tapi dipilih" icon="✗" />
-          <LegendBox color="gray-100 border-gray-300" text="Bukan jawaban benar" />
+          <LegendBox
+            color="bg-green-500 border-green-500 text-white"
+            text="Jawaban siswa – BENAR (dipilih siswa & sesuai kunci)"
+            icon="✓"
+          />
+          <LegendBox
+            color="bg-green-200 border-green-300 text-green-700"
+            text="Kunci jawaban yang tidak dipilih siswa"
+            icon="✓"
+          />
+          <LegendBox
+            color="bg-red-500 border-red-500 text-white"
+            text="Jawaban siswa – SALAH (dipilih siswa, bukan kunci)"
+            icon="✗"
+          />
+          <LegendBox
+            color="bg-gray-100 border-gray-300"
+            text="Tidak dipilih siswa & bukan kunci"
+          />
         </div>
       </div>
     </div>
@@ -175,6 +195,20 @@ function LegendBox({ color, text, icon }) {
       <span>{text}</span>
     </div>
   );
+}
+
+// "c,b" / ["c","b"] / "C" -> ["c","b"] (trim + lowercase, tanpa duplikat)
+function keArray(v) {
+  const arr = Array.isArray(v)
+    ? v
+    : v === null || v === undefined
+    ? []
+    : String(v).split(",");
+  return [
+    ...new Set(
+      arr.map((x) => String(x ?? "").trim().toLowerCase()).filter((x) => x !== ""),
+    ),
+  ];
 }
 
 // ✅ Error-safe filter jawaban siswa
