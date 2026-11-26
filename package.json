@@ -77,6 +77,7 @@
     "socket.io-client": "^4.7.5",
     "sql.js": "^1.4.0",
     "sweetalert2": "^11.1.9",
+    "tesseract.js": "6.0.1",
     "web-vitals": "^1.1.2",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "yup": "^0.32.11",

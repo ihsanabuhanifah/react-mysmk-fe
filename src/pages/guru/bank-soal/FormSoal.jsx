@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import {
   pgOptions,
   pointOptions,
   tfOptions,
-  tipeSoalOptions,
   mpOptions,
 } from "../../../utils/options";
 import { Input, Form, Select, Button, Icon } from "semantic-ui-react";
@@ -26,6 +25,7 @@ import MemoizedEditor from "../../../components/MemorizeEditor";
 import { SocketContext } from "../../../SocketProvider";
 import ImageUploader from "./ImageUpload";
 import MultiTrueFalseOptions from "./MultiTrueFalse";
+import TipeSoalPicker from "./TipeSoalPicker";
 
 // Komponen untuk pilihan dinamis Multi True False
 
@@ -33,7 +33,7 @@ let personalSchema = Yup.object().shape({
   materi: Yup.string().nullable().required("wajib disii"),
   mapel_id: Yup.string().nullable().required("wajib pilih"),
   point: Yup.string().nullable().required("wajib pilih"),
-  tipe: Yup.string().nullable(),
+  tipe: Yup.string().nullable().required("Pilih tipe soal dulu"),
   soal: Yup.object().shape({
     soal: Yup.string().nullable().required("wajib isi"),
     tipe: Yup.string().nullable(),
@@ -74,33 +74,38 @@ const updatedTipeSoalOptions = [
 export default function FormSoal({ id = null }) {
   const { socket } = useContext(SocketContext);
   const [memorize, setMemorize] = useState(false);
+  // Naik setiap kali soal diisi dari gambar -> form MTF dimuat ulang dari values
+  const [ocrKey, setOcrKey] = useState({});
 
   const { dataMapel } = useList();
 
   const queryClient = useQueryClient();
-  let { data, isFetching, refetch } = useQuery(
+  let { data, isFetching } = useQuery(
     ["/bank-soal/update", [id]],
     () => detailBankSoal(id),
     {
-      enabled: id !== null,
+      // Hanya ambil detail saat mode update. Dulu di halaman Tambah id = undefined
+      // sehingga tetap request "detail/undefined" -> 403 -> react-query retry 3x
+      // (1s+2s+4s) dan form tertutup loading selama itu.
+      enabled: !!id,
+      retry: false,
+      refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 10,
-      select: (response) => {
-        let data = response?.data?.soal;
-
-        data.soal = JSON.parse(data?.soal);
-        // Handle data untuk MTF
-       
-        setInitialState({
-          payload: [data],
-        });
-        return response.data.soal;
-      },
     },
   );
 
-  useEffect(() => {
-    refetch();
-  }, [id]);
+  // Nilai awal mode update (tanpa mengubah data cache react-query)
+  const detailState = useMemo(() => {
+    const soal = data?.data?.soal;
+    if (!soal) return null;
+    let isi = soal.soal;
+    try {
+      if (typeof isi === "string") isi = JSON.parse(isi);
+    } catch (e) {
+      isi = { soal: isi };
+    }
+    return { payload: [{ ...soal, soal: isi }] };
+  }, [data]);
 
   const [initialState, setInitialState] = useState({
     payload: [
@@ -213,7 +218,11 @@ export default function FormSoal({ id = null }) {
   let local = localStorage.getItem("create_soal");
 
   const formik = useFormik({
-    initialValues: id ? initialState : local ? JSON.parse(local) : initialState,
+    initialValues: id
+      ? detailState || initialState
+      : local
+      ? JSON.parse(local)
+      : initialState,
     validationSchema: AbsensiSchema,
     enableReinitialize: true,
     onSubmit: onSubmit,
@@ -254,10 +263,16 @@ export default function FormSoal({ id = null }) {
         <FormikProvider values={formik}>
           <Form onSubmit={handleSubmit}>
             {values?.payload?.map((value, index) => (
-              <div className="space-y-5" key={index}>
-                <section className="mt-10 grid grid-cols-1 gap-5 rounded-lg border p-5 lg:grid-cols-3">
+              <div
+                className="mt-6 overflow-hidden rounded-xl border bg-white shadow-sm"
+                key={index}
+              >
+                <div className="flex items-center justify-between border-b bg-gray-50 px-5 py-3">
+                  <span className="text-base font-bold text-gray-800">
+                    Soal #{index + 1}
+                  </span>
                   {id === undefined && (
-                    <div className="col-span-3 flex justify-end">
+                    <div>
                       <DeleteButton
                         disabled={values.payload.length <= 1}
                         onClick={() => {
@@ -272,8 +287,10 @@ export default function FormSoal({ id = null }) {
                       />
                     </div>
                   )}
+                </div>
 
-                  <div className="col-span-3">
+                <section className="grid grid-cols-1 gap-x-5 gap-y-1 border-b px-5 pt-5 md:grid-cols-3">
+                  <div>
                     <Form.Field
                       control={Select}
                       value={value?.mapel_id}
@@ -299,7 +316,7 @@ export default function FormSoal({ id = null }) {
                     />
                   </div>
 
-                  <div className="col-span-3">
+                  <div>
                     <Form.Field
                       control={Input}
                       label={`Materi`}
@@ -317,14 +334,6 @@ export default function FormSoal({ id = null }) {
                         errors?.payload?.[index]?.materi !== undefined &&
                         errors?.payload?.[index]?.materi
                       }
-                    />
-                  </div>
-                  <div className="col-span-3">
-                    <ImageUploader
-                      values={values}
-                      setFieldValue={setFieldValue}
-                      index={index}
-                      setMemorize={setMemorize}
                     />
                   </div>
                   <div>
@@ -350,94 +359,43 @@ export default function FormSoal({ id = null }) {
                       value={value?.point}
                     />
                   </div>
-                  <div>
-                    <Form.Dropdown
-                      selection
-                      search
-                      label={{
-                        children: "Tipe Soal",
-                        htmlFor: `payload[${index}]tipe`,
-                        name: `payload[${index}]tipe`,
-                      }}
-                      placeholder="Tipe Soal"
-                      options={tipeSoalOptions}
-                      id={`payload[${index}]tipe`}
-                      name={`payload[${index}]tipe`}
-                      onChange={(e, data) => {
-                        setFieldValue(`payload[${index}]tipe`, data.value);
-                        setFieldValue(`payload[${index}]soal.tipe`, data.value);
-                        setFieldValue(`payload[${index}]jawaban`, "");
-                      }}
-                      error={
-                        errors?.payload?.[index]?.tipe !== undefined &&
-                        errors?.payload?.[index]?.tipe
-                      }
-                      value={value?.tipe}
-                    />
-                  </div>
-
-                  {["ES", "LV"].includes(value.tipe) === false &&
-                    value.tipe !== "MTF" && (
-                      <div>
-                        {value.tipe === "MP" ? (
-                          <Form.Dropdown
-                            selection
-                            multiple
-                            search
-                            label={{
-                              children: "Jawaban (Multi Pilihan)",
-                              htmlFor: `payload[${index}]jawaban`,
-                              name: `payload[${index}]jawaban`,
-                            }}
-                            placeholder="Pilih jawaban"
-                            options={mpOptions}
-                            id={`payload[${index}]jawaban`}
-                            name={`payload[${index}]jawaban`}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `payload[${index}]jawaban`,
-                                data.value,
-                              );
-                            }}
-                            error={
-                              errors?.payload?.[index]?.jawaban !== undefined &&
-                              errors?.payload?.[index]?.jawaban
-                            }
-                            value={value?.jawaban || []}
-                          />
-                        ) : (
-                          <Form.Dropdown
-                            selection
-                            search
-                            label={{
-                              children: "Jawaban",
-                              htmlFor: `payload[${index}]jawaban`,
-                              name: `payload[${index}]jawaban`,
-                            }}
-                            placeholder="Pilih"
-                            options={
-                              value?.tipe === "TF" ? tfOptions : pgOptions
-                            }
-                            id={`payload[${index}]jawaban`}
-                            name={`payload[${index}]jawaban`}
-                            onChange={(e, data) => {
-                              setFieldValue(
-                                `payload[${index}]jawaban`,
-                                data.value,
-                              );
-                            }}
-                            error={
-                              errors?.payload?.[index]?.jawaban !== undefined &&
-                              errors?.payload?.[index]?.jawaban
-                            }
-                            value={value?.jawaban}
-                          />
-                        )}
-                      </div>
-                    )}
                 </section>
 
-                <section className="rounded-md border p-5 shadow-md">
+                <section className="border-b p-5">
+                    <StepTitle nomor={1} judul="Pilih tipe soal" />
+                    <TipeSoalPicker
+                      value={value?.tipe}
+                      disabled={isSubmitting}
+                      error={
+                        formik.submitCount > 0 && errors?.payload?.[index]?.tipe
+                      }
+                      onChange={(tipe) => {
+                        setFieldValue(`payload[${index}]tipe`, tipe);
+                        setFieldValue(`payload[${index}]soal.tipe`, tipe);
+                        setFieldValue(`payload[${index}]jawaban`, "");
+                      }}
+                    />
+                </section>
+
+                <section className="border-b p-5">
+                    <StepTitle
+                      nomor={2}
+                      judul="Tempel gambar soal"
+                      ket="opsional – bisa juga langsung ketik di bawah"
+                    />
+                    <ImageUploader
+                      values={values}
+                      setFieldValue={setFieldValue}
+                      index={index}
+                      setMemorize={setMemorize}
+                      onFilled={(i) =>
+                        setOcrKey((k) => ({ ...k, [i]: (k[i] || 0) + 1 }))
+                      }
+                    />
+                </section>
+
+                <section className="p-5">
+                  <StepTitle nomor={3} judul="Isi soal & kunci jawaban" />
                   <div className="mb-5">
                     <FormLabel>Uraian Soal</FormLabel>
                     {memorize ? (
@@ -617,6 +575,7 @@ export default function FormSoal({ id = null }) {
                   {/* Tampilkan untuk Multi True False */}
                   {value.tipe === "MTF" && (
                     <MultiTrueFalseOptions
+                      key={`mtf-${index}-${ocrKey[index] || 0}`}
                       value={value}
                       index={index}
                       setFieldValue={setFieldValue}
@@ -624,6 +583,65 @@ export default function FormSoal({ id = null }) {
                       memorize={memorize}
                     />
                   )}
+                  {["ES", "LV"].includes(value.tipe) === false &&
+                    value.tipe !== "MTF" && (
+                      <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 lg:w-1/2">
+                        {value.tipe === "MP" ? (
+                          <Form.Dropdown
+                            selection
+                            multiple
+                            search
+                            label={{
+                              children: "Jawaban (Multi Pilihan)",
+                              htmlFor: `payload[${index}]jawaban`,
+                              name: `payload[${index}]jawaban`,
+                            }}
+                            placeholder="Pilih jawaban"
+                            options={mpOptions}
+                            id={`payload[${index}]jawaban`}
+                            name={`payload[${index}]jawaban`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${index}]jawaban`,
+                                data.value,
+                              );
+                            }}
+                            error={
+                              errors?.payload?.[index]?.jawaban !== undefined &&
+                              errors?.payload?.[index]?.jawaban
+                            }
+                            value={value?.jawaban || []}
+                          />
+                        ) : (
+                          <Form.Dropdown
+                            selection
+                            search
+                            label={{
+                              children: "Jawaban",
+                              htmlFor: `payload[${index}]jawaban`,
+                              name: `payload[${index}]jawaban`,
+                            }}
+                            placeholder="Pilih"
+                            options={
+                              value?.tipe === "TF" ? tfOptions : pgOptions
+                            }
+                            id={`payload[${index}]jawaban`}
+                            name={`payload[${index}]jawaban`}
+                            onChange={(e, data) => {
+                              setFieldValue(
+                                `payload[${index}]jawaban`,
+                                data.value,
+                              );
+                            }}
+                            error={
+                              errors?.payload?.[index]?.jawaban !== undefined &&
+                              errors?.payload?.[index]?.jawaban
+                            }
+                            value={value?.jawaban}
+                          />
+                        )}
+                      </div>
+                    )}
                 </section>
               </div>
             ))}
@@ -670,8 +688,6 @@ export default function FormSoal({ id = null }) {
               )}
             </div>
 
-            {console.log("sim", errors)}
-            {console.log("pay", values)}
 
             <div className="mt-5">
               <Button
@@ -689,5 +705,17 @@ export default function FormSoal({ id = null }) {
         </FormikProvider>
       </div>
     </LayoutPage>
+  );
+}
+
+function StepTitle({ nomor, judul, ket }) {
+  return (
+    <div className="mb-3 flex items-center gap-2">
+      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-500 text-xs font-bold text-white">
+        {nomor}
+      </span>
+      <span className="font-semibold text-gray-800">{judul}</span>
+      {ket && <span className="text-sm text-gray-400">({ket})</span>}
+    </div>
   );
 }
